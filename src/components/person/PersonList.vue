@@ -57,13 +57,13 @@
     <q-dialog v-model="deleteDialog" persistent>
       <q-card>
         <q-card-section class="row items-center">
-          <q-avatar icon="signal_wifi_off" color="primary" text-color="white" />
+          <q-avatar icon="fas fa-trash" color="negative" text-color="white" />
           <span class="q-ml-sm">Please confirm delete person</span>
         </q-card-section>
 
         <q-card-actions align="right">
           <q-btn flat label="Cancel" color="primary" v-close-popup @click="cancelDelete" />
-          <q-btn flat label="Delete" color="primary" v-close-popup @click="performDelete" />
+          <q-btn label="Delete" color="negative" v-close-popup @click="performDelete" />
         </q-card-actions>
       </q-card>
     </q-dialog>
