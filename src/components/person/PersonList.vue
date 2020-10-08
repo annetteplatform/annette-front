@@ -23,8 +23,9 @@
                 <q-icon name="search" />
               </template>
             </q-input>
+            <q-btn class="q-mr-md" outline color="primary" :disable="loading" label="Refresh" @click="refreshPersons()"/>
 
-            <q-btn flat dense color="primary" :disable="loading" label="Create" :to="`/person/create/new`"/>
+            <q-btn color="primary" :disable="loading" label="Create" :to="'/person/create/new'"/>
           </template>
           <template v-slot:body="props">
             <q-tr :props="props">
@@ -46,13 +47,26 @@
               <q-td key="actions" :props="props" style="width: 12em">
                 <q-btn flat round color="green" size="sm" icon="far fa-eye" :to="`/person/view/${props.row.id}`"/>
                 <q-btn flat round color="blue" size="sm" icon="far fa-edit" :to="`/person/edit/${props.row.id}`"/>
-                <q-btn flat round color="red" size="sm" icon="fas fa-trash" :to="`/person/delete/${props.row.id}`"/>
+                <q-btn flat round color="red" size="sm" icon="fas fa-trash" @click="startDelete(props.row.id)"/>
               </q-td>
             </q-tr>
           </template>
         </q-table>
       </div>
     </div>
+    <q-dialog v-model="deleteDialog" persistent>
+      <q-card>
+        <q-card-section class="row items-center">
+          <q-avatar icon="signal_wifi_off" color="primary" text-color="white" />
+          <span class="q-ml-sm">Please confirm delete person</span>
+        </q-card-section>
+
+        <q-card-actions align="right">
+          <q-btn flat label="Cancel" color="primary" v-close-popup @click="cancelDelete" />
+          <q-btn flat label="Delete" color="primary" v-close-popup @click="performDelete" />
+        </q-card-actions>
+      </q-card>
+    </q-dialog>
   </q-pull-to-refresh>
 </template>
 
@@ -61,7 +75,7 @@ import { Component, Prop, Vue, Watch } from 'vue-property-decorator'
 import { Action, Getter } from 'vuex-class'
 import { PagingMode } from 'src/lib/state'
 
-const groupNamespace = 'person'
+const personNamespace = 'person'
 const PAGE_SIZE = 10
 const DEFAULT_INSTANCE_KEY = 'Persons'
 
@@ -109,19 +123,22 @@ export default class PersonList extends Vue {
 
   initialized = false
   columns = COLUMNS
+  deleteId = null
+  deleteDialog = false
 
-  @Getter('totalPages', { namespace: groupNamespace }) totalPagesFn;
-  @Getter('total', { namespace: groupNamespace }) totalFn;
-  @Getter('instance', { namespace: groupNamespace }) instanceFn;
-  @Getter('page', { namespace: groupNamespace }) pageStateFn;
-  @Getter('loading', { namespace: groupNamespace }) loadingFn;
-  @Getter('items', { namespace: groupNamespace }) itemsFn;
-  @Getter('filter', { namespace: groupNamespace }) filterFn;
-  @Action('Init', { namespace: groupNamespace }) init;
-  @Action('SetPage', { namespace: groupNamespace }) setPage;
-  @Action('Refresh', { namespace: groupNamespace }) refresh;
-  @Action('SetPageSize', { namespace: groupNamespace }) setPageSize;
-  @Action('SetFilter', { namespace: groupNamespace }) setFilter;
+  @Getter('totalPages', { namespace: personNamespace }) totalPagesFn;
+  @Getter('total', { namespace: personNamespace }) totalFn;
+  @Getter('instance', { namespace: personNamespace }) instanceFn;
+  @Getter('page', { namespace: personNamespace }) pageStateFn;
+  @Getter('loading', { namespace: personNamespace }) loadingFn;
+  @Getter('items', { namespace: personNamespace }) itemsFn;
+  @Getter('filter', { namespace: personNamespace }) filterFn;
+  @Action('Init', { namespace: personNamespace }) init;
+  @Action('SetPage', { namespace: personNamespace }) setPage;
+  @Action('Refresh', { namespace: personNamespace }) refresh;
+  @Action('SetPageSize', { namespace: personNamespace }) setPageSize;
+  @Action('SetFilter', { namespace: personNamespace }) setFilter;
+  @Action('DeleteEntity', { namespace: personNamespace }) deleteEntityFn;
 
   get totalPages () {
     // eslint-disable-next-line @typescript-eslint/no-unsafe-return
@@ -183,6 +200,22 @@ export default class PersonList extends Vue {
     return pg
   }
 
+  startDelete (delId) {
+    this.deleteId = delId
+    this.deleteDialog = true
+  }
+
+  cancelDelete () {
+    this.deleteId = null
+    this.deleteDialog = false
+  }
+
+  performDelete () {
+    this.deleteEntityFn(this.deleteId)
+    this.deleteDialog = false
+    this.deleteId = null
+  }
+
   created () {
     console.log('PersonList.created: ', this.page)
     this.init({ instanceKey: this.instanceKey, page: this.page, pageSize: PAGE_SIZE, mode: PagingMode.Standard })
@@ -225,7 +258,9 @@ export default class PersonList extends Vue {
   refreshPersons (done) {
     if (this.initialized) {
       // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-      this.refresh({ instanceKey: this.instanceKey }).then(() => done())
+      this.refresh({ instanceKey: this.instanceKey }).then(() => {
+        if (done) done()
+      })
     }
   }
 }

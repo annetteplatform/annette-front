@@ -1,8 +1,7 @@
 
 // Person specific declarations
 
-import { AnnettePrincipal, EntityState, InstanceState, SortBy } from 'src/lib/state'
-import { InitData, LoadCompletedData, LoadData, SetFilterData } from 'src/lib/state/actions'
+import { AnnettePrincipal, EntityState, InstanceState, SortBy, InitData, LoadCompletedData, LoadData, SetFilterData } from 'src/lib/state'
 
 export type PersonState = EntityState<Person, PersonFindQuery>
 export type PersonInstanceState = InstanceState<PersonFindQuery>
@@ -14,8 +13,8 @@ export interface Person {
   middlename?: string,
   phone?: string,
   email?: string,
-  updatedAt: Date,
-  updatedBy: AnnettePrincipal
+  updatedAt?: Date,
+  updatedBy?: AnnettePrincipal
 }
 
 export interface PersonFindQuery {

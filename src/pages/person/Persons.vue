@@ -10,7 +10,7 @@
 
 <script lang="ts">
 import { Component, Vue, Watch } from 'vue-property-decorator'
-import { Getter } from 'vuex-class'
+import { Action, Getter } from 'vuex-class'
 import PersonList from 'components/person/PersonList.vue'
 
 const personNamespace = 'person'
@@ -23,6 +23,7 @@ const INSTANCE_KEY = 'Persons'
 })
 export default class Persons extends Vue {
   @Getter('page', { namespace: personNamespace }) pageStateFn;
+  @Action('deleteEntity', { namespace: personNamespace }) deleteEntity;
 
   page = 1
   instanceKey = INSTANCE_KEY

@@ -12,6 +12,7 @@ const routes: RouteConfig[] = [
       },
       {
         path: 'person/profile',
+        name: 'profile',
         component: () => import('pages/person/PersonProfile.vue'),
         meta: { requiresAuth: true }
       },
@@ -19,6 +20,12 @@ const routes: RouteConfig[] = [
         path: 'person/persons',
         name: 'persons',
         component: () => import('pages/person/Persons.vue'),
+        meta: { requiresAuth: true }
+      },
+      {
+        path: 'person/:action/:id',
+        name: 'person',
+        component: () => import('pages/person/PersonPage.vue'),
         meta: { requiresAuth: true }
       }
     ]

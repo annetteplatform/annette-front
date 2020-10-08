@@ -5,11 +5,10 @@ import {
   DEFAULT_PERSON_FIND_QUERY,
   PersonInitData,
   PersonSetFilterData,
-  PersonLoadCompletedData, PersonLoadData
+  PersonLoadCompletedData, PersonLoadData, Person
 } from './state'
 import Vue from 'vue'
-import { calculateTotalPages, PagingMode } from 'src/lib/state'
-import { SetPageData, SetPageSizeData } from 'src/lib/state/actions'
+import { calculateTotalPages, PagingMode, SetPageData, SetPageSizeData } from 'src/lib/state'
 
 const DEFAULT_PAGE_SIZE = 10
 
@@ -67,6 +66,20 @@ export const mutations: MutationTree<PersonState> = {
     }
 
     state.entities = { ...state.entities, ...data.entities }
+  },
+
+  StoreEntity: (state: PersonState, entity: Person) => {
+    Vue.set(state.entities, entity.id, entity)
+  },
+
+  RemoveEntity: (state: PersonState, id: string) => {
+    Object.keys(state.instances).forEach(instanceKey => {
+      Object.keys(state.instances[instanceKey].pages).forEach(pageKey => {
+        const newIds = state.instances[instanceKey].pages[pageKey].ids.filter(pid => pid !== id)
+        state.instances[instanceKey].pages[pageKey].ids = newIds
+      })
+    })
+    Vue.delete(state.entities, id)
   }
 
 }

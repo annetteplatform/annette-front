@@ -14,9 +14,10 @@ import hash from 'object-hash'
 import {
   RefreshActionData,
   SetPageData,
-  SetPageSizeData
-} from 'src/lib/state/actions'
-import { FindResult, PagingMode } from 'src/lib/state'
+  SetPageSizeData,
+  FindResult,
+  PagingMode
+} from 'src/lib/state'
 
 // import Vue from 'vue'
 
@@ -74,7 +75,7 @@ export const actions: ActionTree<PersonState, RootState> = {
         if (!entity) {
           return v.id
         }
-        if (lastModified > entity.updatedAt) {
+        if (entity.updatedAt && lastModified > entity.updatedAt) {
           return v.id
         } else {
           return null
@@ -149,6 +150,29 @@ export const actions: ActionTree<PersonState, RootState> = {
     } else {
       return 'unchanged'
     }
+  },
+
+  async GetEntityForEdit ({ dispatch, commit, state }, id: string) {
+    const entity = await backendService.getPersonById(id, false)
+    commit('StoreEntity', entity)
+    return entity
+  },
+
+  async CreateEntity ({ dispatch, commit, state }, entity: Person) {
+    const newEntity = await backendService.createPerson(entity)
+    commit('StoreEntity', newEntity)
+    return newEntity
+  },
+
+  async UpdateEntity ({ dispatch, commit, state }, entity: Person) {
+    const newEntity = await backendService.updatePerson(entity)
+    commit('StoreEntity', newEntity)
+    return newEntity
+  },
+
+  async DeleteEntity ({ dispatch, commit, state }, id: string) {
+    await backendService.deletePerson(id)
+    commit('RemoveEntity', id)
   }
 
 }
