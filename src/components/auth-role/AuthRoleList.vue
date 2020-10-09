@@ -1,9 +1,8 @@
 <template>
-  <q-pull-to-refresh @refresh="refreshPersons">
+  <q-pull-to-refresh @refresh="refreshEntities">
     <div class="row items-start">
       <div class="q-pb-sm col-md-12 col-sm-12 col-xs-12">
         <q-table
-          title="Persons"
           flat
           wrap-cells
           :data="items"
@@ -15,7 +14,7 @@
           :loading="loading"
         >
           <template v-slot:top>
-            <h5 class="q-ma-none">Persons</h5>
+            <h5 class="q-ma-none">Authorization Roles</h5>
             <q-space/>
             <q-input class="q-mr-md" borderless dense placeholder="Search"
                      :value="filter.filter" debounce="500" @input="setFilterVal" >
@@ -23,30 +22,21 @@
                 <q-icon name="search" />
               </template>
             </q-input>
-            <q-btn class="q-mr-md" outline color="primary" :disable="loading" label="Refresh" @click="refreshPersons()"/>
+            <q-btn class="q-mr-md" outline color="primary" :disable="loading" label="Refresh" @click="refreshEntities()"/>
 
-            <q-btn color="primary" :disable="loading" label="Create" :to="'/person/create/new'"/>
+            <q-btn color="primary" :disable="loading" label="Create" :to="'/auth/role/create/new'"/>
           </template>
           <template v-slot:body="props">
             <q-tr :props="props">
-              <q-td key="lastname" :props="props">
-                {{ props.row.lastname }}
+              <q-td key="id" :props="props">
+                {{ props.row.id }}
               </q-td>
-              <q-td key="firstname" :props="props">
-                {{ props.row.firstname }}
-              </q-td>
-              <q-td key="middlename" :props="props">
-                {{ props.row.middlename }}
-              </q-td>
-              <q-td key="email" :props="props">
-                {{ props.row.email }}
-              </q-td>
-              <q-td key="phone" :props="props">
-                {{ props.row.phone }}
+              <q-td key="name" :props="props">
+                {{ props.row.name }}
               </q-td>
               <q-td key="actions" :props="props" style="width: 12em">
-                <q-btn flat round color="green" size="sm" icon="far fa-eye" :to="`/person/view/${props.row.id}`"/>
-                <q-btn flat round color="blue" size="sm" icon="far fa-edit" :to="`/person/edit/${props.row.id}`"/>
+                <q-btn flat round color="green" size="sm" icon="far fa-eye" :to="`/auth/role/view/${props.row.id}`"/>
+                <q-btn flat round color="blue" size="sm" icon="far fa-edit" :to="`/auth/role/edit/${props.row.id}`"/>
                 <q-btn flat round color="red" size="sm" icon="fas fa-trash" @click="startDelete(props.row.id)"/>
               </q-td>
             </q-tr>
@@ -58,7 +48,7 @@
       <q-card>
         <q-card-section class="row items-center">
           <q-avatar icon="fas fa-trash" color="negative" text-color="white" />
-          <span class="q-ml-sm">Please confirm delete person</span>
+          <span class="q-ml-sm">Please confirm delete authorization role</span>
         </q-card-section>
 
         <q-card-actions align="right">
@@ -75,35 +65,26 @@ import { Component, Prop, Vue, Watch } from 'vue-property-decorator'
 import { Action, Getter } from 'vuex-class'
 import { PagingMode } from 'src/lib/state'
 
-const personNamespace = 'person'
+const namespace = 'authRole'
 const PAGE_SIZE = 10
-const DEFAULT_INSTANCE_KEY = 'Person'
+const DEFAULT_INSTANCE_KEY = 'AuthRoles'
 
 const COLUMNS = [
 
   {
-    name: 'lastname',
+    name: 'id',
     align: 'left',
-    label: 'Lastname',
-    field: 'lastname',
+    label: 'Id',
+    field: 'id',
     classes: 'text-truncate'
   },
   {
-    name: 'firstname',
+    name: 'name',
     align: 'left',
-    label: 'Firstname',
-    field: 'firstname',
+    label: 'Name',
+    field: 'name',
     classes: 'text-truncate'
   },
-  {
-    name: 'middlename',
-    align: 'left',
-    label: 'Middlename',
-    field: 'middlename',
-    classes: 'text-truncate'
-  },
-  { name: 'email', align: 'center', label: 'Email', field: 'email' },
-  { name: 'phone', align: 'center', label: 'Phone', field: 'phone' },
   {
     name: 'actions',
     label: 'Actions',
@@ -116,7 +97,7 @@ const COLUMNS = [
 @Component({
   components: {}
 })
-export default class PersonList extends Vue {
+export default class AuthRoleList extends Vue {
   @Prop(Number) page
 
   @Prop({ type: String, default: DEFAULT_INSTANCE_KEY }) instanceKey
@@ -126,18 +107,18 @@ export default class PersonList extends Vue {
   deleteId = null
   deleteDialog = false
 
-  @Getter('total', { namespace: personNamespace }) totalFn;
-  @Getter('page', { namespace: personNamespace }) pageStateFn;
-  @Getter('pageSize', { namespace: personNamespace }) pageSizeFn;
-  @Getter('loading', { namespace: personNamespace }) loadingFn;
-  @Getter('items', { namespace: personNamespace }) itemsFn;
-  @Getter('filter', { namespace: personNamespace }) filterFn;
-  @Action('Init', { namespace: personNamespace }) init;
-  @Action('SetPage', { namespace: personNamespace }) setPage;
-  @Action('Refresh', { namespace: personNamespace }) refresh;
-  @Action('SetPageSize', { namespace: personNamespace }) setPageSize;
-  @Action('SetFilter', { namespace: personNamespace }) setFilter;
-  @Action('DeleteEntity', { namespace: personNamespace }) deleteEntityFn;
+  @Getter('total', { namespace: namespace }) totalFn;
+  @Getter('page', { namespace: namespace }) pageStateFn;
+  @Getter('pageSize', { namespace: namespace }) pageSizeFn;
+  @Getter('loading', { namespace: namespace }) loadingFn;
+  @Getter('items', { namespace: namespace }) itemsFn;
+  @Getter('filter', { namespace: namespace }) filterFn;
+  @Action('Init', { namespace: namespace }) init;
+  @Action('SetPage', { namespace: namespace }) setPage;
+  @Action('Refresh', { namespace: namespace }) refresh;
+  @Action('SetPageSize', { namespace: namespace }) setPageSize;
+  @Action('SetFilter', { namespace: namespace }) setFilter;
+  @Action('DeleteEntity', { namespace: namespace }) deleteEntityFn;
 
   get pageState () {
     // eslint-disable-next-line @typescript-eslint/no-unsafe-return
@@ -206,14 +187,12 @@ export default class PersonList extends Vue {
   }
 
   created () {
-    console.log('PersonList.created: ', this.page)
     this.init({ instanceKey: this.instanceKey, page: this.page, pageSize: PAGE_SIZE, mode: PagingMode.Standard })
     this.initialized = true
   }
 
   @Watch('page', { immediate: true })
   onPagePropChanged (newVal) {
-    console.log('PersonList.onPagePropChanged: ', newVal)
     if (this.initialized) {
       if (this.pageState !== newVal) {
         this.setPage({ instanceKey: this.instanceKey, page: newVal })
@@ -238,7 +217,7 @@ export default class PersonList extends Vue {
     }
   }
 
-  refreshPersons (done) {
+  refreshEntities (done) {
     if (this.initialized) {
       // eslint-disable-next-line @typescript-eslint/no-unsafe-return
       this.refresh({ instanceKey: this.instanceKey }).then(() => {

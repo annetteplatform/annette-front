@@ -1,20 +1,33 @@
 
 // Person specific declarations
 
-import { AnnettePrincipal, EntityState, InstanceState, SortBy, InitData, LoadCompletedData, LoadData, SetFilterData } from 'src/lib/state'
+import {
+  AnnettePrincipal,
+  EntityState,
+  SortBy,
+  BaseEntity
+} from 'src/lib/state'
 
 export type PersonState = EntityState<Person, PersonFindQuery>
-export type PersonInstanceState = InstanceState<PersonFindQuery>
 
-export interface Person {
+export interface Person extends BaseEntity {
   id: string,
   lastname: string,
   firstname: string,
   middlename?: string,
   phone?: string,
   email?: string,
-  updatedAt?: Date,
+  updatedAt: Date,
   updatedBy?: AnnettePrincipal
+}
+
+export interface PersonDto {
+  id: string,
+  lastname: string,
+  firstname: string,
+  middlename?: string,
+  phone?: string,
+  email?: string,
 }
 
 export interface PersonFindQuery {
@@ -41,10 +54,3 @@ export const DEFAULT_PERSON_FIND_QUERY:PersonFindQuery = {
     }
   ]
 }
-
-// Actions datatypes
-
-export type PersonInitData = InitData<PersonFindQuery>
-export type PersonLoadData = LoadData<PersonFindQuery>
-export type PersonLoadCompletedData = LoadCompletedData<Person>
-export type PersonSetFilterData = SetFilterData<PersonFindQuery>

@@ -1,19 +1,19 @@
 <template>
   <div class="narrow-layout">
-    <person-form :id="id" :action="action"></person-form>
+    <auth-role-form :id="id" :action="action"/>
   </div>
 </template>
 
 <script lang="ts">
 import { Component, Vue, Watch } from 'vue-property-decorator'
-import PersonForm from 'components/person/PersonForm.vue'
+import AuthRoleForm from 'components/auth-role/AuthRoleForm.vue'
 
 @Component({
   components: {
-    PersonForm
+    AuthRoleForm
   }
 })
-export default class PersonPage extends Vue {
+export default class AuthRolePage extends Vue {
   id = ''
   action = 'view'
 

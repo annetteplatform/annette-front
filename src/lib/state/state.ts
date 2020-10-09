@@ -1,5 +1,5 @@
 // State specific declarations
-export interface EntityState<E, F> {
+export interface EntityState<E extends BaseEntity, F> {
   instances: { [key: string]: InstanceState<F> }
   entities: { [key: string]: E }
 }
@@ -27,4 +27,9 @@ export enum PagingMode {
 
 export function calculateTotalPages (total, pageSize) {
   return Math.ceil(total / pageSize)
+}
+
+export interface BaseEntity {
+  id: string,
+  updatedAt: Date
 }

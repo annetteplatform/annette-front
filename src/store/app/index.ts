@@ -106,7 +106,7 @@ const SERVICE_GROUPS: ServiceGroup[] = [
         icon: 'admin_panel_settings',
         title: 'Authorization roles',
         // subtitle: string,
-        action: '/authorization/roles',
+        action: '/auth/roles',
         actionName: 'Open'
       },
       {
@@ -115,7 +115,7 @@ const SERVICE_GROUPS: ServiceGroup[] = [
         icon: 'policy',
         title: 'View permissions assignments',
         // subtitle: string,
-        action: '/authorization/assignments',
+        action: '/auth/assignments',
         actionName: 'View'
       }
     ]
