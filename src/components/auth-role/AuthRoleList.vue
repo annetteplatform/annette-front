@@ -8,7 +8,7 @@
           :data="items"
           :columns="columns"
           row-key="id"
-          :pagination.sync="pagination"
+          :pagination="pagination"
           :filter="filter"
           @request="onRequest"
           :loading="loading"
