@@ -62,7 +62,7 @@ const SERVICE_GROUPS: ServiceGroup[] = [
         order: 20,
         icon: 'account_circle',
         title: 'My profile',
-        // subtitle: string,
+        subtitle: 'View my profile',
         action: '/person/profile',
         actionName: 'View'
       }
@@ -79,7 +79,7 @@ const SERVICE_GROUPS: ServiceGroup[] = [
         order: 10,
         icon: 'account_balance',
         title: 'Organizations',
-        // subtitle: string,
+        subtitle: 'Maintain organizations, hierarchies, person assignments to positions',
         action: '/org-structure/organizations',
         actionName: 'Open'
       },
@@ -88,7 +88,7 @@ const SERVICE_GROUPS: ServiceGroup[] = [
         order: 20,
         icon: 'local_offer',
         title: 'Organization roles',
-        // subtitle: string,
+        subtitle: 'Maintain organization roles',
         action: '/org-structure/roles',
         actionName: 'View'
       }
@@ -105,7 +105,7 @@ const SERVICE_GROUPS: ServiceGroup[] = [
         order: 10,
         icon: 'admin_panel_settings',
         title: 'Authorization roles',
-        // subtitle: string,
+        subtitle: 'Maintain authorization roles, assign principals to roles',
         action: '/auth/roles',
         actionName: 'Open'
       },
@@ -113,8 +113,8 @@ const SERVICE_GROUPS: ServiceGroup[] = [
         id: 'PERMISSIONS',
         order: 20,
         icon: 'policy',
-        title: 'View permissions assignments',
-        // subtitle: string,
+        title: 'Permission assignments',
+        subtitle: 'View permission assignments to principals',
         action: '/auth/assignments',
         actionName: 'View'
       }

@@ -14,6 +14,9 @@
           <q-btn outline color="primary"
                  to="/auth/roles"
                  label="Auth Roles"/>
+          <q-btn outline color="primary"
+                 :to="`/auth/role-assignments/${id}`"
+                 label="Assignments"/>
           <q-btn color="primary" label="Save"
                  v-if="action == 'edit' || action == 'create'"
                  @click="save"/>
@@ -65,7 +68,7 @@
             row-key="id"
           >
             <template v-slot:top>
-              <h5 class="q-ma-none">Permissions</h5>
+              <h6 class="q-ma-none">Permissions</h6>
               <q-space/>
               <q-btn color="primary" v-if="action !== 'view'" label="Add permission" @click="addPermission"/>
             </template>
@@ -118,11 +121,6 @@
                         </q-item>
                       </template>
                     </q-select>
-<!--                    <q-input-->
-<!--                      class="col-md-12 col-sm-12 col-xs-12 q-pr-md"-->
-<!--                      v-model="permission.id"-->
-<!--                      label="Permission Id"-->
-<!--                    />-->
                   </div>
                   <div class="row">
                     <q-input

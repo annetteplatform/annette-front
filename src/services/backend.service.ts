@@ -1,7 +1,8 @@
 import axios from 'axios'
 import { Person, PersonFindQuery } from 'src/store/person/state'
-import { FindResult } from 'src/lib/state'
+import { AnnettePrincipal, FindResult } from 'src/lib/state'
 import { AuthRole, AuthRoleFindQuery } from 'src/store/auth-role/state'
+import { RolePrincipalPayload } from 'src/store/app/state'
 
 export const backendService = {
 
@@ -75,6 +76,22 @@ export const backendService = {
   async getAuthRolesById (ids: string[], fromReadSide = true) {
     // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
     return await axios.post<{ [key: string]: AuthRole }>(`/api/annette/v1/authorization/getRolesById/${fromReadSide}`, ids)
+      .then(result => result.data)
+  },
+
+  async assignPrincipal (assignment: RolePrincipalPayload) {
+    return await axios.post<boolean>('/api/annette/v1/authorization/assignPrincipal', assignment)
+      .then(() => true)
+  },
+
+  async unassignPrincipal (assignment: RolePrincipalPayload) {
+    return await axios.post<boolean>('/api/annette/v1/authorization/unassignPrincipal', assignment)
+      .then(() => true)
+  },
+
+  async getAuthRolePrincipals (roleId: string, fromReadSide = true) {
+    // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
+    return await axios.get<AnnettePrincipal[]>(`/api/annette/v1/authorization/getRolePrincipals/${roleId}/${fromReadSide}`)
       .then(result => result.data)
   }
 

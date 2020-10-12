@@ -39,6 +39,12 @@ const routes: RouteConfig[] = [
         name: 'auth-role',
         component: () => import('pages/auth-role/AuthRolePage.vue'),
         meta: { requiresAuth: true }
+      },
+      {
+        path: 'auth/role-assignments/:id',
+        name: 'auth-role-assignments',
+        component: () => import('pages/auth-role/AuthRoleAssignmentPage.vue'),
+        meta: { requiresAuth: true }
       }
     ]
   },

@@ -38,6 +38,7 @@
                 <q-btn flat round color="green" size="sm" icon="far fa-eye" :to="`/auth/role/view/${props.row.id}`"/>
                 <q-btn flat round color="blue" size="sm" icon="far fa-edit" :to="`/auth/role/edit/${props.row.id}`"/>
                 <q-btn flat round color="red" size="sm" icon="fas fa-trash" @click="startDelete(props.row.id)"/>
+                <q-btn flat round color="primary" size="sm" icon="fas fa-users" :to="`/auth/role-assignments/${props.row.id}`"/>
               </q-td>
             </q-tr>
           </template>

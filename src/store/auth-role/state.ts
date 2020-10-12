@@ -50,3 +50,8 @@ export const DEFAULT_AUTH_ROLE_FIND_QUERY:AuthRoleFindQuery = {
   }
 
 }
+
+export interface RolePrincipalPayload {
+  roleId: string,
+  principal: AnnettePrincipal,
+}
