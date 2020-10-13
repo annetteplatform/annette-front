@@ -109,7 +109,7 @@
                               hide-selected
                               fill-input
                               input-debounce="0"
-                              :options="permissionIds"
+                              :options="filteredPermissionIds"
                               @filter="permissionFilterFn"
                               @input-value="setPermissionId"
                               label="Permission Id" >
@@ -164,33 +164,11 @@
 
 <script lang="ts">
 import { Component, Prop, Vue, Watch } from 'vue-property-decorator'
-import { Action } from 'vuex-class'
-import { v4 as uuidv4 } from 'uuid'
+import { Action, Getter } from 'vuex-class'
+import { uid } from 'quasar'
 import { AuthRoleDto, Permission } from 'src/store/auth-role/state'
 
 const namespace = 'authRole'
-
-const PERMISSION_IDS = [
-  'annette.application.application.maintain.all',
-  'annette.application.translation.maintain.all',
-  'annette.application.language.maintain.all',
-  'annette.authorization.role.view',
-  'annette.authorization.role.maintain',
-  'annette.authorization.role.maintainPrincipals',
-  'annette.authorization.role.viewPrincipals',
-  'annette.authorization.assignments.view',
-  'annette.orgStructure.hierarchy.view.all',
-  'annette.orgStructure.hierarchy.view.org',
-  'annette.orgStructure.hierarchy.maintain.all',
-  'annette.orgStructure.hierarchy.maintain.org',
-  'annette.orgStructure.orgRole.view.all',
-  'annette.orgStructure.orgRole.maintain.all',
-  'annette.person.view.all',
-  'annette.person.maintain.all',
-  'annette.person.maintain.subordinate',
-  'annette.person.maintain.orgUnit'
-
-]
 
 const COLUMNS = [
 
@@ -235,7 +213,7 @@ export default class AuthRoleForm extends Vue {
   @Prop() action
 
   entity: AuthRoleDto = {
-    id: uuidv4(),
+    id: uid(),
     name: '',
     description: '',
     permissions: []
@@ -253,11 +231,12 @@ export default class AuthRoleForm extends Vue {
   }
 
   originPermission: Permission | null = null
-  permissionIds = PERMISSION_IDS
+  filteredPermissionIds: string[] = []
 
   @Action('GetEntityForEdit', { namespace: namespace }) getEntityForEdit;
   @Action('CreateEntity', { namespace: namespace }) createEntity;
   @Action('UpdateEntity', { namespace: namespace }) updateEntity;
+  @Getter('permissionIds', { namespace: namespace }) permissionIds;
 
   @Watch('id', { immediate: true })
   onIdChange () {
@@ -273,14 +252,14 @@ export default class AuthRoleForm extends Vue {
     }
     if (this.action === 'create' && this.id === 'new') {
       this.entity = {
-        id: uuidv4(),
+        id: uid(),
         name: '',
         description: '',
         permissions: []
       }
     } else if (this.action === 'create') {
       this.getEntityForEdit(this.id).then(entity => {
-        this.entity = { ...entity, id: uuidv4() }
+        this.entity = { ...entity, id: uid() }
       })
     } else {
       this.getEntityForEdit(this.id).then(entity => {
@@ -298,6 +277,7 @@ export default class AuthRoleForm extends Vue {
     }
     this.showDialog = true
     this.createPermission = true
+    this.filteredPermissionIds = this.permissionIds
   }
 
   editPermission (perm) {
@@ -327,7 +307,7 @@ export default class AuthRoleForm extends Vue {
   permissionFilterFn (val, update) {
     update(() => {
       const needle = val.toLocaleLowerCase()
-      this.permissionIds = PERMISSION_IDS.filter(v => v.toLocaleLowerCase().indexOf(needle) > -1)
+      this.filteredPermissionIds = this.permissionIds.filter(v => v.toLocaleLowerCase().indexOf(needle) > -1)
     })
   }
 

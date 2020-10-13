@@ -8,7 +8,7 @@
           :data="items"
           :columns="columns"
           row-key="id"
-          :pagination="pagination"
+          :pagination.sync="pagination"
           :filter="filter"
           @request="onRequest"
           :loading="loading"
@@ -71,7 +71,6 @@ const PAGE_SIZE = 10
 const DEFAULT_INSTANCE_KEY = 'AuthRoles'
 
 const COLUMNS = [
-
   {
     name: 'id',
     align: 'left',
@@ -92,7 +91,6 @@ const COLUMNS = [
     align: 'center',
     style: 'width: 9em'
   }
-
 ]
 
 @Component({

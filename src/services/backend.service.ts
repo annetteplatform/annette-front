@@ -1,8 +1,8 @@
 import axios from 'axios'
 import { Person, PersonFindQuery } from 'src/store/person/state'
 import { AnnettePrincipal, FindResult } from 'src/lib/state'
-import { AuthRole, AuthRoleFindQuery } from 'src/store/auth-role/state'
-import { RolePrincipalPayload } from 'src/store/app/state'
+import { AuthRole, AuthRoleFindQuery, RolePrincipalPayload } from 'src/store/auth-role/state'
+import { AssignmentFindResult, FindAssignmentsQuery } from 'src/store/auth-assignment/state'
 
 export const backendService = {
 
@@ -92,6 +92,12 @@ export const backendService = {
   async getAuthRolePrincipals (roleId: string, fromReadSide = true) {
     // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
     return await axios.get<AnnettePrincipal[]>(`/api/annette/v1/authorization/getRolePrincipals/${roleId}/${fromReadSide}`)
+      .then(result => result.data)
+  },
+
+  async findAssignments (query: FindAssignmentsQuery) {
+    // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
+    return await axios.post<AssignmentFindResult>('/api/annette/v1/authorization/findAssignments', query)
       .then(result => result.data)
   }
 

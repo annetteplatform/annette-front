@@ -84,7 +84,7 @@
                           hide-selected
                           fill-input
                           input-debounce="0"
-                          :options="principalTypes"
+                          :options="filteredPrincipalTypes"
                           @filter="principalTypeFilterFn"
                           @input-value="setPrincipalType"
                           label="Principal Type">
@@ -134,22 +134,12 @@
 
 <script lang="ts">
 import { Component, Prop, Vue, Watch } from 'vue-property-decorator'
-import { Action } from 'vuex-class'
-import { AuthRoleDto } from 'src/store/auth-role/state'
+import { Action, Getter } from 'vuex-class'
+import { AuthRoleDto, RolePrincipalPayload } from 'src/store/auth-role/state'
 import { AnnettePrincipal } from 'src/lib/state'
-import { RolePrincipalPayload } from 'src/store/app/state'
 
 const namespace = 'authRole'
 
-const PRINCIPAL_TYPES = [
-  'person',
-  'org-position',
-  'org-role',
-  'unit-chief',
-  'direct-unit',
-  'descendant-unit',
-  'tech'
-]
 const COLUMNS = [
 
   {
@@ -194,7 +184,7 @@ export default class AuthRoleAssignments extends Vue {
     principalId: ''
   }
 
-  principalTypes = PRINCIPAL_TYPES
+  filteredPrincipalTypes: string[] = []
 
   deletePrincipal: AnnettePrincipal = {
     principalType: '',
@@ -207,6 +197,7 @@ export default class AuthRoleAssignments extends Vue {
   @Action('GetRolePrincipals', { namespace: namespace }) getRolePrincipals;
   @Action('AssignPrincipal', { namespace: namespace }) assignPrincipal;
   @Action('UnassignPrincipal', { namespace: namespace }) unassignPrincipal;
+  @Getter('principalTypes', { namespace: namespace }) principalTypes;
 
   @Watch('id', { immediate: true })
   onIdChange () {
@@ -229,6 +220,7 @@ export default class AuthRoleAssignments extends Vue {
       principalId: ''
     }
     this.showDialog = true
+    this.filteredPrincipalTypes = this.principalTypes
   }
 
   setPrincipalType (principalType) {
@@ -238,7 +230,7 @@ export default class AuthRoleAssignments extends Vue {
   principalTypeFilterFn (val, update) {
     update(() => {
       const needle = val.toLocaleLowerCase()
-      this.principalTypes = PRINCIPAL_TYPES.filter(v => v.toLocaleLowerCase().indexOf(needle) > -1)
+      this.filteredPrincipalTypes = this.principalTypes.filter(v => v.toLocaleLowerCase().indexOf(needle) > -1)
     })
   }
 

@@ -15,9 +15,8 @@ import {
 
 export type EntityMap<E extends BaseEntity> = { [key: string]: E }
 
-export function buildActions<E extends BaseEntity, F, R> (
-  find: (query: F) => Promise<FindResult>,
-  getEntitiesById: (ids: string[]) => Promise<EntityMap<E>>
+export function buildActionsWithCustomLoad<E extends BaseEntity, F, R> (
+  load: ({ dispatch, commit, state }, data: LoadData<F>) => Promise<string>
 ): ActionTree<EntityState<E, F>, R> {
   const actions: ActionTree<EntityState<E, F>, R> = {
 
@@ -49,65 +48,8 @@ export function buildActions<E extends BaseEntity, F, R> (
       return await dispatch('Load', loadActionData)
     },
 
-    async Load ({ commit, state }, data: LoadData<F>) {
-      const instance = state.instances[data.instanceKey]
-      if (!instance) {
-        throw new Error(`Instance ${data.instanceKey} isn't initialised`)
-      }
-
-      commit('LoadStarted', { instanceKey: data.instanceKey })
-
-      const filter: F = {
-        ...data.filter,
-        offset: Math.max((data.fromPage - 1) * instance.pageSize, 0),
-        size: (data.toPage - data.fromPage + 1) * instance.pageSize
-      }
-      console.log('filter: ', filter)
-
-      const findPostResponse: FindResult = await find(filter)
-
-      const ids = Object.values(findPostResponse.hits)
-        .map(v => {
-          const entity = state.entities[v.id]
-          const lastModified = new Date(v.updatedAt)
-          if (!entity) {
-            return v.id
-          }
-          if (entity.updatedAt && lastModified > entity.updatedAt) {
-            return v.id
-          } else {
-            return null
-          }
-        })
-        .filter(v => !!v)
-
-      let entityMap: { [key: string]: E } = {}
-      if (ids.length > 0) {
-        entityMap = await getEntitiesById(ids as string[])
-      }
-
-      const entities = {}
-      Object.values(entityMap).forEach(a => {
-        const newItem = a
-        if (newItem.updatedAt) {
-          newItem.updatedAt = new Date(newItem.updatedAt)
-        }
-        entities[a.id] = newItem
-      })
-
-      const loadCompletedData: LoadCompletedData<E> = {
-        instanceKey: data.instanceKey,
-        fromPage: data.fromPage,
-        toPage: data.toPage,
-        total: findPostResponse.total,
-        ids: Object.values(findPostResponse.hits).map(v => v.id),
-        entities: entities,
-        page: data.page,
-        clearPages: data.clearPages
-      }
-
-      commit('LoadCompleted', loadCompletedData)
-      return 'done'
+    async Load ({ dispatch, commit, state }, data: LoadData<F>) {
+      return await load({ dispatch, commit, state }, data)
     },
 
     async SetPage (context: { dispatch, commit, state }, data: SetPageData) {
@@ -151,6 +93,74 @@ export function buildActions<E extends BaseEntity, F, R> (
     }
 
   }
+  return actions
+}
+
+export function buildActions<E extends BaseEntity, F, R> (
+  find: (query: F) => Promise<FindResult>,
+  getEntitiesById: (ids: string[]) => Promise<EntityMap<E>>
+): ActionTree<EntityState<E, F>, R> {
+  async function load ({ commit, state }, data: LoadData<F>) {
+    const instance = state.instances[data.instanceKey]
+    if (!instance) {
+      throw new Error(`Instance ${data.instanceKey} isn't initialised`)
+    }
+
+    commit('LoadStarted', { instanceKey: data.instanceKey })
+
+    const filter: F = {
+      ...data.filter,
+      offset: Math.max((data.fromPage - 1) * instance.pageSize, 0),
+      size: (data.toPage - data.fromPage + 1) * instance.pageSize
+    }
+
+    const findPostResponse: FindResult = await find(filter)
+
+    const ids = Object.values(findPostResponse.hits)
+      .map(v => {
+        const entity = state.entities[v.id]
+        const lastModified = new Date(v.updatedAt)
+        if (!entity) {
+          return v.id
+        }
+        if (entity.updatedAt && lastModified > entity.updatedAt) {
+          return v.id
+        } else {
+          return null
+        }
+      })
+      .filter(v => !!v)
+
+    let entityMap: { [key: string]: E } = {}
+    if (ids.length > 0) {
+      entityMap = await getEntitiesById(ids as string[])
+    }
+
+    const entities = {}
+    Object.values(entityMap).forEach(a => {
+      const newItem = a
+      if (newItem.updatedAt) {
+        newItem.updatedAt = new Date(newItem.updatedAt)
+      }
+      entities[a.id] = newItem
+    })
+
+    const loadCompletedData: LoadCompletedData<E> = {
+      instanceKey: data.instanceKey,
+      fromPage: data.fromPage,
+      toPage: data.toPage,
+      total: findPostResponse.total,
+      ids: Object.values(findPostResponse.hits).map(v => v.id),
+      entities: entities,
+      page: data.page,
+      clearPages: data.clearPages
+    }
+
+    commit('LoadCompleted', loadCompletedData)
+    return 'done'
+  }
+
+  const actions: ActionTree<EntityState<E, F>, R> = buildActionsWithCustomLoad<E, F, R>(load)
   return actions
 }
 

@@ -8,7 +8,10 @@ import {
   BaseEntity
 } from 'src/lib/state'
 
-export type AuthRoleState = EntityState<AuthRole, AuthRoleFindQuery>
+export interface AuthRoleState extends EntityState<AuthRole, AuthRoleFindQuery> {
+  permissionIds: string[]
+  principalTypes: string[]
+}
 
 export interface AuthRole extends BaseEntity {
   id: string,

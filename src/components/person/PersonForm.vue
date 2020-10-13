@@ -86,7 +86,7 @@
 <script lang="ts">
 import { Component, Prop, Vue, Watch } from 'vue-property-decorator'
 import { Action } from 'vuex-class'
-import { v4 as uuidv4 } from 'uuid'
+import { uid } from 'quasar'
 import { PersonDto } from 'src/store/person/state'
 
 const namespace = 'person'
@@ -113,7 +113,7 @@ export default class PersonForm extends Vue {
   loadData () {
     if (this.action === 'create' && this.id === 'new') {
       this.entity = {
-        id: uuidv4(),
+        id: uid(),
         lastname: '',
         firstname: '',
         middlename: '',
@@ -122,7 +122,7 @@ export default class PersonForm extends Vue {
       }
     } else if (this.action === 'create') {
       this.getEntityForEdit(this.id).then(entity => {
-        this.entity = { ...entity, id: uuidv4() }
+        this.entity = { ...entity, id: uid() }
       })
     } else {
       this.getEntityForEdit(this.id).then(entity => {
