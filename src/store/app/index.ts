@@ -87,8 +87,8 @@ const SERVICE_GROUPS: ServiceGroup[] = [
         id: 'ORG_ROLES',
         order: 20,
         icon: 'local_offer',
-        title: 'Organization roles',
-        subtitle: 'Maintain organization roles',
+        title: 'Organizational roles',
+        subtitle: 'Maintain organizational roles',
         action: '/org-structure/roles',
         actionName: 'View'
       }

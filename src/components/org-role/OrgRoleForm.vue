@@ -68,7 +68,7 @@
 
 <script lang="ts">
 import { Component, Prop, Vue, Watch } from 'vue-property-decorator'
-import { Action, Getter } from 'vuex-class'
+import { Action } from 'vuex-class'
 import { uid } from 'quasar'
 import { OrgRoleDto } from 'src/store/org-role/state'
 
@@ -84,7 +84,7 @@ export default class OrgRoleForm extends Vue {
   entity: OrgRoleDto = {
     id: '',
     name: '',
-    description: '',
+    description: ''
   }
 
   @Action('GetEntityForEdit', { namespace: namespace }) getEntityForEdit;
@@ -102,7 +102,7 @@ export default class OrgRoleForm extends Vue {
       this.entity = {
         id: uid(),
         name: '',
-        description: '',
+        description: ''
       }
     } else if (this.action === 'create') {
       this.getEntityForEdit(this.id).then(entity => {
