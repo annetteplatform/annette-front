@@ -4,6 +4,7 @@ import { RootState } from './root-state'
 import { app } from './app'
 import { person } from './person'
 import { authRole } from './auth-role'
+import { orgRole } from './org-role'
 import { authAssignment } from 'src/store/auth-assignment'
 
 // import example from './module-example';
@@ -25,7 +26,8 @@ export default store(function ({ Vue }) {
       app,
       person,
       authRole,
-      authAssignment
+      authAssignment,
+      orgRole
     },
 
     // enable strict mode (adds overhead!)

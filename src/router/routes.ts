@@ -51,6 +51,18 @@ const routes: RouteConfig[] = [
         name: 'auth-assignments',
         component: () => import('pages/auth-assignment/AuthAssignments.vue'),
         meta: { requiresAuth: true }
+      },
+      {
+        path: 'org-structure/roles',
+        name: 'org-roles',
+        component: () => import('pages/org-role/OrgRoles.vue'),
+        meta: { requiresAuth: true }
+      },
+      {
+        path: 'org-structure/role/:action/:id',
+        name: 'org-role',
+        component: () => import('pages/org-role/OrgRolePage.vue'),
+        meta: { requiresAuth: true }
       }
     ]
   },

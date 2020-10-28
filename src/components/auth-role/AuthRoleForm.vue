@@ -213,7 +213,7 @@ export default class AuthRoleForm extends Vue {
   @Prop() action
 
   entity: AuthRoleDto = {
-    id: uid(),
+    id: '',
     name: '',
     description: '',
     permissions: []
