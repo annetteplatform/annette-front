@@ -1,0 +1,5 @@
+export * from './pages/PersonPage.vue'
+export * from './pages/PersonProfile.vue'
+export * from './pages/Persons.vue'
+export * from './components/PersonList.vue'
+export * from './components/PersonList.vue'

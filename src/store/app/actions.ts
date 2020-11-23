@@ -2,7 +2,7 @@ import { ActionTree } from 'vuex'
 import { RootState } from '../root-state'
 import { AppState } from './state'
 import Vue from 'vue'
-import { backendService } from 'src/services/backend.service'
+import { personsService } from '../persons/persons.service'
 
 export const actions: ActionTree<AppState, RootState> = {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -38,7 +38,7 @@ export const actions: ActionTree<AppState, RootState> = {
   },
 
   LoadProfile ({ commit }) {
-    return backendService.profile().then(profile => {
+    return personsService.profile().then(profile => {
       commit('ProfileLoaded', profile)
     })
   }
