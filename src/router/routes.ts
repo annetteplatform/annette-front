@@ -63,6 +63,18 @@ const routes: RouteConfig[] = [
         name: 'org-role',
         component: () => import('pages/org-role/OrgRolePage.vue'),
         meta: { requiresAuth: true }
+      },
+      {
+        path: 'org-structure/organizations',
+        name: 'organizations',
+        component: () => import('pages/org-hierarchy/Organizations.vue'),
+        meta: { requiresAuth: true }
+      },
+      {
+        path: 'org-structure/organization/:action/:id',
+        name: 'organization',
+        component: () => import('pages/org-hierarchy/OrganizationPage.vue'),
+        meta: { requiresAuth: true }
       }
     ]
   },
