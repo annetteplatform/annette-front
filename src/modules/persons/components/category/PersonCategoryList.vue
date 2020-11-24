@@ -14,7 +14,7 @@
           :loading="loading"
         >
           <template v-slot:top>
-            <h5 class="q-ma-none">Organizations</h5>
+            <h5 class="q-ma-none">Person Categories</h5>
             <q-space/>
             <q-input class="q-mr-md" borderless dense placeholder="Search"
                      :value="filter.filter" debounce="500" @input="setFilterVal" >
@@ -24,22 +24,19 @@
             </q-input>
             <q-btn class="q-mr-md" outline color="primary" :disable="loading" label="Refresh" @click="refreshEntities()"/>
 
-            <q-btn color="primary" :disable="loading" label="Create" :to="'/org-structure/organization/create/new'"/>
+            <q-btn color="primary" :disable="loading" label="Create" :to="'/person/category/create/new'"/>
           </template>
           <template v-slot:body="props">
             <q-tr :props="props">
               <q-td key="id" :props="props">
                 {{ props.row.id }}
               </q-td>
-              <q-td key="shortName" :props="props">
-                {{ props.row.shortName }}
-              </q-td>
               <q-td key="name" :props="props">
                 {{ props.row.name }}
               </q-td>
               <q-td key="actions" :props="props" style="width: 12em">
-                <q-btn flat round color="green" size="sm" icon="far fa-eye" :to="`/org-structure/organization/view/${props.row.id}`"/>
-                <q-btn flat round color="blue" size="sm" icon="far fa-edit" :to="`/org-structure/organization/edit/${props.row.id}`"/>
+                <q-btn flat round color="green" size="sm" icon="far fa-eye" :to="`/person/category/view/${props.row.id}`"/>
+                <q-btn flat round color="blue" size="sm" icon="far fa-edit" :to="`/person/category/edit/${props.row.id}`"/>
                 <q-btn flat round color="red" size="sm" icon="fas fa-trash" @click="startDelete(props.row.id)"/>
               </q-td>
             </q-tr>
@@ -51,7 +48,7 @@
       <q-card>
         <q-card-section class="row items-center">
           <q-avatar icon="fas fa-trash" color="negative" text-color="white" />
-          <span class="q-ml-sm">Please confirm delete organization</span>
+          <span class="q-ml-sm">Please confirm delete person category</span>
         </q-card-section>
 
         <q-card-actions align="right">
@@ -68,9 +65,9 @@ import { Component, Prop, Vue, Watch } from 'vue-property-decorator'
 import { Action, Getter } from 'vuex-class'
 import { PagingMode } from 'src/lib/state'
 
-const namespace = 'orgItem'
+const namespace = 'personCategory'
 const PAGE_SIZE = 10
-const DEFAULT_INSTANCE_KEY = 'Organizations'
+const DEFAULT_INSTANCE_KEY = 'PersonCategories'
 
 const COLUMNS = [
   {
@@ -78,13 +75,6 @@ const COLUMNS = [
     align: 'left',
     label: 'Id',
     field: 'id',
-    classes: 'text-truncate'
-  },
-  {
-    name: 'shortName',
-    align: 'left',
-    label: 'Short Name',
-    field: 'shortName',
     classes: 'text-truncate'
   },
   {
@@ -105,7 +95,7 @@ const COLUMNS = [
 @Component({
   components: {}
 })
-export default class OrganizationList extends Vue {
+export default class PersonCategoryList extends Vue {
   @Prop(Number) page
 
   @Prop({ type: String, default: DEFAULT_INSTANCE_KEY }) instanceKey

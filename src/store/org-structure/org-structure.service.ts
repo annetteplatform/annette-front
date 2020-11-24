@@ -2,6 +2,7 @@ import axios from 'axios'
 import { FindResult } from 'src/lib/state'
 import { OrgRole, OrgRoleDto, OrgRoleFindQuery } from './org-role/state'
 import { CreateOrganizationPayloadDto, OrgItem, OrgItemFindQuery, OrgUnit } from './org-hierarchy/state'
+import { OrgCategory, OrgCategoryDto, OrgCategoryFindQuery } from 'src/store/org-structure/org-category/state'
 
 export const orgStructureService = {
 
@@ -80,12 +81,46 @@ export const orgStructureService = {
   async findOrgItems (query: OrgItemFindQuery) {
     return await axios.post<FindResult>('/api/annette/v1/orgStructure/findOrgItems', query)
       .then(result => result.data)
-  }
+  },
 
   // async moveItem(payload: MoveItemPayload): Future[Done]
   // async changeItemOrder(payload: ChangeItemOrderPayload): Future[Done]
   //
   // async getPersonPrincipals(personId: PersonId): Future[Set[AnnettePrincipal]]
   // async getPersonPositions(personId: PersonId): Future[Set[PersonPosition]]
+
+  // ******************************* Categories API *******************************
+
+  async createCategory (entity: OrgCategoryDto) {
+    return await axios.post<OrgCategory>('/api/annette/v1/orgStructure/createCategory', entity)
+      .then(result => result.data)
+  },
+
+  async updateCategory (entity: OrgCategoryDto) {
+    return await axios.post<OrgCategory>('/api/annette/v1/orgStructure/updateCategory', entity)
+      .then(result => result.data)
+  },
+
+  async deleteCategory (id: string) {
+    return await axios.post('/api/annette/v1/orgStructure/deleteCategory', { id })
+      .then(result => result)
+  },
+
+  async findCategories (query: OrgCategoryFindQuery) {
+    return await axios.post<FindResult>('/api/annette/v1/orgStructure/findCategories', query)
+      .then(result => result.data)
+  },
+
+  async getCategoryById (id: string, fromReadSide = true) {
+    // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
+    return await axios.get<OrgCategory>(`/api/annette/v1/orgStructure/getCategoryById/${id}/${fromReadSide}`)
+      .then(result => result.data)
+  },
+
+  async getCategoriesById (ids: string[], fromReadSide = true) {
+    // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
+    return await axios.post<{ [key: string]: OrgCategory }>(`/api/annette/v1/orgStructure/getCategoriesById/${fromReadSide}`, ids)
+      .then(result => result.data)
+  }
 
 }

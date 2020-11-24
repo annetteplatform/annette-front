@@ -13,19 +13,31 @@ const routes: RouteConfig[] = [
       {
         path: 'person/profile',
         name: 'profile',
-        component: () => import('src/modules/persons/pages/PersonProfile.vue'),
+        component: () => import('src/modules/persons/pages/person/PersonProfile.vue'),
         meta: { requiresAuth: true }
       },
       {
         path: 'person/persons',
         name: 'persons',
-        component: () => import('src/modules/persons/pages/Persons.vue'),
+        component: () => import('src/modules/persons/pages/person/Persons.vue'),
         meta: { requiresAuth: true }
       },
       {
         path: 'person/:action/:id',
         name: 'person',
-        component: () => import('src/modules/persons/pages/PersonPage.vue'),
+        component: () => import('src/modules/persons/pages/person/PersonPage.vue'),
+        meta: { requiresAuth: true }
+      },
+      {
+        path: 'person/categories',
+        name: 'person-categories',
+        component: () => import('src/modules/persons/pages/category/PersonCategories.vue'),
+        meta: { requiresAuth: true }
+      },
+      {
+        path: 'person/category/:action/:id',
+        name: 'person-category',
+        component: () => import('src/modules/persons/pages/category/PersonCategoryPage.vue'),
         meta: { requiresAuth: true }
       },
       {
@@ -62,6 +74,18 @@ const routes: RouteConfig[] = [
         path: 'org-structure/role/:action/:id',
         name: 'org-role',
         component: () => import('src/modules/org-structure/pages/org-role/OrgRolePage.vue'),
+        meta: { requiresAuth: true }
+      },
+      {
+        path: 'org-structure/categories',
+        name: 'org-categories',
+        component: () => import('src/modules/org-structure/pages/org-category/OrgCategories.vue'),
+        meta: { requiresAuth: true }
+      },
+      {
+        path: 'org-structure/category/:action/:id',
+        name: 'org-category',
+        component: () => import('src/modules/org-structure/pages/org-category/OrgCategoryPage.vue'),
         meta: { requiresAuth: true }
       },
       {

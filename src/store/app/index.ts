@@ -58,6 +58,15 @@ const SERVICE_GROUPS: ServiceGroup[] = [
         actionName: 'Open'
       },
       {
+        id: 'PERSON_CATEGORIES',
+        order: 20,
+        icon: 'local_offer',
+        title: 'Person categories',
+        subtitle: 'Maintain person categories',
+        action: '/person/categories',
+        actionName: 'View'
+      },
+      {
         id: 'PROFILE',
         order: 20,
         icon: 'account_circle',
@@ -90,6 +99,15 @@ const SERVICE_GROUPS: ServiceGroup[] = [
         title: 'Organizational roles',
         subtitle: 'Maintain organizational roles',
         action: '/org-structure/roles',
+        actionName: 'View'
+      },
+      {
+        id: 'ORG_CATEGORIES',
+        order: 20,
+        icon: 'local_offer',
+        title: 'Org. categories',
+        subtitle: 'Maintain org. categories',
+        action: '/org-structure/categories',
         actionName: 'View'
       }
     ]

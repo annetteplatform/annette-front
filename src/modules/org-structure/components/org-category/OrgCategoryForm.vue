@@ -4,16 +4,16 @@
       <div class="row items-center no-wrap">
         <div class="col">
           <div class="text-h6">
-            <span v-if="action == 'create'">Create organization</span>
-            <span v-else-if="action == 'edit'">Edit organization</span>
-            <span v-else-if="action == 'view'">View organization</span>
+            <span v-if="action == 'create'">Create category</span>
+            <span v-else-if="action == 'edit'">Edit category</span>
+            <span v-else-if="action == 'view'">View category</span>
 
           </div>
         </div>
         <div class="col-auto q-gutter-sm">
           <q-btn outline color="primary"
-                 to="/org-structure/organizations"
-                 label="Organizations"/>
+                 to="/org-structure/categories"
+                 label="Org Categories"/>
           <q-btn color="primary" label="Save"
                  v-if="action == 'edit' || action == 'create'"
                  @click="save"/>
@@ -32,7 +32,7 @@
             <q-input
               class="col-md-4 col-sm-12 col-xs-12 q-pr-md"
               v-model="entity.id"
-              label="Organization ID"
+              label="Category ID"
               :readonly="action !== 'create'"
             />
           </div>
@@ -40,16 +40,33 @@
           <div class="row">
             <q-input
               class="col-md-6 col-sm-12 col-xs-12 q-pr-md"
-              v-model="entity.shortName"
-              label="Short name"
+              v-model="entity.name"
+              label="Name"
+              :readonly="action === 'view'"
+            />
+          </div>
+
+          <div class="row">
+            <q-checkbox
+              class="col-md-12 col-sm-12 col-xs-12 q-pr-md"
+              v-model="entity.forOrganization"
+              label="Organization"
               :readonly="action === 'view'"
             />
           </div>
           <div class="row">
-            <q-input
-              class="col-md-6 col-sm-12 col-xs-12 q-pr-md"
-              v-model="entity.name"
-              label="Name"
+            <q-checkbox
+              class="col-md-12 col-sm-12 col-xs-12 q-pr-md"
+              v-model="entity.forUnit"
+              label="Unit"
+              :readonly="action === 'view'"
+            />
+          </div>
+          <div class="row">
+            <q-checkbox
+              class="col-md-12 col-sm-12 col-xs-12 q-pr-md"
+              v-model="entity.forPosition"
+              label="Position"
               :readonly="action === 'view'"
             />
           </div>
@@ -67,29 +84,26 @@
 import { Component, Prop, Vue, Watch } from 'vue-property-decorator'
 import { Action } from 'vuex-class'
 import { uid } from 'quasar'
-import { OrgUnitDto } from 'src/store/org-structure/org-hierarchy/state'
+import { OrgCategoryDto } from 'src/store/org-structure/org-category/state'
 
-const namespace = 'orgItem'
+const namespace = 'orgCategory'
 
 @Component({
   components: {}
 })
-export default class OrganizationForm extends Vue {
+export default class OrgCategoryForm extends Vue {
   @Prop() id
   @Prop() action
 
-  entity: OrgUnitDto = {
+  entity: OrgCategoryDto = {
     id: '',
-    orgId: '',
-    parentId: 'ROOT',
-    itemType: 'unit',
     name: '',
-    shortName: '',
-    level: 0,
-    children: []
+    forOrganization: false,
+    forPosition: false,
+    forUnit: false
   }
 
-  @Action('GetOrganizationForEdit', { namespace: namespace }) getOrganizationForEdit;
+  @Action('GetEntityForEdit', { namespace: namespace }) getEntityForEdit;
   @Action('CreateEntity', { namespace: namespace }) createEntity;
   @Action('UpdateEntity', { namespace: namespace }) updateEntity;
 
@@ -102,21 +116,18 @@ export default class OrganizationForm extends Vue {
     console.log('load data', this.action, this.id)
     if (this.action === 'create' && this.id === 'new') {
       this.entity = {
-        id: '',
-        orgId: '',
-        parentId: 'ROOT',
-        itemType: 'unit',
+        id: uid(),
         name: '',
-        shortName: '',
-        level: 0,
-        children: []
+        forOrganization: false,
+        forPosition: false,
+        forUnit: false
       }
     } else if (this.action === 'create') {
-      this.getOrganizationForEdit(this.id).then(entity => {
+      this.getEntityForEdit(this.id).then(entity => {
         this.entity = { ...entity, id: uid() }
       })
     } else {
-      this.getOrganizationForEdit(this.id).then(entity => {
+      this.getEntityForEdit(this.id).then(entity => {
         this.entity = { ...entity }
       })
     }
@@ -127,7 +138,7 @@ export default class OrganizationForm extends Vue {
     if (this.action === 'create') {
       this.createEntity(this.entity).then(entity => {
         // eslint-disable-next-line no-void
-        void this.$router.push({ name: 'organization', params: { action: 'edit', id: entity.id } })
+        void this.$router.push({ name: 'org-category', params: { action: 'edit', id: entity.id } })
       })
     } else if (this.action === 'edit') {
       this.updateEntity(this.entity).then(entity => {

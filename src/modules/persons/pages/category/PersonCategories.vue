@@ -2,7 +2,7 @@
   <div class="narrow-layout row">
     <div class="col-md-12 q-pa-md">
       <q-card>
-        <person-list :page="page" :instanceKey="instanceKey" @pageChanged="onPageChanged"></person-list>
+        <person-category-list :page="page" :instanceKey="instanceKey" @pageChanged="onPageChanged"></person-category-list>
       </q-card>
     </div>
   </div>
@@ -11,19 +11,19 @@
 <script lang="ts">
 import { Component, Vue, Watch } from 'vue-property-decorator'
 import { Action, Getter } from 'vuex-class'
-import PersonList from '../components/PersonList.vue'
+import PersonCategoryList from '../../components/category/PersonCategoryList.vue'
 
-const personNamespace = 'person'
-const INSTANCE_KEY = 'Persons'
+const namespace = 'personCategory'
+const INSTANCE_KEY = 'PersonCategories'
 
 @Component({
   components: {
-    PersonList
+    PersonCategoryList
   }
 })
-export default class Persons extends Vue {
-  @Getter('page', { namespace: personNamespace }) pageStateFn;
-  @Action('deleteEntity', { namespace: personNamespace }) deleteEntity;
+export default class PersonCategories extends Vue {
+  @Getter('page', { namespace: namespace }) pageStateFn;
+  @Action('deleteEntity', { namespace: namespace }) deleteEntity;
 
   page = 1
   instanceKey = INSTANCE_KEY
@@ -38,18 +38,16 @@ export default class Persons extends Vue {
       this.page = +this.$route.query.page
     } else if (this.pageState) {
       // eslint-disable-next-line no-void
-      void this.$router.push({ name: 'persons', query: { page: this.pageState } })
+      void this.$router.push({ name: 'person-categories', query: { page: this.pageState } })
     } else {
       // eslint-disable-next-line no-void
-      void this.$router.push({ name: 'persons', query: { page: '1' } })
+      void this.$router.push({ name: 'person-categories', query: { page: '1' } })
     }
-    console.log('Persons created: ', this.page)
   }
 
   onPageChanged (page) {
-    console.log('onPageChanged: ', page)
     // eslint-disable-next-line no-void
-    void this.$router.push({ name: 'persons', query: { page } })
+    void this.$router.push({ name: 'person-categories', query: { page } })
   }
 
   @Watch('$route')

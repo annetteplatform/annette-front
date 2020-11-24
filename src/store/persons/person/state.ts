@@ -15,6 +15,7 @@ export interface Person extends BaseEntity {
   lastname: string,
   firstname: string,
   middlename?: string,
+  categoryId: string,
   phone?: string,
   email?: string,
   updatedAt: Date,
@@ -26,6 +27,7 @@ export interface PersonDto {
   lastname: string,
   firstname: string,
   middlename?: string,
+  categoryId: string,
   phone?: string,
   email?: string,
 }
@@ -37,6 +39,7 @@ export interface PersonFindQuery {
   lastname?: string,
   firstname?: string,
   middlename?: string,
+  categories?: string[],
   phone?: string,
   email?: string,
   // attributes?: Option[AttributeQuery] = None,

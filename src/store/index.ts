@@ -2,9 +2,9 @@ import { store } from 'quasar/wrappers'
 import Vuex from 'vuex'
 import { RootState } from './root-state'
 import { app } from './app'
-import { person } from './persons'
+import { person, personCategory } from './persons'
 import { authRole, authAssignment } from './authorization'
-import { orgRole, orgItem } from './org-structure'
+import { orgRole, orgItem, orgCategory } from './org-structure'
 
 // import example from './module-example';
 // import { ExampleStateInterface } from './module-example/state';
@@ -24,9 +24,11 @@ export default store(function ({ Vue }) {
     modules: {
       app,
       person,
+      personCategory,
       authRole,
       authAssignment,
       orgRole,
+      orgCategory,
       orgItem
     },
 

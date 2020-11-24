@@ -118,7 +118,8 @@ export default class PersonForm extends Vue {
         firstname: '',
         middlename: '',
         phone: '',
-        email: ''
+        email: '',
+        categoryId: 'PERSON' // TODO: change this
       }
     } else if (this.action === 'create') {
       this.getEntityForEdit(this.id).then(entity => {

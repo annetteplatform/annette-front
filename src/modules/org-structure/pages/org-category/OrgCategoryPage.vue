@@ -1,19 +1,19 @@
 <template>
   <div class="narrow-layout">
-    <person-form :id="id" :action="action"></person-form>
+    <org-category-form :id="id" :action="action"/>
   </div>
 </template>
 
 <script lang="ts">
 import { Component, Vue, Watch } from 'vue-property-decorator'
-import PersonForm from '../components/PersonForm.vue'
+import OrgCategoryForm from '../../components/org-category/OrgCategoryForm.vue'
 
 @Component({
   components: {
-    PersonForm
+    OrgCategoryForm
   }
 })
-export default class PersonPage extends Vue {
+export default class OrgCategoryPage extends Vue {
   id = ''
   action = 'view'
 
