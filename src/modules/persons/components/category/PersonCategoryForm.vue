@@ -46,6 +46,11 @@
             />
           </div>
 
+          <updated-fields
+            v-if="entity.updatedAt && entity.updatedBy"
+            :updated-at="entity.updatedAt"
+            :updated-by="entity.updatedBy" />
+
         </div>
 
       </div>
@@ -60,11 +65,12 @@ import { Component, Prop, Vue, Watch } from 'vue-property-decorator'
 import { Action } from 'vuex-class'
 import { uid } from 'quasar'
 import { PersonCategoryDto } from 'src/store/persons/category/state'
+import UpdatedFields from 'src/lib/components/UpdatedFields.vue'
 
 const namespace = 'personCategory'
 
 @Component({
-  components: {}
+  components: { UpdatedFields }
 })
 export default class PersonCategoryForm extends Vue {
   @Prop() id

@@ -7,7 +7,7 @@
               <span v-if="action == 'create'">Create person: </span>
               <span v-else-if="action == 'edit'">Edit person: </span>
               <span v-else-if="action == 'view'">View person: </span>
-              <span v-if="entity">{{ entity.lastname }} {{ entity.firstname }}</span>
+              <span v-if="!!entity">{{ entity.lastname }} {{ entity.firstname }}</span>
 
             </div>
           </div>
@@ -77,6 +77,11 @@
               />
             </div>
 
+            <updated-fields
+              v-if="entity.updatedAt && entity.updatedBy"
+              :updated-at="entity.updatedAt"
+              :updated-by="entity.updatedBy" />
+
           </div>
         </div>
       </q-card-section>
@@ -88,11 +93,12 @@ import { Component, Prop, Vue, Watch } from 'vue-property-decorator'
 import { Action } from 'vuex-class'
 import { uid } from 'quasar'
 import { PersonDto } from 'src/store/persons/person/state'
+import UpdatedFields from 'src/lib/components/UpdatedFields.vue'
 
 const namespace = 'person'
 
 @Component({
-  components: {}
+  components: { UpdatedFields }
 })
 export default class PersonForm extends Vue {
   @Prop() id
@@ -142,7 +148,7 @@ export default class PersonForm extends Vue {
       })
     } else if (this.action === 'edit') {
       this.updateEntity(this.entity).then(entity => {
-        this.entity = entity
+        this.entity = { ...entity }
       })
     }
   }

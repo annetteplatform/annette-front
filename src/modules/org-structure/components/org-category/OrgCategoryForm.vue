@@ -71,6 +71,11 @@
             />
           </div>
 
+          <updated-fields
+            v-if="entity.updatedAt && entity.updatedBy"
+            :updated-at="entity.updatedAt"
+            :updated-by="entity.updatedBy" />
+
         </div>
 
       </div>
@@ -85,11 +90,12 @@ import { Component, Prop, Vue, Watch } from 'vue-property-decorator'
 import { Action } from 'vuex-class'
 import { uid } from 'quasar'
 import { OrgCategoryDto } from 'src/store/org-structure/org-category/state'
+import UpdatedFields from 'src/lib/components/UpdatedFields.vue'
 
 const namespace = 'orgCategory'
 
 @Component({
-  components: {}
+  components: { UpdatedFields }
 })
 export default class OrgCategoryForm extends Vue {
   @Prop() id

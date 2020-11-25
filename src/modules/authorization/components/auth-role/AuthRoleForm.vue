@@ -60,6 +60,11 @@
 
           </div>
 
+          <updated-fields
+            v-if="entity.updatedAt && entity.updatedBy"
+            :updated-at="entity.updatedAt"
+            :updated-by="entity.updatedBy" />
+
           <q-table
             flat
             wrap-cells
@@ -93,6 +98,7 @@
               </q-tr>
             </template>
           </q-table>
+
           <q-dialog v-model="showDialog">
             <q-card style="width: 700px; max-width: 80vw;">
               <q-card-section>
@@ -167,6 +173,7 @@ import { Component, Prop, Vue, Watch } from 'vue-property-decorator'
 import { Action, Getter } from 'vuex-class'
 import { uid } from 'quasar'
 import { AuthRoleDto, Permission } from 'src/store/authorization/auth-role/state'
+import UpdatedFields from 'src/lib/components/UpdatedFields.vue'
 
 const namespace = 'authRole'
 
@@ -206,7 +213,7 @@ const ACTION_COL = {
 }
 
 @Component({
-  components: {}
+  components: { UpdatedFields }
 })
 export default class AuthRoleForm extends Vue {
   @Prop() id

@@ -22,6 +22,12 @@ export const actions: ActionTree<PersonState, RootState> = {
     return entity
   },
 
+  async GetEntityForView ({ commit }, id: string) {
+    const entity = await personsService.getPersonById(id, true)
+    commit('StoreEntity', entity)
+    return entity
+  },
+
   async CreateEntity ({ commit }, entity: Person) {
     const newEntity = await personsService.createPerson(entity)
     commit('StoreEntity', newEntity)

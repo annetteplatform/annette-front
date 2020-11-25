@@ -5,6 +5,8 @@ import { calculateTotalPages, PagingMode } from 'src/lib/state'
 export function buildGetters<E extends BaseEntity, F, R> (): GetterTree<EntityState<E, F>, R> {
   const getters: GetterTree<EntityState<E, F>, R> = {
 
+    entities: state => state.entities,
+
     page: state => instanceKey => {
       const instance = state.instances[instanceKey]
       if (instance) {

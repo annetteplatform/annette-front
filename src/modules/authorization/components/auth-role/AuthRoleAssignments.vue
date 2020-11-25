@@ -52,11 +52,8 @@
             </template>
             <template v-slot:body="props">
               <q-tr :props="props">
-                <q-td key="principalType" :props="props">
-                  {{ props.row.principalType }}
-                </q-td>
-                <q-td key="principalId" :props="props">
-                  {{ props.row.principalId }}
+                <q-td key="principal" :props="props">
+                  <principal-field :principal="{ principalType: props.row.principalType, principalId: props.row.principalId }" />
                 </q-td>
                 <q-td key="actions" :props="props" style="width: 12em">
                   <q-btn flat round color="red" size="sm" icon="fas fa-trash" @click="startDelete(props.row)"/>
@@ -137,22 +134,17 @@ import { Component, Prop, Vue, Watch } from 'vue-property-decorator'
 import { Action, Getter } from 'vuex-class'
 import { AuthRoleDto, RolePrincipalPayload } from 'src/store/authorization/auth-role/state'
 import { AnnettePrincipal } from 'src/lib/state'
+import PrincipalField from 'src/lib/components/PrincipalField.vue'
 
 const namespace = 'authRole'
 
 const COLUMNS = [
 
   {
-    name: 'principalType',
+    name: 'principal',
     align: 'left',
-    label: 'Principal Type',
+    label: 'Principal',
     field: 'principalType'
-  },
-  {
-    name: 'principalId',
-    align: 'left',
-    label: 'Principal Id',
-    field: 'principalId'
   },
   {
     name: 'actions',
@@ -163,7 +155,7 @@ const COLUMNS = [
 ]
 
 @Component({
-  components: {}
+  components: { PrincipalField }
 })
 export default class AuthRoleAssignments extends Vue {
   @Prop() id

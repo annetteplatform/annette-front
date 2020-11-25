@@ -56,6 +56,11 @@
           />
         </div>
 
+        <updated-fields
+          v-if="profile.updatedAt && profile.updatedBy"
+          :updated-at="profile.updatedAt"
+          :updated-by="profile.updatedBy" />
+
       </div>
     </div>
 
@@ -65,11 +70,12 @@
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator'
 import { Getter } from 'vuex-class'
+import UpdatedFields from 'src/lib/components/UpdatedFields.vue'
 
 const appNamespace = 'app'
 
 @Component({
-  components: {}
+  components: { UpdatedFields }
 })
 export default class PersonProfile extends Vue {
   @Getter('profile', { namespace: appNamespace }) profile

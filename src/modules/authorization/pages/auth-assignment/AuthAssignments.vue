@@ -104,6 +104,29 @@
           @request="onRequest"
           :loading="loading"
         >
+          <template v-slot:body="props">
+            <q-tr :props="props">
+              <q-td key="principal" :props="props">
+                <principal-field :principal="props.row.principal" />
+              </q-td>
+              <q-td key="id" :props="props">
+                {{ props.row.permission.id }}
+              </q-td>
+              <q-td key="arg1" :props="props">
+                {{ props.row.permission.arg1 }}
+              </q-td>
+              <q-td key="arg2" :props="props">
+                {{ props.row.permission.arg2 }}
+              </q-td>
+              <q-td key="arg3" :props="props">
+                {{ props.row.permission.arg3 }}
+              </q-td>
+
+              <q-td key="source" :props="props">
+                <auth-source-chip :source="props.row.source" />
+              </q-td>
+            </q-tr>
+          </template>
         </q-table>
       </q-card-section>
     </q-card>
@@ -120,6 +143,8 @@ import {
   PermissionAssignment
 } from 'src/store/authorization/auth-assignment/state'
 import { extend } from 'quasar'
+import PrincipalField from 'src/lib/components/PrincipalField.vue'
+import AuthSourceChip from 'src/modules/authorization/components/auth-role/AuthSourceChip.vue'
 
 const assignmentNamespace = 'authAssignment'
 const roleNamespace = 'authRole'
@@ -128,16 +153,10 @@ const PAGE_SIZE = 10
 
 const COLUMNS = [
   {
-    name: 'principalType',
+    name: 'principal',
     align: 'left',
-    label: 'Principal Type',
-    field: (row: PermissionAssignment) => row.principal.principalType
-  },
-  {
-    name: 'principalId',
-    align: 'left',
-    label: 'Principal Id',
-    field: (row: PermissionAssignment) => row.principal.principalId
+    label: 'Principal ',
+    field: 'principal'
   },
   {
     name: 'id',
@@ -164,21 +183,15 @@ const COLUMNS = [
     field: (row: PermissionAssignment) => row.permission.arg3
   },
   {
-    name: 'sourceType',
+    name: 'source',
     align: 'left',
-    label: 'Source Type',
-    field: (row: PermissionAssignment) => row.source.sourceType
-  },
-  {
-    name: 'sourceId',
-    align: 'left',
-    label: 'Source Id',
-    field: (row: PermissionAssignment) => row.source.sourceId
+    label: 'Source',
+    field: 'source'
   }
 ]
 
 @Component({
-  components: {}
+  components: { AuthSourceChip, PrincipalField }
 })
 export default class AuthAssignments extends Vue {
   @Getter('page', { namespace: assignmentNamespace }) pageStateFn;
