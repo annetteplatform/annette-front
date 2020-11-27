@@ -94,4 +94,5 @@ export interface CreateOrganizationPayloadDto {
   orgId: string,
   name: string,
   shortName: string,
+  categoryId: string
 }

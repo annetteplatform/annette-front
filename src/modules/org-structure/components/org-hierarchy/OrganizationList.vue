@@ -24,7 +24,8 @@
             </q-input>
             <q-btn class="q-mr-md" outline color="primary" :disable="loading" label="Refresh" @click="refreshEntities()"/>
 
-            <q-btn color="primary" :disable="loading" label="Create" :to="'/org-structure/organization/create/new'"/>
+            <q-btn color="primary" :disable="loading" label="Create" @click="createOrg"/>
+            <create-organization-dialog :show="showCreateOrgDialog" @ok="createOrgOk" @cancel="createOrgCancel" />
           </template>
           <template v-slot:body="props">
             <q-tr :props="props">
@@ -67,6 +68,8 @@
 import { Component, Prop, Vue, Watch } from 'vue-property-decorator'
 import { Action, Getter } from 'vuex-class'
 import { PagingMode } from 'src/lib/state'
+import CreateOrganizationDialog from 'src/modules/org-structure/components/org-hierarchy/CreateOrganizationDialog.vue'
+import { CreateOrganizationPayloadDto } from 'src/store/org-structure/org-hierarchy/state'
 
 const namespace = 'orgItem'
 const PAGE_SIZE = 10
@@ -103,7 +106,7 @@ const COLUMNS = [
 ]
 
 @Component({
-  components: {}
+  components: { CreateOrganizationDialog }
 })
 export default class OrganizationList extends Vue {
   @Prop(Number) page
@@ -114,6 +117,8 @@ export default class OrganizationList extends Vue {
   columns = COLUMNS
   deleteId = null
   deleteDialog = false
+
+  showCreateOrgDialog = false
 
   @Getter('total', { namespace: namespace }) totalFn;
   @Getter('page', { namespace: namespace }) pageStateFn;
@@ -127,6 +132,7 @@ export default class OrganizationList extends Vue {
   @Action('SetPageSize', { namespace: namespace }) setPageSize;
   @Action('SetFilter', { namespace: namespace }) setFilter;
   @Action('DeleteEntity', { namespace: namespace }) deleteEntityFn;
+  @Action('CreateOrganization', { namespace: namespace }) createOrganization;
 
   get pageState () {
     // eslint-disable-next-line @typescript-eslint/no-unsafe-return
@@ -225,13 +231,29 @@ export default class OrganizationList extends Vue {
     }
   }
 
-  refreshEntities (done) {
+  refreshEntities (done?) {
     if (this.initialized) {
       // eslint-disable-next-line @typescript-eslint/no-unsafe-return
       this.refresh({ instanceKey: this.instanceKey }).then(() => {
         if (done) done()
       })
     }
+  }
+
+  createOrg () {
+    this.showCreateOrgDialog = true
+  }
+
+  createOrgOk (createOrgPayload: CreateOrganizationPayloadDto) {
+    if (this.showCreateOrgDialog) {
+      console.log(createOrgPayload)
+      this.showCreateOrgDialog = false
+      this.createOrganization(createOrgPayload)
+    }
+  }
+
+  createOrgCancel () {
+    this.showCreateOrgDialog = false
   }
 }
 

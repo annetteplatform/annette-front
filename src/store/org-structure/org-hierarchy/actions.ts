@@ -1,6 +1,7 @@
 import { ActionTree } from 'vuex'
 import { RootState } from '../../root-state'
 import {
+  CreateOrganizationPayloadDto,
   OrgItem,
   OrgItemFindQuery,
   OrgItemState
@@ -20,13 +21,13 @@ export const actions: ActionTree<OrgItemState, RootState> = {
     const entity = await orgStructureService.getOrgItemById(id, id)
     commit('StoreEntity', entity)
     return entity
+  },
+
+  async CreateOrganization ({ commit }, entity: CreateOrganizationPayloadDto) {
+    const newEntity = await orgStructureService.createOrganization(entity)
+    commit('StoreEntity', newEntity)
+    return newEntity
   }
-  //
-  // async CreateEntity ({ commit }, entity: OrgItem) {
-  //   const newEntity = await orgStructureService.createOrgItem(entity)
-  //   commit('StoreEntity', newEntity)
-  //   return newEntity
-  // },
   //
   // async UpdateEntity ({ commit }, entity: OrgItem) {
   //   const newEntity = await orgStructureService.updateOrgItem(entity)
