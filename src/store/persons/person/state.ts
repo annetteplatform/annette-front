@@ -49,11 +49,11 @@ export interface PersonFindQuery {
 export const DEFAULT_PERSON_FIND_QUERY:PersonFindQuery = {
   offset: 0,
   size: 0,
-  filter: '',
-  sortBy: [
-    {
-      field: 'lastname',
-      ascending: true
-    }
-  ]
+  filter: ''
+  // sortBy: [
+  //   {
+  //     field: 'lastname',
+  //     ascending: true
+  //   }
+  // ]
 }
