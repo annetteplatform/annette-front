@@ -72,7 +72,6 @@
                 class="col-md-4 col-sm-12 col-xs-12 q-pr-md "
                 v-model="entity.phone"
                 label="Phone number "
-                mask="+# (###) ###-####" fill-mask="#" unmasked-value
                 :readonly="action === 'view'"
               />
             </div>
