@@ -1,7 +1,14 @@
 import axios from 'axios'
 import { FindResult } from 'src/lib/state'
 import { OrgRole, OrgRoleDto, OrgRoleFindQuery } from './org-role/state'
-import { CreateOrganizationPayloadDto, OrgItem, OrgItemFindQuery, OrgUnit } from './org-hierarchy/state'
+import {
+  AssignCategoryPayloadDto,
+  CreateOrganizationPayloadDto,
+  OrgItem,
+  OrgItemFindQuery,
+  OrgUnit,
+  UpdateNamePayloadDto, UpdateShortNamePayloadDto
+} from './org-hierarchy/state'
 import { OrgCategory, OrgCategoryDto, OrgCategoryFindQuery } from 'src/store/org-structure/org-category/state'
 
 export const orgStructureService = {
@@ -46,7 +53,10 @@ export const orgStructureService = {
     return await axios.post<OrgUnit>('/api/annette/v1/orgStructure/createOrganization', payload)
       .then(result => result.data)
   },
-  // async deleteOrganization(payload: DeleteOrganizationPayloadDto): Future[Done]
+  async deleteOrganization (id: string) {
+    return await axios.post<OrgUnit>('/api/annette/v1/orgStructure/deleteOrganization', { orgId: id })
+      .then(result => result.data)
+  },
   // async getOrganizationById(orgId: string): Future[Organization]
   // async getOrganizationTree(orgId: string, itemId: string): Future[OrganizationTree]
   //
@@ -57,8 +67,18 @@ export const orgStructureService = {
   //
   // async createPosition(payload: CreatePositionPayload): Future[Done]
   // async deletePosition(payload: DeletePositionPayload): Future[Done]
-  // async updateName(payload: UpdateNamePayload): Future[Done]
-  // async updateShortName(payload: UpdateShortNamePayload): Future[Done]
+  async updateName(payload: UpdateNamePayloadDto) {
+    return await axios.post<OrgItem>('/api/annette/v1/orgStructure/updateName', payload)
+      .then(result => result.data)
+  },
+  async updateShortName(payload: UpdateShortNamePayloadDto) {
+    return await axios.post<OrgItem>('/api/annette/v1/orgStructure/updateShortName', payload)
+      .then(result => result.data)
+  },
+  async assignCategory(payload: AssignCategoryPayloadDto) {
+    return await axios.post<OrgItem>('/api/annette/v1/orgStructure/assignCategory', payload)
+      .then(result => result.data)
+  },
   // async changePositionLimit(payload: ChangePositionLimitPayload): Future[Done]
   // async assignPerson(payload: AssignPersonPayload): Future[Done]
   // async unassignPerson(payload: UnassignPersonPayload): Future[Done]
@@ -70,7 +90,10 @@ export const orgStructureService = {
     return await axios.get<OrgItem>(`/api/annette/v1/orgStructure/getOrgItemById/${orgId}/${id}`)
       .then(result => result.data)
   },
-  // async getOrgItemsById(orgId: OrgItemId, ids: Set[OrgItemId]): Future[Map[OrgItemId, OrgItem]]
+  async getOrgItemsById(orgId: string, ids: string[]) {
+    return await axios.post<{ [key: string]: OrgItem }>(`/api/annette/v1/orgStructure/getOrgItemsById/${orgId}`, ids)
+      .then(result => result.data)
+  },
   // async getOrgItemByIdFromReadSide(id: OrgItemId): Future[OrgItem]
   async getOrgItemsByIdFromReadSide (ids: string[]) {
     // eslint-disable-next-line @typescript-eslint/restrict-template-expressions

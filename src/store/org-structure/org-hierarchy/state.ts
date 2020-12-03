@@ -12,6 +12,7 @@ export interface OrgItem extends BaseEntity {
   shortName: string
   level: number
   itemType: string
+  categoryId: string,
   updatedAt: Date
   updatedBy?: AnnettePrincipal
 }
@@ -32,6 +33,7 @@ export interface OrgItemDto {
   parentId: string
   name: string
   shortName: string
+  categoryId: string,
   level: number
   itemType: string
 }
@@ -94,5 +96,23 @@ export interface CreateOrganizationPayloadDto {
   orgId: string,
   name: string,
   shortName: string,
+  categoryId: string
+}
+
+export interface UpdateNamePayloadDto {
+  orgId: string,
+  orgItemId: string,
+  name: string
+}
+
+export interface UpdateShortNamePayloadDto {
+  orgId: string,
+  orgItemId: string,
+  shortName: string
+}
+
+export interface AssignCategoryPayloadDto {
+  orgId: string,
+  itemId: string,
   categoryId: string
 }

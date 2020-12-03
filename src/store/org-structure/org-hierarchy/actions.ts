@@ -1,10 +1,11 @@
 import { ActionTree } from 'vuex'
 import { RootState } from '../../root-state'
 import {
+  AssignCategoryPayloadDto,
   CreateOrganizationPayloadDto,
   OrgItem,
   OrgItemFindQuery,
-  OrgItemState
+  OrgItemState, UpdateNamePayloadDto, UpdateShortNamePayloadDto
 } from './state'
 import { orgStructureService } from '../org-structure.service'
 import { buildActions } from 'src/lib/state'
@@ -27,7 +28,7 @@ export const actions: ActionTree<OrgItemState, RootState> = {
     const newEntity = await orgStructureService.createOrganization(entity)
     commit('StoreEntity', newEntity)
     return newEntity
-  }
+  },
   //
   // async UpdateEntity ({ commit }, entity: OrgItem) {
   //   const newEntity = await orgStructureService.updateOrgItem(entity)
@@ -35,9 +36,32 @@ export const actions: ActionTree<OrgItemState, RootState> = {
   //   return newEntity
   // },
   //
-  // async DeleteEntity ({ commit }, id: string) {
-  //   await orgStructureService.deleteOrgItem(id)
-  //   commit('RemoveEntity', id)
-  // }
+  async DeleteOrganization ({ commit }, id: string) {
+    await orgStructureService.deleteOrganization(id)
+    commit('RemoveEntity', id)
+  },
+
+  async GetOrgItemsById ({ commit }, {orgId, ids}) {
+    const entities = await orgStructureService.getOrgItemsById(orgId, ids)
+    commit('StoreEntities', entities)
+    return entities
+  },
+
+  async UpdateName ({ commit }, payload: UpdateNamePayloadDto) {
+    const updatedEntity = await orgStructureService.updateName(payload)
+    commit('StoreEntity', updatedEntity)
+    return updatedEntity
+  },
+
+  async UpdateShortName ({ commit }, payload: UpdateShortNamePayloadDto) {
+    const updatedEntity = await orgStructureService.updateShortName(payload)
+    commit('StoreEntity', updatedEntity)
+    return updatedEntity
+  },
+  async AssignCategory ({ commit }, payload: AssignCategoryPayloadDto) {
+    const updatedEntity = await orgStructureService.assignCategory(payload)
+    commit('StoreEntity', updatedEntity)
+    return updatedEntity
+  }
 
 }

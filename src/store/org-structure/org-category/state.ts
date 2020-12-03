@@ -13,7 +13,9 @@ export type OrgCategoryState = EntityState<OrgCategory, OrgCategoryFindQuery>
 export interface OrgCategory extends BaseEntity {
   id: string,
   name: string,
-  description: string,
+  forOrganization: boolean,
+  forUnit: boolean,
+  forPosition: boolean
   updatedAt: Date,
   updatedBy?: AnnettePrincipal
 }
