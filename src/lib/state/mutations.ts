@@ -71,12 +71,15 @@ export function buildMutations<E extends BaseEntity, F> (
         const ids = data.ids.slice(start, start + instance.pageSize)
         Vue.set(instance.pages, index, { ids })
       }
-
       state.entities = { ...state.entities, ...data.entities }
     },
 
     StoreEntity: (state: EntityState<E, F>, entity: E) => {
       Vue.set(state.entities, entity.id, entity)
+    },
+
+    StoreEntities: (state: EntityState<E, F>, entities: { [key: string]: E }) => {
+      Object.values(entities).forEach(entity => Vue.set(state.entities, entity.id, entity))
     },
 
     RemoveEntity: (state: EntityState<E, F>, id: string) => {

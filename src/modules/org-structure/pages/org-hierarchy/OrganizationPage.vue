@@ -1,16 +1,16 @@
 <template>
-  <div class="narrow-layout">
-    <organization-form :id="id" :action="action"/>
+  <div>
+    <org-hierarchy :id="id" :action="action"/>
   </div>
 </template>
 
 <script lang="ts">
 import { Component, Vue, Watch } from 'vue-property-decorator'
-import OrganizationForm from '../../components/org-hierarchy/OrganizationForm.vue'
+import OrgHierarchy from 'src/modules/org-structure/components/org-hierarchy/OrgHierarchy.vue'
 
 @Component({
   components: {
-    OrganizationForm
+    OrgHierarchy
   }
 })
 export default class OrganizationPage extends Vue {

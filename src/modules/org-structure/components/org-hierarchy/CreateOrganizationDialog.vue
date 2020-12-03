@@ -33,10 +33,11 @@
             </div>
 
             <div class="row">
-              <q-input
-                class="col-md-6 col-sm-12 col-xs-12 q-pr-md"
+              <org-category-selector
+                type="org"
+                label="Organization category"
                 v-model="entity.categoryId"
-                label="Category"
+                readonly="false"
               />
             </div>
           </div>
@@ -53,9 +54,10 @@
 <script lang="ts">
 import { Component, Prop, Vue, Watch } from 'vue-property-decorator'
 import { CreateOrganizationPayloadDto } from 'src/store/org-structure/org-hierarchy/state'
+import OrgCategorySelector from 'src/modules/org-structure/components/org-category/OrgCategorySelector.vue'
 
 @Component({
-  components: {}
+  components: { OrgCategorySelector }
 })
 export default class CreateOrganizationDialog extends Vue {
   @Prop() show

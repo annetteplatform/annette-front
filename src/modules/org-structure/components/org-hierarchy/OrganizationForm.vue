@@ -4,8 +4,7 @@
       <div class="row items-center no-wrap">
         <div class="col">
           <div class="text-h6">
-            <span v-if="action == 'create'">Create organization</span>
-            <span v-else-if="action == 'edit'">Edit organization</span>
+            <span v-if="action == 'edit'">Edit organization</span>
             <span v-else-if="action == 'view'">View organization</span>
 
           </div>
@@ -14,71 +13,31 @@
           <q-btn outline color="primary"
                  to="/org-structure/organizations"
                  label="Organizations"/>
-          <q-btn color="primary" label="Save"
-                 v-if="action == 'edit' || action == 'create'"
-                 @click="save"/>
         </div>
       </div>
 
     </q-card-section>
 
     <q-card-section>
-
-      <div class="q-pa-md full-width ">
-
-        <div class="q-gutter-md" v-if="entity">
-
-          <div class="row">
-            <q-input
-              class="col-md-4 col-sm-12 col-xs-12 q-pr-md"
-              v-model="entity.id"
-              label="Organization ID"
-              :readonly="action !== 'create'"
-            />
-          </div>
-
-          <div class="row">
-            <q-input
-              class="col-md-6 col-sm-12 col-xs-12 q-pr-md"
-              v-model="entity.shortName"
-              label="Short name"
-              :readonly="action === 'view'"
-            />
-          </div>
-          <div class="row">
-            <q-input
-              class="col-md-6 col-sm-12 col-xs-12 q-pr-md"
-              v-model="entity.name"
-              label="Name"
-              :readonly="action === 'view'"
-            />
-          </div>
-
-          <updated-fields
-            v-if="entity.updatedAt && entity.updatedBy"
-            :updated-at="entity.updatedAt"
-            :updated-by="entity.updatedBy" />
-
-        </div>
-
-      </div>
-
+      <org-hierarchy :id="id" :action="action"/>
     </q-card-section>
   </q-card>
 
 </template>
 
 <script lang="ts">
-import { Component, Prop, Vue, Watch } from 'vue-property-decorator'
-import { Action } from 'vuex-class'
-import { uid } from 'quasar'
-import { OrgUnitDto } from 'src/store/org-structure/org-hierarchy/state'
+import {Component, Prop, Vue, Watch} from 'vue-property-decorator'
+import {Action} from 'vuex-class'
+import {uid} from 'quasar'
+import {OrgUnitDto} from 'src/store/org-structure/org-hierarchy/state'
 import UpdatedFields from 'src/lib/components/UpdatedFields.vue'
+import OrgCategorySelector from 'src/modules/org-structure/components/org-category/OrgCategorySelector.vue'
+import OrgHierarchy from 'src/modules/org-structure/components/org-hierarchy/OrgHierarchy.vue'
 
 const namespace = 'orgItem'
 
 @Component({
-  components: { UpdatedFields }
+  components: {OrgHierarchy, OrgCategorySelector, UpdatedFields}
 })
 export default class OrganizationForm extends Vue {
   @Prop() id
@@ -91,20 +50,21 @@ export default class OrganizationForm extends Vue {
     itemType: 'unit',
     name: '',
     shortName: '',
+    categoryId: '',
     level: 0,
     children: []
   }
 
-  @Action('GetOrganizationForEdit', { namespace: namespace }) getOrganizationForEdit;
-  @Action('CreateEntity', { namespace: namespace }) createEntity;
-  @Action('UpdateEntity', { namespace: namespace }) updateEntity;
+  @Action('GetOrganizationForEdit', {namespace: namespace}) getOrganizationForEdit;
+  @Action('CreateEntity', {namespace: namespace}) createEntity;
+  @Action('UpdateEntity', {namespace: namespace}) updateEntity;
 
-  @Watch('id', { immediate: true })
-  onIdChange () {
+  @Watch('id', {immediate: true})
+  onIdChange() {
     this.loadData()
   }
 
-  loadData () {
+  loadData() {
     console.log('load data', this.action, this.id)
     if (this.action === 'create' && this.id === 'new') {
       this.entity = {
@@ -114,26 +74,27 @@ export default class OrganizationForm extends Vue {
         itemType: 'unit',
         name: '',
         shortName: '',
+        categoryId: '',
         level: 0,
         children: []
       }
     } else if (this.action === 'create') {
       this.getOrganizationForEdit(this.id).then(entity => {
-        this.entity = { ...entity, id: uid() }
+        this.entity = {...entity, id: uid()}
       })
     } else {
       this.getOrganizationForEdit(this.id).then(entity => {
-        this.entity = { ...entity }
+        this.entity = {...entity}
       })
     }
   }
 
-  save () {
+  save() {
     console.log('save')
     if (this.action === 'create') {
       this.createEntity(this.entity).then(entity => {
         // eslint-disable-next-line no-void
-        void this.$router.push({ name: 'organization', params: { action: 'edit', id: entity.id } })
+        void this.$router.push({name: 'organization', params: {action: 'edit', id: entity.id}})
       })
     } else if (this.action === 'edit') {
       this.updateEntity(this.entity).then(entity => {

@@ -41,26 +41,13 @@
               <q-td key="actions" :props="props" style="width: 12em">
                 <q-btn flat round color="green" size="sm" icon="far fa-eye" :to="`/org-structure/organization/view/${props.row.id}`"/>
                 <q-btn flat round color="blue" size="sm" icon="far fa-edit" :to="`/org-structure/organization/edit/${props.row.id}`"/>
-                <q-btn flat round color="red" size="sm" icon="fas fa-trash" @click="startDelete(props.row.id)"/>
+                <q-btn flat round color="red" size="sm" icon="fas fa-trash" @click="deleteOrg(props.row.id)"/>
               </q-td>
             </q-tr>
           </template>
         </q-table>
       </div>
     </div>
-    <q-dialog v-model="deleteDialog" persistent>
-      <q-card>
-        <q-card-section class="row items-center">
-          <q-avatar icon="fas fa-trash" color="negative" text-color="white" />
-          <span class="q-ml-sm">Please confirm delete organization</span>
-        </q-card-section>
-
-        <q-card-actions align="right">
-          <q-btn flat label="Cancel" color="primary" v-close-popup @click="cancelDelete" />
-          <q-btn label="Delete" color="negative" v-close-popup @click="performDelete" />
-        </q-card-actions>
-      </q-card>
-    </q-dialog>
   </q-pull-to-refresh>
 </template>
 
@@ -115,8 +102,6 @@ export default class OrganizationList extends Vue {
 
   initialized = false
   columns = COLUMNS
-  deleteId = null
-  deleteDialog = false
 
   showCreateOrgDialog = false
 
@@ -131,7 +116,7 @@ export default class OrganizationList extends Vue {
   @Action('Refresh', { namespace: namespace }) refresh;
   @Action('SetPageSize', { namespace: namespace }) setPageSize;
   @Action('SetFilter', { namespace: namespace }) setFilter;
-  @Action('DeleteEntity', { namespace: namespace }) deleteEntityFn;
+  @Action('DeleteOrganization', { namespace: namespace }) deleteOrganization;
   @Action('CreateOrganization', { namespace: namespace }) createOrganization;
 
   get pageState () {
@@ -184,20 +169,21 @@ export default class OrganizationList extends Vue {
     return pg
   }
 
-  startDelete (delId) {
-    this.deleteId = delId
-    this.deleteDialog = true
-  }
-
-  cancelDelete () {
-    this.deleteId = null
-    this.deleteDialog = false
-  }
-
-  performDelete () {
-    this.deleteEntityFn(this.deleteId)
-    this.deleteDialog = false
-    this.deleteId = null
+  deleteOrg (orgId) {
+    this.$q.notify({
+      type: 'negative',
+      message: 'Please confirm delete organization.',
+      actions: [
+        { label: 'Cancel', color: 'white' },
+        {
+          label: 'Delete',
+          color: 'white',
+          handler: () => {
+            this.deleteOrganization(orgId)
+          }
+        }
+      ]
+    })
   }
 
   created () {
