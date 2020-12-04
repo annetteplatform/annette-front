@@ -33,11 +33,11 @@
               <q-td key="id" :props="props">
                 {{ props.row.id }}
               </q-td>
-              <q-td key="shortName" :props="props">
-                {{ props.row.shortName }}
-              </q-td>
               <q-td key="name" :props="props">
                 {{ props.row.name }}
+              </q-td>
+              <q-td key="shortName" :props="props">
+                {{ props.row.shortName }}
               </q-td>
               <q-td key="actions" :props="props" style="width: 12em">
                 <q-btn flat round color="green" size="sm" icon="far fa-eye"
@@ -75,18 +75,18 @@ const COLUMNS = [
     classes: 'text-truncate'
   },
   {
-    name: 'shortName',
-    align: 'left',
-    label: 'Short Name',
-    field: 'shortName',
-    sortable: true,
-    classes: 'text-truncate'
-  },
-  {
     name: 'name',
     align: 'left',
     label: 'Name',
     field: 'name',
+    sortable: true,
+    classes: 'text-truncate'
+  },
+  {
+    name: 'shortName',
+    align: 'left',
+    label: 'Short Name',
+    field: 'shortName',
     sortable: true,
     classes: 'text-truncate'
   },

@@ -83,12 +83,12 @@ export const DEFAULT_ORGANIZATION_FIND_QUERY: OrgItemFindQuery = {
   offset: 0,
   size: 0,
   filter: '',
-  parents: ['ROOT'],
-  sortBy: [{
-    field: 'name',
-    ascending: true
-  }
-  ]
+  parents: ['ROOT']
+  // sortBy: [{
+  //   field: 'name',
+  //   ascending: true
+  // }
+  // ]
 
 }
 
