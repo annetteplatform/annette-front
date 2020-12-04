@@ -91,13 +91,13 @@ export default class OrgCategorySelector extends Vue {
   }
 
   get filter() {
-    console.log('getFilter', this.filterFn(this.instanceKey))
+    // console.log('getFilter', this.filterFn(this.instanceKey))
     // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return this.filterFn(this.instanceKey)
   }
 
   setFilterVal(val, update?) {
-    console.log('setFilter', val)
+    // console.log('setFilter', val)
     const itemType = {
       forOrganization: this.type === 'org' || this.type === 'any',
       forUnit: this.type === 'unit' || this.type === 'any',
@@ -108,7 +108,7 @@ export default class OrgCategorySelector extends Vue {
       filter: val,
       ...itemType
     }
-    console.log(newFilter)
+    // console.log(newFilter)
     this.setFilter({
       instanceKey: this.instanceKey,
       filter: newFilter
@@ -129,7 +129,7 @@ export default class OrgCategorySelector extends Vue {
   }
 
   select(id) {
-    console.log(id)
+    // console.log(id)
     this.model = id
     this.$emit('input', id)
   }

@@ -78,7 +78,7 @@ export function buildGetters<E extends BaseEntity, F, R> (): GetterTree<EntitySt
       } else {
         ids = []
       }
-      console.log(`items: len:${ids.length}, page: ${instance.page}`)
+      // console.log(`items: len:${ids.length}, page: ${instance.page}`)
       return ids
         .map(id => state.entities[id])
         .filter(v => !!v)

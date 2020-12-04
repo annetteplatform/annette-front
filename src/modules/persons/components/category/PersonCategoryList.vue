@@ -75,6 +75,7 @@ const COLUMNS = [
     align: 'left',
     label: 'Id',
     field: 'id',
+    sortable: true,
     classes: 'text-truncate'
   },
   {
@@ -82,6 +83,7 @@ const COLUMNS = [
     align: 'left',
     label: 'Name',
     field: 'name',
+    sortable: true,
     classes: 'text-truncate'
   },
   {
@@ -157,9 +159,15 @@ export default class PersonCategoryList extends Vue {
   }
 
   get pagination () {
+    let sortBy = ''
+    let descending = false
+    if (this.filter && this.filter.sortBy) {
+      sortBy = this.filter.sortBy.field
+      descending = !this.filter.sortBy.ascending
+    }
     const pg = {
-      sortBy: '',
-      descending: false,
+      sortBy,
+      descending,
       page: this.page,
       rowsPerPage: this.pageSize,
       rowsNumber: this.totalFn(this.instanceKey)
@@ -199,17 +207,28 @@ export default class PersonCategoryList extends Vue {
   }
 
   onRequest (props) {
-    const { page, rowsPerPage } = props.pagination
-    // const filter = props.filter
-    console.log(props)
+    const {page, rowsPerPage, sortBy, descending} = props.pagination
+    const filter = { ...this.filter }
+    if (sortBy) {
+      filter.sortBy = {
+        field: sortBy,
+        ascending: !descending
+      }
+    } else {
+      filter.sortBy = null
+    }
+    this.setFilter({
+      instanceKey: this.instanceKey,
+      filter
+    })
     if (page !== this.pageState) {
-      this.setPage({ instanceKey: this.instanceKey, page: page }).then(
+      this.setPage({instanceKey: this.instanceKey, page: page}).then(
         () => this.$emit('pageChanged', page.toString())
       )
     }
 
     if (rowsPerPage !== this.pageSize && rowsPerPage !== 0) {
-      this.setPageSize({ instanceKey: this.instanceKey, pageSize: rowsPerPage }).then(
+      this.setPageSize({instanceKey: this.instanceKey, pageSize: rowsPerPage}).then(
         () => this.$emit('pageChanged', '1')
       )
     }

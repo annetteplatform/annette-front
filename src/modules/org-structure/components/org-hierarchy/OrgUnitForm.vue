@@ -79,7 +79,8 @@ export default class OrgUnitForm extends Vue {
   @Prop() id
   @Prop() action
 
-  entity: OrgUnit
+  // @ts-ignore
+  entity: OrgUnit = null
   unitType = 'unit'
 
   @Getter('entities', {namespace: namespace}) entities;
@@ -88,8 +89,10 @@ export default class OrgUnitForm extends Vue {
   @Action('AssignCategory', {namespace: namespace}) assignCategoryAction;
 
   @Watch('id', {immediate: true})
-  onIdChange() {
-    this.entity = {...this.entities[this.id]}
+  onIdChange(id) {
+    console.log(id)
+    this.entity = {...this.entities[id]}
+    console.log(this.entity)
     this.unitType = this.entity.parentId === 'ROOT' ? 'org' : 'unit'
   }
 

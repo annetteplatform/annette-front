@@ -9,7 +9,7 @@
           :columns="columns"
           row-key="id"
           :pagination.sync="pagination"
-          :filter="filter"
+          :filter="filter.filter"
           @request="onRequest"
           :loading="loading"
         >
@@ -17,15 +17,16 @@
             <h5 class="q-ma-none">Organizations</h5>
             <q-space/>
             <q-input class="q-mr-md" borderless dense placeholder="Search"
-                     :value="filter.filter" debounce="500" @input="setFilterVal" >
+                     :value="filter.filter" debounce="500" @input="setFilterVal">
               <template v-slot:prepend>
-                <q-icon name="search" />
+                <q-icon name="search"/>
               </template>
             </q-input>
-            <q-btn class="q-mr-md" outline color="primary" :disable="loading" label="Refresh" @click="refreshEntities()"/>
+            <q-btn class="q-mr-md" outline color="primary" :disable="loading" label="Refresh"
+                   @click="refreshEntities()"/>
 
             <q-btn color="primary" :disable="loading" label="Create" @click="createOrg"/>
-            <create-organization-dialog :show="showCreateOrgDialog" @ok="createOrgOk" @cancel="createOrgCancel" />
+            <create-organization-dialog :show="showCreateOrgDialog" @ok="createOrgOk" @cancel="createOrgCancel"/>
           </template>
           <template v-slot:body="props">
             <q-tr :props="props">
@@ -39,8 +40,10 @@
                 {{ props.row.name }}
               </q-td>
               <q-td key="actions" :props="props" style="width: 12em">
-                <q-btn flat round color="green" size="sm" icon="far fa-eye" :to="`/org-structure/organization/view/${props.row.id}`"/>
-                <q-btn flat round color="blue" size="sm" icon="far fa-edit" :to="`/org-structure/organization/edit/${props.row.id}`"/>
+                <q-btn flat round color="green" size="sm" icon="far fa-eye"
+                       :to="`/org-structure/organization/view/${props.row.id}`"/>
+                <q-btn flat round color="blue" size="sm" icon="far fa-edit"
+                       :to="`/org-structure/organization/edit/${props.row.id}`"/>
                 <q-btn flat round color="red" size="sm" icon="fas fa-trash" @click="deleteOrg(props.row.id)"/>
               </q-td>
             </q-tr>
@@ -52,11 +55,11 @@
 </template>
 
 <script lang="ts">
-import { Component, Prop, Vue, Watch } from 'vue-property-decorator'
-import { Action, Getter } from 'vuex-class'
-import { PagingMode } from 'src/lib/state'
+import {Component, Prop, Vue, Watch} from 'vue-property-decorator'
+import {Action, Getter} from 'vuex-class'
+import {PagingMode} from 'src/lib/state'
 import CreateOrganizationDialog from 'src/modules/org-structure/components/org-hierarchy/CreateOrganizationDialog.vue'
-import { CreateOrganizationPayloadDto } from 'src/store/org-structure/org-hierarchy/state'
+import {CreateOrganizationPayloadDto} from 'src/store/org-structure/org-hierarchy/state'
 
 const namespace = 'orgItem'
 const PAGE_SIZE = 10
@@ -68,6 +71,7 @@ const COLUMNS = [
     align: 'left',
     label: 'Id',
     field: 'id',
+    sortable: true,
     classes: 'text-truncate'
   },
   {
@@ -75,6 +79,7 @@ const COLUMNS = [
     align: 'left',
     label: 'Short Name',
     field: 'shortName',
+    sortable: true,
     classes: 'text-truncate'
   },
   {
@@ -82,6 +87,7 @@ const COLUMNS = [
     align: 'left',
     label: 'Name',
     field: 'name',
+    sortable: true,
     classes: 'text-truncate'
   },
   {
@@ -93,59 +99,59 @@ const COLUMNS = [
 ]
 
 @Component({
-  components: { CreateOrganizationDialog }
+  components: {CreateOrganizationDialog}
 })
 export default class OrganizationList extends Vue {
   @Prop(Number) page
 
-  @Prop({ type: String, default: DEFAULT_INSTANCE_KEY }) instanceKey
+  @Prop({type: String, default: DEFAULT_INSTANCE_KEY}) instanceKey
 
   initialized = false
   columns = COLUMNS
 
   showCreateOrgDialog = false
 
-  @Getter('total', { namespace: namespace }) totalFn;
-  @Getter('page', { namespace: namespace }) pageStateFn;
-  @Getter('pageSize', { namespace: namespace }) pageSizeFn;
-  @Getter('loading', { namespace: namespace }) loadingFn;
-  @Getter('items', { namespace: namespace }) itemsFn;
-  @Getter('filter', { namespace: namespace }) filterFn;
-  @Action('Init', { namespace: namespace }) init;
-  @Action('SetPage', { namespace: namespace }) setPage;
-  @Action('Refresh', { namespace: namespace }) refresh;
-  @Action('SetPageSize', { namespace: namespace }) setPageSize;
-  @Action('SetFilter', { namespace: namespace }) setFilter;
-  @Action('DeleteOrganization', { namespace: namespace }) deleteOrganization;
-  @Action('CreateOrganization', { namespace: namespace }) createOrganization;
+  @Getter('total', {namespace: namespace}) totalFn;
+  @Getter('page', {namespace: namespace}) pageStateFn;
+  @Getter('pageSize', {namespace: namespace}) pageSizeFn;
+  @Getter('loading', {namespace: namespace}) loadingFn;
+  @Getter('items', {namespace: namespace}) itemsFn;
+  @Getter('filter', {namespace: namespace}) filterFn;
+  @Action('Init', {namespace: namespace}) init;
+  @Action('SetPage', {namespace: namespace}) setPage;
+  @Action('Refresh', {namespace: namespace}) refresh;
+  @Action('SetPageSize', {namespace: namespace}) setPageSize;
+  @Action('SetFilter', {namespace: namespace}) setFilter;
+  @Action('DeleteOrganization', {namespace: namespace}) deleteOrganization;
+  @Action('CreateOrganization', {namespace: namespace}) createOrganization;
 
-  get pageState () {
+  get pageState() {
     // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return this.pageStateFn(this.instanceKey)
   }
 
-  get pageSize () {
+  get pageSize() {
     // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return this.pageSizeFn(this.instanceKey)
   }
 
-  get loading () {
+  get loading() {
     // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return this.loadingFn(this.instanceKey)
   }
 
-  get items () {
+  get items() {
     // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return this.itemsFn(this.instanceKey)
   }
 
-  get filter () {
+  get filter() {
     console.log('getFilter', this.filterFn(this.instanceKey))
     // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return this.filterFn(this.instanceKey)
   }
 
-  setFilterVal (val) {
+  setFilterVal(val) {
     console.log('setFilter', val)
     const newFilter = {
       ...this.filter,
@@ -157,10 +163,16 @@ export default class OrganizationList extends Vue {
     })
   }
 
-  get pagination () {
+  get pagination() {
+    let sortBy = ''
+    let descending = false
+    if (this.filter && this.filter.sortBy && this.filter.sortBy[0]) {
+      sortBy = this.filter.sortBy[0].field
+      descending = !this.filter.sortBy[0].ascending
+    }
     const pg = {
-      sortBy: '',
-      descending: false,
+      sortBy,
+      descending,
       page: this.page,
       rowsPerPage: this.pageSize,
       rowsNumber: this.totalFn(this.instanceKey)
@@ -169,12 +181,12 @@ export default class OrganizationList extends Vue {
     return pg
   }
 
-  deleteOrg (orgId) {
+  deleteOrg(orgId) {
     this.$q.notify({
       type: 'negative',
       message: 'Please confirm delete organization.',
       actions: [
-        { label: 'Cancel', color: 'white' },
+        {label: 'Cancel', color: 'white'},
         {
           label: 'Delete',
           color: 'white',
@@ -186,51 +198,64 @@ export default class OrganizationList extends Vue {
     })
   }
 
-  created () {
-    this.init({ instanceKey: this.instanceKey, page: this.page, pageSize: PAGE_SIZE, mode: PagingMode.Standard })
+  created() {
+    this.init({instanceKey: this.instanceKey, page: this.page, pageSize: PAGE_SIZE, mode: PagingMode.Standard})
     this.initialized = true
   }
 
-  @Watch('page', { immediate: true })
-  onPagePropChanged (newVal) {
+  @Watch('page', {immediate: true})
+  onPagePropChanged(newVal) {
     if (this.initialized) {
       if (this.pageState !== newVal) {
-        this.setPage({ instanceKey: this.instanceKey, page: newVal })
+        this.setPage({instanceKey: this.instanceKey, page: newVal})
       }
     }
   }
 
-  onRequest (props) {
-    const { page, rowsPerPage } = props.pagination
-    // const filter = props.filter
-    console.log(props)
+  onRequest(props) {
+    const {page, rowsPerPage, sortBy, descending} = props.pagination
+    const filter = { ...this.filter }
+    if (sortBy) {
+      filter.sortBy = [
+        {
+          field: sortBy,
+          ascending: !descending
+        }
+      ]
+    } else {
+      filter.sortBy = null
+    }
+    this.setFilter({
+      instanceKey: this.instanceKey,
+      filter
+    })
     if (page !== this.pageState) {
-      this.setPage({ instanceKey: this.instanceKey, page: page }).then(
+      this.setPage({instanceKey: this.instanceKey, page: page}).then(
         () => this.$emit('pageChanged', page.toString())
       )
     }
 
     if (rowsPerPage !== this.pageSize && rowsPerPage !== 0) {
-      this.setPageSize({ instanceKey: this.instanceKey, pageSize: rowsPerPage }).then(
+      this.setPageSize({instanceKey: this.instanceKey, pageSize: rowsPerPage}).then(
         () => this.$emit('pageChanged', '1')
       )
     }
   }
 
-  refreshEntities (done?) {
+  refreshEntities(done?) {
     if (this.initialized) {
       // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-      this.refresh({ instanceKey: this.instanceKey }).then(() => {
+      this.refresh({instanceKey: this.instanceKey}).then(() => {
         if (done) done()
       })
     }
   }
 
-  createOrg () {
+  createOrg() {
     this.showCreateOrgDialog = true
   }
 
-  createOrgOk (createOrgPayload: CreateOrganizationPayloadDto) {
+  createOrgOk(createOrgPayload: CreateOrganizationPayloadDto) {
     if (this.showCreateOrgDialog) {
       console.log(createOrgPayload)
       this.showCreateOrgDialog = false
@@ -238,7 +263,7 @@ export default class OrganizationList extends Vue {
     }
   }
 
-  createOrgCancel () {
+  createOrgCancel() {
     this.showCreateOrgDialog = false
   }
 }

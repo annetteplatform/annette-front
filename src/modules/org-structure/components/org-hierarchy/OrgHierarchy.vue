@@ -37,6 +37,7 @@
               :nodes="nodes"
               node-key="id"
               label-key="name"
+              :expanded.sync="expanded"
               :selected.sync="selected"
               selected-color="primary"
               @lazy-load="onLazyLoad"
@@ -86,7 +87,7 @@ interface OrgNode {
   expandable: boolean,
   selectable: boolean,
   children?: OrgNode[]
-  childrenId?: string[]
+  childrenId: string[]
 }
 
 @Component({
@@ -98,6 +99,7 @@ export default class OrgHierarchy extends Vue {
 
   nodes: OrgNode[] = []
   selected = ''
+  expanded = []
 
   @Action('GetOrganizationForEdit', {namespace: namespace}) getOrganizationForEdit;
   @Action('GetOrgItemsById', {namespace: namespace}) getOrgItemsById;
@@ -111,20 +113,23 @@ export default class OrgHierarchy extends Vue {
 
   @Watch('id', {immediate: true})
   onIdChange() {
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises
     this.loadData()
   }
 
-  loadData() {
-    this.getOrganizationForEdit(this.id).then((entity: OrgUnit) => {
-      const node = this.orgItemToOrgNode(entity)
-      this.nodes = [node]
+  async loadData() {
+    const entity: OrgUnit = await this.getOrganizationForEdit(this.id)
+    const node = this.orgItemToOrgNode(entity)
+    if (entity.children.length > 0) {
+      const entities = await this.getOrgItemsById({orgId: node.orgId, ids: node.childrenId})
+      node.children = node.childrenId.map(id => this.orgItemToOrgNode(entities[id]))
+      Vue.set(this.expanded, 0, node.id)
+      Vue.set(this.nodes, 0, node)
       this.selected = node.id
-      this.getOrgItemsById({orgId: node.orgId, ids: node.childrenId}).then(entities => {
-        const subNodes = node.childrenId.map(id => this.orgItemToOrgNode(entities[id]))
-        node.children = subNodes
-        this.$refs.tree.setExpanded(node.orgId, true)
-      })
-    })
+    } else {
+      Vue.set(this.nodes, 0, node)
+      this.selected = node.id
+    }
   }
 
   onLazyLoad({node, done, fail}) {
@@ -170,6 +175,7 @@ export default class OrgHierarchy extends Vue {
   }
 
   itemNameUpdated(newName: string) {
+    // @ts-ignore
     const node = this.$refs.tree.getNodeByKey(this.selected)
     node.name = newName
   }

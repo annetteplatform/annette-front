@@ -75,7 +75,8 @@ export default class OrgPositionForm extends Vue {
   @Prop() id
   @Prop() action
 
-  entity: OrgPosition
+  // @ts-ignore
+  entity: OrgPosition = null
 
   @Getter('entities', {namespace: namespace}) entities;
   @Action('UpdateName', {namespace: namespace}) updateNameAction;
