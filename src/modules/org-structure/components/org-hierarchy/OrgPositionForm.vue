@@ -44,18 +44,22 @@
         />
       </div>
       <div class="row">
-        <q-input
-          class="col-md-6 col-sm-12 col-xs-12 q-pr-md"
-          :value="entity.limit"
-          @input="changePositionLimit"
-          type="number"
-          label="Person assignment limit"
-          :readonly="action === 'view'"
-        />
-      </div>
-      <div class="row">
         <q-list class="full-width " bordered>
           <q-item-label header>Persons</q-item-label>
+          <q-item>
+            <q-item-section>
+              <div class="row">
+                <q-input
+                  class="col-md-6 col-sm-12 col-xs-12 q-pr-md"
+                  :value="entity.limit"
+                  @input="changePositionLimit"
+                  type="number"
+                  label="Person assignment limit"
+                  :readonly="action === 'view'"
+                />
+              </div>
+            </q-item-section>
+          </q-item>
           <q-item v-if="action === 'edit' && assignedPersons.length < entity.limit">
             <q-item-section>
               <person-selector label="Person"
@@ -144,20 +148,20 @@ export default class OrgPositionForm extends Vue {
 
   @Watch('id', {immediate: true})
   onIdChange() {
-    this.loadEntity()
+    this.loadEntity().catch(error => console.error(error))
   }
 
-  loadEntity() {
+  async loadEntity() {
     if (this.entities[this.id]) {
       this.entity = {...this.entities[this.id]}
-      this.loadAssignedPersons()
+      await this.loadAssignedPersons()
     }
   }
 
   async loadAssignedPersons() {
     const assignedPersons = await this.loadPersonsIfNotExistAction(this.entity.persons)
     this.assignedPersons = assignedPersons
-      .sort((a, b) => a.name < b.name ? -1 : 1)
+      .sort((a, b) => a.fullname < b.fullname ? -1 : 1)
   }
 
   updateName(newName: string) {
@@ -218,29 +222,25 @@ export default class OrgPositionForm extends Vue {
       .catch(err => console.error(err))
   }
 
-  assignPerson(personId) {
+  async assignPerson(personId) {
     const payload: AssignPersonPayloadDto = {
       orgId: this.entity?.orgId,
       positionId: this.entity?.id,
       personId
     }
-    this.assignPersonAction(payload).then(entity => {
-      this.entity = entity
-      this.personId = ''
-      this.loadAssignedPersons()
-    })
+    this.entity = await this.assignPersonAction(payload)
+    this.personId = ''
+    await this.loadAssignedPersons()
   }
 
-  unassignPerson(personId) {
+  async unassignPerson(personId) {
     const payload: UnassignPersonPayloadDto = {
       orgId: this.entity?.orgId,
       positionId: this.entity?.id,
       personId
     }
-    this.unassignPersonAction(payload).then(entity => {
-      this.entity = entity
-      this.loadAssignedPersons()
-    })
+    this.entity = await this.unassignPersonAction(payload)
+    await this.loadAssignedPersons()
   }
 }
 

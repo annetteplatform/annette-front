@@ -36,7 +36,7 @@ import { PagingMode } from 'src/lib/state'
 
 const namespace = 'person'
 
-const PAGE_SIZE = 10
+const PAGE_SIZE = 100
 const DEFAULT_INSTANCE_KEY = 'PersonSelector'
 
 @Component({
