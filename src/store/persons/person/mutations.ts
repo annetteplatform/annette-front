@@ -4,7 +4,7 @@ import {
   DEFAULT_PERSON_FIND_QUERY,
   Person, PersonFindQuery
 } from './state'
-import { buildMutations } from 'src/lib/state'
+import {buildMutations} from 'src/lib/state'
 
 const DEFAULT_PAGE_SIZE = 10
 

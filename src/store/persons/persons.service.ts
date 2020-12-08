@@ -9,12 +9,12 @@ export const personsService = {
 
   async createPerson (entity: Person) {
     return await axios.post<Person>('/api/annette/v1/person/createPerson', entity)
-      .then(result => result.data)
+      .then(result => enrichPerson(result.data))
   },
 
   async updatePerson (entity: Person) {
     return await axios.post<Person>('/api/annette/v1/person/updatePerson', entity)
-      .then(result => result.data)
+      .then(result => enrichPerson(result.data))
   },
 
   async deletePerson (id: string) {
@@ -30,18 +30,24 @@ export const personsService = {
   async getPersonById (id: string, fromReadSide = true) {
     // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
     return await axios.get<Person>(`/api/annette/v1/person/getPersonById/${id}/${fromReadSide}`)
-      .then(result => result.data)
+      .then(result => enrichPerson(result.data))
   },
 
   async getPersonsById (ids: string[], fromReadSide = true) {
     // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
     return await axios.post<{ [key: string]: Person }>(`/api/annette/v1/person/getPersonsById/${fromReadSide}`, ids)
-      .then(result => result.data)
+      .then(result => {
+        const persons = {}
+        Object.values(result.data).forEach(person => { persons[person.id] = enrichPerson(person) })
+        // console.log('data', result.data)
+        // console.log('persons', persons)
+        return persons
+      })
   },
 
   async profile () {
     return await axios.get<Person>('/api/annette/v1/person/profile')
-      .then(result => result.data)
+      .then(result => enrichPerson(result.data))
   },
 
   // ******************************* Categories API *******************************
@@ -77,4 +83,12 @@ export const personsService = {
     return await axios.post<{ [key: string]: PersonCategory }>(`/api/annette/v1/person/getCategoriesById/${fromReadSide}`, ids)
       .then(result => result.data)
   }
+}
+
+function enrichPerson(person: Person): Person {
+  const newPerson = {
+    ...person,
+    fullname: `${person.lastname}, ${person.firstname} ${person.middlename || ''}`
+  }
+  return newPerson
 }

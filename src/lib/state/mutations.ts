@@ -72,6 +72,7 @@ export function buildMutations<E extends BaseEntity, F> (
         Vue.set(instance.pages, index, { ids })
       }
       state.entities = { ...state.entities, ...data.entities }
+      // commit('StoreEntities', data.entities)
     },
 
     StoreEntity: (state: EntityState<E, F>, entity: E) => {

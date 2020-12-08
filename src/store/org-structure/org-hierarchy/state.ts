@@ -23,6 +23,7 @@ export interface OrgUnit extends OrgItem {
 }
 
 export interface OrgPosition extends OrgItem {
+  limit: number,
   persons: string[]
   orgRoles: string[]
 }
@@ -44,6 +45,7 @@ export interface OrgUnitDto extends OrgItemDto {
 }
 
 export interface OrgPositionDto extends OrgItemDto {
+  limit: number,
   persons: string[]
   orgRoles: string[]
 }
@@ -99,6 +101,27 @@ export interface CreateOrganizationPayloadDto {
   categoryId: string
 }
 
+export interface CreateUnitPayloadDto {
+  orgId: string,
+  parentId: string,
+  unitId: string,
+  name: string,
+  shortName: string,
+  categoryId: string
+  order?: number
+}
+
+export interface CreatePositionPayloadDto {
+  orgId: string,
+  parentId: string,
+  positionId: string,
+  name: string,
+  shortName: string,
+  limit: number,
+  categoryId: string
+  order?: number
+}
+
 export interface UpdateNamePayloadDto {
   orgId: string,
   orgItemId: string,
@@ -115,4 +138,22 @@ export interface AssignCategoryPayloadDto {
   orgId: string,
   itemId: string,
   categoryId: string
+}
+
+export interface ChangePositionLimitPayloadDto {
+  orgId: string,
+  positionId: string,
+  limit: number
+}
+
+export interface AssignPersonPayloadDto {
+  orgId: string,
+  positionId: string,
+  personId: string
+}
+
+export interface UnassignPersonPayloadDto {
+  orgId: string,
+  positionId: string,
+  personId: string
 }

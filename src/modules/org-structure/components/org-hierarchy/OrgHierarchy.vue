@@ -29,6 +29,31 @@
     </q-card-section>
 
     <q-card-section>
+      <div class="row q-ma-md " v-if="action === 'edit'">
+        <q-btn class="q-mr-md" outline color="primary"
+               @click="createUnit"
+               :disable="!(selected && selectedItem && selectedItem.itemType === 'unit')"
+               icon="add"
+               label="Unit"/>
+        <q-btn class="q-mr-md" outline color="primary"
+               @click="createPosition"
+               :disable="!(selected && selectedItem && selectedItem.itemType === 'unit')"
+               icon="add"
+               label="Position"/>
+        <q-btn class="q-mr-md" outline color="negative"
+               @click="deleteItem"
+               :disable="!(selected && selectedItem && selectedItem.parentId !== 'ROOT')"
+               icon="delete"
+               label="Delete"/>
+
+        <create-org-item-dialog :show="showCreateDialog"
+                                :type="itemType"
+                                :parentId="selected"
+                                :orgId="id"
+                                @created="orgItemCreated"
+                                @cancel="orgItemCreateCanceled"/>
+
+      </div>
       <div class="row">
         <div class="col-md-6 col-sm-12 col-xs-12 q-pr-md">
           <q-scroll-area style="height: 80vh;">
@@ -73,6 +98,7 @@ import OrgCategorySelector from 'src/modules/org-structure/components/org-catego
 import {OrgItem, OrgPosition, OrgUnit} from 'src/store/org-structure/org-hierarchy/state'
 import OrgUnitForm from 'src/modules/org-structure/components/org-hierarchy/OrgUnitForm.vue'
 import OrgPositionForm from 'src/modules/org-structure/components/org-hierarchy/OrgPositionForm.vue'
+import CreateOrgItemDialog from 'src/modules/org-structure/components/org-hierarchy/CreateOrgItemDialog.vue'
 
 const namespace = 'orgItem'
 
@@ -91,7 +117,7 @@ interface OrgNode {
 }
 
 @Component({
-  components: {OrgPositionForm, OrgUnitForm, OrgCategorySelector, UpdatedFields}
+  components: {CreateOrgItemDialog, OrgPositionForm, OrgUnitForm, OrgCategorySelector, UpdatedFields}
 })
 export default class OrgHierarchy extends Vue {
   @Prop() id
@@ -101,14 +127,23 @@ export default class OrgHierarchy extends Vue {
   selected = ''
   expanded = []
 
+  showCreateDialog = false
+  itemType = 'unit'
+
   @Action('GetOrganizationForEdit', {namespace: namespace}) getOrganizationForEdit;
   @Action('GetOrgItemsById', {namespace: namespace}) getOrgItemsById;
-  @Action('CreateEntity', {namespace: namespace}) createEntity;
-  @Action('UpdateEntity', {namespace: namespace}) updateEntity;
+  @Action('DeleteUnit', {namespace: namespace}) deleteUnit;
+  @Action('DeletePosition', {namespace: namespace}) deletePosition;
   @Getter('entities', {namespace: namespace}) entities;
 
   get rootNode(): OrgNode {
     return this.nodes[0] || null
+  }
+
+  get selectedItem(): OrgItem | null {
+    if (this.selected) {
+      return this.entities[this.selected] as OrgItem
+    } else return null
   }
 
   @Watch('id', {immediate: true})
@@ -178,6 +213,68 @@ export default class OrgHierarchy extends Vue {
     // @ts-ignore
     const node = this.$refs.tree.getNodeByKey(this.selected)
     node.name = newName
+  }
+
+  createUnit() {
+    this.itemType = 'unit'
+    this.showCreateDialog = true
+  }
+
+  createPosition() {
+    this.itemType = 'position'
+    this.showCreateDialog = true
+  }
+
+  deleteItem() {
+    if (this.selected && this.selectedItem) {
+      const message = this.selectedItem.itemType === 'unit' ? 'Please confirm delete unit.' : 'Please confirm delete position.'
+      const selectedItem = this.selectedItem
+      this.$q.notify({
+        type: 'negative',
+        message,
+        actions: [
+          {label: 'Cancel', color: 'white'},
+          {
+            label: 'Delete',
+            color: 'white',
+            handler: () => {
+              const payload = {orgId: selectedItem.orgId, id: selectedItem.id}
+              const promise = selectedItem.itemType === 'unit' ? this.deleteUnit(payload) : this.deletePosition(payload)
+              promise
+                .then(() => {
+                  // @ts-ignore
+                  const parentNode: OrgNode = this.$refs.tree.getNodeByKey(selectedItem.parentId)
+                  if (parentNode) {
+                    // @ts-ignore
+                    parentNode.children = parentNode.children.filter(item => item.id !== payload.id)
+                    parentNode.childrenId = parentNode.childrenId.filter(item => item !== payload.id)
+                  }
+                })
+            }
+          }
+        ]
+      })
+    }
+  }
+
+  orgItemCreated(item) {
+    const node = this.orgItemToOrgNode(item.child)
+    // @ts-ignore
+    const parentNode: OrgNode = this.$refs.tree.getNodeByKey(node.parentId)
+    if (parentNode) {
+      parentNode.childrenId.push(node.id)
+      if (parentNode.children) {
+        parentNode.children.push(node)
+      } else {
+        parentNode.expandable = true
+        Vue.set(parentNode, 'children', [node])
+      }
+    }
+    this.showCreateDialog = false
+  }
+
+  orgItemCreateCanceled() {
+    this.showCreateDialog = false
   }
 }
 

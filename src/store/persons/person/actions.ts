@@ -27,6 +27,16 @@ export const actions: ActionTree<PersonState, RootState> = {
     commit('StoreEntity', entity)
     return entity
   },
+  async LoadEntitiesIfNotExist ({ commit, state }, ids: string[]) {
+    const entitiesToLoad: string[] = ids.filter(id => !state.entities[id])
+    if (entitiesToLoad.length > 0) {
+      const entities = await personsService.getPersonsById(entitiesToLoad, true)
+      commit('StoreEntities', entities)
+      return ids.filter(id => state.entities[id]).map(id => state.entities[id])
+    } else {
+      return ids.filter(id => state.entities[id]).map(id => state.entities[id])
+    }
+  },
 
   async CreateEntity ({ commit }, entity: Person) {
     const newEntity = await personsService.createPerson(entity)

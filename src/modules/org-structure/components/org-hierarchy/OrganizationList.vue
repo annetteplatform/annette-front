@@ -26,7 +26,7 @@
                    @click="refreshEntities()"/>
 
             <q-btn color="primary" :disable="loading" label="Create" @click="createOrg"/>
-            <create-organization-dialog :show="showCreateOrgDialog" @ok="createOrgOk" @cancel="createOrgCancel"/>
+            <create-org-item-dialog :show="showCreateOrgDialog" type="org" @created="orgCreated" @cancel="orgCreateCanceled"/>
           </template>
           <template v-slot:body="props">
             <q-tr :props="props">
@@ -58,8 +58,7 @@
 import {Component, Prop, Vue, Watch} from 'vue-property-decorator'
 import {Action, Getter} from 'vuex-class'
 import {PagingMode} from 'src/lib/state'
-import CreateOrganizationDialog from 'src/modules/org-structure/components/org-hierarchy/CreateOrganizationDialog.vue'
-import {CreateOrganizationPayloadDto} from 'src/store/org-structure/org-hierarchy/state'
+import CreateOrgItemDialog from 'src/modules/org-structure/components/org-hierarchy/CreateOrgItemDialog.vue'
 
 const namespace = 'orgItem'
 const PAGE_SIZE = 10
@@ -99,7 +98,7 @@ const COLUMNS = [
 ]
 
 @Component({
-  components: {CreateOrganizationDialog}
+  components: {CreateOrgItemDialog}
 })
 export default class OrganizationList extends Vue {
   @Prop(Number) page
@@ -214,7 +213,7 @@ export default class OrganizationList extends Vue {
 
   onRequest(props) {
     const {page, rowsPerPage, sortBy, descending} = props.pagination
-    const filter = { ...this.filter }
+    const filter = {...this.filter}
     if (sortBy) {
       filter.sortBy = [
         {
@@ -255,15 +254,11 @@ export default class OrganizationList extends Vue {
     this.showCreateOrgDialog = true
   }
 
-  createOrgOk(createOrgPayload: CreateOrganizationPayloadDto) {
-    if (this.showCreateOrgDialog) {
-      console.log(createOrgPayload)
-      this.showCreateOrgDialog = false
-      this.createOrganization(createOrgPayload)
-    }
+  orgCreated() {
+    this.showCreateOrgDialog = false
   }
 
-  createOrgCancel() {
+  orgCreateCanceled() {
     this.showCreateOrgDialog = false
   }
 }

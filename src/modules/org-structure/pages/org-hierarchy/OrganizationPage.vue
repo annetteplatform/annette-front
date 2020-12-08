@@ -19,7 +19,6 @@ export default class OrganizationPage extends Vue {
 
   @Watch('$route', { immediate: true })
   onRouteChange (to) {
-    console.log(to)
     this.id = to.params.id
     this.action = to.params.action
   }

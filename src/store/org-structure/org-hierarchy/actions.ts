@@ -1,11 +1,11 @@
 import { ActionTree } from 'vuex'
 import { RootState } from '../../root-state'
 import {
-  AssignCategoryPayloadDto,
-  CreateOrganizationPayloadDto,
+  AssignCategoryPayloadDto, AssignPersonPayloadDto, ChangePositionLimitPayloadDto,
+  CreateOrganizationPayloadDto, CreatePositionPayloadDto, CreateUnitPayloadDto,
   OrgItem,
   OrgItemFindQuery,
-  OrgItemState, UpdateNamePayloadDto, UpdateShortNamePayloadDto
+  OrgItemState, UnassignPersonPayloadDto, UpdateNamePayloadDto, UpdateShortNamePayloadDto
 } from './state'
 import { orgStructureService } from '../org-structure.service'
 import { buildActions } from 'src/lib/state'
@@ -62,6 +62,43 @@ export const actions: ActionTree<OrgItemState, RootState> = {
     const updatedEntity = await orgStructureService.assignCategory(payload)
     commit('StoreEntity', updatedEntity)
     return updatedEntity
+  },
+  async CreateUnit ({ commit }, entity: CreateUnitPayloadDto) {
+    const entities = await orgStructureService.createUnit(entity)
+    commit('StoreEntities', entities)
+    return entities
+  },
+  async DeleteUnit ({ commit }, {orgId, id}) {
+    const entity = await orgStructureService.deleteUnit(orgId, id)
+    commit('RemoveEntity', id)
+    commit('StoreEntity', entity)
+    return entity
+  },
+  async CreatePosition ({ commit }, entity: CreatePositionPayloadDto) {
+    const entities = await orgStructureService.createPosition(entity)
+    commit('StoreEntities', entities)
+    return entities
+  },
+  async ChangePositionLimit ({ commit }, payload: ChangePositionLimitPayloadDto) {
+    const entity = await orgStructureService.changePositionLimit(payload)
+    commit('StoreEntity', entity)
+    return entity
+  },
+  async DeletePosition({ commit }, {orgId, id}) {
+    const entity = await orgStructureService.deletePosition(orgId, id)
+    commit('RemoveEntity', id)
+    commit('StoreEntity', entity)
+    return entity
+  },
+  async AssignPerson ({ commit }, payload: AssignPersonPayloadDto) {
+    const entity = await orgStructureService.assignPerson(payload)
+    commit('StoreEntity', entity)
+    return entity
+  },
+  async UnassignPerson ({ commit }, payload: UnassignPersonPayloadDto) {
+    const entity = await orgStructureService.unassignPerson(payload)
+    commit('StoreEntity', entity)
+    return entity
   }
 
 }

@@ -15,6 +15,7 @@ export interface Person extends BaseEntity {
   lastname: string,
   firstname: string,
   middlename?: string,
+  fullname?: string,
   categoryId: string,
   phone?: string,
   email?: string,

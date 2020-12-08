@@ -1,20 +1,23 @@
 <template>
-  <q-select class="full-width"
-            :value="model"
-            @input="select"
-            use-input
-            fill-input
-            hide-selected
-            input-debounce="500"
-            :readonly="readonly"
-            :label="label"
-            :options="items"
-            option-value="id"
-            option-label="name"
-            emit-value
-            map-options
-            :loading="loading"
-            @filter="setFilterVal"
+  <q-select
+    class="full-width"
+    dense
+    :value="model"
+    @input="select"
+    use-input
+    fill-input
+    hide-selected
+    input-debounce="500"
+    :readonly="readonly"
+    :label="label"
+    :options="items"
+    option-value="id"
+    option-label="fullname"
+    emit-value
+    map-options
+    clearable
+    :loading="loading"
+    @filter="setFilterVal"
   >
     <template v-slot:no-option>
       <q-item>
@@ -30,18 +33,16 @@
 import {Component, Prop, Vue, Watch} from 'vue-property-decorator'
 import { Action, Getter} from 'vuex-class'
 import { PagingMode } from 'src/lib/state'
-import { OrgCategory} from 'src/store/org-structure/org-category/state'
 
-const namespace = 'orgCategory'
+const namespace = 'person'
 
-const PAGE_SIZE = 100
-const DEFAULT_INSTANCE_KEY = 'OrgCategorySelector'
+const PAGE_SIZE = 10
+const DEFAULT_INSTANCE_KEY = 'PersonSelector'
 
 @Component({
   components: {}
 })
-export default class OrgCategorySelector extends Vue {
-  @Prop() type
+export default class PersonSelector extends Vue {
   @Prop() label
   @Prop() value
   @Prop() readonly
@@ -63,12 +64,6 @@ export default class OrgCategorySelector extends Vue {
   @Action('SetPageSize', {namespace: namespace}) setPageSize;
   @Action('SetFilter', {namespace: namespace}) setFilter;
 
-  @Watch('type', {immediate: true})
-  onTypeChange() {
-    if (!this.initialized) this.initInstance()
-    this.setFilterVal('')
-  }
-
   @Watch('value', {immediate: true})
   onValueChange() {
     this.model = this.value
@@ -81,38 +76,22 @@ export default class OrgCategorySelector extends Vue {
 
   get items() {
     // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-    const list: OrgCategory[] = this.itemsFn(this.instanceKey)
-    switch (this.type) {
-      case 'org':
-        return list.filter(item => item.forOrganization)
-      case 'unit':
-        return list.filter(item => item.forUnit)
-      case 'position':
-        return list.filter(item => item.forPosition)
-      default:
-        return list
-    }
+    return this.itemsFn(this.instanceKey)
   }
 
   get filter() {
-    // console.log('getFilter', this.filterFn(this.instanceKey))
+    console.log('getFilter', this.filterFn(this.instanceKey).filter)
     // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-    return this.filterFn(this.instanceKey)
+    return this.filterFn(this.instanceKey).filter
   }
 
   setFilterVal(val, update?) {
-    // console.log('setFilter', val)
-    const itemType = {
-      forOrganization: this.type === 'org' || this.type === 'any',
-      forUnit: this.type === 'unit' || this.type === 'any',
-      forPosition: this.type === 'position' || this.type === 'any'
-    }
+    console.log('setFilterVal', val)
     const newFilter = {
       ...this.filter,
-      filter: val,
-      ...itemType
+      filter: val
     }
-    // console.log(newFilter)
+    console.log(newFilter)
     this.setFilter({
       instanceKey: this.instanceKey,
       filter: newFilter

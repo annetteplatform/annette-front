@@ -6,7 +6,7 @@
          Organization
       </div>
       <div class="row text-subtitle1" v-else>
-        Organizational Unit
+        Unit
       </div>
       <div class="row">
         <q-input
@@ -90,9 +90,7 @@ export default class OrgUnitForm extends Vue {
 
   @Watch('id', {immediate: true})
   onIdChange(id) {
-    console.log(id)
     this.entity = {...this.entities[id]}
-    console.log(this.entity)
     this.unitType = this.entity.parentId === 'ROOT' ? 'org' : 'unit'
   }
 
