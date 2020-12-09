@@ -103,7 +103,6 @@ export default class OrgRoleForm extends Vue {
   }
 
   loadData () {
-    console.log('load data', this.action, this.id)
     if (this.action === 'create' && this.id === 'new') {
       this.entity = {
         id: uid(),
@@ -122,7 +121,6 @@ export default class OrgRoleForm extends Vue {
   }
 
   save () {
-    console.log('save')
     if (this.action === 'create') {
       this.createEntity(this.entity).then(entity => {
         // eslint-disable-next-line no-void

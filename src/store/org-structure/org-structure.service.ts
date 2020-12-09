@@ -2,13 +2,13 @@ import axios from 'axios'
 import {FindResult} from 'src/lib/state'
 import {OrgRole, OrgRoleDto, OrgRoleFindQuery} from './org-role/state'
 import {
-  AssignCategoryPayloadDto, AssignPersonPayloadDto, ChangePositionLimitPayloadDto,
+  AssignCategoryPayloadDto, AssignOrgRolePayloadDto, AssignPersonPayloadDto, ChangePositionLimitPayloadDto,
   CreateOrganizationPayloadDto,
   CreatePositionPayloadDto,
   CreateUnitPayloadDto,
   OrgItem,
   OrgItemFindQuery, OrgPosition,
-  OrgUnit, UnassignPersonPayloadDto,
+  OrgUnit, UnassignOrgRolePayloadDto, UnassignPersonPayloadDto,
   UpdateNamePayloadDto,
   UpdateShortNamePayloadDto
 } from './org-hierarchy/state'
@@ -109,6 +109,14 @@ export const orgStructureService = {
   },
   // async assignOrgRole(payload: AssignOrgRolePayload): Future[Done]
   // async unassignOrgRole(payload: UnassignOrgRolePayload): Future[Done]
+  async assignOrgRole(payload: AssignOrgRolePayloadDto) {
+    return await axios.post<OrgPosition>('/api/annette/v1/orgStructure/assignOrgRole', payload)
+      .then(result => result.data)
+  },
+  async unassignOrgRole(payload: UnassignOrgRolePayloadDto) {
+    return await axios.post<OrgPosition>('/api/annette/v1/orgStructure/unassignOrgRole', payload)
+      .then(result => result.data)
+  },
 
   async getOrgItemById(orgId: string, id: string) {
     // eslint-disable-next-line @typescript-eslint/restrict-template-expressions

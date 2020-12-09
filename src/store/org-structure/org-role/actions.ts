@@ -8,8 +8,6 @@ import {
 import { orgStructureService } from '../org-structure.service'
 import { buildActions } from 'src/lib/state'
 
-// import Vue from 'vue'
-
 export const actions: ActionTree<OrgRoleState, RootState> = {
   ...buildActions<OrgRole, OrgRoleFindQuery, RootState>(
     (query: OrgRoleFindQuery) => orgStructureService.findOrgRoles(query),
@@ -37,6 +35,17 @@ export const actions: ActionTree<OrgRoleState, RootState> = {
   async DeleteEntity ({ commit }, id: string) {
     await orgStructureService.deleteOrgRole(id)
     commit('RemoveEntity', id)
+  },
+
+  async LoadEntitiesIfNotExist ({ commit, state }, ids: string[]) {
+    const entitiesToLoad: string[] = ids.filter(id => !state.entities[id])
+    if (entitiesToLoad.length > 0) {
+      const entities = await orgStructureService.getOrgRolesById(entitiesToLoad, true)
+      commit('StoreEntities', entities)
+      return ids.filter(id => state.entities[id]).map(id => state.entities[id])
+    } else {
+      return ids.filter(id => state.entities[id]).map(id => state.entities[id])
+    }
   }
 
 }

@@ -44,12 +44,12 @@
         />
       </div>
       <div class="row">
-        <person-assignment-form :id="id" :action="action" />
+        <person-assignment-form :id="id" :action="action"/>
+      </div>
+      <div class="row">
+        <org-role-assignment-form :id="id" :action="action"/>
       </div>
 
-      <div class="row">
-        Organizational Roles
-      </div>
       <updated-fields
         v-if="entity.updatedAt && entity.updatedBy"
         :updated-at="entity.updatedAt"
@@ -72,11 +72,19 @@ import {
 import PersonField from 'src/lib/components/persons/PersonField.vue'
 import PersonSelector from 'src/lib/components/persons/PersonSelector.vue'
 import PersonAssignmentForm from 'src/modules/org-structure/components/org-hierarchy/PersonAssignmentForm.vue'
+import OrgRoleAssignmentForm from 'src/modules/org-structure/components/org-hierarchy/OrgRoleAssignmentForm.vue'
 
 const namespace = 'orgItem'
 
 @Component({
-  components: {PersonAssignmentForm, PersonSelector, PersonField, OrgCategorySelector, UpdatedFields}
+  components: {
+    OrgRoleAssignmentForm,
+    PersonAssignmentForm,
+    PersonSelector,
+    PersonField,
+    OrgCategorySelector,
+    UpdatedFields
+  }
 })
 export default class OrgPositionForm extends Vue {
   @Prop() id

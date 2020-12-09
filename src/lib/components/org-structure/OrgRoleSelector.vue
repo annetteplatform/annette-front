@@ -12,7 +12,7 @@
     :label="label"
     :options="items"
     option-value="id"
-    option-label="fullname"
+    option-label="name"
     emit-value
     map-options
     clearable
@@ -34,15 +34,15 @@ import {Component, Prop, Vue, Watch} from 'vue-property-decorator'
 import { Action, Getter} from 'vuex-class'
 import { PagingMode } from 'src/lib/state'
 
-const namespace = 'person'
+const namespace = 'orgRole'
 
 const PAGE_SIZE = 100
-const DEFAULT_INSTANCE_KEY = 'PersonSelector'
+const DEFAULT_INSTANCE_KEY = 'OrgRoleSelector'
 
 @Component({
   components: {}
 })
-export default class PersonSelector extends Vue {
+export default class OrgRoleSelector extends Vue {
   @Prop() label
   @Prop() value
   @Prop() readonly

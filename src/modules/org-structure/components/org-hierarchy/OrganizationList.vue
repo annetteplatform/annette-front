@@ -145,13 +145,11 @@ export default class OrganizationList extends Vue {
   }
 
   get filter() {
-    console.log('getFilter', this.filterFn(this.instanceKey))
     // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return this.filterFn(this.instanceKey)
   }
 
   setFilterVal(val) {
-    console.log('setFilter', val)
     const newFilter = {
       ...this.filter,
       filter: val
@@ -176,7 +174,6 @@ export default class OrganizationList extends Vue {
       rowsPerPage: this.pageSize,
       rowsNumber: this.totalFn(this.instanceKey)
     }
-    console.log(pg)
     return pg
   }
 

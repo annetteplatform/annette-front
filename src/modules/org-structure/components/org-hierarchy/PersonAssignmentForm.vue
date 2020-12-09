@@ -1,6 +1,6 @@
 <template>
   <q-list class="full-width " bordered>
-    <q-item-label header>Persons</q-item-label>
+    <q-item-label header>Assigned Persons</q-item-label>
     <q-item>
       <q-item-section>
         <div class="row">
