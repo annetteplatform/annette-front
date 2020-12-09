@@ -8,6 +8,7 @@ export interface OrgItem extends BaseEntity {
   id: string,
   orgId: string
   parentId: string
+  rootPath: string[]
   name: string
   shortName: string
   level: number
@@ -32,6 +33,7 @@ export interface OrgItemDto {
   id: string,
   orgId: string
   parentId: string
+  rootPath: string[]
   name: string
   shortName: string
   categoryId: string,
