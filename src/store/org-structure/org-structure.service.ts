@@ -2,13 +2,21 @@ import axios from 'axios'
 import {FindResult} from 'src/lib/state'
 import {OrgRole, OrgRoleDto, OrgRoleFindQuery} from './org-role/state'
 import {
-  AssignCategoryPayloadDto, AssignOrgRolePayloadDto, AssignPersonPayloadDto, ChangePositionLimitPayloadDto,
+  AssignCategoryPayloadDto,
+  AssignChiefPayloadDto,
+  AssignOrgRolePayloadDto,
+  AssignPersonPayloadDto,
+  ChangePositionLimitPayloadDto,
   CreateOrganizationPayloadDto,
   CreatePositionPayloadDto,
   CreateUnitPayloadDto,
   OrgItem,
-  OrgItemFindQuery, OrgPosition,
-  OrgUnit, UnassignOrgRolePayloadDto, UnassignPersonPayloadDto,
+  OrgItemFindQuery,
+  OrgPosition,
+  OrgUnit,
+  UnassignChiefPayloadDto,
+  UnassignOrgRolePayloadDto,
+  UnassignPersonPayloadDto,
   UpdateNamePayloadDto,
   UpdateShortNamePayloadDto
 } from './org-hierarchy/state'
@@ -70,9 +78,14 @@ export const orgStructureService = {
     return await axios.post<OrgUnit>('/api/annette/v1/orgStructure/deleteUnit', {orgId: orgId, unitId: id})
       .then(result => result.data)
   },
-  // async assignChief(payload: AssignChiefPayloadDto): Future[Done]
-  // async unassignChief(payload: UnassignChiefPayloadDto): Future[Done]
-  //
+  async assignChief(payload: AssignChiefPayloadDto) {
+    return await axios.post<OrgUnit>('/api/annette/v1/orgStructure/assignChief', payload)
+      .then(result => result.data)
+  },
+  async unassignChief(payload: UnassignChiefPayloadDto) {
+    return await axios.post<OrgUnit>('/api/annette/v1/orgStructure/unassignChief', payload)
+      .then(result => result.data)
+  },
   async createPosition(payload: CreatePositionPayloadDto) {
     return await axios.post<{ [key: string]: OrgItem }>('/api/annette/v1/orgStructure/createPosition', payload)
       .then(result => result.data)
@@ -93,12 +106,10 @@ export const orgStructureService = {
     return await axios.post<OrgItem>('/api/annette/v1/orgStructure/assignCategory', payload)
       .then(result => result.data)
   },
-  // async changePositionLimit(payload: ChangePositionLimitPayload): Future[Done]
   async changePositionLimit(payload: ChangePositionLimitPayloadDto) {
     return await axios.post<OrgPosition>('/api/annette/v1/orgStructure/changePositionLimit', payload)
       .then(result => result.data)
   },
-  // async assignPerson(payload: AssignPersonPayload): Future[Done]
   async assignPerson(payload: AssignPersonPayloadDto) {
     return await axios.post<OrgPosition>('/api/annette/v1/orgStructure/assignPerson', payload)
       .then(result => result.data)
@@ -107,8 +118,6 @@ export const orgStructureService = {
     return await axios.post<OrgPosition>('/api/annette/v1/orgStructure/unassignPerson', payload)
       .then(result => result.data)
   },
-  // async assignOrgRole(payload: AssignOrgRolePayload): Future[Done]
-  // async unassignOrgRole(payload: UnassignOrgRolePayload): Future[Done]
   async assignOrgRole(payload: AssignOrgRolePayloadDto) {
     return await axios.post<OrgPosition>('/api/annette/v1/orgStructure/assignOrgRole', payload)
       .then(result => result.data)

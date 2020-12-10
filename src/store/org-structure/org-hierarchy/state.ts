@@ -171,3 +171,14 @@ export interface UnassignOrgRolePayloadDto {
   positionId: string,
   orgRoleId: string
 }
+
+export interface AssignChiefPayloadDto {
+  orgId: string,
+  unitId: string,
+  chiefId: string
+}
+
+export interface UnassignChiefPayloadDto {
+  orgId: string,
+  unitId: string
+}

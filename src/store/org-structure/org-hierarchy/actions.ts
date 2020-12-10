@@ -1,11 +1,21 @@
 import { ActionTree } from 'vuex'
 import { RootState } from '../../root-state'
 import {
-  AssignCategoryPayloadDto, AssignOrgRolePayloadDto, AssignPersonPayloadDto, ChangePositionLimitPayloadDto,
-  CreateOrganizationPayloadDto, CreatePositionPayloadDto, CreateUnitPayloadDto,
+  AssignCategoryPayloadDto, AssignChiefPayloadDto,
+  AssignOrgRolePayloadDto,
+  AssignPersonPayloadDto,
+  ChangePositionLimitPayloadDto,
+  CreateOrganizationPayloadDto,
+  CreatePositionPayloadDto,
+  CreateUnitPayloadDto,
   OrgItem,
   OrgItemFindQuery,
-  OrgItemState, UnassignOrgRolePayloadDto, UnassignPersonPayloadDto, UpdateNamePayloadDto, UpdateShortNamePayloadDto
+  OrgItemState,
+  UnassignChiefPayloadDto,
+  UnassignOrgRolePayloadDto,
+  UnassignPersonPayloadDto,
+  UpdateNamePayloadDto,
+  UpdateShortNamePayloadDto
 } from './state'
 import { orgStructureService } from '../org-structure.service'
 import { buildActions } from 'src/lib/state'
@@ -74,6 +84,17 @@ export const actions: ActionTree<OrgItemState, RootState> = {
     commit('StoreEntity', entity)
     return entity
   },
+  async AssignChief ({ commit }, payload: AssignChiefPayloadDto) {
+    const entity = await orgStructureService.assignChief(payload)
+    commit('StoreEntity', entity)
+    return entity
+  },
+  async UnassignChief ({ commit }, payload: UnassignChiefPayloadDto) {
+    const entity = await orgStructureService.unassignChief(payload)
+    commit('StoreEntity', entity)
+    return entity
+  },
+
   async CreatePosition ({ commit }, entity: CreatePositionPayloadDto) {
     const entities = await orgStructureService.createPosition(entity)
     commit('StoreEntities', entities)

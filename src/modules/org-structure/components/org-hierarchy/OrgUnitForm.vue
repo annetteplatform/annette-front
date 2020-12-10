@@ -3,7 +3,7 @@
 
     <div class="q-gutter-md" v-if="entity">
       <div class="row text-subtitle1" v-if="this.entity.parentId === 'ROOT'">
-         Organization
+        Organization
       </div>
       <div class="row text-subtitle1" v-else>
         Unit
@@ -48,6 +48,24 @@
         />
       </div>
 
+      <div class="row">
+        <q-input
+          class="col-md-12 col-sm-12 col-xs-12 q-pr-md"
+          v-model="entity.chief"
+          label="Chief"
+          :readonly="true"
+        >
+          <template v-slot:append v-if="action === 'edit' && entity.chief">
+            <q-btn round dense flat icon="close" @click="unassignChief"/>
+          </template>
+          <template v-slot:after v-if="action === 'edit'">
+            <q-btn round dense flat icon="edit" @click="selectChief"/>
+          </template>
+        </q-input>
+      </div>
+      <org-item-selector :id="entity.orgId" type="position" :show="showChiefSelector" @selected="chiefSelected"
+                         @canceled="chiefSelectCanceled"/>
+
       <updated-fields
         v-if="entity.updatedAt && entity.updatedBy"
         :updated-at="entity.updatedAt"
@@ -64,16 +82,18 @@ import {Action, Getter} from 'vuex-class'
 import UpdatedFields from 'src/lib/components/UpdatedFields.vue'
 import OrgCategorySelector from 'src/modules/org-structure/components/org-category/OrgCategorySelector.vue'
 import {
-  AssignCategoryPayloadDto,
+  AssignCategoryPayloadDto, AssignChiefPayloadDto,
   OrgUnit,
+  UnassignChiefPayloadDto,
   UpdateNamePayloadDto,
   UpdateShortNamePayloadDto
 } from 'src/store/org-structure/org-hierarchy/state'
+import OrgItemSelector from 'src/lib/components/org-structure/OrgItemSelector.vue'
 
 const namespace = 'orgItem'
 
 @Component({
-  components: {OrgCategorySelector, UpdatedFields}
+  components: {OrgItemSelector, OrgCategorySelector, UpdatedFields}
 })
 export default class OrgUnitForm extends Vue {
   @Prop() id
@@ -83,10 +103,14 @@ export default class OrgUnitForm extends Vue {
   entity: OrgUnit = null
   unitType = 'unit'
 
+  showChiefSelector = false
+
   @Getter('entities', {namespace: namespace}) entities;
   @Action('UpdateName', {namespace: namespace}) updateNameAction;
   @Action('UpdateShortName', {namespace: namespace}) updateShortNameAction;
   @Action('AssignCategory', {namespace: namespace}) assignCategoryAction;
+  @Action('AssignChief', {namespace: namespace}) assignChiefAction;
+  @Action('UnassignChief', {namespace: namespace}) unassignChiefAction;
 
   @Watch('id', {immediate: true})
   onIdChange(id) {
@@ -115,7 +139,9 @@ export default class OrgUnitForm extends Vue {
       shortName: newName
     }
     this.updateShortNameAction(payload)
-      .then(entity => { this.entity = entity })
+      .then(entity => {
+        this.entity = entity
+      })
       .catch(failure => console.log(failure))
   }
 
@@ -126,7 +152,43 @@ export default class OrgUnitForm extends Vue {
       categoryId: categoryId
     }
     this.assignCategoryAction(payload)
-      .then(entity => { this.entity = entity })
+      .then(entity => {
+        this.entity = entity
+      })
+      .catch(failure => console.log(failure))
+  }
+
+  selectChief() {
+    this.showChiefSelector = true
+  }
+
+  chiefSelected(chiefId) {
+    this.showChiefSelector = false
+    const payload: AssignChiefPayloadDto = {
+      orgId: this.entity?.orgId,
+      unitId: this.entity?.id,
+      chiefId
+    }
+    this.assignChiefAction(payload)
+      .then(entity => {
+        this.entity = entity
+      })
+      .catch(failure => console.log(failure))
+  }
+
+  chiefSelectCanceled() {
+    this.showChiefSelector = false
+  }
+
+  unassignChief() {
+    const payload: UnassignChiefPayloadDto = {
+      orgId: this.entity?.orgId,
+      unitId: this.entity?.id
+    }
+    this.unassignChiefAction(payload)
+      .then(entity => {
+        this.entity = entity
+      })
       .catch(failure => console.log(failure))
   }
 }
