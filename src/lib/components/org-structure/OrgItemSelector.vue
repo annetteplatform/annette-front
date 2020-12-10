@@ -39,10 +39,6 @@
             </q-scroll-area>
           </div>
         </div>
-        <pre>
-          {{ selected }}
-          {{ type }}
-        </pre>
       </q-card-section>
 
       <q-card-actions align="right">
