@@ -69,7 +69,6 @@ import {
   UpdateNamePayloadDto,
   UpdateShortNamePayloadDto
 } from 'src/store/org-structure/org-hierarchy/state'
-import PersonField from 'src/lib/components/persons/PersonField.vue'
 import PersonSelector from 'src/lib/components/persons/PersonSelector.vue'
 import PersonAssignmentForm from 'src/modules/org-structure/components/org-hierarchy/PersonAssignmentForm.vue'
 import OrgRoleAssignmentForm from 'src/modules/org-structure/components/org-hierarchy/OrgRoleAssignmentForm.vue'
@@ -81,7 +80,6 @@ const namespace = 'orgItem'
     OrgRoleAssignmentForm,
     PersonAssignmentForm,
     PersonSelector,
-    PersonField,
     OrgCategorySelector,
     UpdatedFields
   }

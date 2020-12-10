@@ -1,14 +1,11 @@
 <template>
   <div class="row">
-    <q-list v-if="principal.principalType ==='person'" dense>
-    <q-item clickable   @click="openPerson">
-      <q-item-section avatar >
-        <q-avatar icon="person" size="xl">
-        </q-avatar>
+    <q-item v-if="principal.principalType ==='person'" dense>
+      <q-item-section class="cursor-pointer" avatar>
+        <q-btn flat round icon="person" @click="openPerson"/>
       </q-item-section>
       <q-item-section>{{ personName }}</q-item-section>
     </q-item>
-    </q-list>
     <div
       v-else
       class="col-md-6 col-sm-12 col-xs-12 q-pr-md">

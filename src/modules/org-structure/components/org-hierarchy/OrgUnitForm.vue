@@ -49,19 +49,25 @@
       </div>
 
       <div class="row">
-        <q-input
-          class="col-md-12 col-sm-12 col-xs-12 q-pr-md"
-          v-model="entity.chief"
-          label="Chief"
-          :readonly="true"
-        >
-          <template v-slot:append v-if="action === 'edit' && entity.chief">
-            <q-btn round dense flat icon="close" @click="unassignChief"/>
-          </template>
-          <template v-slot:after v-if="action === 'edit'">
-            <q-btn round dense flat icon="edit" @click="selectChief"/>
-          </template>
-        </q-input>
+        <q-list class="full-width " bordered>
+          <q-item-label header>Chief</q-item-label>
+          <q-item>
+            <q-item-section>
+              <position-field v-if="entity.chief" :position-id="entity.chief"/>
+              <div v-else class="text-grey-8">Not assigned</div>
+            </q-item-section>
+            <q-item-section center side>
+              <div class="q-gutter-xs">
+                <q-btn round dense flat icon="close"
+                       v-if="action === 'edit' && entity.chief"
+                       @click="unassignChief"/>
+                <q-btn round dense flat icon="edit"
+                       v-if="action === 'edit' && !entity.chief"
+                       @click="selectChief"/>
+              </div>
+            </q-item-section>
+          </q-item>
+        </q-list>
       </div>
       <org-item-selector :id="entity.orgId" type="position" :show="showChiefSelector" @selected="chiefSelected"
                          @canceled="chiefSelectCanceled"/>
@@ -82,18 +88,20 @@ import {Action, Getter} from 'vuex-class'
 import UpdatedFields from 'src/lib/components/UpdatedFields.vue'
 import OrgCategorySelector from 'src/modules/org-structure/components/org-category/OrgCategorySelector.vue'
 import {
-  AssignCategoryPayloadDto, AssignChiefPayloadDto,
+  AssignCategoryPayloadDto,
+  AssignChiefPayloadDto,
   OrgUnit,
   UnassignChiefPayloadDto,
   UpdateNamePayloadDto,
   UpdateShortNamePayloadDto
 } from 'src/store/org-structure/org-hierarchy/state'
 import OrgItemSelector from 'src/lib/components/org-structure/OrgItemSelector.vue'
+import PositionField from 'src/lib/components/org-structure/PositionField.vue'
 
 const namespace = 'orgItem'
 
 @Component({
-  components: {OrgItemSelector, OrgCategorySelector, UpdatedFields}
+  components: {PositionField, OrgItemSelector, OrgCategorySelector, UpdatedFields}
 })
 export default class OrgUnitForm extends Vue {
   @Prop() id

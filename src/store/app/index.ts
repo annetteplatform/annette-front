@@ -104,7 +104,7 @@ const SERVICE_GROUPS: ServiceGroup[] = [
       {
         id: 'ORG_CATEGORIES',
         order: 20,
-        icon: 'local_offer',
+        icon: 'category',
         title: 'Org. categories',
         subtitle: 'Maintain org. categories',
         action: '/org-structure/categories',

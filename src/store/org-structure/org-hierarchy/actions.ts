@@ -131,6 +131,16 @@ export const actions: ActionTree<OrgItemState, RootState> = {
     const entity = await orgStructureService.unassignOrgRole(payload)
     commit('StoreEntity', entity)
     return entity
+  },
+  async LoadEntitiesIfNotExist ({ commit, state }, ids: string[]) {
+    const entitiesToLoad: string[] = ids.filter(id => !state.entities[id])
+    if (entitiesToLoad.length > 0) {
+      const entities = await orgStructureService.getOrgItemsByIdFromReadSide(entitiesToLoad)
+      commit('StoreEntities', entities)
+      return ids.filter(id => state.entities[id]).map(id => state.entities[id])
+    } else {
+      return ids.filter(id => state.entities[id]).map(id => state.entities[id])
+    }
   }
 
 }

@@ -56,7 +56,7 @@
       </div>
       <div class="row">
         <div class="col-md-6 col-sm-12 col-xs-12 q-pr-md">
-          <q-scroll-area class="full-height" style="min-height: 80vh;">
+          <q-scroll-area class="full-height" style="min-height: 72vh;">
             <q-tree
               ref="tree"
               :nodes="nodes"
