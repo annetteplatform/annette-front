@@ -99,6 +99,18 @@ const routes: RouteConfig[] = [
         name: 'organization',
         component: () => import('src/modules/org-structure/pages/org-hierarchy/OrganizationPage.vue'),
         meta: { requiresAuth: true }
+      },
+      {
+        path: '/cms/view/posts',
+        name: 'cms.postViews',
+        component: () => import('src/modules/cms/view/post/PostViewListPage.vue'),
+        meta: { requiresAuth: true }
+      },
+      {
+        path: '/cms/view/post/:id',
+        name: 'cms.postView',
+        component: () => import('src/modules/cms/view/post/PostViewPage.vue'),
+        meta: { requiresAuth: true }
       }
     ]
   },

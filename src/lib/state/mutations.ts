@@ -36,7 +36,7 @@ export function buildMutations<E extends BaseEntity, F> (
 
     SetFilter: (state: EntityState<E, F>, data: SetFilterData<F>) => {
       if (data) {
-        state.instances[data.instanceKey].filter = data.filter
+        state.instances[data.instanceKey].filter = {...data.filter}
       }
     },
 

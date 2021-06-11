@@ -18,6 +18,7 @@ export interface PersonProfile {
 export interface ServiceGroup {
   id: string,
   order: number,
+  icon: string,
   title: string,
   subtitle?: string,
   services: Service[]
@@ -29,6 +30,6 @@ export interface Service {
   icon: string,
   title: string,
   subtitle?: string,
-  action?: string,
+  action?: string | object,
   actionName?: string,
 }

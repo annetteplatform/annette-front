@@ -1,6 +1,6 @@
 {
   "name": "annette-front",
-  "version": "0.1.0-SNAPSHOT",
+  "version": "0.2.0-SNAPSHOT",
   "description": "Annette Admin Console",
   "productName": "Annette Frontend",
   "author": "Valery Lobachev <valery@lobachev.biz>",
@@ -14,6 +14,7 @@
     "axios": "^0.18.1",
     "core-js": "^3.6.5",
     "keycloak-js": "^11.0.2",
+    "markdown-it-vue": "^1.1.6",
     "moment": "^2.29.1",
     "quasar": "^1.0.0",
     "vue-class-component": "^7.2.2",

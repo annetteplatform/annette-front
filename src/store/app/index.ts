@@ -1,15 +1,16 @@
-import { Module } from 'vuex'
+import {Module} from 'vuex'
 
-import { RootState } from '../root-state'
-import { actions } from './actions'
-import { getters } from './getters'
-import { mutations } from './mutations'
-import { AppState, ServiceGroup } from './state'
+import {RootState} from '../root-state'
+import {actions} from './actions'
+import {getters} from './getters'
+import {mutations} from './mutations'
+import {AppState, ServiceGroup} from './state'
 
 const SERVICE_GROUPS: ServiceGroup[] = [
   {
     id: 'APP_GROUP',
     order: 10,
+    icon: 'apps',
     title: 'Application ',
     subtitle: 'Maintain languages, translations and applications',
     services: [
@@ -45,6 +46,7 @@ const SERVICE_GROUPS: ServiceGroup[] = [
   {
     id: 'PERSON_GROUP',
     order: 20,
+    icon: 'people',
     title: 'Person ',
     subtitle: 'Maintain person repository',
     services: [
@@ -80,6 +82,7 @@ const SERVICE_GROUPS: ServiceGroup[] = [
   {
     id: 'ORG_STRUCTURE_GROUP',
     order: 20,
+    icon: 'account_balance',
     title: 'Organizational Structure ',
     subtitle: 'Maintain organizational structures and roles',
     services: [
@@ -115,6 +118,7 @@ const SERVICE_GROUPS: ServiceGroup[] = [
   {
     id: 'AUTHORIZATION_GROUP',
     order: 20,
+    icon: 'admin_panel_settings',
     title: 'Authorization ',
     subtitle: 'Maintain authorization roles and assign permissions',
     services: [
@@ -134,6 +138,33 @@ const SERVICE_GROUPS: ServiceGroup[] = [
         title: 'Permission assignments',
         subtitle: 'View permission assignments to principals',
         action: '/auth/assignments',
+        actionName: 'View'
+      }
+    ]
+  },
+  {
+    id: 'CMS-VIEW',
+    order: 30,
+    icon: 'fas fa-rss',
+    title: 'CMS View ',
+    subtitle: '',
+    services: [
+      {
+        id: 'POST-VIEW',
+        order: 10,
+        icon: 'fas fa-list',
+        title: 'Blog posts',
+        subtitle: 'View blog posts',
+        action: {name: 'cms.postViews'},
+        actionName: 'Open'
+      },
+      {
+        id: 'SPACES',
+        order: 20,
+        icon: 'fas fa-rss',
+        title: 'Spaces',
+        subtitle: 'View list of spaces: blogs & wikies',
+        action: {name: 'cms.spaceViews'},
         actionName: 'View'
       }
     ]

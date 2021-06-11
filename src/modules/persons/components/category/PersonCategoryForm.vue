@@ -50,7 +50,6 @@
             v-if="entity.updatedAt && entity.updatedBy"
             :updated-at="entity.updatedAt"
             :updated-by="entity.updatedBy" />
-
         </div>
 
       </div>

@@ -5,6 +5,7 @@ import { app } from './app'
 import { person, personCategory } from './persons'
 import { authRole, authAssignment } from './authorization'
 import { orgRole, orgItem, orgCategory } from './org-structure'
+import { cmsPostView } from './cms'
 
 // import example from './module-example';
 // import { ExampleStateInterface } from './module-example/state';
@@ -29,7 +30,8 @@ export default store(function ({ Vue }) {
       authAssignment,
       orgRole,
       orgCategory,
-      orgItem
+      orgItem,
+      cmsPostView
     },
 
     // enable strict mode (adds overhead!)
