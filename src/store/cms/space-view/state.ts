@@ -35,7 +35,7 @@ export interface SpaceViewFindQuery {
 export function DEFAULT_SPACE_VIEW_FIND_QUERY():SpaceViewFindQuery {
   return {
     offset: 0,
-    size: 0,
+    size: 10,
     filter: ''
   }
 }

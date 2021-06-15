@@ -59,7 +59,7 @@ export interface PostViewFindQuery {
 export function DEFAULT_POST_VIEW_FIND_QUERY():PostViewFindQuery {
   return {
     offset: 0,
-    size: 0,
+    size: 10,
     filter: ''
   }
 }

@@ -8,14 +8,26 @@
     >
       <q-card class="my-card">
         <q-card-section horizontal>
-          <q-form
-            @submit="setFilter"
-            @reset="clear"
-            class="full-width q-pa-md q-gutter-md">
-            <q-input
-              v-model="filterModel.filter"
-              label="Filter"/>
-          </q-form>
+            <q-form
+              @submit="setFilter"
+              @reset="clear"
+              class="full-width q-pa-md q-gutter-md">
+              <q-input
+                v-model="filterModel.filter"
+                label="Filter"/>
+
+                <q-select
+                  label="Spaces"
+                  v-model="filterModel.spaces"
+                  use-input
+                  use-chips
+                  multiple
+                  hide-dropdown-icon
+                  input-debounce="0"
+                  new-value-mode="add-unique"
+
+                />
+            </q-form>
           <q-card-actions vertical class="justify-start">
             <q-btn flat color="primary" label="Filter" @click="setFilter"/>
             <q-btn flat color="negative" label="Clear" @click="clear"/>
@@ -35,7 +47,7 @@ import {DEFAULT_POST_VIEW_FIND_QUERY, PostViewFindQuery} from 'src/store/cms/pos
 })
 export default class PostViewFilter extends Vue {
   // @ts-ignore
-  @Prop({ type: PostViewFindQuery, default: DEFAULT_POST_VIEW_FIND_QUERY() }) filter
+  @Prop({type: PostViewFindQuery, default: DEFAULT_POST_VIEW_FIND_QUERY()}) filter
 
   expanded = true
   filterModel: PostViewFindQuery = DEFAULT_POST_VIEW_FIND_QUERY()
@@ -48,8 +60,8 @@ export default class PostViewFilter extends Vue {
     this.filterModel = DEFAULT_POST_VIEW_FIND_QUERY()
   }
 
-  @Watch('filter', { immediate: true })
-  onFilterChange (newFilter) {
+  @Watch('filter', {immediate: true})
+  onFilterChange(newFilter) {
     this.filterModel = {...newFilter}
   }
 }

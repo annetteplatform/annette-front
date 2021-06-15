@@ -111,6 +111,12 @@ const routes: RouteConfig[] = [
         name: 'cms.postView',
         component: () => import('src/modules/cms/view/post/PostViewPage.vue'),
         meta: { requiresAuth: true }
+      },
+      {
+        path: '/cms/view/spaces',
+        name: 'cms.spaceViews',
+        component: () => import('src/modules/cms/view/space/SpaceViewListPage.vue'),
+        meta: { requiresAuth: true }
       }
     ]
   },

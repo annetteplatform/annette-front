@@ -36,7 +36,11 @@ export function buildMutations<E extends BaseEntity, F> (
 
     SetFilter: (state: EntityState<E, F>, data: SetFilterData<F>) => {
       if (data) {
-        state.instances[data.instanceKey].filter = {...data.filter}
+        // @ts-ignore
+        const offset = state.instances[data.instanceKey].filter.offset
+        // @ts-ignore
+        const size = state.instances[data.instanceKey].filter.size
+        state.instances[data.instanceKey].filter = {...data.filter, offset, size}
       }
     },
 
@@ -62,7 +66,7 @@ export function buildMutations<E extends BaseEntity, F> (
       instance.total = data.total
       instance.page = data.page
       const totalPages = calculateTotalPages(instance.total, instance.pageSize)
-      if (instance.page > totalPages) {
+      if (instance.page > totalPages && totalPages !== 0) {
         instance.page = totalPages
       }
       if (data.clearPages) instance.pages = {}

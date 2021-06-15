@@ -1,6 +1,6 @@
 import axios from 'axios'
 import {PostMetric, PostView, PostViewFindQuery} from './post-view/state'
-import { FindResult } from 'src/lib/state'
+import {AnnettePrincipal, FindResult} from 'src/lib/state'
 import {SpaceView, SpaceViewFindQuery} from 'src/store/cms/space-view/state'
 
 export const cmsService = {
@@ -59,8 +59,18 @@ export const cmsService = {
     // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
     return await axios.post<{ [key: string]: SpaceView }>('/api/annette/v1/cms/view/getSpaceViewsById', ids)
       .then(convertSpaceViews)
-  }
+  },
 
+  async subscribeToSpace (id: string) {
+    // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
+    return await axios.post<AnnettePrincipal[]>(`/api/annette/v1/cms/view/subscribeToSpace/${id}`)
+      .then(result => result.data)
+  },
+  async unsubscribeFromSpace (id: string) {
+    // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
+    return await axios.post<AnnettePrincipal[]>(`/api/annette/v1/cms/view/unsubscribeFromSpace/${id}`)
+      .then(result => result.data)
+  }
 }
 
 function convertPostViews(rawPostViews): { [key: string]: PostView } {
