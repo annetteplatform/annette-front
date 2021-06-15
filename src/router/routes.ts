@@ -117,6 +117,19 @@ const routes: RouteConfig[] = [
         name: 'cms.spaceViews',
         component: () => import('src/modules/cms/view/space/SpaceViewListPage.vue'),
         meta: { requiresAuth: true }
+      },
+
+      {
+        path: 'cms/categories',
+        name: 'cms.categories',
+        component: () => import('src/modules/cms/category/SpaceCategories.vue'),
+        meta: { requiresAuth: true }
+      },
+      {
+        path: 'cms/category/:action/:id',
+        name: 'cms.category',
+        component: () => import('src/modules/cms/category/SpaceCategoryPage.vue'),
+        meta: { requiresAuth: true }
       }
     ]
   },

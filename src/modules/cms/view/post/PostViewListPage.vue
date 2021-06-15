@@ -85,7 +85,6 @@ export default class PostViewListPage extends Vue {
     } else {
       this.onRouteChange(this.$route)
     }
-
   }
 
   @Watch('$route')
@@ -119,17 +118,19 @@ export default class PostViewListPage extends Vue {
     else filter['filter'] = ''
     if (route.query['spaces']) filter['spaces'] = route.query['spaces'].split(',')
     if (route.query['featured']) filter['featured'] = !!route.query['featured']
-    if (route.query['sortBy']) filter['sortBy'] = route.query['sortBy'].split(',').map(fieldSort => {
-      const arr = fieldSort.split(':')
-      const field = arr[0]
-      const ascending = arr[1] && arr[1] === 'asc'
-      return {field, ascending}
-    })
+    if (route.query['sortBy']) {
+      filter['sortBy'] = route.query['sortBy'].split(',').map(fieldSort => {
+        const arr = fieldSort.split(':')
+        const field = arr[0]
+        const ascending = arr[1] && arr[1] === 'asc'
+        return {field, ascending}
+      })
+    }
     return {page, filter}
   }
 
   onFilterChanged(newFilter: PostViewFindQuery) {
-    let query = {}
+    const query = {}
     if (newFilter['filter']) {
       query['filter'] = newFilter.filter
     }

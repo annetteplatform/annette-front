@@ -168,6 +168,33 @@ const SERVICE_GROUPS: ServiceGroup[] = [
         actionName: 'View'
       }
     ]
+  },
+  {
+    id: 'CMS-EDIT',
+    order: 40,
+    icon: 'fas fa-rss',
+    title: 'CMS maintenance ',
+    subtitle: '',
+    services: [
+      {
+        id: 'SPACE_CATEGORIES',
+        order: 20,
+        icon: 'local_offer',
+        title: 'Space categories',
+        subtitle: 'Maintain space categories',
+        action: {name: 'cms.categories'},
+        actionName: 'View'
+      }
+      // {
+      //   id: 'SPACES',
+      //   order: 20,
+      //   icon: 'fas fa-rss',
+      //   title: 'Spaces',
+      //   subtitle: 'View list of spaces: blogs & wikies',
+      //   action: {name: 'cms.spaceViews'},
+      //   actionName: 'View'
+      // }
+    ]
   }
 ]
 

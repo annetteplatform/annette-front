@@ -4,16 +4,16 @@
       <div class="row items-center no-wrap">
         <div class="col">
           <div class="text-h6">
-            <span v-if="action == 'create'">Create person category</span>
-            <span v-else-if="action == 'edit'">Edit person category</span>
-            <span v-else-if="action == 'view'">View person category</span>
+            <span v-if="action == 'create'">Create space category</span>
+            <span v-else-if="action == 'edit'">Edit space category</span>
+            <span v-else-if="action == 'view'">View space category</span>
 
           </div>
         </div>
         <div class="col-auto q-gutter-sm">
           <q-btn outline color="primary"
-                 to="/person/categories"
-                 label="Person Categories"/>
+                 :to="{ name: 'cms.categories' }"
+                 label="Space Categories"/>
           <q-btn color="primary" label="Save"
                  v-if="action == 'edit' || action == 'create'"
                  @click="save"/>
@@ -63,19 +63,19 @@
 import { Component, Prop, Vue, Watch } from 'vue-property-decorator'
 import { Action } from 'vuex-class'
 import { uid } from 'quasar'
-import { PersonCategoryDto } from 'src/store/persons/category/state'
 import UpdatedFields from 'src/lib/components/UpdatedFields.vue'
+import {SpaceCategoryDto} from 'src/store/cms/category/state'
 
-const namespace = 'personCategory'
+const namespace = 'cmsSpaceCategory'
 
 @Component({
   components: { UpdatedFields }
 })
-export default class PersonCategoryForm extends Vue {
+export default class SpaceCategoryForm extends Vue {
   @Prop() id
   @Prop() action
 
-  entity: PersonCategoryDto = {
+  entity: SpaceCategoryDto = {
     id: '',
     name: ''
   }
@@ -108,11 +108,10 @@ export default class PersonCategoryForm extends Vue {
   }
 
   save () {
-    console.log('save')
     if (this.action === 'create') {
       this.createEntity(this.entity).then(entity => {
         // eslint-disable-next-line no-void
-        void this.$router.push({ name: 'person-category', params: { action: 'edit', id: entity.id } })
+        void this.$router.push({ name: 'cms.category', params: { action: 'edit', id: entity.id } })
       })
     } else if (this.action === 'edit') {
       this.updateEntity(this.entity).then(entity => {

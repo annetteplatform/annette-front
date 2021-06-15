@@ -42,7 +42,6 @@ import UpdatedFields from 'src/lib/components/UpdatedFields.vue'
 const namespace = 'cmsPostView'
 const spaceNamespace = 'cmsSpaceView'
 
-
 @Component({
   components: {UpdatedFields, PostViewStatusLine, PrincipalField, PostContentView}
 })
