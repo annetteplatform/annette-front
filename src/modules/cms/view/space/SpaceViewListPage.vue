@@ -53,7 +53,7 @@ export default class SpaceViewListPage extends Vue {
   }
 
   created() {
-    this.init({instanceKey: this.instanceKey, page: this.page, pageSize: PAGE_SIZE, mode: PagingMode.Range})
+    this.init({instanceKey: this.instanceKey, page: this.page, pageSize: PAGE_SIZE, mode: PagingMode.Standard})
     this.initialized = true
   }
 

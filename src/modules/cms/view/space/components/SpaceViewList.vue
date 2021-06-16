@@ -3,7 +3,10 @@
       flat bordered
       :data="items"
       :columns="columns"
-      row-key="name"
+      row-key="id"
+      :pagination.sync="pagination"
+      :loading="this.instance.loading"
+      @request="onRequest"
     >
       <template v-slot:header="props">
         <q-tr :props="props">
@@ -45,7 +48,7 @@
 
 <script lang="ts">
 import {Component, Prop, Vue} from 'vue-property-decorator'
-import {Getter} from 'vuex-class'
+import {Action, Getter} from 'vuex-class'
 import SpaceTypeField from 'src/modules/cms/view/space/components/SpaceTypeField.vue'
 import CategoryField from 'src/modules/cms/view/space/components/CategoryField.vue'
 import SubscriptionField from 'src/modules/cms/view/space/components/SubscriptionField.vue'
@@ -73,7 +76,10 @@ export default class SpaceViewList extends Vue {
   @Prop() instanceKey
 
   @Getter('items', {namespace}) itemsFn;
-  @Getter('loading', {namespace}) loadingFn;
+  @Getter('instance', {namespace}) instanceFn;
+  @Action('SetPage', { namespace: namespace }) setPage;
+  @Action('SetPageSize', { namespace: namespace }) setPageSize;
+  @Action('SetFilter', { namespace: namespace }) setFilter;
 
   columns = COLUMNS
 
@@ -82,9 +88,50 @@ export default class SpaceViewList extends Vue {
     return this.itemsFn(this.instanceKey)
   }
 
-  get loading() {
+  get instance() {
     // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-    return this.loadingFn(this.instanceKey)
+    return this.instanceFn(this.instanceKey)
+  }
+
+  get pagination () {
+    let sortBy = ''
+    let descending = false
+    if (this.instance.filter && this.instance.filter.sortBy) {
+      sortBy = this.instance.filter.sortBy.field
+      descending = !this.instance.filter.sortBy.ascending
+    }
+    const pg = {
+      sortBy,
+      descending,
+      page: this.instance.page,
+      rowsPerPage: this.instance.pageSize,
+      rowsNumber: this.instance.total
+    }
+    return pg
+  }
+
+  onRequest (props) {
+    const {page, rowsPerPage, sortBy, descending} = props.pagination
+    const filter = { ...this.instance.filter }
+    if (sortBy) {
+      filter.sortBy = {
+        field: sortBy,
+        ascending: !descending
+      }
+    } else {
+      filter.sortBy = null
+    }
+    this.setFilter({
+      instanceKey: this.instanceKey,
+      filter
+    })
+    if (page !== this.instance.page) {
+      this.setPage({instanceKey: this.instanceKey, page: page})
+    }
+
+    if (rowsPerPage !== this.instance.pageSize && rowsPerPage !== 0) {
+      this.setPageSize({instanceKey: this.instanceKey, pageSize: rowsPerPage})
+    }
   }
 }
 </script>
