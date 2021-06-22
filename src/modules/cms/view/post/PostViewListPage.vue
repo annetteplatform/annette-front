@@ -92,7 +92,7 @@ export default class PostViewListPage extends Vue {
     console.log('onRouteChange')
     const {page, filter} = this.getFilterFromRoute(to)
 
-    if (filter['filter'] || filter['spaces'] || filter['featured'] || filter['sortBy']) {
+    if (filter.filter || filter.spaces || filter.featured || filter.sortBy) {
       if (page) {
         this.setPageMutation({
           instanceKey: this.instanceKey,
@@ -112,14 +112,14 @@ export default class PostViewListPage extends Vue {
   }
 
   getFilterFromRoute(route) {
-    const page = route.query['page']
-    let filter = {}
-    if (route.query['filter']) filter['filter'] = route.query['filter']
-    else filter['filter'] = ''
-    if (route.query['spaces']) filter['spaces'] = route.query['spaces'].split(',')
-    if (route.query['featured']) filter['featured'] = !!route.query['featured']
-    if (route.query['sortBy']) {
-      filter['sortBy'] = route.query['sortBy'].split(',').map(fieldSort => {
+    const page = route.query.page
+    const filter: any = {}
+    if (route.query.filter) filter.filter = route.query.filter
+    else filter.filter = ''
+    if (route.query.spaces) filter.spaces = route.query.spaces.split(',')
+    if (route.query.featured) filter.featured = !!route.query.featured
+    if (route.query.sortBy) {
+      filter.sortBy = route.query.sortBy.split(',').map(fieldSort => {
         const arr = fieldSort.split(':')
         const field = arr[0]
         const ascending = arr[1] && arr[1] === 'asc'
@@ -130,18 +130,18 @@ export default class PostViewListPage extends Vue {
   }
 
   onFilterChanged(newFilter: PostViewFindQuery) {
-    const query = {}
-    if (newFilter['filter']) {
-      query['filter'] = newFilter.filter
+    const query: any = {}
+    if (newFilter.filter) {
+      query.filter = newFilter.filter
     }
-    if (newFilter['spaces']) {
-      query['spaces'] = newFilter.spaces.join(',')
+    if (newFilter.spaces) {
+      query.spaces = newFilter.spaces.join(',')
     }
-    if (newFilter['featured']) {
-      query['featured'] = !!newFilter.featured
+    if (newFilter.featured) {
+      query.featured = !!newFilter.featured
     }
-    if (newFilter['sortBy']) {
-      query['sortBy'] = newFilter.sortBy
+    if (newFilter.sortBy) {
+      query.sortBy = newFilter.sortBy
         .map(f => `${f.field}:${f.ascending ? 'asc' : 'desc'}`)
         .join(',')
     }

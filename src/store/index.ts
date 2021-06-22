@@ -5,7 +5,7 @@ import { app } from './app'
 import { person, personCategory } from './persons'
 import { authRole, authAssignment } from './authorization'
 import { orgRole, orgItem, orgCategory } from './org-structure'
-import {cmsPostView, cmsSpaceView, cmsSpaceCategory} from './cms'
+import {cmsPostView, cmsSpaceView, cmsSpace, cmsSpaceCategory} from './cms'
 
 // import example from './module-example';
 // import { ExampleStateInterface } from './module-example/state';
@@ -33,6 +33,7 @@ export default store(function ({ Vue }) {
       orgItem,
       cmsPostView,
       cmsSpaceView,
+      cmsSpace,
       cmsSpaceCategory
     },
 

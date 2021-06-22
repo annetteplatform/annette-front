@@ -130,6 +130,12 @@ const routes: RouteConfig[] = [
         name: 'cms.category',
         component: () => import('src/modules/cms/category/SpaceCategoryPage.vue'),
         meta: { requiresAuth: true }
+      },
+      {
+        path: '/cms/spaces',
+        name: 'cms.spaces',
+        component: () => import('src/modules/cms/space/SpaceListPage.vue'),
+        meta: { requiresAuth: true }
       }
     ]
   },

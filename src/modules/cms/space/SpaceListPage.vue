@@ -6,8 +6,8 @@
         <q-space/>
         <q-btn outline color="primary" :disable="loading" label="Refresh" @click="refreshList"/>
       </q-item>
-      <space-view-filter :filter="filter" @filterChanged="onFilterChanged"/>
-      <space-view-list :instance-key="instanceKey"/>
+      <space-filter :filter="filter" @filterChanged="onFilterChanged"/>
+      <space-list :instance-key="instanceKey"/>
 
     </div>
   </div>
@@ -17,21 +17,21 @@
 import {Component, Vue} from 'vue-property-decorator'
 import {Action, Getter} from 'vuex-class'
 import {PagingMode} from 'src/lib/state'
-import SpaceViewFilter from 'src/modules/cms/view/space/components/SpaceViewFilter.vue'
-import SpaceViewList from 'src/modules/cms/view/space/components/SpaceViewList.vue'
-import {SpaceViewFindQuery} from 'src/store/cms/space-view/state'
+import SpaceFilter from './components/SpaceFilter.vue'
+import SpaceList from './components/SpaceList.vue'
+import {SpaceFindQuery} from 'src/store/cms/space/state'
 
-const namespace = 'cmsSpaceView'
+const namespace = 'cmsSpace'
 const INSTANCE_KEY = 'spaces'
 const PAGE_SIZE = 10
 
 @Component({
   components: {
-    SpaceViewList,
-    SpaceViewFilter
+    SpaceList,
+    SpaceFilter
   }
 })
-export default class SpaceViewListPage extends Vue {
+export default class SpaceListPage extends Vue {
   @Action('Init', {namespace}) init;
   @Getter('filter', {namespace}) filterFn;
   @Getter('loading', { namespace }) loadingFn;
@@ -57,7 +57,7 @@ export default class SpaceViewListPage extends Vue {
     this.initialized = true
   }
 
-  onFilterChanged(newFilter: SpaceViewFindQuery) {
+  onFilterChanged(newFilter: SpaceFindQuery) {
     this.setFilter({
       instanceKey: this.instanceKey,
       filter: newFilter

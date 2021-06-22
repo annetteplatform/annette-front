@@ -3,6 +3,7 @@ import {PostMetric, PostView, PostViewFindQuery} from './post-view/state'
 import {AnnettePrincipal, FindResult} from 'src/lib/state'
 import {SpaceView, SpaceViewFindQuery} from 'src/store/cms/space-view/state'
 import {SpaceCategory, SpaceCategoryDto, SpaceCategoryFindQuery} from 'src/store/cms/category/state'
+import {Space, SpaceFindQuery} from 'src/store/cms/space/state'
 
 export const cmsService = {
 
@@ -111,7 +112,21 @@ export const cmsService = {
     // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
     return await axios.post<{ [key: string]: SpaceCategory }>('/api/annette/v1/cms/getCategoriesById', ids)
       .then(result => result.data)
+  },
+
+  // ******************************* Space API *******************************
+
+  async findSpaces (query: SpaceFindQuery) {
+    return await axios.post<FindResult>('/api/annette/v1/cms/findSpaces', query)
+      .then(result => result.data)
+  },
+
+  async getSpacesById (ids: string[]) {
+    // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
+    return await axios.post<{ [key: string]: SpaceView }>('/api/annette/v1/cms/getSpacesById', ids)
+      .then(convertSpaces)
   }
+
 }
 
 function convertPostViews(rawPostViews): { [key: string]: PostView } {
@@ -151,4 +166,21 @@ function convertSpaceView(rawSpaceView): SpaceView {
   }
   spaceView.updatedAt = new Date(rawSpaceView.updatedAt)
   return spaceView
+}
+
+function convertSpaces(rawSpaces): { [key: string]: Space } {
+  const spaces = {}
+  Object.values(rawSpaces.data).forEach(pv => {
+    // @ts-ignore
+    spaces[pv.id] = convertSpace(pv)
+  })
+  return spaces
+}
+
+function convertSpace(rawSpace): Space {
+  const space: Space = {
+    ...rawSpace
+  }
+  space.updatedAt = new Date(rawSpace.updatedAt)
+  return space
 }
