@@ -193,6 +193,15 @@ const SERVICE_GROUPS: ServiceGroup[] = [
         subtitle: 'View list of spaces: blogs & wikies',
         action: {name: 'cms.spaces'},
         actionName: 'View'
+      },
+      {
+        id: 'POSTS',
+        order: 30,
+        icon: 'fas fa-list',
+        title: 'Posts',
+        subtitle: 'View list of posts',
+        action: {name: 'cms.posts'},
+        actionName: 'View'
       }
     ]
   }

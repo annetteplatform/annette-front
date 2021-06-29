@@ -1,7 +1,9 @@
 <template>
   <markdown-it-vue v-if="postContent.type == 'markdown'"
                    :content="postContent.markdown"
-                   :options="options"></markdown-it-vue>
+                   :options="options"
+                   ref="markdownItVue"
+  ></markdown-it-vue>
   <div v-else v-html="postContent.html"></div>
 </template>
 
@@ -9,11 +11,16 @@
 import {Component, Prop, Vue} from 'vue-property-decorator'
 import MarkdownItVue from 'markdown-it-vue'
 import 'markdown-it-vue/dist/markdown-it-vue.css'
+import * as echarts from 'echarts'
+// import {QMarkdown} from '@quasar/quasar-ui-qmarkdown'
+import MarkdownItCharts from 'src/lib/markdown-plugins/markdown-it-charts'
+import MarkdownItMermaid from '@datatraccorporation/markdown-it-mermaid'
 
 // @ts-ignore
 @Component({
   components: {
     MarkdownItVue
+    // QMarkdown
   }
 })
 export default class PostContentView extends Vue {
@@ -39,9 +46,35 @@ export default class PostContentView extends Vue {
       anchorLinkSymbolClassName: 'octicon octicon-link'
     }
   }
+
+  // beforeMount() {
+  //   this.$refs.markdownItVue.use(MarkdownItCharts)
+  // }
+  //
+  mounted() {
+    console.log(this.$refs)
+    console.log(echarts)
+    this.$refs.markdownItVue
+      .use(MarkdownItCharts)
+    // .use(MarkdownItMermaid)
+    console.log('plugin initialized')
+    setTimeout(() => {
+      document.querySelectorAll('.md-echarts5').forEach(element => {
+        try {
+          console.log(element)
+          const options = JSON.parse(element.textContent)
+          // window.opt = options
+          // window.el = element
+          // window.ech = echarts
+
+          const chart = echarts.init(element)
+          chart.setOption(options)
+        } catch (e) {
+          element.outerHTML = `<pre>echarts complains: ${e}</pre>`
+        }
+      })
+    }
+    )
+  }
 }
 </script>
-
-<style>
-
-</style>

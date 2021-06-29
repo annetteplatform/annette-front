@@ -6,7 +6,7 @@
         switch-toggle-sideu
         :icon="group.icon"
         :label="group.title"
-        :value="true"
+        :value="false"
         :key="group.id"
         :content-inset-level="0.4"
       >

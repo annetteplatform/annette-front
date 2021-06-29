@@ -32,7 +32,7 @@
           <q-td> <space-type-field :space-type="props.row.spaceType"/> </q-td>
           <q-td> <category-field :category-id="props.row.categoryId"/> </q-td>
           <q-td auto-width>
-            <q-btn flat round color="blue" size="sm" icon="login" :to="{name: 'cms.postViews', query: { spaces: props.row.id } }"/>
+            <q-btn flat round color="blue" size="sm" icon="login" :to="{name: 'cms.posts', query: { spaces: props.row.id } }"/>
           </q-td>
         </q-tr>
         <q-tr v-show="props.expand" :props="props">

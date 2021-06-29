@@ -1,7 +1,7 @@
 <template>
     <div class="narrow-layout">
 
-    <h5 class="text-center" v-if="isAuthenticated">Wecome, {{ fullname }}</h5>
+    <h5 class="text-center" v-if="isAuthenticated">Welcome, {{ fullname }}</h5>
     <h5 class="text-center" v-else>Annette Platform</h5>
 
     <not-authenticated v-if="!isAuthenticated"></not-authenticated>

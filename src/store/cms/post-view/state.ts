@@ -8,8 +8,6 @@ import {
   BaseEntity
 } from 'src/lib/state'
 
-export type PostViewState = EntityState<PostView, PostViewFindQuery>
-
 export interface PostView extends BaseEntity {
   id: string,
   spaceId: string,
@@ -55,6 +53,8 @@ export interface PostViewFindQuery {
   authors?: AnnettePrincipal[],
   sortBy?: SortBy[]
 }
+
+export type PostViewState = EntityState<PostView, PostViewFindQuery>
 
 export function DEFAULT_POST_VIEW_FIND_QUERY():PostViewFindQuery {
   return {

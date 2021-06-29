@@ -136,6 +136,18 @@ const routes: RouteConfig[] = [
         name: 'cms.spaces',
         component: () => import('src/modules/cms/space/SpaceListPage.vue'),
         meta: { requiresAuth: true }
+      },
+      {
+        path: '/cms/posts',
+        name: 'cms.posts',
+        component: () => import('src/modules/cms/post/PostListPage.vue'),
+        meta: { requiresAuth: true }
+      },
+      {
+        path: '/cms/post/:id',
+        name: 'cms.post',
+        component: () => import('src/modules/cms/post/PostPage.vue'),
+        meta: { requiresAuth: true }
       }
     ]
   },

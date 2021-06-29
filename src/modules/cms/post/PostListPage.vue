@@ -1,14 +1,16 @@
 <template>
-  <div class="narrow-layout row">
+  <div class=" row">
     <div class="col-md-12 q-pa-md q-gutter-md">
       <q-item class="q-mr-none">
         <h5 class="q-ma-none">Blog posts</h5>
         <q-space/>
-        <q-btn outline color="primary" :disable="loading" label="Refresh" @click="refreshList"/>
+        <q-btn class="q-mr-md" outline color="primary" :disable="loading" label="Refresh" @click="refreshList"/>
+        <q-btn color="primary" :disable="loading" label="Create"
+               @click="createPost"/>
       </q-item>
-      <post-view-filter :filter="filter" @filterChanged="onFilterChanged"/>
-      <post-view-list :items="items"/>
-
+      <post-filter :filter="filter" @filterChanged="onFilterChanged"/>
+      <post-list :items="items" :instance-key="instanceKey"/>
+      <create-post-dialog ref="createPostDialog"/>
     </div>
   </div>
 </template>
@@ -17,21 +19,23 @@
 import {Component, Vue, Watch} from 'vue-property-decorator'
 import {Action, Getter, Mutation} from 'vuex-class'
 import {PagingMode} from 'src/lib/state'
-import PostViewFilter from 'src/modules/cms/view/post/components/PostViewFilter.vue'
-import {PostViewFindQuery} from 'src/store/cms/post-view/state'
-import PostViewList from 'src/modules/cms/view/post/components/PostViewList.vue'
+import PostFilter from './components/PostFilter.vue'
+import {PostFindQuery} from 'src/store/cms/post/state'
+import PostList from './components/PostList.vue'
+import CreatePostDialog from 'src/modules/cms/post/components/CreatePostDialog.vue'
 
-const namespace = 'cmsPostView'
+const namespace = 'cmsPost'
 const INSTANCE_KEY = 'posts'
 const PAGE_SIZE = 10
 
 @Component({
   components: {
-    PostViewList,
-    PostViewFilter
+    CreatePostDialog,
+    PostList,
+    PostFilter
   }
 })
-export default class PostViewListPage extends Vue {
+export default class PostListPage extends Vue {
   @Action('Init', {namespace}) init;
   @Getter('filter', {namespace}) filterFn;
   @Getter('items', {namespace}) itemsFn;
@@ -79,7 +83,7 @@ export default class PostViewListPage extends Vue {
         page: page || 1,
         filter,
         pageSize: PAGE_SIZE,
-        mode: PagingMode.Range
+        mode: PagingMode.Standard
       }
       this.init(initData)
     } else {
@@ -90,10 +94,11 @@ export default class PostViewListPage extends Vue {
   @Watch('$route')
   onRouteChange(to) {
     console.log('onRouteChange')
-    const {page, filter} = this.getFilterFromRoute(to)
+    const {page, filter, filterSet} = this.getFilterFromRoute(to)
+    console.log(filter)
 
     // @ts-ignore
-    if (filter.filter || filter.spaces || filter.featured || filter.sortBy) {
+    if (filterSet) {
       if (page) {
         this.setPageMutation({
           instanceKey: this.instanceKey,
@@ -115,16 +120,18 @@ export default class PostViewListPage extends Vue {
   getFilterFromRoute(route) {
     const page = route.query.page
     const filter = {}
+    let filterSet = false
+    if (route.query.filter === '' || route.query.spaces === '' || route.query.featured === '' || route.query.sortBy === '') filterSet = true
     // @ts-ignore
+    if (route.query.filter === undefined) filter.filter = ''
     if (route.query.filter) filter.filter = route.query.filter
-    // @ts-ignore
     else filter.filter = ''
     // @ts-ignore
     if (route.query.spaces) filter.spaces = route.query.spaces.split(',')
     // @ts-ignore
     if (route.query.featured) filter.featured = !!route.query.featured
     if (route.query.sortBy) {
-    // @ts-ignore
+      // @ts-ignore
       filter.sortBy = route.query.sortBy.split(',').map(fieldSort => {
         const arr = fieldSort.split(':')
         const field = arr[0]
@@ -132,32 +139,45 @@ export default class PostViewListPage extends Vue {
         return {field, ascending}
       })
     }
-    return {page, filter}
+    return {page, filter, filterSet}
   }
 
-  onFilterChanged(newFilter: PostViewFindQuery) {
+  onFilterChanged(newFilter: PostFindQuery) {
     const query: any = {}
     if (newFilter.filter) {
       query.filter = newFilter.filter
+    } else {
+      query.filter = ''
     }
     if (newFilter.spaces) {
       query.spaces = newFilter.spaces.join(',')
+    } else {
+      query.spaces = null
     }
     if (newFilter.featured) {
       query.featured = !!newFilter.featured
+    } else {
+      query.featured = null
     }
     if (newFilter.sortBy) {
       query.sortBy = newFilter.sortBy
         .map(f => `${f.field}:${f.ascending ? 'asc' : 'desc'}`)
         .join(',')
     }
-    this.$router.push({name: 'cms.postViews', query})
+    this.$router.push({name: 'cms.posts', query})
   }
 
   refreshList() {
     if (this.initialized) {
       this.refresh({instanceKey: this.instanceKey})
     }
+  }
+
+  createPost() {
+    let spaceId = null
+    if (this.filter.spaces && this.filter.spaces.length === 1) spaceId = this.filter.spaces[0]
+    console.log(spaceId)
+    this.$refs.createPostDialog.showDialog(spaceId)
   }
 }
 </script>
