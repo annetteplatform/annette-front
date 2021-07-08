@@ -4,11 +4,13 @@
       <q-item class="q-mr-none">
         <h5 class="q-ma-none">Spaces</h5>
         <q-space/>
-        <q-btn outline color="primary" :disable="loading" label="Refresh" @click="refreshList"/>
+        <q-btn outline class="q-mr-md" color="primary" :disable="loading" label="Refresh" @click="refreshList"/>
+        <q-btn color="primary" :disable="loading" label="Create"
+               @click="createSpace"/>
       </q-item>
       <space-filter :filter="filter" @filterChanged="onFilterChanged"/>
       <space-list :instance-key="instanceKey"/>
-
+      <create-space-dialog ref="createSpaceDialog"/>
     </div>
   </div>
 </template>
@@ -20,6 +22,7 @@ import {PagingMode} from 'src/lib/state'
 import SpaceFilter from './components/SpaceFilter.vue'
 import SpaceList from './components/SpaceList.vue'
 import {SpaceFindQuery} from 'src/store/cms/space/state'
+import CreateSpaceDialog from 'src/modules/cms/space/components/CreateSpaceDialog.vue'
 
 const namespace = 'cmsSpace'
 const INSTANCE_KEY = 'spaces'
@@ -27,6 +30,7 @@ const PAGE_SIZE = 10
 
 @Component({
   components: {
+    CreateSpaceDialog,
     SpaceList,
     SpaceFilter
   }
@@ -34,7 +38,7 @@ const PAGE_SIZE = 10
 export default class SpaceListPage extends Vue {
   @Action('Init', {namespace}) init;
   @Getter('filter', {namespace}) filterFn;
-  @Getter('loading', { namespace }) loadingFn;
+  @Getter('loading', {namespace}) loadingFn;
   @Action('SetFilter', {namespace}) setFilter;
   @Action('Refresh', {namespace}) refresh;
 
@@ -68,6 +72,10 @@ export default class SpaceListPage extends Vue {
     if (this.initialized) {
       this.refresh({instanceKey: this.instanceKey})
     }
+  }
+
+  createSpace() {
+    this.$refs.createSpaceDialog.showDialog()
   }
 }
 </script>

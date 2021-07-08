@@ -1,14 +1,6 @@
-
 // Person specific declarations
 
-import {
-  AnnettePrincipal,
-  EntityState,
-  SortBy,
-  BaseEntity
-} from 'src/lib/state'
-
-export type SpaceState = EntityState<Space, SpaceFindQuery>
+import {AnnettePrincipal, BaseEntity, EntityState, SortBy} from 'src/lib/state'
 
 export interface Space extends BaseEntity {
   id: string,
@@ -32,10 +24,21 @@ export interface SpaceFindQuery {
   sortBy?: SortBy
 }
 
-export function DEFAULT_SPACE_FIND_QUERY():SpaceFindQuery {
+export type SpaceState = EntityState<Space, SpaceFindQuery>
+
+export function DEFAULT_SPACE_FIND_QUERY(): SpaceFindQuery {
   return {
     offset: 0,
     size: 10,
     filter: ''
   }
+}
+
+export interface CreateSpacePayloadDto {
+  id: string,
+  name: string,
+  description: string,
+  spaceType: string,
+  categoryId: string,
+  targets: AnnettePrincipal[]
 }

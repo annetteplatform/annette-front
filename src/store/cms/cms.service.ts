@@ -3,7 +3,7 @@ import {PostMetric, PostView, PostViewFindQuery} from './post-view/state'
 import {AnnettePrincipal, FindResult} from 'src/lib/state'
 import {SpaceView, SpaceViewFindQuery} from 'src/store/cms/space-view/state'
 import {SpaceCategory, SpaceCategoryDto, SpaceCategoryFindQuery} from 'src/store/cms/category/state'
-import {Space, SpaceFindQuery} from 'src/store/cms/space/state'
+import {CreateSpacePayloadDto, Space, SpaceFindQuery} from 'src/store/cms/space/state'
 import {
   CreatePostPayloadDto,
   Post,
@@ -124,6 +124,12 @@ export const cmsService = {
   },
 
   // ******************************* Space API *******************************
+
+  async createSpace(entity: CreateSpacePayloadDto) {
+    return await axios.post<Space>('/api/annette/v1/cms/createSpace', entity)
+      .then(result => result.data)
+      .then(convertSpace)
+  },
 
   async findSpaces(query: SpaceFindQuery) {
     return await axios.post<FindResult>('/api/annette/v1/cms/findSpaces', query)

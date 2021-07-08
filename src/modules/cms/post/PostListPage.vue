@@ -121,7 +121,7 @@ export default class PostListPage extends Vue {
     const page = route.query.page
     const filter = {}
     let filterSet = false
-    if (route.query.filter === '' || route.query.spaces === '' || route.query.featured === '' || route.query.sortBy === '') filterSet = true
+    if (route.query.filter !== '' || route.query.spaces !== '' || route.query.featured !== '' || route.query.sortBy !== '') filterSet = true
     // @ts-ignore
     if (route.query.filter === undefined) filter.filter = ''
     if (route.query.filter) filter.filter = route.query.filter

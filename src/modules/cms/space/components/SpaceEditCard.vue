@@ -187,8 +187,7 @@ import {date} from 'quasar'
 import PersonField from 'src/lib/components/persons/PersonField.vue'
 import PersonSelector from 'src/lib/components/persons/PersonSelector.vue'
 
-const namespace = 'cmsPost'
-const spaceNamespace = 'cmsSpace'
+const namespace = 'cmsSpace'
 
 @Component({
   components: {
@@ -209,22 +208,13 @@ export default class PostEditCard extends Vue {
   options = ['markdown', 'html']
 
   @Getter('entities', {namespace}) entities;
-  @Getter('entities', {namespace: spaceNamespace}) spaces;
-  @Action('GetPostForEdit', {namespace}) getPostForEdit;
-  @Action('UpdatePostTitle', {namespace: namespace}) updatePostTitle;
-  @Action('UpdatePostAuthor', {namespace: namespace}) updatePostAuthor;
-  @Action('UpdatePostIntro', {namespace: namespace}) updatePostIntro;
-  @Action('UpdatePostContent', {namespace: namespace}) updatePostContent;
-  @Action('UpdatePostFeatured', {namespace: namespace}) updatePostFeatured;
-  @Action('PublishPost', {namespace: namespace}) publishPost;
-  @Action('UnpublishPost', {namespace: namespace}) unpublishPost;
-  @Action('UpdatePostPublicationTimestamp', {namespace: namespace}) updatePostPublicationTimestamp;
+  @Action('GetSpaceForEdit', {namespace}) getSpaceForEdit;
 
   @Watch('id', {immediate: true})
   onIdChanged(id) {
     console.log(id)
     if (id) {
-      this.getPostForEdit(id).then(entity => {
+      this.getSpaceForEdit(id).then(entity => {
         this.entity = {...entity}
       })
     }

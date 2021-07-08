@@ -1,6 +1,7 @@
 import { ActionTree } from 'vuex'
 import { RootState } from '../../root-state'
 import {
+  CreateSpacePayloadDto,
   Space,
   SpaceFindQuery,
   SpaceState
@@ -23,6 +24,12 @@ export const actions: ActionTree<SpaceState, RootState> = {
     } else {
       return ids.filter(id => state.entities[id]).map(id => state.entities[id])
     }
+  },
+
+  async CreateSpace ({ commit }, space: CreateSpacePayloadDto) {
+    const entity = await cmsService.createSpace(space)
+    commit('StoreEntity', entity)
+    return entity
   }
 
 }
