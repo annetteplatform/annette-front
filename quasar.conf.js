@@ -31,6 +31,7 @@ module.exports = configure(function (ctx) {
     boot: [
       'i18n',
       'axios',
+      'auth'
     ],
 
     // https://v2.quasar.dev/quasar-cli/quasar-conf-js#Property%3A-css
@@ -50,11 +51,12 @@ module.exports = configure(function (ctx) {
 
       'roboto-font', // optional, you are not bound to it
       'material-icons', // optional, you are not bound to it
+      'fontawesome-v5'
     ],
 
     // Full list of options: https://v2.quasar.dev/quasar-cli/quasar-conf-js#Property%3A-build
     build: {
-      vueRouterMode: 'hash', // available values: 'hash', 'history'
+      vueRouterMode: 'history', // available values: 'hash', 'history'
 
       // transpile: false,
 
@@ -77,13 +79,24 @@ module.exports = configure(function (ctx) {
       chainWebpack (/* chain */) {
         //
       },
+
+      env: {
+        KEYCLOAK_CONFIG: process.env.KEYCLOAK_CONFIG
+      }
     },
 
     // Full list of options: https://v2.quasar.dev/quasar-cli/quasar-conf-js#Property%3A-devServer
     devServer: {
       https: false,
       port: 8080,
-      open: true // opens browser window automatically
+      open: true, // opens browser window automatically
+      proxy: {
+        '/api': {
+          target: process.env.API_TARGET,
+          // secure: false,
+          changeOrigin: true
+        }
+      }
     },
 
     // https://v2.quasar.dev/quasar-cli/quasar-conf-js#Property%3A-framework

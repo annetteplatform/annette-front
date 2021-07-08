@@ -1,1 +1,12 @@
 // app global css in SCSS form
+
+.narrow-layout {
+  max-width: 1024px;
+  margin-left: auto;
+  margin-right: auto
+}
+
+h6 {
+  margin-block-start: 1em;
+  margin-block-end: 1.2em
+}
