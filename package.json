@@ -1,6 +1,6 @@
 {
   "name": "annette-front",
-  "version": "0.1.0-SNAPSHOT",
+  "version": "0.2.0-SNAPSHOT",
   "description": "Annette Admin Console",
   "productName": "Annette Frontend",
   "author": "Valery Lobachev <valery@lobachev.biz>",
@@ -10,22 +10,25 @@
     "test": "echo \"No test specified\" && exit 0"
   },
   "dependencies": {
-    "@quasar/extras": "^1.0.0",
+    "@datatraccorporation/markdown-it-mermaid": "^0.5.0",
+    "@quasar/extras": "^1.10.7",
     "axios": "^0.18.1",
     "core-js": "^3.6.5",
+    "echarts": "^5.1.2",
     "keycloak-js": "^11.0.2",
+    "markdown-it-vue": "^1.1.6",
     "moment": "^2.29.1",
-    "quasar": "^1.0.0",
+    "quasar": "^1.15.20",
     "vue-class-component": "^7.2.2",
     "vue-i18n": "^8.0.0",
     "vue-property-decorator": "^8.3.0",
     "vuex-class": "^0.3.2"
   },
   "devDependencies": {
-    "@quasar/app": "^2.0.0",
+    "@quasar/app": "^2.2.10",
     "@types/node": "^10.17.15",
-    "@typescript-eslint/eslint-plugin": "^3.3.0",
-    "@typescript-eslint/parser": "^3.3.0",
+    "@typescript-eslint/eslint-plugin": "^4.28.0",
+    "@typescript-eslint/parser": "^4.28.0",
     "babel-eslint": "^10.0.1",
     "eslint": "^6.8.0",
     "eslint-config-standard": "^14.1.0",

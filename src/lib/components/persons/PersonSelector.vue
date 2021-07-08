@@ -11,6 +11,7 @@
     :readonly="readonly"
     :label="label"
     :options="items"
+    :multiple="multiple"
     option-value="id"
     option-label="fullname"
     emit-value
@@ -46,11 +47,12 @@ export default class PersonSelector extends Vue {
   @Prop() label
   @Prop() value
   @Prop() readonly
+  @Prop({ type: Boolean, default: false }) multiple
 
   instanceKey = DEFAULT_INSTANCE_KEY
   initialized = false
 
-  model = ''
+  model: string | string[] = ''
 
   @Getter('loading', {namespace: namespace}) loadingFn;
   @Getter('items', {namespace: namespace}) itemsFn;

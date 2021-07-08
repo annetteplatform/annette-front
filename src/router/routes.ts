@@ -99,6 +99,55 @@ const routes: RouteConfig[] = [
         name: 'organization',
         component: () => import('src/modules/org-structure/pages/org-hierarchy/OrganizationPage.vue'),
         meta: { requiresAuth: true }
+      },
+      {
+        path: '/cms/view/posts',
+        name: 'cms.postViews',
+        component: () => import('src/modules/cms/view/post/PostViewListPage.vue'),
+        meta: { requiresAuth: true }
+      },
+      {
+        path: '/cms/view/post/:id',
+        name: 'cms.postView',
+        component: () => import('src/modules/cms/view/post/PostViewPage.vue'),
+        meta: { requiresAuth: true }
+      },
+      {
+        path: '/cms/view/spaces',
+        name: 'cms.spaceViews',
+        component: () => import('src/modules/cms/view/space/SpaceViewListPage.vue'),
+        meta: { requiresAuth: true }
+      },
+
+      {
+        path: 'cms/categories',
+        name: 'cms.categories',
+        component: () => import('src/modules/cms/category/SpaceCategories.vue'),
+        meta: { requiresAuth: true }
+      },
+      {
+        path: 'cms/category/:action/:id',
+        name: 'cms.category',
+        component: () => import('src/modules/cms/category/SpaceCategoryPage.vue'),
+        meta: { requiresAuth: true }
+      },
+      {
+        path: '/cms/spaces',
+        name: 'cms.spaces',
+        component: () => import('src/modules/cms/space/SpaceListPage.vue'),
+        meta: { requiresAuth: true }
+      },
+      {
+        path: '/cms/posts',
+        name: 'cms.posts',
+        component: () => import('src/modules/cms/post/PostListPage.vue'),
+        meta: { requiresAuth: true }
+      },
+      {
+        path: '/cms/post/:id',
+        name: 'cms.post',
+        component: () => import('src/modules/cms/post/PostPage.vue'),
+        meta: { requiresAuth: true }
       }
     ]
   },

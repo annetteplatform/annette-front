@@ -50,7 +50,6 @@
             v-if="entity.updatedAt && entity.updatedBy"
             :updated-at="entity.updatedAt"
             :updated-by="entity.updatedBy" />
-
         </div>
 
       </div>
@@ -117,7 +116,7 @@ export default class PersonCategoryForm extends Vue {
       })
     } else if (this.action === 'edit') {
       this.updateEntity(this.entity).then(entity => {
-        this.entity = entity
+        this.entity = {...entity}
       })
     }
   }

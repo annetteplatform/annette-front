@@ -32,6 +32,11 @@ export default class PersonField extends Vue {
     if (this.entities[this.personId]) {
       const person: Person = this.entities[this.personId]
       this.personName = `${person.lastname}, ${person.firstname} ${person.middlename || ''}`
+    } else {
+      this.getEntityForView(this.personId).then(person => {
+        console.log(person)
+        this.personName = `${person.lastname}, ${person.firstname} ${person.middlename || ''}`
+      })
     }
   }
 

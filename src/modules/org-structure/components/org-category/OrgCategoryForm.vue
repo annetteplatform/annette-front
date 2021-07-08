@@ -148,7 +148,7 @@ export default class OrgCategoryForm extends Vue {
       })
     } else if (this.action === 'edit') {
       this.updateEntity(this.entity).then(entity => {
-        this.entity = entity
+        this.entity = {...entity}
       })
     }
   }
