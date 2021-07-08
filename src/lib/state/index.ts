@@ -1,6 +1,0 @@
-export * from './platform'
-export * from './state'
-export * from './action-data'
-export * from './actions'
-export * from './getters'
-export * from './mutations'
