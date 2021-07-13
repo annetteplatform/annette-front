@@ -12,7 +12,7 @@
 <script lang="ts">
 import {defineComponent, computed} from 'vue';
 import NotAuthenticated from './components/NotAuthenticated.vue'
-import {useStore} from "src/store";
+import {useStore} from 'src/store';
 
 export default defineComponent({
   name: 'PageIndex',
@@ -21,7 +21,9 @@ export default defineComponent({
   },
   setup() {
     const store = useStore()
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access,@typescript-eslint/no-unsafe-return
     const profile = computed(() => store.getters['main/profile'])
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access,@typescript-eslint/no-unsafe-return
     const isAuthenticated = computed(() => store.getters['main/isAuthenticated'])
     return {
       profile,

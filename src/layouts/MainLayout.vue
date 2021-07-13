@@ -20,9 +20,9 @@
 
 <script lang="ts">
 import {computed, defineComponent, ref} from 'vue'
-import Toolbar from "layouts/components/Toolbar.vue";
-import MainMenu from "layouts/components/MainMenu.vue";
-import {useStore} from "src/store";
+import Toolbar from 'layouts/components/Toolbar.vue';
+import MainMenu from 'layouts/components/MainMenu.vue';
+import {useStore} from 'src/store';
 
 export default defineComponent({
   name: 'MainLayout',
@@ -35,8 +35,8 @@ export default defineComponent({
   setup () {
     const leftDrawerOpen = ref(false)
     const store = useStore()
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access,@typescript-eslint/no-unsafe-return
     const isAuthenticated = computed(() => store.getters['main/isAuthenticated'])
-
 
     return {
       leftDrawerOpen,

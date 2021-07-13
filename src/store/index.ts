@@ -6,6 +6,7 @@ import {
   useStore as vuexUseStore,
 } from 'vuex'
 import mainStore from 'layouts/store/main'
+import {appLanguageStore} from 'src/modules/application';
 
 // import example from './module-example'
 // import { ExampleStateInterface } from './module-example/state';
@@ -39,7 +40,9 @@ export const storeKey: InjectionKey<VuexStore<StateInterface>> = Symbol('vuex-ke
 export default store(function (/* { ssrContext } */) {
   const Store = createStore<StateInterface>({
     modules: {
-      main: mainStore
+      main: mainStore,
+      appLanguage: appLanguageStore
+
     },
 
     // enable strict mode (adds overhead!)

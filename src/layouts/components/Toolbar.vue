@@ -43,7 +43,7 @@
 <script lang="ts">
 import {computed, defineComponent} from 'vue';
 import {useStore} from 'src/store';
-import {useQuasar} from "quasar";
+import {useQuasar} from 'quasar'
 
 export default defineComponent({
   name: 'Toolbar',
@@ -51,7 +51,9 @@ export default defineComponent({
   setup(props, { emit }) {
     const quasar = useQuasar()
     const store = useStore()
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access,@typescript-eslint/no-unsafe-return
     const fullname = computed(() => store.getters['main/fullname'])
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access,@typescript-eslint/no-unsafe-return
     const isAuthenticated = computed(() => store.getters['main/isAuthenticated'])
     const login = () => store.dispatch('main/Login')
     const logout = () => store.dispatch('main/Logout')

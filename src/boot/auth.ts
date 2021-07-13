@@ -99,6 +99,7 @@ export default boot(async ({app, router, store}) => {
           checkLoginIframe: true,
           // enableLogging: true,
           silentCheckSsoRedirectUri: window.location.origin + '/silent-check-sso.html',
+        pkceMethod: 'S256',
         }
       )
       // eslint-disable-next-line @typescript-eslint/no-explicit-any

@@ -36,7 +36,9 @@ export default defineComponent({
   components: {},
   setup() {
     const store = useStore()
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access,@typescript-eslint/no-unsafe-return
     const serviceGroups = computed(() => store.getters['main/serviceGroups'])
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access,@typescript-eslint/no-unsafe-return
     const openGroups = computed(() => store.getters['main/openGroups'])
     const toggleOpenGroup = (groupId: string) => store.commit('main/ToggleOpenGroup', groupId)
     return {
