@@ -15,7 +15,7 @@ export function serviceGroups(): ServiceGroup[] {
           icon: 'language',
           title: 'Languages',
           // subtitle: string,
-          action: '/application/languages',
+          action: {name: 'application.languages'},
           actionName: 'Open'
         },
         {

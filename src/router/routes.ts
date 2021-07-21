@@ -1,4 +1,5 @@
-import { RouteRecordRaw } from 'vue-router';
+import {RouteRecordRaw} from 'vue-router';
+import {applicationRoutes} from 'src/modules/application';
 
 const routes: RouteRecordRaw[] = [
   {
@@ -8,8 +9,9 @@ const routes: RouteRecordRaw[] = [
       {
         path: '',
         component: () => import('layouts/IndexPage.vue'),
-        meta: { requiresAuth: false }
-      }
+        meta: {requiresAuth: false}
+      },
+      ...applicationRoutes
     ],
   },
 

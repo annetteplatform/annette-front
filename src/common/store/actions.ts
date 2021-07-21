@@ -28,6 +28,7 @@ export function buildActionsWithCustomLoad<E extends BaseEntity, F, R>(
   const actions: ActionTree<EntityState<E, F>, R> = {
 
     async initInstance({dispatch, commit, state}, payload: InitInstancePayload<F>) {
+      console.log('initInstance', payload)
       if (!state.instances[payload.key]) {
         commit('initInstance', payload)
       }
@@ -98,6 +99,7 @@ export function buildActionsWithCustomLoad<E extends BaseEntity, F, R>(
     },
 
     async refresh({dispatch, state}, payload: RefreshPayload) {
+      console.log('refresh', payload)
       const instance = state.instances[payload.key]
       if (instance) {
         const resetInstancePayload: ResetInstancePayload<F> = {
@@ -112,12 +114,15 @@ export function buildActionsWithCustomLoad<E extends BaseEntity, F, R>(
     },
 
     async resetInstance({dispatch, state}, payload: ResetInstancePayload<F>) {
+      console.log('resetInstance', payload)
       const instance = state.instances[payload.key]
       if (instance) {
-        if (!payload.page || !payload.pageSize || !payload.filter || !payload.clear) {
+        if ((!payload.page || !payload.pageSize || !payload.filter) && !payload.clear) {
+          console.log('UNCHANGED', UNCHANGED)
           return UNCHANGED
         } else {
-          // eslint-disable-next-line @typescript-eslint/no-unsafe-call
+          // eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/ban-ts-comment
+          // @ts-ignore
           const clear = !!payload.clear || payload.pageSize !== instance.pageSize || hash(payload.filter) === hash(instance.filter)
           const loadPayload: LoadPayload<F> = {
             key: payload.key,
@@ -134,6 +139,7 @@ export function buildActionsWithCustomLoad<E extends BaseEntity, F, R>(
             loadPayload.fromPage = findFirstNonExistingPage(instance, loadPayload.page)
           }
 
+          console.log('loadPayload', loadPayload)
           // eslint-disable-next-line @typescript-eslint/no-unsafe-return
           return await dispatch('load', loadPayload)
         }
@@ -144,10 +150,11 @@ export function buildActionsWithCustomLoad<E extends BaseEntity, F, R>(
 
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
-    async load({dispatch, commit, state}: Store<EntityState<E, F>>, data: LoadPayload<F>) {
+    async load({dispatch, commit, state}: Store<EntityState<E, F>>, payload: LoadPayload<F>) {
+      console.log('load', payload)
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
-      return await load({dispatch, commit, state}, data)
+      return await load({dispatch, commit, state}, payload)
     },
   }
   if (!!getEntity) {

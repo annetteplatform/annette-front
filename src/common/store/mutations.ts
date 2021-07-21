@@ -21,7 +21,7 @@ export function buildMutations<E extends BaseEntity, F>(
     initInstance: (state: EntityState<E, F>, payload: InitInstancePayload<F>) => {
       const instance: InstanceState<F> = {
         mode: payload.mode || PagingMode.Standard,
-        page: payload.page || 1,
+        page: payload.page || 0,
         pageSize: payload.pageSize || defaultPageSize,
         filter: payload.filter || defaultFilter(),
         total: 0,
@@ -57,6 +57,7 @@ export function buildMutations<E extends BaseEntity, F>(
     },
 
     loadSuccess: (state: EntityState<E, F>, payload: LoadSuccessPayload<E, F>) => {
+      console.log('loadSuccess', payload)
       const instance = state.instances[payload.key]
       if (instance) {
         if (payload.clear) instance.pages = {}
@@ -74,6 +75,8 @@ export function buildMutations<E extends BaseEntity, F>(
         const entities: EntityMap<E> = {}
         payload.entities.forEach(entity => entities[entity.id] = entity)
         state.entities = {...state.entities, ...entities}
+        console.log('loadSuccess: instance', instance)
+        console.log('loadSuccess: state.entities', state.entities)
       }
     },
 
