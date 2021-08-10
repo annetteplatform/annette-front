@@ -16,7 +16,7 @@
               v-model="filterModel.filter"
               label="Filter"/>
           </q-form>
-          <q-card-actions vertical class="justify-start q-pa-md">
+          <q-card-actions vertical class=" q-ml-lg q-mr-lg q-mb-md">
             <q-btn flat color="primary" label="Filter" @click="setFilter"/>
             <q-btn flat color="negative" label="Clear" @click="clearFilter"/>
           </q-card-actions>
@@ -27,7 +27,7 @@
 </template>
 
 <script lang="ts">
-import {defineComponent, ref, toRefs, watch, reactive, toRaw, PropType} from 'vue'
+import {defineComponent, ref, toRefs, watch, PropType} from 'vue'
 import {SimpleFilter} from 'src/common';
 
 export default defineComponent({
@@ -44,7 +44,6 @@ export default defineComponent({
     const {filter} = toRefs(props)
     const expanded = ref(true)
 
-    console.log('setup: props.filter', props.filter)
     const filterModel: any = ref({...props.filter} )
 
     const clearFilter = () => {

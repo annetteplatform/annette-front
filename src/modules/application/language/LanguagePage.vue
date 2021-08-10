@@ -1,65 +1,87 @@
 <template>
-    <div class="narrow-layout">
-      <div class="row">
-        <div class="col-md-12 q-pa-md q-gutter-md">
-          <q-item class="q-mr-none">
-            <h5 class="q-ma-none">Language</h5>
-            <q-space/>
-<!--            <q-btn class="q-mr-md" outline color="primary"-->
-<!--                   label="Refresh"-->
-<!--                   @click="refreshList"/>-->
-<!--            <q-btn color="primary"-->
-<!--                   label="Create"-->
-<!--                   :disable="instance.loading"-->
-<!--                   @click="createLanguage"/>-->
-          </q-item>
+  <div class="narrow-layout">
+    <div class="row">
+      <div class="col-md-12 q-pa-md q-gutter-md">
+        <q-item class="q-mr-none">
+          <h5 class="q-ma-none">Language</h5>
+          <q-space/>
+          <q-btn class="q-mr-md" outline color="primary"
+                 label="Languages"
+                 :to="{name: 'application.languages'}"/>
+          <q-btn color="primary"
+                 label="Save"
+                 @click="save"/>
+        </q-item>
 
-        </div>
       </div>
     </div>
+
+    <q-form
+      v-if="languageModel"
+      @submit="save"
+      class="full-width">
+      <div class="row q-pb-md">
+        <q-input class="col-md-4 col-sm-12 col-xs-12 "
+                 v-model="languageModel.id"
+                 label="Language Id"/>
+      </div>
+      <div class="row">
+        <q-input class="col-md-12 col-sm-12 col-xs-12 "
+                 v-model="languageModel.name"
+                 label="Name"/>
+      </div>
+    </q-form>
+
+  </div>
 </template>
 
 <script lang="ts">
-import {computed, defineComponent} from 'vue';
+import {defineComponent, ref, watch,} from 'vue';
 import {useStore} from 'src/store';
-import {InitInstancePayload, PagingMode} from 'src/common';
-
-const INSTANCE_KEY = 'languages'
+import {RouteLocationNormalizedLoaded, useRoute} from 'vue-router'
 
 export default defineComponent({
   name: 'LanguagePage',
   components: {},
   setup() {
     const store = useStore()
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-member-access
-    if (!store.getters['appLanguage/instance'](INSTANCE_KEY)) {
-      const initInstancePayload: InitInstancePayload<string> = {
-        key: INSTANCE_KEY,
-        mode: PagingMode.Standard
+
+    const route = useRoute()
+    const action = ref(route.params.action)
+    const id = ref(route.params.id)
+    const languageModel = ref()
+
+    const loadEntity = async (newRoute: RouteLocationNormalizedLoaded) => {
+      action.value = newRoute.params.action
+      id.value = newRoute.params.id
+      if (action.value === 'edit') {
+        languageModel.value = { ...await store.dispatch('appLanguage/getEntityForEdit', id.value) }
+      } else if (action.value === 'create') {
+        languageModel.value = {
+          id: '',
+          name: ''
+        }
       }
-      void store.dispatch('appLanguage/initInstance', initInstancePayload)
-        .then(() => {
-            // eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-member-access
-            console.log('instance 2', store.getters['appLanguage/instance'](INSTANCE_KEY))
-          }
-        )
     }
 
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access,@typescript-eslint/no-unsafe-return,@typescript-eslint/no-unsafe-call
-    const instance = computed(() => store.getters['appLanguage/instance'](INSTANCE_KEY))
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access,@typescript-eslint/no-unsafe-return,@typescript-eslint/no-unsafe-call
-    const items = computed(() => store.getters['appLanguage/items'](INSTANCE_KEY))
-    const refreshList = () => {
-      void store.dispatch('appLanguage/refresh', {key: INSTANCE_KEY})
+    void loadEntity(route)
+
+    watch(route, loadEntity)
+
+    const save = async () => {
+      console.log('save')
+      if (action.value === 'edit') {
+        languageModel.value = { ...await store.dispatch('appLanguage/updateEntity', languageModel.value) }
+      } else if (action.value === 'create') {
+        languageModel.value = { ...await store.dispatch('appLanguage/createEntity', languageModel.value) }
+      }
     }
-    const createLanguage = () => {
-      console.log('createLanguage')
-    }
+
     return {
-      instance,
-      items,
-      refreshList,
-      createLanguage
+      action,
+      id,
+      save,
+      languageModel
     };
   }
 });

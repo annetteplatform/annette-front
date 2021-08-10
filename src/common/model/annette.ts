@@ -1,6 +1,6 @@
 export interface SortBy {
   field: string,
-  ascending: boolean
+  descending?: boolean
 }
 
 export interface FindResult {

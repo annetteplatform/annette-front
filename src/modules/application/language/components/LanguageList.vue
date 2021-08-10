@@ -64,9 +64,11 @@ export default defineComponent({
     items: Array,
     loading: Boolean
   },
-  setup() {
+  emits: ['deleteEntity'],
+  setup(props, {emit}) {
     const deleteEntity = (id: string) => {
       console.log(id)
+      emit('deleteEntity', id)
     }
     return {
       columns: COLUMNS,
