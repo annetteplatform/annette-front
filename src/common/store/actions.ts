@@ -2,7 +2,8 @@ import {EntityMap, EntityState, findFirstNonExistingPage, pageLoaded, totalPages
 import {
   BaseEntity,
   InitInstancePayload,
-  LoadPayload, LoadSuccessPayload,
+  LoadPayload,
+  LoadSuccessPayload,
   PagingMode,
   RefreshPayload,
   ResetInstancePayload,
@@ -82,8 +83,11 @@ export function buildActionsWithCustomLoad<E extends BaseEntity, F, R>(
     async setFilter({dispatch, state}, payload: SetFilterPayload<F>) {
       const instance = state.instances[payload.key]
       if (instance) {
+        console.log('setFilter: payload.filter', payload.filter)
+        console.log('setFilter: instance.filter', instance.filter)
         // eslint-disable-next-line @typescript-eslint/no-unsafe-call
         if (hash(payload.filter) === hash(instance.filter)) {
+          console.log('setFilter: UNCHANGED')
           return UNCHANGED
         } else {
           const resetInstancePayload: ResetInstancePayload<F> = {
@@ -182,14 +186,14 @@ export function buildActions<E extends BaseEntity, F, R>(
     commit('loadStarted', payload.key)
     // TODO: implement exception processing
     const findResults: FindResult = await find(payload.filter, payload.page, payload.pageSize)
-    const ids = findResults.hits.map( hit => hit.id)
+    const ids = findResults.hits.map(hit => hit.id)
     const idsToLoad = findResults.hits.filter(hit => {
-      isEntityUpdated(hit.id, hit.updatedAt, state.entities) &&
-      !isEntityLoading(hit.id, state.idInLoading)
+      return isEntityUpdated(hit.id, hit.updatedAt, state.entities) &&
+        !isEntityLoading(hit.id, state.idInLoading)
     }).map(hit => hit.id)
 
     if (idsToLoad.length !== 0) {
-      commit('addIdInLoading', {ids: idsToLoad} )
+      commit('addIdInLoading', {ids: idsToLoad})
       try {
         const newEntities: E[] = await getEntitiesById(idsToLoad)
         const loadSuccessPayload: LoadSuccessPayload<E, F> = {
@@ -210,7 +214,7 @@ export function buildActions<E extends BaseEntity, F, R>(
         ...payload,
         idInLoading: [],
         entities: [],
-        ids: [],
+        ids,
         total: findResults.total
       }
       commit('loadSuccess', loadSuccessPayload)

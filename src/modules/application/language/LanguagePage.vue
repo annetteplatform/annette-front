@@ -23,13 +23,12 @@
 import {computed, defineComponent} from 'vue';
 import {useStore} from 'src/store';
 import {InitInstancePayload, PagingMode} from 'src/common';
-import LanguageList from './components/LanguageList.vue';
 
 const INSTANCE_KEY = 'languages'
 
 export default defineComponent({
-  name: 'LanguageListPage',
-  components: {LanguageList},
+  name: 'LanguagePage',
+  components: {},
   setup() {
     const store = useStore()
     // eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-member-access

@@ -32,3 +32,10 @@ export interface Message {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   params: any
 }
+
+export interface SimpleFilter {
+  filter?: string
+  sortBy?: SortBy
+}
+
+

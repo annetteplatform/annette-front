@@ -13,6 +13,7 @@
                    :disable="instance.loading"
                    @click="createLanguage"/>
           </q-item>
+          <simple-filter-form :filter="instance.filter" @filterChanged="onFilterChanged"/>
           <language-list :items="items" :loading="instance.loading"/>
         </div>
       </div>
@@ -24,12 +25,13 @@ import {computed, defineComponent} from 'vue';
 import {useStore} from 'src/store';
 import {InitInstancePayload, PagingMode} from 'src/common';
 import LanguageList from './components/LanguageList.vue';
+import SimpleFilterForm from 'src/common/components/SimpleFilterForm.vue';
 
 const INSTANCE_KEY = 'languages'
 
 export default defineComponent({
   name: 'LanguageListPage',
-  components: {LanguageList},
+  components: {LanguageList, SimpleFilterForm},
   setup() {
     const store = useStore()
     // eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-member-access
@@ -56,11 +58,18 @@ export default defineComponent({
     const createLanguage = () => {
       console.log('createLanguage')
     }
+    const onFilterChanged = (filter: any) => {
+      console.log('onFilterChanged', filter)
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+      void store.dispatch('appLanguage/setFilter', {key: INSTANCE_KEY, filter: filter})
+    }
+
     return {
       instance,
       items,
       refreshList,
-      createLanguage
+      createLanguage,
+      onFilterChanged
     };
   }
 });
