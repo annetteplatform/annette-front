@@ -57,8 +57,8 @@
 import {defineComponent, ref} from 'vue';
 
 import MessageBox from 'src/common/components/MessageBox.vue';
-import {useEntityPage} from 'src/common/compositions/entity-editor';
 import {Language} from 'src/modules/application';
+import {useEntityPage} from 'src/common';
 
 export default defineComponent({
   name: 'LanguagePage',

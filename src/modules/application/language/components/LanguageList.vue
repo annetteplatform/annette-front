@@ -41,9 +41,11 @@
 </template>
 
 <script lang="ts">
-import {computed, defineComponent} from 'vue';
+import {defineComponent} from 'vue';
 import {useStore} from 'src/store';
-import {useQuasar} from "quasar";
+import {useQuasar} from 'quasar';
+import {Language, LanguageFilter} from 'src/modules/application';
+import {useEntityList} from 'src/common';
 
 const COLUMNS = [
   {
@@ -68,90 +70,16 @@ export default defineComponent({
   name: 'LanguageList',
   components: {},
   props: {
-    instanceKey: String,
+    instanceKey: {
+      type: String,
+      required: true
+    }
   },
-  setup(props, {emit}) {
+  setup(props) {
     const store = useStore()
     const quasar = useQuasar()
 
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-return
-    const instance = computed(() => store.getters['appLanguage/instance'](props.instanceKey))
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-return
-    const items = computed(() => store.getters['appLanguage/items'](props.instanceKey))
-
-    const pagination = computed(() => {
-      console.log('pagination')
-      let sortBy = ''
-      let descending = false
-      if (instance.value.filter.sortBy) {
-        sortBy = instance.value.filter.sortBy.field
-        descending = instance.value.filter.sortBy.descending
-      }
-      const pg = {
-        sortBy,
-        descending,
-        // eslint-disable-next-line @typescript-eslint/restrict-plus-operands
-        page: instance.value.page + 1,
-        rowsPerPage: instance.value.pageSize,
-        rowsNumber: instance.value.total
-      }
-      console.log(pg)
-      return pg
-    })
-
-    const onRequest = async (data: any) => {
-      console.log('onRequest')
-      console.log(data)
-      const {page, rowsPerPage, sortBy, descending} = data.pagination
-      const filter = {...instance.value.filter}
-      const filterSortBy = {
-        field: filter.sortBy.field || '',
-        descending: filter.sortBy.descending || false
-      }
-
-      //  set filter if changed
-      if (filterSortBy.field !== sortBy || filterSortBy.descending !== descending) {
-        if (sortBy) {
-          filter.sortBy = {
-            field: sortBy,
-            descending
-          }
-        } else {
-          filter.sortBy = undefined
-        }
-        await store.dispatch(
-          'appLanguage/setFilter',
-          {
-            key: props.instanceKey,
-            filter
-          })
-      }
-
-      // set page if changed
-      if (page !== instance.value.page) {
-        await store.dispatch(
-          'appLanguage/setPage',
-          {
-            key: props.instanceKey,
-            page: page - 1
-          }
-        )
-      }
-
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-      if (rowsPerPage !== instance.value.pageSize && rowsPerPage !== 0) {
-        await store.dispatch(
-          'appLanguage/setPageSize',
-          {
-            key: props.instanceKey,
-            pageSize: rowsPerPage
-          }
-        )
-      }
-
-      console.log(pagination.value)
-
-    }
+    const entityList = useEntityList<Language, LanguageFilter>('appLanguage', props.instanceKey)
 
     const deleteEntity = (id: string) => {
       quasar.notify({
@@ -171,10 +99,7 @@ export default defineComponent({
     }
     return {
       columns: COLUMNS,
-      instance,
-      items,
-      pagination,
-      onRequest,
+      ...entityList,
       deleteEntity
     };
   }
