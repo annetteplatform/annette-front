@@ -1,6 +1,6 @@
 import {AnnettePrincipal, BaseEntity} from 'src/common';
 
-export interface Translation extends BaseEntity {
+export interface Language extends BaseEntity {
   id: string,
   name: string
   updatedAt?: Date

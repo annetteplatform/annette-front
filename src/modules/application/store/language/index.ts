@@ -3,7 +3,7 @@ export * from './state'
 import {buildGetters} from 'src/common/store/getters';
 import {GetterTree, Module, MutationTree} from 'vuex';
 import {StateInterface} from 'src/store';
-import {DEFAULT_PAGE_SIZE, emptyLanguageFilter, LanguageFilter, LanguageState, state} from './state';
+import {LANGUAGE_DEFAULT_PAGE_SIZE, emptyLanguageFilter, LanguageFilter, LanguageState, languageState} from './state';
 import {actions} from './actions';
 import {Language} from 'src/modules/application';
 import {buildMutations} from 'src/common/store/mutations';
@@ -11,7 +11,7 @@ import {buildMutations} from 'src/common/store/mutations';
 const getters: GetterTree<LanguageState, StateInterface> = buildGetters<Language, LanguageFilter, StateInterface>()
 const mutations: MutationTree<LanguageState> = {
   ...buildMutations<Language, LanguageFilter>(
-    DEFAULT_PAGE_SIZE,
+    LANGUAGE_DEFAULT_PAGE_SIZE,
     emptyLanguageFilter
   )
 }
@@ -21,5 +21,5 @@ export const appLanguageStore: Module<LanguageState, StateInterface> = {
   actions,
   getters,
   mutations,
-  state
+  state: languageState
 };
