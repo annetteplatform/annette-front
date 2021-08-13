@@ -2,7 +2,7 @@ import {Message} from 'src/common';
 
 export interface BaseEntity {
   id: string,
-  updatedAt: Date
+  updatedAt?: Date
 }
 
 export enum PagingMode {

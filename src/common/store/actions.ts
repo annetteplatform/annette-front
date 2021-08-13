@@ -29,7 +29,7 @@ export function buildActionsWithCustomLoad<E extends BaseEntity, F, R>(
   const actions: ActionTree<EntityState<E, F>, R> = {
 
     async initInstance({dispatch, commit, state}, payload: InitInstancePayload<F>) {
-      console.log('initInstance', payload)
+      // console.log('initInstance', payload)
       if (!state.instances[payload.key]) {
         commit('initInstance', payload)
       }
@@ -43,15 +43,22 @@ export function buildActionsWithCustomLoad<E extends BaseEntity, F, R>(
 
     async setPage({dispatch, commit, state}, payload: SetPagePayload) {
       const instance = state.instances[payload.key]
+      console.log('setPage')
+      console.log('payload', payload)
+      console.log('instance', instance)
       if (instance) {
         if (payload.page === instance.page) {
+          console.log('setPage 1')
           return UNCHANGED
         } else if (payload.page >= totalPages(instance)) {
+          console.log('setPage 2')
           return UNCHANGED
         } else if (pageLoaded<F>(instance, payload.page)) {
+          console.log('setPage 3')
           commit('setPage', payload)
           return CHANGED
         } else {
+          console.log('setPage 4')
           const resetInstancePayload: ResetInstancePayload<F> = {
             ...payload,
           }
@@ -65,12 +72,16 @@ export function buildActionsWithCustomLoad<E extends BaseEntity, F, R>(
 
     async setPageSize({dispatch, state}, payload: SetPageSizePayload) {
       const instance = state.instances[payload.key]
+      console.log('setPageSize')
+      console.log('payload', payload)
+      console.log('instance', instance)
       if (instance) {
         if (payload.pageSize === instance.pageSize) {
           return UNCHANGED
         } else {
           const resetInstancePayload: ResetInstancePayload<F> = {
             ...payload,
+            clear: true
           }
           // eslint-disable-next-line @typescript-eslint/no-unsafe-return
           return await dispatch('resetInstance', resetInstancePayload)
@@ -83,11 +94,11 @@ export function buildActionsWithCustomLoad<E extends BaseEntity, F, R>(
     async setFilter({dispatch, state}, payload: SetFilterPayload<F>) {
       const instance = state.instances[payload.key]
       if (instance) {
-        console.log('setFilter: payload.filter', payload.filter)
-        console.log('setFilter: instance.filter', instance.filter)
+        // console.log('setFilter: payload.filter', payload.filter)
+        // console.log('setFilter: instance.filter', instance.filter)
         // eslint-disable-next-line @typescript-eslint/no-unsafe-call
         if (hash(payload.filter) === hash(instance.filter)) {
-          console.log('setFilter: UNCHANGED')
+          // console.log('setFilter: UNCHANGED')
           return UNCHANGED
         } else {
           const resetInstancePayload: ResetInstancePayload<F> = {
@@ -103,7 +114,7 @@ export function buildActionsWithCustomLoad<E extends BaseEntity, F, R>(
     },
 
     async refresh({dispatch, state}, payload: RefreshPayload) {
-      console.log('refresh', payload)
+      // console.log('refresh', payload)
       const instance = state.instances[payload.key]
       if (instance) {
         const resetInstancePayload: ResetInstancePayload<F> = {
@@ -118,21 +129,19 @@ export function buildActionsWithCustomLoad<E extends BaseEntity, F, R>(
     },
 
     async resetInstance({dispatch, state}, payload: ResetInstancePayload<F>) {
-      console.log('resetInstance', payload)
       const instance = state.instances[payload.key]
+      console.log('resetInstance', payload)
+      console.log('instance', instance)
       if (instance) {
-        if ((!payload.page || !payload.pageSize || !payload.filter) && !payload.clear) {
-          console.log('UNCHANGED', UNCHANGED)
-          return UNCHANGED
-        } else {
+        if ( !!payload.page || payload.page === 0 || !!payload.pageSize || !!payload.filter || payload.clear ) {
           // eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/ban-ts-comment
           // @ts-ignore
           const clear = !!payload.clear || payload.pageSize !== instance.pageSize || hash(payload.filter) === hash(instance.filter)
           const loadPayload: LoadPayload<F> = {
             key: payload.key,
             fromPage: 0,
-            toPage: payload.page || instance.page,
-            page: payload.page || instance.page,
+            toPage: (payload.page || payload.page === 0) ? payload.page : instance.page,
+            page: (payload.page || payload.page === 0) ? payload.page : instance.page,
             pageSize: payload.pageSize || instance.pageSize,
             filter: payload.filter || instance.filter,
             clear
@@ -143,9 +152,12 @@ export function buildActionsWithCustomLoad<E extends BaseEntity, F, R>(
             loadPayload.fromPage = findFirstNonExistingPage(instance, loadPayload.page)
           }
 
-          console.log('loadPayload', loadPayload)
+          // console.log('loadPayload', loadPayload)
           // eslint-disable-next-line @typescript-eslint/no-unsafe-return
           return await dispatch('load', loadPayload)
+        } else {
+          console.log('UNCHANGED', UNCHANGED)
+          return UNCHANGED
         }
       } else {
         throw new Error(`Instance ${payload.key} isn't initialised`)

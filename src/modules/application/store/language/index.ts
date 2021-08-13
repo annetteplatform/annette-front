@@ -1,11 +1,20 @@
 export * from './state'
 
-import {Module} from 'vuex';
+import {buildGetters} from 'src/common/store/getters';
+import {GetterTree, Module, MutationTree} from 'vuex';
 import {StateInterface} from 'src/store';
-import {LanguageState, state} from './state';
+import {DEFAULT_PAGE_SIZE, emptyLanguageFilter, LanguageFilter, LanguageState, state} from './state';
 import {actions} from './actions';
-import {getters} from './getters';
-import {mutations} from './mutations';
+import {Language} from 'src/modules/application';
+import {buildMutations} from 'src/common/store/mutations';
+
+const getters: GetterTree<LanguageState, StateInterface> = buildGetters<Language, LanguageFilter, StateInterface>()
+const mutations: MutationTree<LanguageState> = {
+  ...buildMutations<Language, LanguageFilter>(
+    DEFAULT_PAGE_SIZE,
+    emptyLanguageFilter
+  )
+}
 
 export const appLanguageStore: Module<LanguageState, StateInterface> = {
   namespaced: true,
@@ -14,5 +23,3 @@ export const appLanguageStore: Module<LanguageState, StateInterface> = {
   mutations,
   state
 };
-
-

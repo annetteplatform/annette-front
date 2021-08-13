@@ -15,7 +15,7 @@ export interface InstanceState<F> {
 
   total: number
   loading: boolean
-  messages?: Message[]
+  message?: Message
 
   pages: { [page: number]: Page },
 

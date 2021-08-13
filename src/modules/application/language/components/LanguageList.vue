@@ -1,10 +1,13 @@
 <template>
   <q-table
     flat bordered
+    v-if="instance && items"
     :rows="items"
     :columns="columns"
     row-key="id"
-    :loading="loading">
+    v-model:pagination="pagination"
+    @request="onRequest"
+    :loading="instance.loading">
     <template v-slot:header="props">
       <q-tr :props="props">
         <q-th
@@ -38,7 +41,9 @@
 </template>
 
 <script lang="ts">
-import {defineComponent} from 'vue';
+import {computed, defineComponent} from 'vue';
+import {useStore} from 'src/store';
+import {useQuasar} from "quasar";
 
 const COLUMNS = [
   {
@@ -46,14 +51,16 @@ const COLUMNS = [
     required: true,
     label: 'Id',
     align: 'left',
-    field: 'id'
+    field: 'id',
+    sortable: true,
   },
   {
     name: 'name',
     required: true,
     label: 'Name',
     align: 'left',
-    field: 'name'
+    field: 'name',
+    sortable: true,
   }
 ]
 
@@ -61,17 +68,113 @@ export default defineComponent({
   name: 'LanguageList',
   components: {},
   props: {
-    items: Array,
-    loading: Boolean
+    instanceKey: String,
   },
-  emits: ['deleteEntity'],
   setup(props, {emit}) {
+    const store = useStore()
+    const quasar = useQuasar()
+
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-return
+    const instance = computed(() => store.getters['appLanguage/instance'](props.instanceKey))
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-return
+    const items = computed(() => store.getters['appLanguage/items'](props.instanceKey))
+
+    const pagination = computed(() => {
+      console.log('pagination')
+      let sortBy = ''
+      let descending = false
+      if (instance.value.filter.sortBy) {
+        sortBy = instance.value.filter.sortBy.field
+        descending = instance.value.filter.sortBy.descending
+      }
+      const pg = {
+        sortBy,
+        descending,
+        // eslint-disable-next-line @typescript-eslint/restrict-plus-operands
+        page: instance.value.page + 1,
+        rowsPerPage: instance.value.pageSize,
+        rowsNumber: instance.value.total
+      }
+      console.log(pg)
+      return pg
+    })
+
+    const onRequest = async (data: any) => {
+      console.log('onRequest')
+      console.log(data)
+      const {page, rowsPerPage, sortBy, descending} = data.pagination
+      const filter = {...instance.value.filter}
+      const filterSortBy = {
+        field: filter.sortBy.field || '',
+        descending: filter.sortBy.descending || false
+      }
+
+      //  set filter if changed
+      if (filterSortBy.field !== sortBy || filterSortBy.descending !== descending) {
+        if (sortBy) {
+          filter.sortBy = {
+            field: sortBy,
+            descending
+          }
+        } else {
+          filter.sortBy = undefined
+        }
+        await store.dispatch(
+          'appLanguage/setFilter',
+          {
+            key: props.instanceKey,
+            filter
+          })
+      }
+
+      // set page if changed
+      if (page !== instance.value.page) {
+        await store.dispatch(
+          'appLanguage/setPage',
+          {
+            key: props.instanceKey,
+            page: page - 1
+          }
+        )
+      }
+
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+      if (rowsPerPage !== instance.value.pageSize && rowsPerPage !== 0) {
+        await store.dispatch(
+          'appLanguage/setPageSize',
+          {
+            key: props.instanceKey,
+            pageSize: rowsPerPage
+          }
+        )
+      }
+
+      console.log(pagination.value)
+
+    }
+
     const deleteEntity = (id: string) => {
-      console.log(id)
-      emit('deleteEntity', id)
+      quasar.notify({
+        type: 'negative',
+        message: 'Please confirm delete language.',
+        actions: [
+          {label: 'Cancel', color: 'white'},
+          {
+            label: 'Delete',
+            color: 'white',
+            handler: () => {
+              void store.dispatch('appLanguage/deleteEntity', id)
+            }
+          }
+        ]
+      })
     }
     return {
       columns: COLUMNS,
+      instance,
+      items,
+      pagination,
+      onRequest,
       deleteEntity
     };
   }

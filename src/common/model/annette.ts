@@ -29,13 +29,22 @@ export enum MessageType {
 export interface Message {
   code: string
   messageType: MessageType
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   params: any
+}
+
+export interface AnnetteError {
+  code: string
+  errorCode?: number
+  messageType?: MessageType
+  params: any
+  originError?: any
 }
 
 export interface SimpleFilter {
   filter?: string
   sortBy?: SortBy
 }
+
+
 
 

@@ -49,6 +49,8 @@ export const applicationService = {
 
 function convertLanguage(rawLanguage: Language): Language {
   const language: Language = { ...rawLanguage }
-  language.updatedAt = new Date(rawLanguage.updatedAt)
+  if (rawLanguage.updatedAt) {
+    language.updatedAt = new Date(rawLanguage.updatedAt)
+  }
   return language
 }

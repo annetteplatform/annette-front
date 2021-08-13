@@ -47,16 +47,19 @@ export default defineComponent({
     const filterModel: any = ref({...props.filter} )
 
     const clearFilter = () => {
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
       filterModel.value = {filter: ''}
     }
 
     const updateModel = (newFilter: any) => {
       console.log('updateModel', newFilter)
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
       filterModel.value = {...newFilter}
     }
     watch(filter, updateModel)
 
     const setFilter = () => {
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
       emit('filterChanged', filterModel.value)
     }
 

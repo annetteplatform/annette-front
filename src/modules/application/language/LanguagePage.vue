@@ -1,5 +1,7 @@
 <template>
-  <div class="narrow-layout">
+  <q-form
+    @submit="save"
+    class="narrow-layout">
     <div class="row">
       <div class="col-md-12 q-pa-md q-gutter-md">
         <q-item class="q-mr-none">
@@ -9,6 +11,7 @@
                  label="Languages"
                  :to="{name: 'application.languages'}"/>
           <q-btn color="primary"
+                 v-if="entityModel"
                  label="Save"
                  @click="save"/>
         </q-item>
@@ -16,72 +19,73 @@
       </div>
     </div>
 
-    <q-form
-      v-if="languageModel"
-      @submit="save"
-      class="full-width">
+    <div v-if="entityModel">
+
+
+      <div class="row q-pb-md" v-if="error">
+        <message-box :message="error" @closeMessage="clearError"/>
+      </div>
+
+
+      <div class="row q-pb-md">
+        <q-chip outline square color="red" text-color="white" label="Changed"
+                v-if="changed()"/>
+        <q-chip outline square color="green" text-color="white" label="Saved"
+                v-if="saved && ! changed()"/>
+      </div>
+
       <div class="row q-pb-md">
         <q-input class="col-md-4 col-sm-12 col-xs-12 "
-                 v-model="languageModel.id"
+                 v-model="entityModel.id"
+                 :rules="[val => !!val || 'Field is required']"
+                 :readonly="action!=='create'"
+                 ref="idRef"
                  label="Language Id"/>
       </div>
       <div class="row">
         <q-input class="col-md-12 col-sm-12 col-xs-12 "
-                 v-model="languageModel.name"
+                 v-model="entityModel.name"
+                 :rules="[val => !!val || 'Field is required']"
+                 ref="nameRef"
                  label="Name"/>
       </div>
-    </q-form>
-
-  </div>
+    </div>
+  </q-form>
 </template>
 
 <script lang="ts">
-import {defineComponent, ref, watch,} from 'vue';
-import {useStore} from 'src/store';
-import {RouteLocationNormalizedLoaded, useRoute} from 'vue-router'
+import {defineComponent, ref} from 'vue';
+
+import MessageBox from 'src/common/components/MessageBox.vue';
+import {useEntityPage} from 'src/common/compositions/entity-editor';
+import {Language} from 'src/modules/application';
 
 export default defineComponent({
   name: 'LanguagePage',
-  components: {},
+  components: {MessageBox},
   setup() {
-    const store = useStore()
+    const idRef = ref()
+    const nameRef = ref()
 
-    const route = useRoute()
-    const action = ref(route.params.action)
-    const id = ref(route.params.id)
-    const languageModel = ref()
-
-    const loadEntity = async (newRoute: RouteLocationNormalizedLoaded) => {
-      action.value = newRoute.params.action
-      id.value = newRoute.params.id
-      if (action.value === 'edit') {
-        languageModel.value = { ...await store.dispatch('appLanguage/getEntityForEdit', id.value) }
-      } else if (action.value === 'create') {
-        languageModel.value = {
-          id: '',
-          name: ''
-        }
-      }
+    const formHasError = (): boolean => {
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-member-access
+      idRef.value.validate()
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-member-access
+      nameRef.value.validate()
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+      return !!nameRef.value.hasError || !!idRef.value.hasError
     }
 
-    void loadEntity(route)
-
-    watch(route, loadEntity)
-
-    const save = async () => {
-      console.log('save')
-      if (action.value === 'edit') {
-        languageModel.value = { ...await store.dispatch('appLanguage/updateEntity', languageModel.value) }
-      } else if (action.value === 'create') {
-        languageModel.value = { ...await store.dispatch('appLanguage/createEntity', languageModel.value) }
-      }
-    }
+    const entityPage = useEntityPage<Language>(
+      'appLanguage',
+      () => { return { id: '', name: ''} },
+      formHasError,
+    )
 
     return {
-      action,
-      id,
-      save,
-      languageModel
+      idRef,
+      nameRef,
+      ...entityPage
     };
   }
 });

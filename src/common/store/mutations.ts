@@ -43,7 +43,7 @@ export function buildMutations<E extends BaseEntity, F>(
       const instance = state.instances[payload.key]
       if (instance) {
         instance.loading = true
-        instance.messages = undefined
+        instance.message = undefined
       }
     },
 
@@ -75,8 +75,8 @@ export function buildMutations<E extends BaseEntity, F>(
         const entities: EntityMap<E> = {}
         payload.entities.forEach(entity => entities[entity.id] = entity)
         state.entities = {...state.entities, ...entities}
-        console.log('loadSuccess: instance', instance)
-        console.log('loadSuccess: state.entities', state.entities)
+        // console.log('loadSuccess: instance', instance)
+        // console.log('loadSuccess: state.entities', state.entities)
       }
     },
 
@@ -94,13 +94,11 @@ export function buildMutations<E extends BaseEntity, F>(
       Object.keys(state.instances).forEach(key => {
         Object.keys(state.instances[key].pages).forEach(pageKey => {
           const instance = state.instances[key]
-          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
           // @ts-ignore
-          // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment,@typescript-eslint/ban-ts-comment,@typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-member-access
+          // eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-member-access
           const newIds: string[] = instance.pages[pageKey].ids.filter(pid => pid !== id)
-          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
           // @ts-ignore
-          // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment,@typescript-eslint/ban-ts-comment,@typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-member-access
+          // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
           instance.pages[pageKey].ids = newIds
         })
       })
