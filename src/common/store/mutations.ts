@@ -1,10 +1,10 @@
 import {
   AddIdInLoadingPayload,
-  BaseEntity,
+  BaseEntity, ClearMessagePayload,
   EntityMap,
   EntityState,
   InitInstancePayload,
-  InstanceState,
+  InstanceState, LoadFailurePayload,
   LoadStartedPayload,
   LoadSuccessPayload,
   PagingMode,
@@ -80,8 +80,26 @@ export function buildMutations<E extends BaseEntity, F>(
       }
     },
 
+    loadFailure: (state: EntityState<E, F>, payload: LoadFailurePayload) => {
+      console.log('loadFailure', payload)
+      const instance = state.instances[payload.key]
+      if (instance) {
+        instance.loading = false
+        instance.message = payload.message
+        state.idInLoading = state.idInLoading.filter(id => !payload.idInLoading.includes(id))
+      }
+    },
+
     storeEntity: (state: EntityState<E, F>, entity: E) => {
       state.entities[entity.id] = entity
+    },
+
+    clearMessage: (state: EntityState<E, F>, payload: ClearMessagePayload) => {
+      console.log('loadFailure', payload)
+      const instance = state.instances[payload.key]
+      if (instance) {
+        instance.message = undefined
+      }
     },
 
     storeEntities: (state: EntityState<E, F>, entities: E[]) => {

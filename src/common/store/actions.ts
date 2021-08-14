@@ -1,7 +1,7 @@
 import {EntityMap, EntityState, findFirstNonExistingPage, pageLoaded, totalPages} from './state'
 import {
   BaseEntity,
-  InitInstancePayload,
+  InitInstancePayload, LoadFailurePayload,
   LoadPayload,
   LoadSuccessPayload,
   PagingMode,
@@ -196,8 +196,18 @@ export function buildActions<E extends BaseEntity, F, R>(
       throw new Error(`Instance ${payload.key} isn't initialised`)
     }
     commit('loadStarted', payload.key)
-    // TODO: implement exception processing
-    const findResults: FindResult = await find(payload.filter, payload.page, payload.pageSize)
+    let findResults: FindResult
+    try {
+      findResults = await find(payload.filter, payload.page, payload.pageSize)
+    } catch(ex) {
+      const loadFailurePayload: LoadFailurePayload = {
+        key: payload.key,
+        message: ex,
+        idInLoading: [],
+      }
+      commit('loadFailure', loadFailurePayload)
+      throw ex
+    }
     const ids = findResults.hits.map(hit => hit.id)
     const idsToLoad = findResults.hits.filter(hit => {
       return isEntityUpdated(hit.id, hit.updatedAt, state.entities) &&
@@ -219,6 +229,13 @@ export function buildActions<E extends BaseEntity, F, R>(
         return CHANGED
       } catch (ex) {
         console.log(ex)
+        const loadFailurePayload: LoadFailurePayload = {
+          key: payload.key,
+          message: ex,
+          idInLoading: idsToLoad,
+        }
+        commit('loadFailure', loadFailurePayload)
+        throw ex
       }
 
     } else {

@@ -8,9 +8,6 @@ import {
 import mainStore from 'layouts/store/main'
 import {appLanguageStore, appTranslationStore} from 'src/modules/application';
 
-// import example from './module-example'
-// import { ExampleStateInterface } from './module-example/state';
-
 /*
  * If not building with SSR mode, you can
  * directly export the Store instantiation;
@@ -43,7 +40,6 @@ export default store(function (/* { ssrContext } */) {
       main: mainStore,
       appLanguage: appLanguageStore,
       appTranslation: appTranslationStore
-
     },
 
     // enable strict mode (adds overhead!)

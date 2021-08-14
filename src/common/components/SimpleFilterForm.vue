@@ -1,5 +1,5 @@
 <template>
-  <q-list bordered class="rounded-borders">
+  <q-list bordered class="rounded-borders full-width">
     <q-expansion-item
       bordered
       icon="search"

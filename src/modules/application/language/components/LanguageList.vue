@@ -1,5 +1,6 @@
 <template>
   <q-table
+    class="full-width"
     flat bordered
     v-if="instance && items"
     :rows="items"

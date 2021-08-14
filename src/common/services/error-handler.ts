@@ -3,9 +3,14 @@ import {AnnetteError } from 'src/common';
 
 
 export function annetteErrorHandler(error: any) {
-  const annetteError: AnnetteError = {
     // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-    code: error.response.data.code || '',
+  let code = error.response.data.code
+  if (!code) {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access,@typescript-eslint/restrict-template-expressions
+    code = `annette.ui.httpError${error.response.status}`
+  }
+  const annetteError: AnnetteError = {
+    code,
     // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
     errorCode: error.response.data.errorCode || error.response.status,
     // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access

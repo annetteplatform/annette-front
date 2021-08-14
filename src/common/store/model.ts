@@ -81,10 +81,14 @@ export interface LoadSuccessPayload<E extends BaseEntity, F> {
   entities: E[]
 }
 
-export interface LoadFailedPayload {
+export interface LoadFailurePayload {
   key: string,
-  messages: Message[]
-  ids: string[],
+  message: Message
+  idInLoading: string[],
+}
+
+export interface ClearMessagePayload {
+  key: string,
 }
 
 
