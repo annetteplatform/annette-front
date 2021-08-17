@@ -10,9 +10,9 @@ export const actions: ActionTree<LanguageState, StateInterface> = {
     // eslint-disable-next-line @typescript-eslint/unbound-method
     applicationService.findLanguages,
     // eslint-disable-next-line @typescript-eslint/unbound-method
-    applicationService.getLanguagesById,
+    applicationService.getLanguageById,
     // eslint-disable-next-line @typescript-eslint/unbound-method
-    applicationService.getLanguageByIdForEdit,
+    applicationService.getLanguagesById,
   ),
 
   async createEntity({commit}, entity: Language) {

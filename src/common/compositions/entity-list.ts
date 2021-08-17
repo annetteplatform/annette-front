@@ -12,7 +12,7 @@ export function useEntityList<E, F>(namespace: string, instanceKey: string) {
   const items: ComputedRef<E[]> = computed(() => store.getters[`${namespace}/items`](instanceKey))
 
   const pagination = computed(() => {
-    console.log('pagination')
+    // console.log('pagination')
     let sortBy = ''
     let descending = false
     // @ts-ignore
@@ -32,13 +32,13 @@ export function useEntityList<E, F>(namespace: string, instanceKey: string) {
       rowsPerPage: instance.value.pageSize,
       rowsNumber: instance.value.total
     }
-    console.log(pg)
+    // console.log(pg)
     return pg
   })
 
   const onRequest = async (data: any) => {
-    console.log('onRequest')
-    console.log(data)
+    // console.log('onRequest')
+    // console.log(data)
     // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
     const {page, rowsPerPage, sortBy, descending} = data.pagination
     const filter = {...instance.value.filter}

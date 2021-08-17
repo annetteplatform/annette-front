@@ -75,6 +75,7 @@ export function buildMutations<E extends BaseEntity, F>(
         const entities: EntityMap<E> = {}
         payload.entities.forEach(entity => entities[entity.id] = entity)
         state.entities = {...state.entities, ...entities}
+        instance.message = undefined
         // console.log('loadSuccess: instance', instance)
         // console.log('loadSuccess: state.entities', state.entities)
       }

@@ -1,2 +1,3 @@
 export * from './components'
-export * from './TranslationListPage.vue'
+export const TranslationListPage = import( './TranslationListPage.vue')
+export const TranslationPage = import( './TranslationPage.vue')

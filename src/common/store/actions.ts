@@ -24,7 +24,8 @@ export function buildActionsWithCustomLoad<E extends BaseEntity, F, R>(
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
   load: ({dispatch, commit, state}: Store<EntityState<E, F>>, data: LoadPayload<F>) => Promise<string>,
-  getEntity: (id: string) => Promise<E> | null
+  getEntityById: (id: string, readSide: boolean) => Promise<E>,
+  getEntitiesById: (ids: string[], readSide: boolean) => Promise<E[]>
 ): ActionTree<EntityState<E, F>, R> {
   const actions: ActionTree<EntityState<E, F>, R> = {
 
@@ -172,21 +173,32 @@ export function buildActionsWithCustomLoad<E extends BaseEntity, F, R>(
       // @ts-ignore
       return await load({dispatch, commit, state}, payload)
     },
-  }
-  if (!!getEntity) {
-    actions.getEntityForEdit = async ({commit}, id: string) => {
-      const entity = await getEntity(id)
+
+    async getEntityForEdit({commit}, id: string) {
+      const entity = await getEntityById(id, false)
       commit('storeEntity', entity)
       return entity
-    }
+    },
+
+    async loadEntitiesIfNotExist ({ commit, state }, ids: string[]) {
+      const entitiesToLoad: string[] = ids.filter(id => !state.entities[id])
+      if (entitiesToLoad.length > 0) {
+        const entities = await getEntitiesById(entitiesToLoad, true)
+        commit('storeEntities', entities)
+        return ids.filter(id => state.entities[id]).map(id => state.entities[id])
+      } else {
+        return ids.filter(id => state.entities[id]).map(id => state.entities[id])
+      }
+    },
   }
+
   return actions
 }
 
 export function buildActions<E extends BaseEntity, F, R>(
   find: (query: F, page: number, pageSize: number) => Promise<FindResult>,
-  getEntitiesById: (ids: string[]) => Promise<E[]>,
-  getEntity: (id: string) => Promise<E> | null
+  getEntityById: (id: string, readSide: boolean) => Promise<E>,
+  getEntitiesById: (ids: string[], readSide: boolean) => Promise<E[]>
 ): ActionTree<EntityState<E, F>, R> {
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
@@ -217,7 +229,7 @@ export function buildActions<E extends BaseEntity, F, R>(
     if (idsToLoad.length !== 0) {
       commit('addIdInLoading', {ids: idsToLoad})
       try {
-        const newEntities: E[] = await getEntitiesById(idsToLoad)
+        const newEntities: E[] = await getEntitiesById(idsToLoad, true)
         const loadSuccessPayload: LoadSuccessPayload<E, F> = {
           ...payload,
           idInLoading: idsToLoad,
@@ -253,7 +265,7 @@ export function buildActions<E extends BaseEntity, F, R>(
   }
 
   const actions: ActionTree<EntityState<E, F>, R> =
-    buildActionsWithCustomLoad<E, F, R>(load, getEntity)
+    buildActionsWithCustomLoad<E, F, R>(load, getEntityById, getEntitiesById)
   return actions
 }
 

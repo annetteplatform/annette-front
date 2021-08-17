@@ -1,18 +1,20 @@
 import {ActionTree} from 'vuex';
 import {StateInterface} from 'src/store';
-import {Translation, TranslationFilter} from 'src/modules/application';
+import {GetTranslationJsonPayload, Translation, TranslationFilter} from 'src/modules/application';
 import {applicationService} from 'src/modules/application/store/application.service';
 import {buildActions} from 'src/common/store/actions';
 import {TranslationState} from './state';
+
+
 
 export const actions: ActionTree<TranslationState, StateInterface> = {
   ...buildActions<Translation, TranslationFilter, StateInterface>(
     // eslint-disable-next-line @typescript-eslint/unbound-method
     applicationService.findTranslations,
     // eslint-disable-next-line @typescript-eslint/unbound-method
-    applicationService.getTranslationsById,
+    applicationService.getTranslationById,
     // eslint-disable-next-line @typescript-eslint/unbound-method
-    applicationService.getTranslationByIdForEdit,
+    applicationService.getTranslationsById,
   ),
 
   async createEntity({commit}, entity: Translation) {
@@ -30,6 +32,14 @@ export const actions: ActionTree<TranslationState, StateInterface> = {
   async deleteEntity ({ commit }, id: string) {
     await applicationService.deleteTranslation(id)
     commit('removeEntity', id)
+  },
+
+  async getTranslationLanguages ({  }, id: string) {
+    return await applicationService.getTranslationLanguages(id)
+  },
+
+  async  getTranslationJsonById({}, payload: GetTranslationJsonPayload) {
+    return await applicationService.getTranslationJsonById(payload.translationId, payload.languageId)
   }
 }
 

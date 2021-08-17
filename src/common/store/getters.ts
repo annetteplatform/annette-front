@@ -28,7 +28,7 @@ export function buildGetters<E extends BaseEntity, F, R>(): GetterTree<EntitySta
       if (instance.mode === PagingMode.Standard && instance.pages[instance.page]) {
         ids = instance.pages[instance.page].ids
       } else if (instance.mode === PagingMode.Range && instance.pages[instance.page]) {
-        for (let index = 1; index <= instance.page; index++) {
+        for (let index = 0; index <= instance.page; index++) {
           if (instance.pages[index]) {
             ids = [...ids, ...instance.pages[index].ids]
           }

@@ -15,16 +15,18 @@ export function useEntityPage<T>(
   const quasar = useQuasar()
   const route: RouteLocationNormalizedLoaded = useRoute()
 
-  const action = ref(route.params.action)
-  const id = ref(route.params.id)
+  const action = ref(typeof route.params.action === 'string' ? route.params.action : route.params.action[0] )
+  const id = ref(typeof route.params.id === 'string' ? route.params.id : route.params.id[0] )
   const entityModel: Ref<T | null> = ref(null)
   const originEntity: Ref<T | null> = ref(null)
   const saved = ref(false)
   const error: Ref<AnnetteError | null> = ref(null)
 
   const loadEntity = async (newRoute: RouteLocationNormalizedLoaded) => {
-    action.value = newRoute.params.action
-    id.value = newRoute.params.id
+    console.log('loadEntity', newRoute.params)
+    if (!newRoute.params.action) return {}
+    action.value = typeof newRoute.params.action === 'string' ? newRoute.params.action : newRoute.params.action[0]
+    id.value = typeof newRoute.params.id === 'string' ? newRoute.params.id : newRoute.params.id[0]
     if (action.value === 'edit') {
       try {
         const entity = await store.dispatch(`${namespace}/getEntityForEdit`, id.value)
@@ -68,6 +70,7 @@ export function useEntityPage<T>(
         originEntity.value = {...entity}
         saved.value = true
         error.value = null
+        action.value = 'edit'
       } catch (ex) {
         error.value = ex
       }

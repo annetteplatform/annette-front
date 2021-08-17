@@ -19,13 +19,12 @@
       </div>
     </div>
 
+
+    <div class="row q-pb-md" v-if="error">
+      <message-box :message="error" @closeMessage="clearError"/>
+    </div>
+
     <div v-if="entityModel">
-
-
-      <div class="row q-pb-md" v-if="error">
-        <message-box :message="error" @closeMessage="clearError"/>
-      </div>
-
 
       <div class="row q-pb-md">
         <q-chip outline square color="red" text-color="white" label="Changed"
@@ -42,12 +41,16 @@
                  ref="idRef"
                  label="Translation Id"/>
       </div>
-      <div class="row">
+      <div class="row q-pb-md">
         <q-input class="col-md-12 col-sm-12 col-xs-12 "
                  v-model="entityModel.name"
                  :rules="[val => !!val || 'Field is required']"
                  ref="nameRef"
                  label="Name"/>
+      </div>
+
+      <div class="row">
+       <language-translation-list v-if="action === 'edit'" :translation-id="id" />
       </div>
     </div>
   </q-form>
@@ -59,10 +62,11 @@ import {defineComponent, ref} from 'vue';
 import MessageBox from 'src/common/components/MessageBox.vue';
 import {Translation} from 'src/modules/application';
 import {useEntityPage} from 'src/common';
+import LanguageTranslationList from './components/LanguageTranslationList.vue';
 
 export default defineComponent({
   name: 'TranslationPage',
-  components: {MessageBox},
+  components: {LanguageTranslationList, MessageBox},
   setup() {
     const idRef = ref()
     const nameRef = ref()
@@ -78,7 +82,9 @@ export default defineComponent({
 
     const entityPage = useEntityPage<Translation>(
       'appTranslation',
-      () => { return { id: '', name: ''} },
+      () => {
+        return {id: '', name: ''}
+      },
       formHasError,
     )
 
@@ -86,7 +92,7 @@ export default defineComponent({
       idRef,
       nameRef,
       ...entityPage
-    };
+    }
   }
-});
+})
 </script>
