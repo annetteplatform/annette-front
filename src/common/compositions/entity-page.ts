@@ -71,6 +71,8 @@ export function useEntityPage<T>(
         saved.value = true
         error.value = null
         action.value = 'edit'
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+        id.value = entity.id
       } catch (ex) {
         error.value = ex
       }
