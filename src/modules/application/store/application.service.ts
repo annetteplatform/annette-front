@@ -1,9 +1,64 @@
-import {Language, Translation, TranslationJson} from 'src/modules/application/store/model'
 import axios from 'axios'
-import {LanguageFilter, TranslationFilter} from 'src/modules/application'
 import {FindResult} from 'src/common'
+import {
+  Application,
+  ApplicationFilter,
+  Language,
+  LanguageFilter,
+  Translation,
+  TranslationFilter,
+  TranslationJson
+} from './';
 
 export const applicationService = {
+
+  // ************************** Application API **************************
+
+  async createApplication(entity: Application) {
+    return await axios.post<Application>('/api/annette/v1/application/createApplication', entity)
+      .then(result => convertApplication(result.data))
+  },
+
+  async updateApplication(entity: Application) {
+    return await axios.post<Application>('/api/annette/v1/application/updateApplication', entity)
+      .then(result => convertApplication(result.data))
+  },
+
+  async deleteApplication(id: string) {
+    return await axios.post<Application>('/api/annette/v1/application/deleteApplication', {id})
+      .then(result => result.data)
+  },
+
+  async getApplicationById(id: string, readSide = true) {
+    // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
+    return await axios.get<Application>(`/api/annette/v1/application/getApplicationById/${id}/${readSide}`)
+      .then(result => convertApplication(result.data))
+  },
+
+  async getApplicationsById(ids: string[], readSide = true) {
+    // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
+    return await axios.post<Application[]>(`/api/annette/v1/application/getApplicationsById/${readSide}`, ids)
+      .then(result => result.data.map(convertApplication))
+  },
+
+  async findApplications(filter: ApplicationFilter, page: number, pageSize: number) {
+    const query = {
+      offset: page * pageSize,
+      size: pageSize,
+      ...filter
+    }
+    return await axios.post<FindResult>('/api/annette/v1/application/findApplications', query)
+      .then(result => result.data)
+  },
+
+  async getApplicationTranslations(id: string,languageId: string) {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+    return await axios.get(`/api/annette/v1/application/getApplicationTranslations/${id}/${languageId}`)
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+      .then(result => result.data)
+  },
+
+  // ************************** Language API **************************
 
   async createLanguage(entity: Language) {
     return await axios.post<Language>('/api/annette/v1/application/createLanguage', entity)
@@ -110,6 +165,14 @@ export const applicationService = {
       .then(result => convertTranslationJson(result.data))
   },
 
+}
+
+function convertApplication(rawApplication: Application): Application {
+  const application: Application = {...rawApplication}
+  if (rawApplication.updatedAt) {
+    application.updatedAt = new Date(rawApplication.updatedAt)
+  }
+  return application
 }
 
 function convertLanguage(rawLanguage: Language): Language {

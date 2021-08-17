@@ -6,7 +6,7 @@ import {
   useStore as vuexUseStore,
 } from 'vuex'
 import mainStore from 'layouts/store/main'
-import {appLanguageStore, appTranslationStore} from 'src/modules/application';
+import {appApplicationStore, appLanguageStore, appTranslationStore} from 'src/modules/application';
 
 /*
  * If not building with SSR mode, you can
@@ -38,8 +38,9 @@ export default store(function (/* { ssrContext } */) {
   const Store = createStore<StateInterface>({
     modules: {
       main: mainStore,
+      appApplication: appApplicationStore,
       appLanguage: appLanguageStore,
-      appTranslation: appTranslationStore
+      appTranslation: appTranslationStore,
     },
 
     // enable strict mode (adds overhead!)

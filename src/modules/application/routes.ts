@@ -2,6 +2,18 @@ import {RouteRecordRaw} from 'vue-router';
 
 export const applicationRoutes: RouteRecordRaw[] = [
   {
+    path: 'application/applications',
+    name: 'application.applications',
+    component: () => import('src/modules/application/application/ApplicationListPage.vue'),
+    meta: {requiresAuth: true}
+  },
+  {
+    path: 'application/application/:action/:id',
+    name: 'application.application',
+    component: () => import('src/modules/application/application/ApplicationPage.vue'),
+    meta: {requiresAuth: true}
+  },
+  {
     path: 'application/languages',
     name: 'application.languages',
     component: () => import('src/modules/application/language/LanguageListPage.vue'),
