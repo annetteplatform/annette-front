@@ -57,7 +57,7 @@ export function buildMutations<E extends BaseEntity, F>(
     },
 
     loadSuccess: (state: EntityState<E, F>, payload: LoadSuccessPayload<E, F>) => {
-      console.log('loadSuccess', payload)
+      // console.log('loadSuccess', payload)
       const instance = state.instances[payload.key]
       if (instance) {
         if (payload.clear) instance.pages = {}
@@ -82,7 +82,7 @@ export function buildMutations<E extends BaseEntity, F>(
     },
 
     loadFailure: (state: EntityState<E, F>, payload: LoadFailurePayload) => {
-      console.log('loadFailure', payload)
+      // console.log('loadFailure', payload)
       const instance = state.instances[payload.key]
       if (instance) {
         instance.loading = false
@@ -96,7 +96,7 @@ export function buildMutations<E extends BaseEntity, F>(
     },
 
     clearMessage: (state: EntityState<E, F>, payload: ClearMessagePayload) => {
-      console.log('loadFailure', payload)
+      // console.log('loadFailure', payload)
       const instance = state.instances[payload.key]
       if (instance) {
         instance.message = undefined

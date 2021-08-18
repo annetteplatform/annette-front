@@ -117,11 +117,11 @@
 import {computed, defineComponent, ref} from 'vue';
 
 import MessageBox from 'src/common/components/MessageBox.vue';
-import {Application, applicationService} from 'src/modules/application';
+import {Application} from 'src/modules/application';
 import {TextCaption, TranslationCaption, useEntityPage} from 'src/common';
-import TranslationSelector from "src/modules/application/translation/components/TranslationSelector.vue";
-import {useStore} from "src/store";
-import {useQuasar} from "quasar";
+import TranslationSelector from 'src/modules/application/translation/components/TranslationSelector.vue';
+import {useStore} from 'src/store';
+import {useQuasar} from 'quasar';
 
 export default defineComponent({
   name: 'ApplicationPage',

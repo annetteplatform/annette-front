@@ -16,13 +16,14 @@ export function useEntityList<E, F>(namespace: string, instanceKey: string) {
     let sortBy = ''
     let descending = false
     // @ts-ignore
-    if (instance.value.filter.sortBy) {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+    if (instance.value.filter && instance.value.filter.sortBy && instance.value.filter.sortBy[0]) {
       // @ts-ignore
       // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-      sortBy = instance.value.filter.sortBy.field
+      sortBy = instance.value.filter.sortBy[0].field
       // @ts-ignore
       // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-      descending = instance.value.filter.sortBy.descending
+      descending = instance.value.filter.sortBy[0].descending
     }
     const pg = {
       sortBy,
@@ -45,20 +46,21 @@ export function useEntityList<E, F>(namespace: string, instanceKey: string) {
     const filterSortBy = {
       // @ts-ignore
       // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-      field: ( filter.sortBy && filter.sortBy.field) ? filter.sortBy.field : '',
+      field: (filter.sortBy && filter.sortBy[0] && filter.sortBy[0].field) ? filter.sortBy[0].field : '',
       // @ts-ignore
       // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-      descending: ( filter.sortBy && filter.sortBy.descending) ? filter.sortBy.descending : false
+      descending: (filter.sortBy && filter.sortBy[0] && filter.sortBy[0].descending) ? filter.sortBy[0].descending : false
     }
 
     //  set filter if changed
     if (filterSortBy.field !== sortBy || filterSortBy.descending !== descending) {
       if (sortBy) {
         // @ts-ignore
-        filter.sortBy = {
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+        filter.sortBy = [{
           field: sortBy,
           descending
-        }
+        }]
       } else {
         // @ts-ignore
         filter.sortBy = undefined

@@ -9,7 +9,7 @@ import {useQuasar} from 'quasar';
 export function useEntityPage<T>(
   namespace: string,
   emptyEntity: () => T,
-  formHasError: () => boolean,
+  formHasError: (entity?: T | null) => boolean,
 ) {
   const store = useStore()
   const quasar = useQuasar()
@@ -46,7 +46,7 @@ export function useEntityPage<T>(
   }
 
   const save = async () => {
-    if (formHasError()) {
+    if (formHasError(entityModel.value)) {
       quasar.notify({
         color: 'negative',
         message: 'Form validation failed'

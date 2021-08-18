@@ -7,6 +7,7 @@ import {
 } from 'vuex'
 import mainStore from 'layouts/store/main'
 import {appApplicationStore, appLanguageStore, appTranslationStore} from 'src/modules/application';
+import {personCategoryStore, personPersonStore} from 'src/modules/person';
 
 /*
  * If not building with SSR mode, you can
@@ -41,6 +42,8 @@ export default store(function (/* { ssrContext } */) {
       appApplication: appApplicationStore,
       appLanguage: appLanguageStore,
       appTranslation: appTranslationStore,
+      personCategory: personCategoryStore,
+      personPerson: personPersonStore,
     },
 
     // enable strict mode (adds overhead!)

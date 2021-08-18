@@ -16,7 +16,6 @@ export function serviceGroups(): ServiceGroup[] {
           title: 'Languages',
           // subtitle: string,
           action: {name: 'application.languages'},
-          actionName: 'Open'
         },
         {
           id: 'TRANSLATIONS',
@@ -24,8 +23,7 @@ export function serviceGroups(): ServiceGroup[] {
           icon: 'translate',
           title: 'Translations',
           // subtitle: string,
-          action: '/application/translations',
-          actionName: 'Open'
+          action: {name: 'application.translations'},
         },
         {
           id: 'APPLICATIONS',
@@ -33,8 +31,7 @@ export function serviceGroups(): ServiceGroup[] {
           icon: 'apps',
           title: 'Applications',
           // subtitle: string,
-          action: '/application/applications',
-          actionName: 'Open'
+          action: {name: 'application.applications'},
         }
       ]
     },
@@ -51,8 +48,7 @@ export function serviceGroups(): ServiceGroup[] {
           icon: 'people',
           title: 'Persons',
           subtitle: 'View person list, create, update and delete persons',
-          action: '/person/persons',
-          actionName: 'Open'
+          action: {name: 'person.persons'},
         },
         {
           id: 'PERSON_CATEGORIES',
@@ -60,18 +56,17 @@ export function serviceGroups(): ServiceGroup[] {
           icon: 'local_offer',
           title: 'Person categories',
           subtitle: 'Maintain person categories',
-          action: '/person/categories',
-          actionName: 'View'
+          action: {name: 'person.categories'},
         },
-        {
-          id: 'PROFILE',
-          order: 20,
-          icon: 'account_circle',
-          title: 'My profile',
-          subtitle: 'View my profile',
-          action: '/person/profile',
-          actionName: 'View'
-        }
+        // {
+        //   id: 'PROFILE',
+        //   order: 20,
+        //   icon: 'account_circle',
+        //   title: 'My profile',
+        //   subtitle: 'View my profile',
+        //   action: '/person/profile',
+        //   actionName: 'View'
+        // }
       ]
     },
     {
@@ -88,7 +83,6 @@ export function serviceGroups(): ServiceGroup[] {
           title: 'Organizations',
           subtitle: 'Maintain organizations, hierarchies, person assignments to positions',
           action: '/org-structure/organizations',
-          actionName: 'Open'
         },
         {
           id: 'ORG_ROLES',
@@ -106,7 +100,6 @@ export function serviceGroups(): ServiceGroup[] {
           title: 'Org. categories',
           subtitle: 'Maintain org. categories',
           action: '/org-structure/categories',
-          actionName: 'View'
         }
       ]
     },
@@ -124,7 +117,6 @@ export function serviceGroups(): ServiceGroup[] {
           title: 'Authorization roles',
           subtitle: 'Maintain authorization roles, assign principals to roles',
           action: '/auth/roles',
-          actionName: 'Open'
         },
         {
           id: 'PERMISSIONS',
@@ -133,7 +125,6 @@ export function serviceGroups(): ServiceGroup[] {
           title: 'Permission assignments',
           subtitle: 'View permission assignments to principals',
           action: '/auth/assignments',
-          actionName: 'View'
         }
       ]
     },
