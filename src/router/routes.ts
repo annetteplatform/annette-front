@@ -1,6 +1,7 @@
 import {RouteRecordRaw} from 'vue-router';
 import {applicationRoutes} from 'src/modules/application';
 import {personRoutes} from 'src/modules/person';
+import {orgStructureRoutes} from 'src/modules/org-structure';
 
 const routes: RouteRecordRaw[] = [
   {
@@ -13,7 +14,8 @@ const routes: RouteRecordRaw[] = [
         meta: {requiresAuth: false}
       },
       ...applicationRoutes,
-      ...personRoutes
+      ...personRoutes,
+      ...orgStructureRoutes
     ],
   },
 

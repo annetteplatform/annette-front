@@ -19,13 +19,11 @@
       </div>
     </div>
 
+    <div class="row q-pb-md" v-if="error">
+      <message-box :message="error" @closeMessage="clearError"/>
+    </div>
+
     <div v-if="entityModel">
-
-
-      <div class="row q-pb-md" v-if="error">
-        <message-box :message="error" @closeMessage="clearError"/>
-      </div>
-
 
       <div class="row q-pb-md">
         <q-chip outline square color="red" text-color="white" label="Changed"
@@ -77,7 +75,9 @@ export default defineComponent({
 
     const entityPage = useEntityPage<Category>(
       'personCategory',
-      () => { return { id: '', name: ''} },
+      () => {
+        return {id: '', name: ''}
+      },
       formHasError,
     )
 

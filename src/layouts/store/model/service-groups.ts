@@ -90,7 +90,7 @@ export function serviceGroups(): ServiceGroup[] {
           icon: 'local_offer',
           title: 'Organizational roles',
           subtitle: 'Maintain organizational roles',
-          action: '/org-structure/roles',
+          action: {name: 'orgStructure.roles'},
           actionName: 'View'
         },
         {
@@ -99,7 +99,7 @@ export function serviceGroups(): ServiceGroup[] {
           icon: 'category',
           title: 'Org. categories',
           subtitle: 'Maintain org. categories',
-          action: '/org-structure/categories',
+          action: {name: 'orgStructure.categories'},
         }
       ]
     },

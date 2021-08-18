@@ -1,15 +1,15 @@
 import {AnnettePrincipal, BaseEntity, SortBy} from 'src/common';
 
-export interface Category extends BaseEntity{
+export interface OrgRole extends BaseEntity{
   id: string,
   name: string,
+  description: string,
   updatedAt?: Date,
   updatedBy?: AnnettePrincipal
 }
 
-export interface CategoryFilter {
+export interface OrgRoleFilter {
   filter?: string
   name?: string
-  sortBy?: SortBy[]
+  sortBy?: SortBy
 }
-

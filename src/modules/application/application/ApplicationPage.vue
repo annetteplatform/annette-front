@@ -19,11 +19,11 @@
       </div>
     </div>
 
-    <div v-if="entityModel">
+    <div class="row q-pb-md" v-if="error">
+      <message-box :message="error" @closeMessage="clearError"/>
+    </div>
 
-      <div class="row q-pb-md" v-if="error">
-        <message-box :message="error" @closeMessage="clearError"/>
-      </div>
+    <div v-if="entityModel">
 
       <div class="row q-pb-md">
         <q-chip outline square color="red" text-color="white" label="Changed"
@@ -212,9 +212,9 @@ export default defineComponent({
             color: 'white',
             handler: () => {
               if (entityPage.entityModel.value &&
-                entityPage.entityModel.value.translations ) {
+                entityPage.entityModel.value.translations) {
                 const newTranslations = entityPage.entityModel.value.translations
-                .filter( v => v !== translation)
+                  .filter(v => v !== translation)
                 entityPage.entityModel.value.translations = newTranslations
               }
             }

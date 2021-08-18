@@ -5,11 +5,11 @@
     <div class="row">
       <div class="col-md-12 q-pa-md q-gutter-md">
         <q-item class="q-mr-none">
-          <h5 class="q-ma-none">Language</h5>
+          <h5 class="q-ma-none">Category</h5>
           <q-space/>
           <q-btn class="q-mr-md" outline color="primary"
-                 label="Languages"
-                 :to="{name: 'application.languages'}"/>
+                 label="Categories"
+                 :to="{name: 'orgStructure.categories'}"/>
           <q-btn color="primary"
                  v-if="entityModel"
                  label="Save"
@@ -19,9 +19,9 @@
       </div>
     </div>
 
-    <div class="row q-pb-md" v-if="error">
-      <message-box :message="error" @closeMessage="clearError"/>
-    </div>
+      <div class="row q-pb-md" v-if="error">
+        <message-box :message="error" @closeMessage="clearError"/>
+      </div>
 
     <div v-if="entityModel">
 
@@ -38,7 +38,7 @@
                  :rules="[val => !!val || 'Field is required']"
                  :readonly="action!=='create'"
                  ref="idRef"
-                 label="Language Id"/>
+                 label="Category Id"/>
       </div>
       <div class="row">
         <q-input class="col-md-12 col-sm-12 col-xs-12 "
@@ -46,6 +46,26 @@
                  :rules="[val => !!val || 'Field is required']"
                  ref="nameRef"
                  label="Name"/>
+      </div>
+      <div>
+        <div>
+          Allowed organizational items
+        </div>
+        <q-checkbox
+          class="col-md-12 col-sm-12 col-xs-12 q-pr-md"
+          v-model="entityModel.forOrganization"
+          label="Organization"
+        />
+        <q-checkbox
+          class="col-md-12 col-sm-12 col-xs-12 q-pr-md"
+          v-model="entityModel.forUnit"
+          label="Unit"
+        />
+        <q-checkbox
+          class="col-md-12 col-sm-12 col-xs-12 q-pr-md"
+          v-model="entityModel.forPosition"
+          label="Position"
+        />
       </div>
     </div>
   </q-form>
@@ -55,11 +75,11 @@
 import {defineComponent, ref} from 'vue';
 
 import MessageBox from 'src/common/components/MessageBox.vue';
-import {Language} from 'src/modules/application';
-import {useEntityPage} from 'src/common';
+import { useEntityPage} from 'src/common';
+import {OrgCategory} from 'src/modules/org-structure';
 
 export default defineComponent({
-  name: 'LanguagePage',
+  name: 'OrgCategoryPage',
   components: {MessageBox},
   setup() {
     const idRef = ref()
@@ -74,11 +94,15 @@ export default defineComponent({
       return !!nameRef.value.hasError || !!idRef.value.hasError
     }
 
-    const entityPage = useEntityPage<Language>(
-      'appLanguage',
-      () => {
-        return {id: '', name: ''}
-      },
+    const entityPage = useEntityPage<OrgCategory>(
+      'orgCategory',
+      () => { return {
+        id: '',
+        name: '',
+        forOrganization: false,
+        forUnit: false,
+        forPosition: false
+      } },
       formHasError,
     )
 

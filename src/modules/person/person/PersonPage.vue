@@ -19,11 +19,9 @@
       </div>
     </div>
 
-
-
-      <div class="row q-pb-md" v-if="error">
-        <message-box :message="error" @closeMessage="clearError"/>
-      </div>
+    <div class="row q-pb-md" v-if="error">
+      <message-box :message="error" @closeMessage="clearError"/>
+    </div>
 
     <div class="q-gutter-md" v-if="entityModel">
 
@@ -59,7 +57,7 @@
       </div>
 
       <div class="row">
-        <person-category-selector v-model="entityModel.categoryId" />
+        <person-category-selector v-model="entityModel.categoryId"/>
       </div>
 
       <div class="row">
@@ -86,7 +84,7 @@ import {defineComponent, ref} from 'vue';
 import MessageBox from 'src/common/components/MessageBox.vue';
 import {useEntityPage} from 'src/common';
 import {Person} from 'src/modules/person';
-import PersonCategorySelector from "src/modules/person/category/components/PersonCategorySelector.vue";
+import PersonCategorySelector from 'src/modules/person/category/components/PersonCategorySelector.vue'
 
 export default defineComponent({
   name: 'PersonPage',

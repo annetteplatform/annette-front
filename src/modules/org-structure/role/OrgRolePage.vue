@@ -5,11 +5,11 @@
     <div class="row">
       <div class="col-md-12 q-pa-md q-gutter-md">
         <q-item class="q-mr-none">
-          <h5 class="q-ma-none">Language</h5>
+          <h5 class="q-ma-none">Role</h5>
           <q-space/>
           <q-btn class="q-mr-md" outline color="primary"
-                 label="Languages"
-                 :to="{name: 'application.languages'}"/>
+                 label="Roles"
+                 :to="{name: 'orgStructure.roles'}"/>
           <q-btn color="primary"
                  v-if="entityModel"
                  label="Save"
@@ -38,7 +38,7 @@
                  :rules="[val => !!val || 'Field is required']"
                  :readonly="action!=='create'"
                  ref="idRef"
-                 label="Language Id"/>
+                 label="Role Id"/>
       </div>
       <div class="row">
         <q-input class="col-md-12 col-sm-12 col-xs-12 "
@@ -46,6 +46,13 @@
                  :rules="[val => !!val || 'Field is required']"
                  ref="nameRef"
                  label="Name"/>
+      </div>
+      <div class="row">
+        <q-input
+                 class="col-md-12 col-sm-12 col-xs-12 "
+                 v-model="entityModel.description"
+                 type="textarea"
+                 label="Description"/>
       </div>
     </div>
   </q-form>
@@ -55,11 +62,11 @@
 import {defineComponent, ref} from 'vue';
 
 import MessageBox from 'src/common/components/MessageBox.vue';
-import {Language} from 'src/modules/application';
 import {useEntityPage} from 'src/common';
+import {OrgRole} from 'src/modules/org-structure';
 
 export default defineComponent({
-  name: 'LanguagePage',
+  name: 'OrgRolePage',
   components: {MessageBox},
   setup() {
     const idRef = ref()
@@ -74,10 +81,14 @@ export default defineComponent({
       return !!nameRef.value.hasError || !!idRef.value.hasError
     }
 
-    const entityPage = useEntityPage<Language>(
-      'appLanguage',
+    const entityPage = useEntityPage<OrgRole>(
+      'orgRole',
       () => {
-        return {id: '', name: ''}
+        return {
+          id: '',
+          name: '',
+          description: ''
+        }
       },
       formHasError,
     )
