@@ -28,16 +28,11 @@ export function useEntityListPage(namespace: string, instanceKey: string) {
     void store.dispatch(`${namespace}/setFilter`, {key: instanceKey, filter: filter})
   }
 
-  const closeMessage = () => {
-    void store.commit(`${namespace}/clearMessage`, {key: instanceKey})
-  }
-
   return {
     namespace,
     instanceKey,
     instance,
     refreshList,
     onFilterChanged,
-    closeMessage
   };
 }

@@ -1,37 +1,25 @@
 <template>
-  <q-form
-    @submit="save"
-    class="narrow-layout">
-    <div class="row">
-      <div class="col-md-12 q-pa-md q-gutter-md">
-        <q-item class="q-mr-none">
-          <h5 class="q-ma-none">Person</h5>
-          <q-space/>
-          <q-btn class="q-mr-md" outline color="primary"
-                 label="Persons"
-                 :to="{name: 'person.persons'}"/>
-          <q-btn color="primary"
-                 v-if="entityModel"
-                 label="Save"
-                 @click="save"/>
-        </q-item>
-
-      </div>
-    </div>
-
-    <div class="row q-pb-md" v-if="error">
-      <message-box :message="error" @closeMessage="clearError"/>
-    </div>
-
-    <div class="q-gutter-md" v-if="entityModel">
-
-      <div class="row q-pb-md">
-        <q-chip outline square color="red" text-color="white" label="Changed"
-                v-if="changed()"/>
-        <q-chip outline square color="green" text-color="white" label="Saved"
-                v-if="saved && ! changed()"/>
-      </div>
-
+  <entity-page narrow
+               caption="Person"
+               :show-form="!!entityModel"
+               :error="error"
+               @clearError="clearError">
+    <template v-slot:toolbar>
+      <q-btn class="q-mr-md" outline color="primary"
+             label="Persons"
+             :to="{name: 'person.persons'}"/>
+      <q-btn color="primary"
+             v-if="entityModel"
+             label="Save"
+             @click="save"/>
+    </template>
+    <template v-slot:status>
+      <q-chip outline square color="red" text-color="white" label="Changed"
+              v-if="changed()"/>
+      <q-chip outline square color="green" text-color="white" label="Saved"
+              v-if="saved && ! changed()"/>
+    </template>
+    <template v-slot:default>
       <div class="row q-pb-md">
         <q-input class="col-md-4 col-sm-12 col-xs-12 "
                  v-model="entityModel.id"
@@ -71,24 +59,25 @@
         <q-input
           class="col-md-4 col-sm-12 col-xs-12 q-pr-md "
           v-model="entityModel.phone"
-          label="Phone number "
-        />
+          label="Phone number "/>
       </div>
-    </div>
-  </q-form>
+    </template>
+  </entity-page>
 </template>
 
 <script lang="ts">
 import {defineComponent, ref} from 'vue';
 
-import MessageBox from 'src/common/components/MessageBox.vue';
 import {useEntityPage} from 'src/common';
 import {Person} from 'src/modules/person';
 import PersonCategorySelector from 'src/modules/person/category/components/PersonCategorySelector.vue'
+import EntityPage from 'src/common/components/EntityPage.vue';
+
+const NAMESPACE = 'personPerson';
 
 export default defineComponent({
   name: 'PersonPage',
-  components: {PersonCategorySelector, MessageBox},
+  components: {EntityPage, PersonCategorySelector},
   setup() {
     const idRef = ref()
     const lastnameRef = ref()
@@ -109,7 +98,7 @@ export default defineComponent({
     }
 
     const entityPage = useEntityPage<Person>(
-      'personPerson',
+      NAMESPACE,
       () => {
         return {
           id: '',

@@ -1,37 +1,25 @@
 <template>
-  <q-form
-    @submit="save"
-    class="narrow-layout">
-    <div class="row">
-      <div class="col-md-12 q-pa-md q-gutter-md">
-        <q-item class="q-mr-none">
-          <h5 class="q-ma-none">Category</h5>
-          <q-space/>
-          <q-btn class="q-mr-md" outline color="primary"
-                 label="Categories"
-                 :to="{name: 'orgStructure.categories'}"/>
-          <q-btn color="primary"
-                 v-if="entityModel"
-                 label="Save"
-                 @click="save"/>
-        </q-item>
-
-      </div>
-    </div>
-
-      <div class="row q-pb-md" v-if="error">
-        <message-box :message="error" @closeMessage="clearError"/>
-      </div>
-
-    <div v-if="entityModel">
-
-      <div class="row q-pb-md">
-        <q-chip outline square color="red" text-color="white" label="Changed"
-                v-if="changed()"/>
-        <q-chip outline square color="green" text-color="white" label="Saved"
-                v-if="saved && ! changed()"/>
-      </div>
-
+  <entity-page narrow
+               caption="Org. Category"
+               :show-form="!!entityModel"
+               :error="error"
+               @clearError="clearError">
+    <template v-slot:toolbar>
+      <q-btn class="q-mr-md" outline color="primary"
+             label="Categories"
+             :to="{name: 'orgStructure.categories'}"/>
+      <q-btn color="primary"
+             v-if="entityModel"
+             label="Save"
+             @click="save"/>
+    </template>
+    <template v-slot:status>
+      <q-chip outline square color="red" text-color="white" label="Changed"
+              v-if="changed()"/>
+      <q-chip outline square color="green" text-color="white" label="Saved"
+              v-if="saved && ! changed()"/>
+    </template>
+    <template v-slot:default>
       <div class="row q-pb-md">
         <q-input class="col-md-4 col-sm-12 col-xs-12 "
                  v-model="entityModel.id"
@@ -67,20 +55,21 @@
           label="Position"
         />
       </div>
-    </div>
-  </q-form>
+    </template>
+  </entity-page>
 </template>
 
 <script lang="ts">
 import {defineComponent, ref} from 'vue';
-
-import MessageBox from 'src/common/components/MessageBox.vue';
-import { useEntityPage} from 'src/common';
+import {useEntityPage} from 'src/common';
 import {OrgCategory} from 'src/modules/org-structure';
+import EntityPage from 'src/common/components/EntityPage.vue';
+
+const NAMESPACE = 'orgCategory';
 
 export default defineComponent({
   name: 'OrgCategoryPage',
-  components: {MessageBox},
+  components: {EntityPage},
   setup() {
     const idRef = ref()
     const nameRef = ref()
@@ -95,14 +84,16 @@ export default defineComponent({
     }
 
     const entityPage = useEntityPage<OrgCategory>(
-      'orgCategory',
-      () => { return {
-        id: '',
-        name: '',
-        forOrganization: false,
-        forUnit: false,
-        forPosition: false
-      } },
+      NAMESPACE,
+      () => {
+        return {
+          id: '',
+          name: '',
+          forOrganization: false,
+          forUnit: false,
+          forPosition: false
+        }
+      },
       formHasError,
     )
 

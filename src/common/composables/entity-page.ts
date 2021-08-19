@@ -23,7 +23,7 @@ export function useEntityPage<T>(
   const error: Ref<AnnetteError | null> = ref(null)
 
   const loadEntity = async (newRoute: RouteLocationNormalizedLoaded) => {
-    console.log('loadEntity', newRoute.params)
+    // console.log('loadEntity', newRoute.params)
     if (!newRoute.params.action) return {}
     action.value = typeof newRoute.params.action === 'string' ? newRoute.params.action : newRoute.params.action[0]
     id.value = typeof newRoute.params.id === 'string' ? newRoute.params.id : newRoute.params.id[0]
