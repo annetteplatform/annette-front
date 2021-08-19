@@ -1,29 +1,23 @@
 <template>
-  <div class="narrow-layout">
-    <div class="row">
-      <div class="col-md-12 q-pa-md">
-        <q-item class="q-mr-none">
-          <h5 class="q-ma-none">Translations</h5>
-          <q-space/>
-          <q-btn class="q-mr-md" outline color="primary"
-                 label="Refresh"
-                 @click="refreshList"/>
-          <q-btn color="primary"
-                 label="Create"
-                 :to="{name: 'application.translation', params: {action: 'create', id: 'new'}}"/>
-        </q-item>
-      </div>
-    </div>
-    <simple-filter-form class="q-mb-md"
-                        :filter="instance.filter"
-                        @filterChanged="onFilterChanged"/>
-    <message-box class="q-mb-md"
-                 v-if="instance.message"
-                 :message="instance.message"
-                 @closeMessage="closeMessage"/>
-    <translation-list class="q-mb-md"
-                   :instance-key="instanceKey"/>
-  </div>
+  <entity-list-page narrow caption="Translations" :namespace="namespace" :instance-key="instanceKey" >
+    <template v-slot:toolbar>
+      <q-btn class="q-mr-md" outline color="primary"
+             label="Refresh"
+             @click="refreshList"/>
+      <q-btn color="primary"
+             label="Create"
+             :to="{name: 'application.translation', params: {action: 'create', id: 'new'}}"/>
+    </template>
+    <template v-slot:filter>
+      <simple-filter-form class="q-mb-md"
+                          :filter="instance.filter"
+                          @filterChanged="onFilterChanged"/>
+    </template>
+    <template v-slot:default>
+      <translation-list class="q-mb-md"
+                        :instance-key="instanceKey"/>
+    </template>
+  </entity-list-page>
 </template>
 
 <script lang="ts">
@@ -31,16 +25,17 @@ import {defineComponent} from 'vue';
 import {useEntityListPage} from 'src/common';
 import TranslationList from './components/TranslationList.vue';
 import SimpleFilterForm from 'src/common/components/SimpleFilterForm.vue';
-import MessageBox from 'src/common/components/MessageBox.vue';
+import EntityListPage from 'src/common/components/EntityListPage.vue';
 
+const NAMESPACE = 'appTranslation'
 const INSTANCE_KEY = 'translations'
 
 export default defineComponent({
   name: 'TranslationListPage',
-  components: {TranslationList, SimpleFilterForm, MessageBox},
+  components: {EntityListPage, TranslationList, SimpleFilterForm},
   setup() {
 
-    const entityListPage = useEntityListPage('appTranslation', INSTANCE_KEY)
+    const entityListPage = useEntityListPage(NAMESPACE, INSTANCE_KEY)
 
     return {
       ...entityListPage

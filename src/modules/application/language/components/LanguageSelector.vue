@@ -32,7 +32,7 @@
 <script lang="ts">
 import {defineComponent, toRef} from 'vue';
 import {Language, LanguageFilter} from 'src/modules/application';
-import {useEntitySelector} from 'src/common/compositions/entity-selector';
+import {useEntitySelector} from 'src/common/composables/entity-selector';
 
 
 export default defineComponent({

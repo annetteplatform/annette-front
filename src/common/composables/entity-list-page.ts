@@ -33,6 +33,7 @@ export function useEntityListPage(namespace: string, instanceKey: string) {
   }
 
   return {
+    namespace,
     instanceKey,
     instance,
     refreshList,

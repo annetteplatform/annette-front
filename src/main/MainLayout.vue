@@ -20,8 +20,8 @@
 
 <script lang="ts">
 import {computed, defineComponent, ref} from 'vue'
-import Toolbar from 'layouts/components/Toolbar.vue';
-import MainMenu from 'layouts/components/MainMenu.vue';
+import Toolbar from './/components/Toolbar.vue';
+import MainMenu from './/components/MainMenu.vue';
 import {useStore} from 'src/store';
 
 export default defineComponent({

@@ -1,4 +1,4 @@
-import {PersonProfile, ServiceGroup} from 'layouts/store/model'
+import {PersonProfile, ServiceGroup} from 'src/main/store/model'
 
 export interface MainState {
   isAuthenticated: boolean,

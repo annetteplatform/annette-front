@@ -5,7 +5,7 @@ import {
   Store as VuexStore,
   useStore as vuexUseStore,
 } from 'vuex'
-import mainStore from 'layouts/store/main'
+import mainStore from 'src/main/store/main'
 import {appApplicationStore, appLanguageStore, appTranslationStore} from 'src/modules/application';
 import {personCategoryStore, personPersonStore} from 'src/modules/person';
 import {orgRoleStore, orgCategoryStore} from 'src/modules/org-structure';

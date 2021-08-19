@@ -2,7 +2,7 @@ import { ActionTree } from 'vuex';
 import { MainState } from './state';
 import {StateInterface} from 'src/store';
 import {Router} from 'vue-router';
-import {mainService} from 'layouts/store';
+import {mainService} from 'src/main/store';
 import {keycloak} from 'boot/auth';
 
 const actions: ActionTree<MainState, StateInterface> = {

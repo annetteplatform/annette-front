@@ -1,4 +1,4 @@
-import {ServiceGroup} from 'layouts/store/model/main'
+import {ServiceGroup} from 'src/main/store/model/main'
 
 export function serviceGroups(): ServiceGroup[] {
   return [

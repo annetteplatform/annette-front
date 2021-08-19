@@ -6,11 +6,11 @@ import {orgStructureRoutes} from 'src/modules/org-structure';
 const routes: RouteRecordRaw[] = [
   {
     path: '/',
-    component: () => import('layouts/MainLayout.vue'),
+    component: () => import('src/main/MainLayout.vue'),
     children: [
       {
         path: '',
-        component: () => import('layouts/IndexPage.vue'),
+        component: () => import('src/main/IndexPage.vue'),
         meta: {requiresAuth: false}
       },
       ...applicationRoutes,
@@ -23,7 +23,7 @@ const routes: RouteRecordRaw[] = [
   // but you can also remove it
   {
     path: '/:catchAll(.*)*',
-    component: () => import('layouts/Error404.vue'),
+    component: () => import('src/main/Error404.vue'),
   },
 ];
 

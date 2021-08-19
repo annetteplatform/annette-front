@@ -1,46 +1,41 @@
 <template>
-  <div class="narrow-layout">
-    <div class="row">
-      <div class="col-md-12 q-pa-md">
-      <q-item class="q-mr-none">
-        <h5 class="q-ma-none">Categories</h5>
-        <q-space/>
-        <q-btn class="q-mr-md" outline color="primary"
-               label="Refresh"
-               @click="refreshList"/>
-        <q-btn color="primary"
-               label="Create"
-               :to="{name: 'person.category', params: {action: 'create', id: 'new'}}"/>
-      </q-item>
-        </div>
-    </div>
+  <entity-list-page narrow caption="Person Categories" :namespace="namespace" :instance-key="instanceKey" >
+    <template v-slot:toolbar>
+      <q-btn class="q-mr-md" outline color="primary"
+             label="Refresh"
+             @click="refreshList"/>
+      <q-btn color="primary"
+             label="Create"
+             :to="{name: 'person.category', params: {action: 'create', id: 'new'}}"/>
+    </template>
+    <template v-slot:filter>
       <simple-filter-form class="q-mb-md"
                           :filter="instance.filter"
                           @filterChanged="onFilterChanged"/>
-      <message-box class="q-mb-md"
-                   v-if="instance.message"
-                   :message="instance.message"
-                   @closeMessage="closeMessage"/>
+    </template>
+    <template v-slot:default>
       <person-category-list class="q-mb-md"
-                     :instance-key="instanceKey"/>
-  </div>
+                            :instance-key="instanceKey"/>
+    </template>
+  </entity-list-page>
 </template>
 
 <script lang="ts">
 import {defineComponent} from 'vue';
-import {useEntityListPage} from 'src/common';
+import { useEntityListPage} from 'src/common';
 import PersonCategoryList from './components/PersonCategoryList.vue';
+import EntityListPage from 'src/common/components/EntityListPage.vue';
 import SimpleFilterForm from 'src/common/components/SimpleFilterForm.vue';
-import MessageBox from 'src/common/components/MessageBox.vue';
 
+const NAMESPACE = 'personCategory'
 const INSTANCE_KEY = 'categories'
 
 export default defineComponent({
   name: 'PersonCategoryListPage',
-  components: {PersonCategoryList, SimpleFilterForm, MessageBox},
+  components: {EntityListPage, PersonCategoryList, SimpleFilterForm},
   setup() {
 
-    const entityListPage = useEntityListPage('personCategory', INSTANCE_KEY)
+    const entityListPage = useEntityListPage(NAMESPACE, INSTANCE_KEY)
 
     return {
       ...entityListPage

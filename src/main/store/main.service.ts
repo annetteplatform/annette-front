@@ -1,4 +1,4 @@
-import {PersonProfile, ServiceGroup, serviceGroups} from 'layouts/store/model';
+import {PersonProfile, ServiceGroup, serviceGroups} from 'src/main/store/model';
 import axios from 'axios';
 
 export const mainService = {

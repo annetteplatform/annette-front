@@ -1,6 +1,6 @@
 import {MutationTree} from 'vuex';
 import {MainState} from './state';
-import {PersonProfile, ServiceGroup} from 'layouts/store'
+import {PersonProfile, ServiceGroup} from 'src/main/store'
 
 const mutation: MutationTree<MainState> = {
   LoggedIn: (state: MainState) => {
