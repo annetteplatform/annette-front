@@ -1,4 +1,4 @@
-import {Message} from 'src/common';
+import {Message} from 'src/shared';
 
 export interface BaseEntity {
   id: string,

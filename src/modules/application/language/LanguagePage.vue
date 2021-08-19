@@ -43,8 +43,8 @@
 import {defineComponent, ref} from 'vue';
 
 import {Language} from 'src/modules/application';
-import {useEntityPage} from 'src/common';
-import EntityPage from 'src/common/components/EntityPage.vue';
+import {useEntityPage} from 'src/shared';
+import EntityPage from 'src/shared/components/EntityPage.vue';
 
 const NAMESPACE = 'appLanguage'
 

@@ -1,5 +1,5 @@
 import {useStore} from 'src/store';
-import {InitInstancePayload, PagingMode} from 'src/common';
+import {InitInstancePayload, PagingMode} from 'src/shared';
 import {computed} from 'vue';
 
 export function useEntityListPage(namespace: string, instanceKey: string) {

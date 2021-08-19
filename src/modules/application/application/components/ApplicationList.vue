@@ -25,8 +25,8 @@
 <script lang="ts">
 import {defineComponent} from 'vue';
 import {Application, ApplicationFilter} from 'src/modules/application';
-import {useEntityList} from 'src/common';
-import EntityList from "src/common/components/EntityList.vue";
+import {useEntityList} from 'src/shared';
+import EntityList from 'src/shared/components/EntityList.vue';
 
 const COLUMNS = [
   {

@@ -1,7 +1,7 @@
 import {ActionTree} from 'vuex';
 import {StateInterface} from 'src/store';
 import {PersonState} from './state';
-import {buildActions} from 'src/common';
+import {buildActions} from 'src/shared';
 import {personService} from '../../person.service';
 import {Person, PersonFilter} from 'src/modules/person';
 

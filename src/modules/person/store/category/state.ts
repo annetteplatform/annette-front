@@ -1,4 +1,4 @@
-import {Category, CategoryFilter, EntityState} from 'src/common';
+import {Category, CategoryFilter, EntityState} from 'src/shared';
 
 export const CATEGORY_DEFAULT_PAGE_SIZE = 10
 

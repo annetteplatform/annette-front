@@ -1,7 +1,7 @@
 import {ActionTree} from 'vuex';
 import {StateInterface} from 'src/store';
 import {OrgCategoryState} from './state';
-import {buildActions} from 'src/common';
+import {buildActions} from 'src/shared';
 import {OrgCategory, OrgCategoryFilter} from 'src/modules/org-structure';
 import {orgStructureService} from '../../org-structure.service'
 

@@ -105,11 +105,11 @@
 import {computed, defineComponent, ref} from 'vue';
 
 import {Application} from 'src/modules/application';
-import {TextCaption, TranslationCaption, useEntityPage} from 'src/common';
+import {TextCaption, TranslationCaption, useEntityPage} from 'src/shared';
 import TranslationSelector from 'src/modules/application/translation/components/TranslationSelector.vue';
 import {useStore} from 'src/store';
 import {useQuasar} from 'quasar';
-import EntityPage from 'src/common/components/EntityPage.vue';
+import EntityPage from 'src/shared/components/EntityPage.vue';
 
 export default defineComponent({
   name: 'ApplicationPage',

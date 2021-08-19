@@ -22,10 +22,10 @@
 
 <script lang="ts">
 import {defineComponent} from 'vue';
-import { useEntityListPage} from 'src/common';
+import { useEntityListPage} from 'src/shared';
 import PersonCategoryList from './components/PersonCategoryList.vue';
-import EntityListPage from 'src/common/components/EntityListPage.vue';
-import SimpleFilterForm from 'src/common/components/SimpleFilterForm.vue';
+import EntityListPage from 'src/shared/components/EntityListPage.vue';
+import SimpleFilterForm from 'src/shared/components/SimpleFilterForm.vue';
 
 const NAMESPACE = 'personCategory'
 const INSTANCE_KEY = 'categories'

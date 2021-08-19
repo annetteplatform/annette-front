@@ -1,4 +1,4 @@
-import {EntityState} from 'src/common';
+import {EntityState} from 'src/shared';
 import {Person, PersonFilter} from 'src/modules/person';
 
 export const PERSON_DEFAULT_PAGE_SIZE = 10

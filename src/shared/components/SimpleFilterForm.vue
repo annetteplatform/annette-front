@@ -28,7 +28,7 @@
 
 <script lang="ts">
 import {defineComponent, ref, toRefs, watch, PropType} from 'vue'
-import {SimpleFilter} from 'src/common';
+import {SimpleFilter} from 'src/shared';
 
 export default defineComponent({
   name: 'SimpleFilterForm',

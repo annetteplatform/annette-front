@@ -47,9 +47,9 @@
 import {defineComponent, ref} from 'vue';
 
 import {Translation} from 'src/modules/application';
-import {useEntityPage} from 'src/common';
+import {useEntityPage} from 'src/shared';
 import LanguageTranslationList from './components/LanguageTranslationList.vue';
-import EntityPage from "src/common/components/EntityPage.vue";
+import EntityPage from 'src/shared/components/EntityPage.vue';
 
 const NAMESPACE = 'appTranslation'
 

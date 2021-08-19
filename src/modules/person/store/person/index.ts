@@ -1,5 +1,5 @@
 export * from './state'
-import {buildGetters, buildMutations} from 'src/common';
+import {buildGetters, buildMutations} from 'src/shared';
 import {GetterTree, Module, MutationTree} from 'vuex';
 import {Person, PersonFilter} from 'src/modules/person';
 import {StateInterface} from 'src/store';

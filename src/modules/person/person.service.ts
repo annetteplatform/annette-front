@@ -1,5 +1,5 @@
 import axios from 'axios'
-import {Category, CategoryFilter, FindResult} from 'src/common'
+import {Category, CategoryFilter, FindResult} from 'src/shared'
 import {Person, PersonFilter} from 'src/modules/person/store';
 
 export const personService = {

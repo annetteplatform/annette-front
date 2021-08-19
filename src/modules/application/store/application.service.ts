@@ -1,5 +1,5 @@
 import axios from 'axios'
-import {FindResult} from 'src/common'
+import {FindResult} from 'src/shared'
 import {
   Application,
   ApplicationFilter,

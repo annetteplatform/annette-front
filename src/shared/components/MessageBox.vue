@@ -23,7 +23,7 @@
 
 <script lang="ts">
 import {defineComponent, PropType} from 'vue'
-import {AnnetteError} from 'src/common';
+import {AnnetteError} from 'src/shared';
 
 export default defineComponent({
   name: 'MessageBox',

@@ -1,4 +1,4 @@
-import {BaseEntity, Message, PagingMode} from 'src/common'
+import {BaseEntity, Message, PagingMode} from 'src/shared'
 
 export type InstanceMap<F> = { [key: string]: InstanceState<F> }
 export type EntityMap<E extends  BaseEntity> = { [key: string]: E }

@@ -1,5 +1,5 @@
 import axios from 'axios'
-import {CategoryFilter, FindResult} from 'src/common'
+import {CategoryFilter, FindResult} from 'src/shared'
 import {OrgCategory, OrgRole, OrgRoleFilter} from 'src/modules/org-structure/store';
 
 export const orgStructureService = {

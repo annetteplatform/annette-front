@@ -1,6 +1,6 @@
 import {ActionTree} from 'vuex';
 import {StateInterface} from 'src/store';
-import {buildActions} from 'src/common/store/actions';
+import {buildActions} from 'src/shared/store/actions';
 import {OrgRoleState} from './state';
 import {OrgRole, OrgRoleFilter} from 'src/modules/org-structure'
 import {orgStructureService} from '../../org-structure.service'

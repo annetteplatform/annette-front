@@ -1,4 +1,4 @@
-import {EntityState} from 'src/common';
+import {EntityState} from 'src/shared';
 import {OrgRole, OrgRoleFilter} from 'src/modules/org-structure';
 
 export const OrgRole_DEFAULT_PAGE_SIZE = 10

@@ -33,9 +33,9 @@
 
 <script lang="ts">
 import {defineComponent} from 'vue';
-import {useEntityList} from 'src/common';
+import {useEntityList} from 'src/shared';
 import {Person, PersonFilter} from 'src/modules/person';
-import EntityList from 'src/common/components/EntityList.vue';
+import EntityList from 'src/shared/components/EntityList.vue';
 
 const COLUMNS = [
   {

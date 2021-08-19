@@ -22,10 +22,10 @@
 
 <script lang="ts">
 import {defineComponent} from 'vue';
-import {useEntityListPage} from 'src/common';
+import {useEntityListPage} from 'src/shared';
 import LanguageList from './components/LanguageList.vue';
-import SimpleFilterForm from 'src/common/components/SimpleFilterForm.vue';
-import EntityListPage from 'src/common/components/EntityListPage.vue';
+import SimpleFilterForm from 'src/shared/components/SimpleFilterForm.vue';
+import EntityListPage from 'src/shared/components/EntityListPage.vue';
 
 const NAMESPACE = 'appLanguage'
 const INSTANCE_KEY = 'languages'

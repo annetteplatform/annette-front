@@ -1,7 +1,7 @@
 import {ActionTree} from 'vuex';
 import {StateInterface} from 'src/store';
 import {CategoryState} from './state';
-import {buildActions, Category, CategoryFilter} from 'src/common';
+import {buildActions, Category, CategoryFilter} from 'src/shared';
 import {personService} from '../../person.service';
 
 export const actions: ActionTree<CategoryState, StateInterface> = {

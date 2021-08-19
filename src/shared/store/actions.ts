@@ -15,7 +15,7 @@ import {ActionTree, Store} from 'vuex'
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import hash from 'object-hash'
-import {FindResult} from 'src/common';
+import {FindResult} from 'src/shared';
 
 export const UNCHANGED = 'unchanged'
 export const CHANGED = 'changed'

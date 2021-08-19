@@ -10,7 +10,7 @@ import {
   PagingMode,
   RemoveIdInLoadingPayload,
   SetPagePayload
-} from 'src/common';
+} from 'src/shared';
 import {MutationTree} from 'vuex';
 
 export function buildMutations<E extends BaseEntity, F>(

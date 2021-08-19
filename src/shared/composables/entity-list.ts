@@ -1,5 +1,5 @@
 import {useStore} from 'src/store';
-import {InstanceState} from 'src/common';
+import {InstanceState} from 'src/shared';
 import {computed, ComputedRef} from 'vue';
 import {useQuasar} from 'quasar';
 

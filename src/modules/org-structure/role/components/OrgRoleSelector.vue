@@ -31,7 +31,7 @@
 
 <script lang="ts">
 import {defineComponent, toRef} from 'vue';
-import {useEntitySelector} from 'src/common';
+import {useEntitySelector} from 'src/shared';
 import {OrgRole, OrgRoleFilter} from 'src/modules/org-structure';
 
 

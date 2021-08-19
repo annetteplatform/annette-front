@@ -1,5 +1,5 @@
 export * from './state'
-import {buildGetters, buildMutations, Category, CategoryFilter} from 'src/common';
+import {buildGetters, buildMutations, Category, CategoryFilter} from 'src/shared';
 import {GetterTree, Module, MutationTree} from 'vuex';
 import {StateInterface} from 'src/store';
 import {CATEGORY_DEFAULT_PAGE_SIZE, emptyCategoryFilter, CategoryState, categoryState} from './state';

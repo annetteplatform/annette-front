@@ -1,4 +1,4 @@
-import {EntityState} from 'src/common';
+import {EntityState} from 'src/shared';
 import {OrgCategory, OrgCategoryFilter} from 'src/modules/org-structure';
 
 export const CATEGORY_DEFAULT_PAGE_SIZE = 10

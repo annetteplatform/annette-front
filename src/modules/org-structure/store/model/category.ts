@@ -1,4 +1,4 @@
-import {AnnettePrincipal, BaseEntity, SortBy} from 'src/common';
+import {AnnettePrincipal, BaseEntity, SortBy} from 'src/shared';
 
 export interface OrgCategory extends BaseEntity{
   id: string,

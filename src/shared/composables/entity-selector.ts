@@ -1,6 +1,6 @@
 import {computed, ComputedRef, ref, watch} from 'vue';
 import {useStore} from 'src/store';
-import {InitInstancePayload, InstanceState, PagingMode} from 'src/common';
+import {InitInstancePayload, InstanceState, PagingMode} from 'src/shared';
 
 
 export function useEntitySelector<E, F>(

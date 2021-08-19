@@ -1,4 +1,4 @@
-import {EntityState, SimpleFilter} from 'src/common';
+import {EntityState, SimpleFilter} from 'src/shared';
 import {Language} from 'src/modules/application';
 
 export const LANGUAGE_DEFAULT_PAGE_SIZE = 10

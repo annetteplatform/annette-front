@@ -24,8 +24,8 @@
 
 <script lang="ts">
 import {defineComponent} from 'vue';
-import {Category, CategoryFilter, useEntityList} from 'src/common';
-import EntityList from 'src/common/components/EntityList.vue';
+import {Category, CategoryFilter, useEntityList} from 'src/shared';
+import EntityList from 'src/shared/components/EntityList.vue';
 
 const COLUMNS = [
   {

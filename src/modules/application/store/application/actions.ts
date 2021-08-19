@@ -2,7 +2,7 @@ import {ActionTree} from 'vuex';
 import {StateInterface} from 'src/store';
 import {Application, ApplicationFilter} from 'src/modules/application';
 import {applicationService} from 'src/modules/application/store/application.service';
-import {buildActions} from 'src/common/store/actions';
+import {buildActions} from 'src/shared/store/actions';
 import {ApplicationState} from './state';
 
 export const actions: ActionTree<ApplicationState, StateInterface> = {

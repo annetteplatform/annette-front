@@ -1,6 +1,6 @@
 import {Ref} from '@vue/reactivity';
 import {ref, watch} from 'vue';
-import {AnnetteError} from 'src/common';
+import {AnnetteError} from 'src/shared';
 import {RouteLocationNormalizedLoaded, useRoute} from 'vue-router';
 import hash from 'object-hash';
 import {useStore} from 'src/store';

@@ -34,10 +34,6 @@
 
 <script lang="ts">
 import {defineComponent} from 'vue';
-import {useStore} from 'src/store';
-import {useQuasar} from 'quasar';
-import { useEntityList} from 'src/common';
-import {OrgRole, OrgRoleFilter} from 'src/modules/org-structure';
 
 export default defineComponent({
   name: 'EntityList',

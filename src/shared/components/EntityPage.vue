@@ -24,10 +24,10 @@
 </template>
 
 <script lang="ts">
-import {defineComponent, PropType, ref} from 'vue';
+import {defineComponent, PropType} from 'vue';
 
-import MessageBox from 'src/common/components/MessageBox.vue';
-import {AnnetteError} from "src/common";
+import MessageBox from 'src/shared/components/MessageBox.vue';
+import {AnnetteError} from 'src/shared';
 
 export default defineComponent({
   name: 'EntityPage',

@@ -1,4 +1,4 @@
-import {AnnettePrincipal, BaseEntity, Caption} from 'src/common';
+import {AnnettePrincipal, BaseEntity, Caption} from 'src/shared';
 
 export interface Application extends BaseEntity {
   id: string,

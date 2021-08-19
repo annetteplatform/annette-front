@@ -1,6 +1,6 @@
 import { boot } from 'quasar/wrappers';
 import axios, { AxiosInstance } from 'axios';
-import {annetteErrorHandler} from 'src/common/services';
+import {annetteErrorHandler} from 'src/shared/services';
 
 declare module '@vue/runtime-core' {
   interface ComponentCustomProperties {

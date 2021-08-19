@@ -1,5 +1,5 @@
 import {GetterTree} from 'vuex'
-import {BaseEntity, EntityState, PagingMode, totalPages} from 'src/common';
+import {BaseEntity, EntityState, PagingMode, totalPages} from 'src/shared';
 
 export function buildGetters<E extends BaseEntity, F, R>(): GetterTree<EntityState<E, F>, R> {
   const getters: GetterTree<EntityState<E, F>, R> = {

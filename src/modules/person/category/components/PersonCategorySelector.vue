@@ -31,7 +31,7 @@
 
 <script lang="ts">
 import {defineComponent, toRef} from 'vue';
-import {Category, CategoryFilter, useEntitySelector} from 'src/common';
+import {Category, CategoryFilter, useEntitySelector} from 'src/shared';
 
 
 export default defineComponent({

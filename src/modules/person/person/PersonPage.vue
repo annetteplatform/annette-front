@@ -68,10 +68,10 @@
 <script lang="ts">
 import {defineComponent, ref} from 'vue';
 
-import {useEntityPage} from 'src/common';
+import {useEntityPage} from 'src/shared';
 import {Person} from 'src/modules/person';
 import PersonCategorySelector from 'src/modules/person/category/components/PersonCategorySelector.vue'
-import EntityPage from 'src/common/components/EntityPage.vue';
+import EntityPage from 'src/shared/components/EntityPage.vue';
 
 const NAMESPACE = 'personPerson';
 

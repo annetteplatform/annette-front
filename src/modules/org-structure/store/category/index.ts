@@ -1,6 +1,6 @@
 
 export * from './state'
-import {buildGetters, buildMutations} from 'src/common';
+import {buildGetters, buildMutations} from 'src/shared';
 import {GetterTree, Module, MutationTree} from 'vuex';
 import {StateInterface} from 'src/store';
 import {OrgCategory, OrgCategoryFilter} from 'src/modules/org-structure';

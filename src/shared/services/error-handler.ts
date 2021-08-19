@@ -1,4 +1,4 @@
-import {AnnetteError } from 'src/common';
+import {AnnetteError } from 'src/shared';
 
 
 

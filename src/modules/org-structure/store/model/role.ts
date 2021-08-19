@@ -1,4 +1,4 @@
-import {AnnettePrincipal, BaseEntity, SortBy} from 'src/common';
+import {AnnettePrincipal, BaseEntity, SortBy} from 'src/shared';
 
 export interface OrgRole extends BaseEntity{
   id: string,
