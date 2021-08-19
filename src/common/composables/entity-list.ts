@@ -1,10 +1,16 @@
 import {useStore} from 'src/store';
 import {InstanceState} from 'src/common';
 import {computed, ComputedRef} from 'vue';
+import {useQuasar} from 'quasar';
 
-export function useEntityList<E, F>(namespace: string, instanceKey: string) {
+export function useEntityList<E, F>(
+  namespace: string,
+  instanceKey: string,
+  deleteQuestion?: string
+) {
 
   const store = useStore()
+  const quasar = useQuasar()
 
   // eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-return,@typescript-eslint/no-unsafe-member-access
   const instance: ComputedRef<InstanceState<F>> = computed(() => store.getters[`${namespace}/instance`](instanceKey))
@@ -96,11 +102,29 @@ export function useEntityList<E, F>(namespace: string, instanceKey: string) {
     }
   }
 
+  const deleteEntity = (id: string) => {
+    quasar.notify({
+      type: 'negative',
+      message: deleteQuestion,
+      actions: [
+        {label: 'Cancel', color: 'white'},
+        {
+          label: 'Delete',
+          color: 'white',
+          handler: () => {
+            void store.dispatch(`${namespace}/deleteEntity`, id)
+          }
+        }
+      ]
+    })
+  }
+
   return {
     instance,
     items,
     pagination,
     onRequest,
+    deleteEntity
   };
 
 }

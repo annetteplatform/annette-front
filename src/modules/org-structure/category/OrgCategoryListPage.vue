@@ -27,7 +27,7 @@ import OrgCategoryList from './components/OrgCategoryList.vue';
 import SimpleFilterForm from 'src/common/components/SimpleFilterForm.vue';
 import EntityListPage from "src/common/components/EntityListPage.vue";
 
-const NAMESPACE = 'orgCategory';
+const NAMESPACE = 'orgCategory'
 const INSTANCE_KEY = 'categories'
 
 export default defineComponent({
