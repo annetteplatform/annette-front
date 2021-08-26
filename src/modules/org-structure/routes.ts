@@ -36,6 +36,18 @@ export const orgStructureRoutes: RouteRecordRaw[] = [
     name: 'orgStructure.role',
     component: () => import('src/modules/org-structure/role/OrgRolePage.vue'),
     meta: {requiresAuth: true}
+  },
+  {
+    path: 'org-structure/organizations',
+    name: 'orgStructure.organizations',
+    component: () => import('src/modules/org-structure/organization/OrganizationListPage.vue'),
+    meta: {requiresAuth: true}
+  },
+  {
+    path: 'org-structure/organization/:action/:id',
+    name: 'orgStructure.organization',
+    component: () => import('src/modules/org-structure/organization/OrganizationPage.vue'),
+    meta: {requiresAuth: true}
   }
 ]
 

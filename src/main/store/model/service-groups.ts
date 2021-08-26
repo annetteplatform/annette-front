@@ -82,7 +82,7 @@ export function serviceGroups(): ServiceGroup[] {
           icon: 'account_balance',
           title: 'Organizations',
           subtitle: 'Maintain organizations, hierarchies, person assignments to positions',
-          action: '/org-structure/organizations',
+          action: {name: 'orgStructure.organizations'},
         },
         {
           id: 'ORG_ROLES',

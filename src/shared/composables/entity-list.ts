@@ -102,6 +102,16 @@ export function useEntityList<E, F>(
     }
   }
 
+  const showErrorNotification = (message: string) => {
+    quasar.notify({
+      type: 'negative',
+      message,
+      actions: [
+        {label: 'Close', color: 'white'},
+      ]
+    })
+  }
+
   const deleteEntity = (id: string) => {
     quasar.notify({
       type: 'negative',
@@ -112,19 +122,24 @@ export function useEntityList<E, F>(
           label: 'Delete',
           color: 'white',
           handler: () => {
-            void store.dispatch(`${namespace}/deleteEntity`, id)
+            store.dispatch(`${namespace}/deleteEntity`, id)
+              // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+              .catch(ex => showErrorNotification(ex.code))
           }
         }
       ]
     })
   }
 
+
+
   return {
     instance,
     items,
     pagination,
     onRequest,
-    deleteEntity
+    deleteEntity,
+    showErrorNotification
   };
 
 }

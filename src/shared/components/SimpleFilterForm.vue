@@ -27,7 +27,7 @@
 </template>
 
 <script lang="ts">
-import {defineComponent, ref, toRefs, watch, PropType} from 'vue'
+import {defineComponent, PropType, ref, toRefs, watch} from 'vue'
 import {SimpleFilter} from 'src/shared';
 
 export default defineComponent({
@@ -37,6 +37,9 @@ export default defineComponent({
     filter: {
       type: Object as PropType<SimpleFilter>,
       required: true
+    },
+    emptyFilter: {
+      type: Function
     }
   },
   emits: ['filterChanged'],
@@ -44,11 +47,16 @@ export default defineComponent({
     const {filter} = toRefs(props)
     const expanded = ref(true)
 
-    const filterModel: any = ref({...props.filter} )
+    const filterModel: any = ref({...props.filter})
 
     const clearFilter = () => {
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-      filterModel.value = {filter: ''}
+      if (props.emptyFilter) {
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+        filterModel.value = props.emptyFilter()
+      } else {
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+        filterModel.value = {filter: ''}
+      }
     }
 
     const updateModel = (newFilter: any) => {

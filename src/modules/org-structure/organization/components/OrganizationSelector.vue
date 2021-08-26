@@ -32,25 +32,21 @@
 <script lang="ts">
 import {defineComponent, toRef} from 'vue';
 import {useEntitySelector} from 'src/shared';
-import {OrgCategory, OrgCategoryFilter} from 'src/modules/org-structure';
+import {emptyOrganizationFilter, OrgItem, OrgItemFilter} from 'src/modules/org-structure';
 
 
 export default defineComponent({
-  name: 'OrgCategorySelector',
+  name: 'OrganizationSelector',
   components: {},
   props: {
     label: {
       type: String,
       required: false,
-      default: 'Category'
+      default: 'Role'
     },
     modelValue: {
       type: String,
       required: true
-    },
-    type: {
-      type: String,
-      default: 'any'
     },
     readonly: {
       type: Boolean,
@@ -68,26 +64,12 @@ export default defineComponent({
 
     const valueRef = toRef(props, 'modelValue')
 
-    const type = toRef(props, 'type')
-
-    const fixedFilter = () => {
-      const filter = {
-        filter: '',
-        forOrganization: type.value === 'org' || type.value === 'any',
-        forUnit: type.value === 'unit' || type.value === 'any',
-        forPosition: type.value === 'position' || type.value === 'any'
-      }
-      return filter
-    }
-
-
-
-    const entitySelector = useEntitySelector<OrgCategory, OrgCategoryFilter>(
-      'orgCategory',
-      'CategorySelector',
+    const entitySelector = useEntitySelector<OrgItem, OrgItemFilter>(
+      'orgItem',
+      'OrganizationSelector',
       valueRef,
       emit,
-      fixedFilter
+      emptyOrganizationFilter
     )
 
 

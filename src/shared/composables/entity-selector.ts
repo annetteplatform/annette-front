@@ -8,16 +8,20 @@ export function useEntitySelector<E, F>(
   instanceKey: string,
   // @ts-ignore
   value,
-  emit: (event: 'update:modelValue', id: string) => void
+  emit: (event: 'update:modelValue', id: string) => void,
+  fixedFilterFn?: () => F
 ) {
   const store = useStore()
 
   // eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-member-access
   if (!store.getters[`${namespace}/instance`](instanceKey)) {
-    const initInstancePayload: InitInstancePayload<string> = {
+    const initInstancePayload: InitInstancePayload<F> = {
       key: instanceKey,
       mode: PagingMode.Range,
       pageSize: 20
+    }
+    if (fixedFilterFn) {
+      initInstancePayload.filter = fixedFilterFn()
     }
     void store.dispatch(`${namespace}/initInstance`, initInstancePayload)
   }
@@ -45,13 +49,14 @@ export function useEntitySelector<E, F>(
   }
 
   const setFilter = async (newFilter: string, update?: () => void) => {
+    let fixedFilter = {}
+    if (fixedFilterFn) fixedFilter = fixedFilterFn()
     await store.dispatch(
       `${namespace}/setFilter`,
       {
         key: instanceKey,
         filter: {
-          // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-          ...instance.value.filter,
+          ...fixedFilter,
           filter: newFilter
         }
       }
