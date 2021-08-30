@@ -1,6 +1,7 @@
 import {useStore} from 'src/store';
-import {InitInstancePayload, PagingMode} from 'src/shared';
+import {InitInstancePayload, InstanceState, PagingMode} from 'src/shared';
 import {computed} from 'vue';
+import {Ref} from '@vue/reactivity';
 
 export function useEntityListPage<F>(namespace: string, instanceKey: string, filter?: F) {
 
@@ -20,7 +21,7 @@ export function useEntityListPage<F>(namespace: string, instanceKey: string, fil
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-return,@typescript-eslint/no-unsafe-member-access
-  const instance = computed(() => store.getters[`${namespace}/instance`](instanceKey))
+  const instance:Ref<InstanceState<F>> = computed(() => store.getters[`${namespace}/instance`](instanceKey))
 
   const refreshList = () => {
     void store.dispatch(`${namespace}/refresh`, {key: instanceKey})

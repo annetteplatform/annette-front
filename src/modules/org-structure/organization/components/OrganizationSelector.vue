@@ -42,7 +42,7 @@ export default defineComponent({
     label: {
       type: String,
       required: false,
-      default: 'Role'
+      default: 'Organization'
     },
     modelValue: {
       type: String,

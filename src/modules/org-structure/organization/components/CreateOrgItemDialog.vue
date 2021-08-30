@@ -49,7 +49,7 @@
             <div class="row">
               <org-category-selector
                 :type="type"
-                label="Organization category"
+                label="Organizational category"
                 v-model="entityModel.categoryId"
                 :readonly="false"
               />
@@ -92,10 +92,9 @@ import {
 import {Ref} from '@vue/reactivity';
 import {useQuasar} from 'quasar';
 import {useStore} from 'src/store';
-import OrgCategorySelector from "src/modules/org-structure/category/components/OrgCategorySelector.vue";
+import OrgCategorySelector from 'src/modules/org-structure/category/components/OrgCategorySelector.vue';
+import {OnCreatedEvent} from 'src/modules/org-structure/organization/components/on-created-event';
 
-
-const NAMESPACE = 'orgItem'
 
 export default defineComponent({
   name: 'CreateOrgItemDialog',
@@ -161,10 +160,11 @@ export default defineComponent({
           externalId: entityModel.value.externalId || undefined
         }
         try {
-          const createdEntity = await store.dispatch(`${NAMESPACE}/createOrganization`, entity)
+          const createdEntity = await store.dispatch('orgItem/createOrganization', entity)
           emit('created', createdEntity)
           show.value = false
         } catch (ex) {
+          console.error(ex)
           // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
           showErrorNotification(ex.code)
         }
@@ -178,17 +178,23 @@ export default defineComponent({
           source: entityModel.value.source || undefined,
           externalId: entityModel.value.externalId || undefined
         }
+        let entities: OrgItem[]
         try {
-          const entities: OrgItem[] = await store.dispatch(`${NAMESPACE}/createUnit`, entity)
-          emit('created', {
-            parent: entities.find(e => e.id === entity.parentId),
-            child: entities.find(e => e.id === entity.unitId)
-          })
-          show.value = false
+          entities = await store.dispatch('orgItem/createUnit', entity)
         } catch (ex) {
+          console.error(ex)
           // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
           showErrorNotification(ex.code)
+          return
         }
+        const event: OnCreatedEvent = {
+          // @ts-ignore
+          parent: { ...entities.find(e => e.id === entity.parentId) },
+          // @ts-ignore
+          child: { ...entities.find(e => e.id === entity.unitId) }
+        }
+        emit('created', event)
+        show.value = false
       } else {
         const orgId = extractOrg(parentId.value)
         const entity: CreatePositionPayloadDto = {
@@ -201,17 +207,23 @@ export default defineComponent({
           source: entityModel.value.source || undefined,
           externalId: entityModel.value.externalId || undefined
         }
+        let entities: OrgItem[]
         try {
-          const entities: OrgItem[] = await store.dispatch(`${NAMESPACE}/createPosition`, entity)
-          emit('created', {
-            parent: entities.find(e => e.id === entity.parentId),
-            child: entities.find(e => e.id === entity.positionId)
-          })
-          show.value = false
+          entities = await store.dispatch('orgItem/createPosition', entity)
         } catch (ex) {
+          console.error(ex)
           // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
           showErrorNotification(ex.code)
+          return
         }
+        const event: OnCreatedEvent = {
+          // @ts-ignore
+          parent: { ...entities.find(e => e.id === entity.parentId) },
+          // @ts-ignore
+          child:{ ...entities.find(e => e.id === entity.positionId) }
+        }
+        emit('created', event)
+        show.value = false
       }
     }
 

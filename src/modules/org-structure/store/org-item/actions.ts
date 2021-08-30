@@ -40,15 +40,15 @@ export const actions: ActionTree<OrgItemState, StateInterface> = {
   },
 
   async createUnit({commit}, entity: CreateUnitPayloadDto) {
-    const newEntity = await orgStructureService.createUnit(entity)
-    commit('storeEntity', newEntity)
-    return newEntity
+    const entities = await orgStructureService.createUnit(entity)
+    commit('storeEntities', entities)
+    return entities
   },
 
   async createPosition({commit}, entity: CreatePositionPayloadDto) {
-    const newEntity = await orgStructureService.createPosition(entity)
-    commit('storeEntity', newEntity)
-    return newEntity
+    const entities = await orgStructureService.createPosition(entity)
+    commit('storeEntities', entities)
+    return entities
   },
 
   async updateName({commit}, payload: UpdateNamePayloadDto) {

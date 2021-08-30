@@ -180,6 +180,12 @@ export function buildActionsWithCustomLoad<E extends BaseEntity, F, R>(
       return entity
     },
 
+    async getEntitiesForEdit({commit}, ids: string[]) {
+      const entities = await getEntitiesById(ids, false)
+      commit('storeEntities', entities)
+      return entities
+    },
+
     async loadEntitiesIfNotExist ({ commit, state }, ids: string[]) {
       const entitiesToLoad: string[] = ids.filter(id => !state.entities[id])
       if (entitiesToLoad.length > 0) {

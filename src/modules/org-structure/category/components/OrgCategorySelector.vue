@@ -1,7 +1,6 @@
 <template>
   <q-select
     class="full-width"
-    dense
     :model-value="model"
     @update:model-value="select"
     use-input
@@ -79,8 +78,6 @@ export default defineComponent({
       }
       return filter
     }
-
-
 
     const entitySelector = useEntitySelector<OrgCategory, OrgCategoryFilter>(
       'orgCategory',

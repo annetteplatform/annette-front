@@ -29,7 +29,7 @@ import OrganizationList from './components/OrganizationList.vue';
 import SimpleFilterForm from 'src/shared/components/SimpleFilterForm.vue';
 import EntityListPage from 'src/shared/components/EntityListPage.vue';
 import {emptyOrganizationFilter, OrgItemFilter} from 'src/modules/org-structure';
-import CreateOrgItemDialog from "src/modules/org-structure/organization/components/CreateOrgItemDialog.vue";
+import CreateOrgItemDialog from 'src/modules/org-structure/organization/components/CreateOrgItemDialog.vue';
 
 const NAMESPACE = 'orgItem'
 const INSTANCE_KEY = 'organizations'
