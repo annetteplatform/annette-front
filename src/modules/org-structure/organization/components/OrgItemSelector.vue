@@ -67,7 +67,6 @@ export default defineComponent({
   emits: ['selected'],
   setup(props, {emit}) {
     const store = useStore()
-    const quasar = useQuasar()
 
     const show = ref(false)
     const id = ref('')

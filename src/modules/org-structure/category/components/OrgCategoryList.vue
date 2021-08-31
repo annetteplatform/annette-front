@@ -19,6 +19,8 @@
         <q-badge class="q-ml-sm" v-if="props.row.forPosition" outline color="accent" label="Position" />
       </q-td>
       <q-td auto-width>
+        <q-btn flat round color="green" size="sm" icon="far fa-eye"
+               :to="{ name: 'orgStructure.category', params: { action: 'view', id: props.row.id } }"/>
         <q-btn flat round color="blue" size="sm" icon="far fa-edit"
                :to="{ name: 'orgStructure.category', params: { action: 'edit', id: props.row.id } }"/>
         <q-btn flat round color="red" size="sm" icon="fas fa-trash" @click="deleteEntity(props.row.id)"/>

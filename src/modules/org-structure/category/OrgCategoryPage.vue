@@ -8,6 +8,14 @@
       <q-btn class="q-mr-md" outline color="primary"
              label="Categories"
              :to="{name: 'orgStructure.categories'}"/>
+      <q-btn v-if="action === 'edit'"
+             class="q-mr-md" outline color="primary"
+             label="View"
+             :to="{ name: 'orgStructure.category', params: { action: 'view', id } }"/>
+      <q-btn v-if="action === 'view'"
+             class="q-mr-md" outline color="primary"
+             label="Edit"
+             :to="{ name: 'orgStructure.category', params: { action: 'edit', id } }"/>
       <q-btn color="primary"
              v-if="entityModel"
              label="Save"
@@ -32,6 +40,7 @@
         <q-input class="col-md-12 col-sm-12 col-xs-12 "
                  v-model="entityModel.name"
                  :rules="[val => !!val || 'Field is required']"
+                 :readonly="action ==='view'"
                  ref="nameRef"
                  label="Name"/>
       </div>
@@ -42,16 +51,19 @@
         <q-checkbox
           class="col-md-12 col-sm-12 col-xs-12 q-pr-md"
           v-model="entityModel.forOrganization"
+          :disable="action ==='view'"
           label="Organization"
         />
         <q-checkbox
           class="col-md-12 col-sm-12 col-xs-12 q-pr-md"
           v-model="entityModel.forUnit"
+          :disable="action ==='view'"
           label="Unit"
         />
         <q-checkbox
           class="col-md-12 col-sm-12 col-xs-12 q-pr-md"
           v-model="entityModel.forPosition"
+          :disable="action ==='view'"
           label="Position"
         />
       </div>

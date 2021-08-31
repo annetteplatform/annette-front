@@ -1,7 +1,7 @@
 <template>
   <q-item dense>
     <q-item-section avatar>
-      <q-btn flat round icon="person" @click="openPerson" />
+      <q-btn flat round icon="person" @click="openPerson"/>
     </q-item-section>
     <q-item-section v-if="position">
       <q-item-label class="cursor-pointer" @click="openPosition">
@@ -19,12 +19,12 @@
 </template>
 
 <script lang="ts">
-import {computed, defineComponent, PropType, ref, toRef, watch} from 'vue';
-import OrgCategorySelector from 'src/modules/org-structure/category/components/OrgCategorySelector.vue';
+import {computed, defineComponent, ref, toRef, watch} from 'vue';
+import {useRouter} from 'vue-router'
 import {OrgItem, OrgPosition} from 'src/modules/org-structure';
-import {Ref} from "@vue/reactivity";
-import {Person} from "src/modules/person";
-import {useStore} from "src/store";
+import {Ref} from '@vue/reactivity';
+import {Person} from 'src/modules/person';
+import {useStore} from 'src/store';
 
 
 export default defineComponent({
@@ -36,9 +36,9 @@ export default defineComponent({
       required: true,
     }
   },
-  setup(props ) {
+  setup(props) {
     const store = useStore()
-    // const router = useRouter()
+    const router = useRouter()
 
     const positionIdProp = toRef(props, 'positionId')
 
@@ -54,13 +54,14 @@ export default defineComponent({
       await store.dispatch('orgItem/loadEntitiesIfNotExist', [posId])
       // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
       position.value = entities.value[posId]
-      console.log(position.value)
+      // @ts-ignore
       const len = position.value.rootPath.length
+      // @ts-ignore
       const hierarchyIds: string[] = position.value.rootPath.slice(0, len - 1)
-      const items: OrgItems[] = await store.dispatch('orgItem/loadEntitiesIfNotExist', hierarchyIds)
+      const items: OrgItem[] = await store.dispatch('orgItem/loadEntitiesIfNotExist', hierarchyIds)
       hierarchy.value = items.map((item: OrgItem) => item.name).join(' / ')
-      if (position.value.persons.length === 1) {
-        const persons: Person[] = await store.dispatch('personPerson/loadEntitiesIfNotExist',[position.value.persons[0]])
+      if (position.value && position.value.persons.length === 1) {
+        const persons: Person[] = await store.dispatch('personPerson/loadEntitiesIfNotExist', [position.value.persons[0]])
         console.log(persons)
         if (persons && persons[0]) {
           person.value = persons[0]
@@ -73,13 +74,18 @@ export default defineComponent({
     }
 
     const openPosition = () => {
-      // router.push({name: 'organization', params: {action: 'view', id: position.value.orgId}})
-      //   .catch(err => console.error(err))
+      if (position.value) {
+        // @ts-ignore
+        router.push({name: 'organization.organization', params: {action: 'view', id: position.value.orgId}})
+          .catch(err => console.error(err))
+      }
     }
 
-    const openPerson = () =>  {
-      // router.push({name: 'person', params: {action: 'view', id: person.value.id}})
-      //   .catch(err => console.error(err))
+    const openPerson = () => {
+      if (person.value) {
+        router.push({name: 'person.person', params: {action: 'view', id: person.value.id}})
+          .catch(err => console.error(err))
+      }
     }
 
     void loadPosition(props.positionId)

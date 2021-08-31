@@ -8,6 +8,14 @@
       <q-btn class="q-mr-md" outline color="primary"
              label="Persons"
              :to="{name: 'person.persons'}"/>
+      <q-btn class="q-mr-md" outline color="primary"
+             v-if="action === 'edit'"
+             label="View"
+             :to="{name: 'person.person', params: { action: 'view', id}}"/>
+      <q-btn class="q-mr-md" outline color="primary"
+             v-if="action === 'view'"
+             label="Edit"
+             :to="{name: 'person.person', params: { action: 'edit', id}}"/>
       <q-btn color="primary"
              v-if="entityModel"
              label="Save"
@@ -20,7 +28,7 @@
               v-if="saved && ! changed()"/>
     </template>
     <template v-slot:default>
-      <div class="row q-pb-md">
+      <div class="row">
         <q-input class="col-md-4 col-sm-12 col-xs-12 "
                  v-model="entityModel.id"
                  :rules="[val => !!val || 'Field is required']"
@@ -32,20 +40,24 @@
         <q-input class="col-md-4 col-sm-12 col-xs-12 q-pr-md"
                  v-model="entityModel.lastname"
                  :rules="[val => !!val || 'Field is required']"
+                 :readonly="action ==='view'"
                  ref="lastnameRef"
                  label="Lastname"/>
         <q-input class="col-md-4 col-sm-12 col-xs-12 q-pr-md"
                  v-model="entityModel.firstname"
                  :rules="[val => !!val || 'Field is required']"
+                 :readonly="action ==='view'"
                  ref="firstnameRef"
                  label="Firstname"/>
         <q-input class="col-md-4 col-sm-12 col-xs-12 "
                  v-model="entityModel.middlename"
+                 :readonly="action ==='view'"
                  label="Middlename"/>
       </div>
 
       <div class="row">
-        <person-category-selector v-model="entityModel.categoryId"/>
+        <person-category-selector v-model="entityModel.categoryId"
+                                  :readonly="action ==='view'"/>
       </div>
 
       <div class="row">
@@ -53,12 +65,14 @@
           class="col-md-5 col-sm-12 col-xs-12 q-pr-md "
           type="email"
           v-model="entityModel.email"
+          :readonly="action ==='view'"
           label="Email"
         />
 
         <q-input
           class="col-md-4 col-sm-12 col-xs-12 q-pr-md "
           v-model="entityModel.phone"
+          :readonly="action ==='view'"
           label="Phone number "/>
       </div>
     </template>

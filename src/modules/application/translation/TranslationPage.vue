@@ -8,6 +8,14 @@
       <q-btn class="q-mr-md" outline color="primary"
              label="Translations"
              :to="{name: 'application.translations'}"/>
+      <q-btn v-if="action === 'edit'"
+             class="q-mr-md" outline color="primary"
+             label="View"
+             :to="{ name: 'application.translation', params: { action: 'view', id } }"/>
+      <q-btn v-if="action === 'view'"
+             class="q-mr-md" outline color="primary"
+             label="Edit"
+             :to="{ name: 'application.translation', params: { action: 'edit', id } }"/>
       <q-btn color="primary"
              v-if="entityModel"
              label="Save"
@@ -32,12 +40,13 @@
         <q-input class="col-md-12 col-sm-12 col-xs-12 "
                  v-model="entityModel.name"
                  :rules="[val => !!val || 'Field is required']"
+                 :readonly="action ==='view'"
                  ref="nameRef"
                  label="Name"/>
       </div>
 
       <div class="row">
-        <language-translation-list v-if="action === 'edit'" :translation-id="id"/>
+        <language-translation-list v-if="action !== 'create'" :translation-id="id" :readonly="action ==='view'"/>
       </div>
     </template>
   </entity-page>

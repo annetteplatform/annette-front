@@ -1,6 +1,6 @@
 import {computed, ComputedRef, ref, watch} from 'vue';
 import {useStore} from 'src/store';
-import {InitInstancePayload, InstanceState, PagingMode} from 'src/shared';
+import {InitInstancePayload, InstanceState, PagingMode, SetFilterPayload} from 'src/shared';
 
 
 export function useEntitySelector<E, F>(
@@ -24,7 +24,15 @@ export function useEntitySelector<E, F>(
       initInstancePayload.filter = fixedFilterFn()
     }
     void store.dispatch(`${namespace}/initInstance`, initInstancePayload)
+  } else if (fixedFilterFn) {
+    const setFilterPayload: SetFilterPayload<F> = {
+      key: instanceKey,
+      filter: fixedFilterFn()
+    }
+    void store.dispatch(`${namespace}/setFilter`, setFilterPayload)
+
   }
+
 
   // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
   const model = ref(value.value)

@@ -8,11 +8,11 @@
       <q-btn class="q-mr-md" outline color="primary"
              label="Organizations"
              :to="{name: 'orgStructure.organizations'}"/>
-      <q-btn v-if="action !== 'view'"
+      <q-btn v-if="action === 'edit'"
              class="q-mr-md" outline color="primary"
              label="View"
              :to="{ name: 'orgStructure.organization', params: { action: 'view', id } }"/>
-      <q-btn v-if="action !== 'edit'"
+      <q-btn v-if="action === 'view'"
              class="q-mr-md" outline color="primary"
              label="Edit"
              :to="{ name: 'orgStructure.organization', params: { action: 'edit', id } }"/>

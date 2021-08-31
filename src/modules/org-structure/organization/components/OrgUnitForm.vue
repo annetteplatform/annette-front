@@ -29,12 +29,17 @@
       </div>
 
       <div class="row">
-        <org-category-selector
-          :type="unitType"
-          label="Organizational category"
-          :model-value="entity.categoryId"
-          @update:model-value="assignCategory"
-          :readonly="action === 'view'"
+        <organization-category-selector v-if="unitType === 'org'"
+                                        label="Organizational category"
+                                        :model-value="entity.categoryId"
+                                        @update:model-value="assignCategory"
+                                        :readonly="action === 'view'"
+        />
+        <org-unit-category-selector v-if="unitType === 'unit'"
+                                    label="Organizational category"
+                                    :model-value="entity.categoryId"
+                                    @update:model-value="assignCategory"
+                                    :readonly="action === 'view'"
         />
       </div>
 
@@ -43,9 +48,9 @@
           <q-item-label header>Chief</q-item-label>
           <q-item>
             <q-item-section>
-<!--              <pre>-->
-<!--{{ entity.chief }}-->
-<!--              </pre>-->
+              <!--              <pre>-->
+              <!--{{ entity.chief }}-->
+              <!--              </pre>-->
               <position-view-field v-if="entity.chief" :position-id="entity.chief"/>
               <div v-else class="text-grey-8">Not assigned</div>
             </q-item-section>
@@ -87,10 +92,10 @@
         />
       </div>
 
-<!--      <updated-fields-->
-<!--        v-if="entity.updatedAt && entity.updatedBy"-->
-<!--        :updated-at="entity.updatedAt"-->
-<!--        :updated-by="entity.updatedBy"/>-->
+      <!--      <updated-fields-->
+      <!--        v-if="entity.updatedAt && entity.updatedBy"-->
+      <!--        :updated-at="entity.updatedAt"-->
+      <!--        :updated-by="entity.updatedBy"/>-->
 
     </div>
 
@@ -99,18 +104,23 @@
 
 <script lang="ts">
 import {computed, defineComponent, PropType, ref, toRef} from 'vue';
-import OrgCategorySelector from 'src/modules/org-structure/category/components/OrgCategorySelector.vue';
 import {useOrgItemForm} from './org-item-form';
 import {Ref} from '@vue/reactivity';
 import {AssignChiefPayloadDto, OrgItem, UnassignChiefPayloadDto} from 'src/modules/org-structure';
 import {useStore} from 'src/store';
 import OrgItemSelector from './OrgItemSelector.vue';
-import PositionViewField from "src/modules/org-structure/organization/components/PositionViewField.vue";
+import PositionViewField from 'src/modules/org-structure/organization/components/PositionViewField.vue';
+import OrganizationCategorySelector
+  from 'src/modules/org-structure/category/components/OrganizationCategorySelector.vue';
+import OrgUnitCategorySelector from 'src/modules/org-structure/category/components/OrgUnitCategorySelector.vue';
 
 
 export default defineComponent({
   name: 'OrgUnitForm',
-  components: {PositionViewField, OrgItemSelector, OrgCategorySelector},
+  components: {
+    OrgUnitCategorySelector,
+    OrganizationCategorySelector, PositionViewField, OrgItemSelector
+  },
   props: {
     action: {
       type: String,
@@ -125,19 +135,16 @@ export default defineComponent({
   setup(props, {emit}) {
     const store = useStore()
 
-    const unitType = computed( () => props.entity.parentId === 'ROOT' ? 'org' : 'unit' )
+    const unitType = computed(() => props.entity.parentId === 'ROOT' ? 'org' : 'unit')
     const entity: Ref<OrgItem> = toRef(props, 'entity')
 
     const orgItemForm = useOrgItemForm(entity, emit)
 
-
     const orgItemSelector = ref()
-
-
 
     const selectChief = () => {
       // eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-member-access
-      orgItemSelector.value.showDialog(entity.value.id, 'position')
+      orgItemSelector.value.showDialog(entity.value.orgId, 'position')
     }
 
     const assignChief = (chiefId: string) => {

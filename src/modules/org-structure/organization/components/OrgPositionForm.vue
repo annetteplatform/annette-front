@@ -2,7 +2,7 @@
   <div class="q-ma-md full-width ">
 
     <div class="q-gutter-md" v-if="entity">
-      <div class="row text-subtitle1" >
+      <div class="row text-subtitle1">
         Position
       </div>
       <div class="row">
@@ -26,8 +26,7 @@
       </div>
 
       <div class="row">
-        <org-category-selector
-          :type="unitType"
+        <org-position-category-selector
           label="Organizational category"
           :model-value="entity.categoryId"
           @update:model-value="assignCategory"
@@ -57,10 +56,10 @@
         />
       </div>
 
-<!--      <updated-fields-->
-<!--        v-if="entity.updatedAt && entity.updatedBy"-->
-<!--        :updated-at="entity.updatedAt"-->
-<!--        :updated-by="entity.updatedBy"/>-->
+      <!--      <updated-fields-->
+      <!--        v-if="entity.updatedAt && entity.updatedBy"-->
+      <!--        :updated-at="entity.updatedAt"-->
+      <!--        :updated-by="entity.updatedBy"/>-->
 
     </div>
 
@@ -68,16 +67,16 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType, toRef} from 'vue';
-import OrgCategorySelector from 'src/modules/org-structure/category/components/OrgCategorySelector.vue';
+import {defineComponent, PropType, toRef} from 'vue';
 import {useOrgItemForm} from './org-item-form';
 import {Ref} from '@vue/reactivity';
 import {OrgItem} from 'src/modules/org-structure';
+import OrgPositionCategorySelector from 'src/modules/org-structure/category/components/OrgPositionCategorySelector.vue';
 
 
 export default defineComponent({
   name: 'OrgPositionForm',
-  components: {OrgCategorySelector},
+  components: {OrgPositionCategorySelector},
   props: {
     action: {
       type: String,

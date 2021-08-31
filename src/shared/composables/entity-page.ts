@@ -27,21 +27,27 @@ export function useEntityPage<T>(
     if (!newRoute.params.action) return {}
     action.value = typeof newRoute.params.action === 'string' ? newRoute.params.action : newRoute.params.action[0]
     id.value = typeof newRoute.params.id === 'string' ? newRoute.params.id : newRoute.params.id[0]
-    if (action.value === 'edit') {
+    if (action.value === 'create') {
+      const entity = emptyEntity()
+      // @ts-ignore
+      entityModel.value = {...entity}
+      // @ts-ignore
+      originEntity.value = {...entity}
+    } else {
       try {
-        const entity = await store.dispatch(`${namespace}/getEntityForEdit`, id.value)
+        let entity: T
+         if (action.value === 'view') {
+           const entities: T[] = await store.dispatch(`${namespace}/loadEntitiesIfNotExist`, [id.value])
+           entity = entities[0]
+         } else {
+           entity = await store.dispatch(`${namespace}/getEntityForEdit`, id.value)
+         }
         entityModel.value = {...entity}
         originEntity.value = {...entity}
         error.value = null
       } catch (ex) {
         error.value = ex
       }
-    } else if (action.value === 'create') {
-      const entity = emptyEntity()
-      // @ts-ignore
-      entityModel.value = {...entity}
-      // @ts-ignore
-      originEntity.value = {...entity}
     }
   }
 

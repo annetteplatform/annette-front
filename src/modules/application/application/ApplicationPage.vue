@@ -8,6 +8,14 @@
       <q-btn class="q-mr-md" outline color="primary"
              label="Applications"
              :to="{name: 'application.applications'}"/>
+      <q-btn v-if="action === 'edit'"
+             class="q-mr-md" outline color="primary"
+             label="View"
+             :to="{ name: 'application.application', params: { action: 'view', id } }"/>
+      <q-btn v-if="action === 'view'"
+             class="q-mr-md" outline color="primary"
+             label="Edit"
+             :to="{ name: 'application.application', params: { action: 'edit', id } }"/>
       <q-btn color="primary"
              v-if="entityModel"
              label="Save"
@@ -32,6 +40,7 @@
         <q-input class="col-md-12 col-sm-12 col-xs-12 "
                  v-model="entityModel.name"
                  :rules="[val => !!val || 'Field is required']"
+                 :readonly="action ==='view'"
                  ref="nameRef"
                  label="Name"/>
       </div>
@@ -43,6 +52,7 @@
           :model-value="entityModel.caption.type"
           @update:model-value="changeCaptionType"
           :options="captionTypes"
+          :disable="action ==='view'"
           color="primary"
           inline
         />
@@ -51,20 +61,22 @@
            v-if="entityModel.caption.type === 'TextCaption'">
         <q-input class="col-md-12 col-sm-12 col-xs-12 "
                  v-model="entityModel.caption.text"
+                 :readonly="action ==='view'"
                  label="Text caption"/>
       </div>
       <div class="row q-pb-md"
            v-else>
         <q-input class="col-md-12 col-sm-12 col-xs-12 "
                  v-model="entityModel.caption.translationId"
+                 :readonly="action ==='view'"
                  label="Translation caption"/>
       </div>
 
       <div class="row full-width q-pb-md">
         <q-list bordered class="full-width" separator>
-          <q-item>
-            <q-item-section>
-              <translation-selector v-model="newTranslation" label="Translation"/>
+          <q-item v-if="action !=='view'">
+            <q-item-section >
+              <translation-selector v-model="newTranslation" label="Translation" />
             </q-item-section>
             <q-item-section avatar>
               <q-btn class="float-left" round dense flat color="primary" icon="add"
@@ -86,6 +98,7 @@
 
             <q-item-section side>
               <q-btn flat round color="red" size="sm" icon="fas fa-trash"
+                     v-if="action !=='view'"
                      @click="deleteTranslation(translation)"/>
             </q-item-section>
           </q-item>
@@ -95,6 +108,7 @@
       <div class="row q-pb-md">
         <q-input class="col-md-12 col-sm-12 col-xs-12 "
                  v-model="entityModel.serverUrl"
+                 :readonly="action ==='view'"
                  label="Server URL"/>
       </div>
     </template>

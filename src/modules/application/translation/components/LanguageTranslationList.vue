@@ -2,11 +2,11 @@
   <div class="full-width">
     <div class="row full-width">
       <q-list bordered class="full-width" separator>
-        <q-item >
+        <q-item v-if="!readonly">
           <q-item-section>
             <language-selector v-model="newLanguage" label="Language"/>
           </q-item-section>
-          <q-item-section avatar>
+          <q-item-section avatar >
             <q-btn class="float-left" round dense flat color="primary" icon="add"
                    @click="addLanguage(newLanguage)"
                    :disable="newLanguage === ''"
@@ -29,9 +29,14 @@
 
           <q-item-section side>
             <div>
+              <q-btn flat round color="green" size="sm" icon="far fa-eye"
+                     v-if="readonly"
+                     @click="editLanguage(language)"/>
               <q-btn flat round color="blue" size="sm" icon="far fa-edit"
+                     v-if="!readonly"
                      @click="editLanguage(language)"/>
               <q-btn flat round color="red" size="sm" icon="fas fa-trash"
+                     v-if="!readonly"
                      @click="deleteLanguage(language)"/>
             </div>
           </q-item-section>
@@ -52,13 +57,17 @@
         <q-card-section class="col q-pt-none full-height translation-json">
           <q-input outlined class="full-height"
                    v-model="translationJsonText"
+                   :readonly="readonly"
                    type="textarea"
           />
         </q-card-section>
 
         <q-card-actions align="right" class="bg-white">
-          <q-btn flat label="Cancel" @click="closeDialog"/>
-          <q-btn class="q-mr-md" label="Save" color="primary" @click="saveJson"/>
+          <q-btn flat class="q-mr-md" label="Cancel"
+                 @click="closeDialog"/>
+          <q-btn class="q-mr-md" label="Save" color="primary"
+                 v-if="!readonly"
+                 @click="saveJson"/>
         </q-card-actions>
       </q-card>
     </q-dialog>
@@ -80,6 +89,10 @@ export default defineComponent({
     translationId: {
       type: String,
       required: true
+    },
+    readonly: {
+      type: Boolean,
+      default: false
     }
   },
   setup(props) {
