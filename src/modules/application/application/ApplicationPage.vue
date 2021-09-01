@@ -128,7 +128,11 @@ import EntityPage from 'src/shared/components/EntityPage.vue';
 export default defineComponent({
   name: 'ApplicationPage',
   components: {EntityPage, TranslationSelector},
-  setup() {
+  props: {
+    id: String,
+    action: String
+  },
+  setup(props) {
     const idRef = ref()
     const nameRef = ref()
 
@@ -156,6 +160,7 @@ export default defineComponent({
         }
       },
       formHasError,
+      props
     )
 
     const captionTypes = [

@@ -92,6 +92,7 @@ function convertCategory(rawCategory: Category): Category {
 
 function convertPerson(rawPerson: Person): Person {
   const person: Person = {...rawPerson}
+  person.fullname = `${person.lastname} ${person.firstname}`
   if (rawPerson.updatedAt) {
     person.updatedAt = new Date(rawPerson.updatedAt)
   }

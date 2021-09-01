@@ -67,7 +67,11 @@ const NAMESPACE = 'orgRole'
 export default defineComponent({
   name: 'OrgRolePage',
   components: {EntityPage},
-  setup() {
+  props: {
+    id: String,
+    action: String
+  },
+  setup(props) {
     const idRef = ref()
     const nameRef = ref()
 
@@ -90,6 +94,7 @@ export default defineComponent({
         }
       },
       formHasError,
+      props
     )
 
     return {

@@ -12,7 +12,7 @@
     :label="label"
     :options="items"
     option-value="id"
-    option-label="name"
+    option-label="fullname"
     emit-value
     map-options
     clearable

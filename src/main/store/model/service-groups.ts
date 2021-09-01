@@ -58,6 +58,7 @@ export function serviceGroups(): ServiceGroup[] {
           subtitle: 'Maintain person categories',
           action: {name: 'person.categories'},
         },
+
         // {
         //   id: 'PROFILE',
         //   order: 20,
@@ -84,15 +85,7 @@ export function serviceGroups(): ServiceGroup[] {
           subtitle: 'Maintain organizations, hierarchies, person assignments to positions',
           action: {name: 'orgStructure.organizations'},
         },
-        {
-          id: 'ORG_ROLES',
-          order: 20,
-          icon: 'local_offer',
-          title: 'Organizational roles',
-          subtitle: 'Maintain organizational roles',
-          action: {name: 'orgStructure.roles'},
-          actionName: 'View'
-        },
+
         {
           id: 'ORG_CATEGORIES',
           order: 20,
@@ -100,7 +93,16 @@ export function serviceGroups(): ServiceGroup[] {
           title: 'Org. categories',
           subtitle: 'Maintain org. categories',
           action: {name: 'orgStructure.categories'},
-        }
+        },
+        {
+          id: 'ORG_ROLES',
+          order: 30,
+          icon: 'local_offer',
+          title: 'Organizational roles',
+          subtitle: 'Maintain organizational roles',
+          action: {name: 'orgStructure.roles'},
+          actionName: 'View'
+        },
       ]
     },
     {

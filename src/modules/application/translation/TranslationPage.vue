@@ -65,7 +65,11 @@ const NAMESPACE = 'appTranslation'
 export default defineComponent({
   name: 'TranslationPage',
   components: {EntityPage, LanguageTranslationList},
-  setup() {
+  props: {
+    id: String,
+    action: String
+  },
+  setup(props) {
     const idRef = ref()
     const nameRef = ref()
 
@@ -84,6 +88,7 @@ export default defineComponent({
         return {id: '', name: ''}
       },
       formHasError,
+      props
     )
 
     return {

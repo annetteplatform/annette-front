@@ -23,6 +23,7 @@ export const orgStructureRoutes: RouteRecordRaw[] = [
     path: 'org-structure/category/:action/:id',
     name: 'orgStructure.category',
     component: () => import('src/modules/org-structure/category/OrgCategoryPage.vue'),
+    props: (route) => ({ id: String(route.params.id),  action: String(route.params.action),}),
     meta: {requiresAuth: true}
   },
   {
@@ -35,6 +36,7 @@ export const orgStructureRoutes: RouteRecordRaw[] = [
     path: 'org-structure/role/:action/:id',
     name: 'orgStructure.role',
     component: () => import('src/modules/org-structure/role/OrgRolePage.vue'),
+    props: (route) => ({ id: String(route.params.id),  action: String(route.params.action),}),
     meta: {requiresAuth: true}
   },
   {
@@ -47,6 +49,7 @@ export const orgStructureRoutes: RouteRecordRaw[] = [
     path: 'org-structure/organization/:action/:id',
     name: 'orgStructure.organization',
     component: () => import('src/modules/org-structure/organization/OrganizationPage.vue'),
+    props: (route) => ({ id: String(route.params.id),  action: String(route.params.action),}),
     meta: {requiresAuth: true}
   }
 ]

@@ -59,7 +59,6 @@ import {OrgItem, OrgUnit} from 'src/modules/org-structure';
 import {Ref} from '@vue/reactivity';
 import {useStore} from 'src/store';
 import {orgItemToOrgNode, OrgNode} from './org-node';
-import {useQuasar} from 'quasar';
 
 export default defineComponent({
   name: 'OrgItemSelector',

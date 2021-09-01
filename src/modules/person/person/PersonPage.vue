@@ -92,7 +92,11 @@ const NAMESPACE = 'personPerson';
 export default defineComponent({
   name: 'PersonPage',
   components: {EntityPage, PersonCategorySelector},
-  setup() {
+  props: {
+    id: String,
+    action: String
+  },
+  setup(props) {
     const idRef = ref()
     const lastnameRef = ref()
     const firstnameRef = ref()
@@ -125,6 +129,7 @@ export default defineComponent({
         }
       },
       formHasError,
+      props
     )
 
     return {

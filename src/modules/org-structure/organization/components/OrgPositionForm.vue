@@ -35,6 +35,14 @@
       </div>
 
       <div class="row">
+        <person-assignment-form :entity="entity" :readonly="action === 'view'" />
+      </div>
+
+      <div class="row">
+        <org-role-assignment-form :entity="entity" :readonly="action === 'view'" />
+      </div>
+
+      <div class="row">
         <q-input
           class="col-md-12 col-sm-12 col-xs-12 q-pr-md"
           debounce="500"
@@ -72,11 +80,13 @@ import {useOrgItemForm} from './org-item-form';
 import {Ref} from '@vue/reactivity';
 import {OrgItem} from 'src/modules/org-structure';
 import OrgPositionCategorySelector from 'src/modules/org-structure/category/components/OrgPositionCategorySelector.vue';
+import PersonAssignmentForm from './PersonAssignmentForm.vue';
+import OrgRoleAssignmentForm from './OrgRoleAssignmentForm.vue';
 
 
 export default defineComponent({
   name: 'OrgPositionForm',
-  components: {OrgPositionCategorySelector},
+  components: {OrgRoleAssignmentForm, PersonAssignmentForm, OrgPositionCategorySelector},
   props: {
     action: {
       type: String,

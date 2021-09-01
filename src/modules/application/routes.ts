@@ -11,6 +11,7 @@ export const applicationRoutes: RouteRecordRaw[] = [
     path: 'application/application/:action/:id',
     name: 'application.application',
     component: () => import('src/modules/application/application/ApplicationPage.vue'),
+    props: (route) => ({ id: String(route.params.id),  action: String(route.params.action),}),
     meta: {requiresAuth: true}
   },
   {
@@ -23,6 +24,7 @@ export const applicationRoutes: RouteRecordRaw[] = [
     path: 'application/language/:action/:id',
     name: 'application.language',
     component: () => import('src/modules/application/language/LanguagePage.vue'),
+    props: (route) => ({ id: String(route.params.id),  action: String(route.params.action),}),
     meta: {requiresAuth: true}
   },
   {
@@ -35,6 +37,7 @@ export const applicationRoutes: RouteRecordRaw[] = [
     path: 'application/translation/:action/:id',
     name: 'application.translation',
     component: () => import('src/modules/application/translation/TranslationPage.vue'),
+    props: (route) => ({ id: String(route.params.id),  action: String(route.params.action),}),
     meta: {requiresAuth: true}
   },
 ]

@@ -62,7 +62,6 @@ export default defineComponent({
       hierarchy.value = items.map((item: OrgItem) => item.name).join(' / ')
       if (position.value && position.value.persons.length === 1) {
         const persons: Person[] = await store.dispatch('personPerson/loadEntitiesIfNotExist', [position.value.persons[0]])
-        console.log(persons)
         if (persons && persons[0]) {
           person.value = persons[0]
         } else {

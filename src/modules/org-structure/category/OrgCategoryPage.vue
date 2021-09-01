@@ -82,7 +82,11 @@ const NAMESPACE = 'orgCategory';
 export default defineComponent({
   name: 'OrgCategoryPage',
   components: {EntityPage},
-  setup() {
+  props: {
+    id: String,
+    action: String
+  },
+  setup(props) {
     const idRef = ref()
     const nameRef = ref()
 
@@ -107,6 +111,7 @@ export default defineComponent({
         }
       },
       formHasError,
+      props
     )
 
     return {

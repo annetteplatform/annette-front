@@ -11,6 +11,7 @@ export const personRoutes: RouteRecordRaw[] = [
     path: 'person/person/:action/:id',
     name: 'person.person',
     component: () => import('src/modules/person/person/PersonPage.vue'),
+    props: (route) => ({ id: String(route.params.id),  action: String(route.params.action),}),
     meta: {requiresAuth: true}
   },
   {
@@ -23,6 +24,7 @@ export const personRoutes: RouteRecordRaw[] = [
     path: 'person/category/:action/:id',
     name: 'person.category',
     component: () => import('src/modules/person/category/PersonCategoryPage.vue'),
+    props: (route) => ({ id: String(route.params.id),  action: String(route.params.action),}),
     meta: {requiresAuth: true}
   }
 ]

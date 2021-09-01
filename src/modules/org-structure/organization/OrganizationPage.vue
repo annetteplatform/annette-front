@@ -19,9 +19,9 @@
 
     </template>
     <template v-slot:status>
-      <div class="q-ml-md q-mr-md">
-        <q-chip outline square color="green" text-color="white" label="Some status info"/>
-      </div>
+<!--      <div class="q-ml-md q-mr-md">-->
+<!--        <q-chip outline square color="green" text-color="white" label="Some status info"/>-->
+<!--      </div>-->
     </template>
     <template v-slot:default>
       <div class="q-ml-md q-mr-md "
@@ -97,13 +97,12 @@
 </template>
 
 <script lang="ts">
-import {computed, defineComponent, ref, watch} from 'vue';
+import {computed, defineComponent, ref, toRefs, watch} from 'vue';
 
 import {OrgItem, OrgUnit} from 'src/modules/org-structure';
 import EntityPage from 'src/shared/components/EntityPage.vue';
 import {Ref} from '@vue/reactivity';
 import {useStore} from 'src/store';
-import {RouteLocationNormalizedLoaded, useRoute} from 'vue-router';
 import {OnCreatedEvent} from './components/on-created-event';
 import CreateOrgItemDialog from './components/CreateOrgItemDialog.vue';
 import OrgUnitForm from './components/OrgUnitForm.vue';
@@ -114,13 +113,18 @@ import {useQuasar} from 'quasar';
 export default defineComponent({
   name: 'OrganizationPage',
   components: {OrgPositionForm, OrgUnitForm, CreateOrgItemDialog, EntityPage},
-  setup() {
+  props: {
+    id: String,
+    action: String
+  },
+  setup(props) {
+    console.log('OrganizationPage.setup')
+
     const store = useStore()
     const quasar = useQuasar()
-    const route: RouteLocationNormalizedLoaded = useRoute()
 
-    const action = ref(typeof route.params.action === 'string' ? route.params.action : route.params.action[0])
-    const id = ref(typeof route.params.id === 'string' ? route.params.id : route.params.id[0])
+    const {id, action} = toRefs(props)
+    const prevProps = ref('')
 
     const createOrgItemDialog = ref()
     const treeRef = ref()
@@ -148,10 +152,7 @@ export default defineComponent({
       })
     }
 
-    const loadEntity = async (newRoute: RouteLocationNormalizedLoaded) => {
-      if (!newRoute.params.action) return {}
-      action.value = typeof newRoute.params.action === 'string' ? newRoute.params.action : newRoute.params.action[0]
-      id.value = typeof newRoute.params.id === 'string' ? newRoute.params.id : newRoute.params.id[0]
+    const loadEntity = async () => {
       const entity: OrgUnit = await store.dispatch('orgItem/getEntityForEdit', id.value)
       const node = orgItemToOrgNode(entity)
       if (entity.children.length > 0) {
@@ -213,7 +214,7 @@ export default defineComponent({
 
     const moveItem = () => {
       quasar.notify({
-        type: 'negative',
+        type: 'warning',
         message: 'Not implemented',
         actions: [
           {label: 'Close', color: 'white'},
@@ -263,12 +264,20 @@ export default defineComponent({
       }
     }
 
-    void loadEntity(route)
-    watch(route, loadEntity)
+    const watcher = () => {
+      // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
+      const newProps = `${action.value}/${id.value}`
+      if (prevProps.value !== newProps) {
+        void loadEntity()
+      }
+      prevProps.value = newProps
+    }
+
+    void loadEntity()
+    watch(id,watcher )
+    watch(action,watcher )
 
     return {
-      action,
-      id,
       createOrgItemDialog,
       treeRef,
       nodes,
