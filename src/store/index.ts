@@ -9,6 +9,7 @@ import mainStore from 'src/main/store/main'
 import {appApplicationStore, appLanguageStore, appTranslationStore} from 'src/modules/application';
 import {personCategoryStore, personPersonStore} from 'src/modules/person';
 import {orgRoleStore, orgCategoryStore, orgItemStore} from 'src/modules/org-structure';
+import {authRoleStore} from 'src/modules/authorization';
 
 /*
  * If not building with SSR mode, you can
@@ -47,7 +48,8 @@ export default store(function (/* { ssrContext } */) {
       personPerson: personPersonStore,
       orgCategory: orgCategoryStore,
       orgRole: orgRoleStore,
-      orgItem: orgItemStore
+      orgItem: orgItemStore,
+      authRole: authRoleStore
     },
 
     // enable strict mode (adds overhead!)

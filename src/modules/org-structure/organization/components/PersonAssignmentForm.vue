@@ -56,9 +56,9 @@ import {
   OrgPosition,
   UnassignPersonPayloadDto
 } from 'src/modules/org-structure';
-import {Person} from "src/modules/person";
-import {useStore} from "src/store";
-import PersonSelector from "src/modules/person/person/components/PersonSelector.vue";
+import {Person} from 'src/modules/person';
+import {useStore} from 'src/store';
+import PersonSelector from 'src/modules/person/person/components/PersonSelector.vue';
 
 
 export default defineComponent({
@@ -75,7 +75,7 @@ export default defineComponent({
     },
   },
   emits: ['nameUpdated'],
-  setup(props, {emit}) {
+  setup(props) {
 
     const store = useStore()
 

@@ -118,7 +118,7 @@ export function serviceGroups(): ServiceGroup[] {
           icon: 'admin_panel_settings',
           title: 'Authorization roles',
           subtitle: 'Maintain authorization roles, assign principals to roles',
-          action: '/auth/roles',
+          action: {name: 'authorization.roles'},
         },
         {
           id: 'PERMISSIONS',

@@ -32,8 +32,8 @@
 import {defineComponent, PropType, ref, toRef, watch} from 'vue';
 import {Ref} from '@vue/reactivity';
 import {AssignOrgRolePayloadDto, OrgPosition, OrgRole, UnassignOrgRolePayloadDto} from 'src/modules/org-structure';
-import {useStore} from "src/store";
-import OrgRoleSelector from "src/modules/org-structure/role/components/OrgRoleSelector.vue";
+import {useStore} from 'src/store';
+import OrgRoleSelector from 'src/modules/org-structure/role/components/OrgRoleSelector.vue';
 
 
 export default defineComponent({
@@ -50,7 +50,7 @@ export default defineComponent({
     },
   },
   emits: ['nameUpdated'],
-  setup(props, {emit}) {
+  setup(props) {
 
     const store = useStore()
 
