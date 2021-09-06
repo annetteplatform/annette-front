@@ -5,16 +5,23 @@ import hash from 'object-hash';
 import {useStore} from 'src/store';
 import {useQuasar} from 'quasar';
 
-export function useEntityPage<T>(
+export interface UseEntityPageOpt<T> {
   namespace: string,
-  emptyEntity: () => T,
-  formHasError: (entity?: T | null) => boolean,
-  props: any
+  emptyEntity?: () => T,
+  formHasError?: (entity?: T | null) => boolean,
+  props: any,
+  onBeforeLoad?: (action: string, id: string) => void
+  onAfterLoad?: (action: string, entity: T) => void
+}
+
+export function useEntityPage<T>(
+  opt: UseEntityPageOpt<T>
 ) {
+
   const store = useStore()
   const quasar = useQuasar()
 
-  const {id, action} = toRefs(props)
+  const {id, action} = toRefs(opt.props)
   const prevProps = ref('')
 
   const entityModel: Ref<T | null> = ref(null)
@@ -23,9 +30,13 @@ export function useEntityPage<T>(
   const error: Ref<AnnetteError | null> = ref(null)
 
   const loadEntity = async () => {
+    if (opt.onBeforeLoad) {
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+      opt.onBeforeLoad(action.value, id.value)
+    }
     // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-    if (action.value === 'create') {
-      const entity = emptyEntity()
+    if (action.value === 'create' && opt.emptyEntity) {
+      const entity = opt.emptyEntity()
       // @ts-ignore
       entityModel.value = {...entity}
       // @ts-ignore
@@ -36,11 +47,11 @@ export function useEntityPage<T>(
         // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
          if (action.value === 'view') {
            // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-           const entities: T[] = await store.dispatch(`${namespace}/loadEntitiesIfNotExist`, [id.value])
+           const entities: T[] = await store.dispatch(`${opt.namespace}/loadEntitiesIfNotExist`, [id.value])
            entity = entities[0]
          } else {
            // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-           entity = await store.dispatch(`${namespace}/getEntityForEdit`, id.value)
+           entity = await store.dispatch(`${opt.namespace}/getEntityForEdit`, id.value)
          }
         entityModel.value = {...entity}
         originEntity.value = {...entity}
@@ -49,10 +60,15 @@ export function useEntityPage<T>(
         error.value = ex
       }
     }
+    if (opt.onAfterLoad) {
+      // @ts-ignore
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+      opt.onAfterLoad(action.value, entityModel.value)
+    }
   }
 
   const save = async () => {
-    if (formHasError(entityModel.value)) {
+    if (opt.formHasError && opt.formHasError(entityModel.value)) {
       quasar.notify({
         color: 'negative',
         message: 'Form validation failed'
@@ -60,7 +76,7 @@ export function useEntityPage<T>(
       // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
     } else if (action.value === 'edit') {
       try {
-        const entity = await store.dispatch(`${namespace}/updateEntity`, entityModel.value)
+        const entity = await store.dispatch(`${opt.namespace}/updateEntity`, entityModel.value)
         // @ts-ignore
         entityModel.value = {...entity}
         // @ts-ignore
@@ -73,7 +89,7 @@ export function useEntityPage<T>(
       // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
     } else if (action.value === 'create') {
       try {
-        const entity = await store.dispatch(`${namespace}/createEntity`, entityModel.value)
+        const entity = await store.dispatch(`${opt.namespace}/createEntity`, entityModel.value)
         entityModel.value = {...entity}
         originEntity.value = {...entity}
         saved.value = true

@@ -77,6 +77,17 @@ import {useEntityPage} from 'src/shared';
 import {OrgCategory} from 'src/modules/org-structure';
 import EntityPage from 'src/shared/components/EntityPage.vue';
 
+
+function emptyEntity() {
+  return {
+    id: '',
+    name: '',
+    forOrganization: false,
+    forUnit: false,
+    forPosition: false
+  }
+}
+
 const NAMESPACE = 'orgCategory';
 
 export default defineComponent({
@@ -99,20 +110,12 @@ export default defineComponent({
       return !!nameRef.value.hasError || !!idRef.value.hasError
     }
 
-    const entityPage = useEntityPage<OrgCategory>(
-      NAMESPACE,
-      () => {
-        return {
-          id: '',
-          name: '',
-          forOrganization: false,
-          forUnit: false,
-          forPosition: false
-        }
-      },
+    const entityPage = useEntityPage<OrgCategory>({
+      namespace: NAMESPACE,
+      emptyEntity,
       formHasError,
       props
-    )
+    })
 
     return {
       idRef,

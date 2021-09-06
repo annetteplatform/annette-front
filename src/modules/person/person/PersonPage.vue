@@ -87,6 +87,18 @@ import {Person} from 'src/modules/person';
 import PersonCategorySelector from 'src/modules/person/category/components/PersonCategorySelector.vue'
 import EntityPage from 'src/shared/components/EntityPage.vue';
 
+function emptyEntity() {
+  return {
+    id: '',
+    lastname: '',
+    firstname: '',
+    middlename: '',
+    categoryId: '',
+    phone: '',
+    email: '',
+  }
+}
+
 const NAMESPACE = 'personPerson';
 
 export default defineComponent({
@@ -115,22 +127,12 @@ export default defineComponent({
         !!(entity && (entity.categoryId === '' || entity.categoryId === null || entity.categoryId === undefined))
     }
 
-    const entityPage = useEntityPage<Person>(
-      NAMESPACE,
-      () => {
-        return {
-          id: '',
-          lastname: '',
-          firstname: '',
-          middlename: '',
-          categoryId: '',
-          phone: '',
-          email: '',
-        }
-      },
+    const entityPage = useEntityPage<Person>({
+      namespace: NAMESPACE,
+      emptyEntity,
       formHasError,
       props
-    )
+    })
 
     return {
       idRef,

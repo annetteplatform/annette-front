@@ -60,6 +60,10 @@ import {useEntityPage} from 'src/shared';
 import LanguageTranslationList from './components/LanguageTranslationList.vue';
 import EntityPage from 'src/shared/components/EntityPage.vue';
 
+function emptyEntity() {
+  return {id: '', name: ''}
+}
+
 const NAMESPACE = 'appTranslation'
 
 export default defineComponent({
@@ -83,12 +87,12 @@ export default defineComponent({
     }
 
     const entityPage = useEntityPage<Translation>(
-      NAMESPACE,
-      () => {
-        return {id: '', name: ''}
-      },
-      formHasError,
-      props
+      {
+        namespace: NAMESPACE,
+        emptyEntity,
+        formHasError,
+        props
+      }
     )
 
     return {

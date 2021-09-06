@@ -1,5 +1,5 @@
 import axios from 'axios';
-import {FindResult} from 'src/shared';
+import {AnnettePrincipal, FindResult} from 'src/shared';
 import {AuthRole, AuthRoleFilter} from 'src/modules/authorization';
 
 export const authorizationService = {
@@ -42,6 +42,22 @@ export const authorizationService = {
     }
     return await axios.post<FindResult>('/api/annette/v1/authorization/findRoles', query)
       .then(result => result.data)
+  },
+
+  async getRolePrincipals(id: string, readSide = true) {
+    // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
+    return await axios.get<AnnettePrincipal[]>(`/api/annette/v1/authorization/getRolePrincipals/${id}/${readSide}`)
+      .then(result => result.data)
+  },
+
+  async assignPrincipal(roleId: string, principal: AnnettePrincipal) {
+    return await axios.post('/api/annette/v1/authorization/assignPrincipal', { roleId, principal })
+      .then(() => true)
+  },
+
+  async unassignPrincipal(roleId: string, principal: AnnettePrincipal) {
+    return await axios.post('/api/annette/v1/authorization/unassignPrincipal', { roleId, principal })
+      .then(() => true)
   },
 }
 

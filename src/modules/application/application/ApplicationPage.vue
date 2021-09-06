@@ -75,14 +75,21 @@
       <div class="row full-width q-pb-md">
         <q-list bordered class="full-width" separator>
           <q-item v-if="action !=='view'">
-            <q-item-section >
-              <translation-selector v-model="newTranslation" label="Translation" />
+            <q-item-section>
+              <translation-selector v-model="newTranslation" label="Translation"/>
             </q-item-section>
             <q-item-section avatar>
               <q-btn class="float-left" round dense flat color="primary" icon="add"
                      @click="addTranslation(newTranslation)"
                      :disable="newTranslation === ''"
               />
+            </q-item-section>
+          </q-item>
+          <q-item v-if="entityModel.translations && entityModel.translations.length === 0">
+            <q-item-section>
+              <q-item-label caption>
+                Translations not assigned
+              </q-item-label>
             </q-item-section>
           </q-item>
           <q-item
@@ -125,6 +132,19 @@ import {useStore} from 'src/store';
 import {useQuasar} from 'quasar';
 import EntityPage from 'src/shared/components/EntityPage.vue';
 
+function emptyEntity() {
+  return {
+    id: '',
+    name: '',
+    caption: {
+      type: 'TextCaption',
+      text: ''
+    },
+    translations: [],
+    serverUrl: '',
+  }
+}
+
 export default defineComponent({
   name: 'ApplicationPage',
   components: {EntityPage, TranslationSelector},
@@ -145,22 +165,12 @@ export default defineComponent({
       return !!nameRef.value.hasError || !!idRef.value.hasError
     }
 
-    const entityPage = useEntityPage<Application>(
-      'appApplication',
-      () => {
-        return {
-          id: '',
-          name: '',
-          caption: {
-            type: 'TextCaption',
-            text: ''
-          },
-          translations: [],
-          serverUrl: '',
-        }
-      },
-      formHasError,
-      props
+    const entityPage = useEntityPage<Application>({
+        namespace: 'appApplication',
+        emptyEntity,
+        formHasError,
+        props
+      }
     )
 
     const captionTypes = [

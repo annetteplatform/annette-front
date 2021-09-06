@@ -18,6 +18,10 @@
                :to="{ name: 'authorization.role', params: { action: 'view', id: props.row.id } }"/>
         <q-btn flat round color="blue" size="sm" icon="far fa-edit"
                :to="{ name: 'authorization.role', params: { action: 'edit', id: props.row.id } }"/>
+        <q-btn flat round color="green" size="sm" icon="fas fa-user"
+               :to="{ name: 'authorization.roleAssignments', params: { action: 'view', id: props.row.id } }"/>
+       <q-btn flat round color="blue" size="sm" icon="fas fa-user-edit"
+               :to="{ name: 'authorization.roleAssignments', params: { action: 'edit', id: props.row.id } }"/>
         <q-btn flat round color="red" size="sm" icon="fas fa-trash" @click="deleteEntity(props.row.id)"/>
       </q-td>
     </template>

@@ -53,6 +53,10 @@ import {defineComponent, ref} from 'vue';
 import {Category, useEntityPage} from 'src/shared';
 import EntityPage from 'src/shared/components/EntityPage.vue';
 
+function emptyEntity() {
+  return {id: '', name: ''}
+}
+
 const NAMESPACE = 'personCategory'
 
 export default defineComponent({
@@ -75,14 +79,12 @@ export default defineComponent({
       return !!nameRef.value.hasError || !!idRef.value.hasError
     }
 
-    const entityPage = useEntityPage<Category>(
-      NAMESPACE,
-      () => {
-        return {id: '', name: ''}
-      },
+    const entityPage = useEntityPage<Category>({
+      namespace: NAMESPACE,
+      emptyEntity,
       formHasError,
       props
-    )
+    })
 
     return {
       idRef,

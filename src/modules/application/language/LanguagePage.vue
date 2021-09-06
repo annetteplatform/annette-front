@@ -55,6 +55,11 @@ import {Language} from 'src/modules/application';
 import {useEntityPage} from 'src/shared';
 import EntityPage from 'src/shared/components/EntityPage.vue';
 
+
+function emptyEntity() {
+  return {id: '', name: ''}
+}
+
 const NAMESPACE = 'appLanguage'
 
 export default defineComponent({
@@ -77,14 +82,12 @@ export default defineComponent({
       return !!nameRef.value.hasError || !!idRef.value.hasError
     }
 
-    const entityPage = useEntityPage<Language>(
-      NAMESPACE,
-      () => {
-        return {id: '', name: ''}
-      },
+    const entityPage = useEntityPage<Language>({
+      namespace: NAMESPACE,
+      emptyEntity,
       formHasError,
       props
-    )
+    })
 
     return {
       idRef,

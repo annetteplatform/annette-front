@@ -62,6 +62,13 @@ import {useEntityPage} from 'src/shared';
 import {OrgRole} from 'src/modules/org-structure';
 import EntityPage from 'src/shared/components/EntityPage.vue';
 
+function emptyEntity() {
+  return {
+    id: '',
+    name: '',
+    description: ''
+  }
+}
 const NAMESPACE = 'orgRole'
 
 export default defineComponent({
@@ -84,18 +91,12 @@ export default defineComponent({
       return !!nameRef.value.hasError || !!idRef.value.hasError
     }
 
-    const entityPage = useEntityPage<OrgRole>(
-      NAMESPACE,
-      () => {
-        return {
-          id: '',
-          name: '',
-          description: ''
-        }
-      },
+    const entityPage = useEntityPage<OrgRole>({
+      namespace: NAMESPACE,
+      emptyEntity,
       formHasError,
       props
-    )
+    })
 
     return {
       idRef,

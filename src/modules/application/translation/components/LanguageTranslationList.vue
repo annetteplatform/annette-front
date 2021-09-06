@@ -13,6 +13,13 @@
             />
           </q-item-section>
         </q-item>
+        <q-item v-if="languages && languages.length === 0">
+          <q-item-section>
+            <q-item-label caption>
+              Language translations not found
+            </q-item-label>
+          </q-item-section>
+        </q-item>
         <q-item
           v-for="language in languages"
           :key="language"

@@ -8,6 +8,7 @@
       <q-btn class="q-mr-md" outline color="primary"
              label="Roles"
              :to="{name: 'authorization.roles'}"/>
+
       <q-btn v-if="action === 'edit'"
              class="q-mr-md" outline color="primary"
              label="View"
@@ -16,6 +17,16 @@
              class="q-mr-md" outline color="primary"
              label="Edit"
              :to="{ name: 'authorization.role', params: { action: 'edit', id } }"/>
+
+      <q-btn v-if="action === 'edit'"
+             class="q-mr-md" outline color="primary"
+             label="Assignments"
+             :to="{ name: 'authorization.roleAssignments', params: { action: 'view', id } }"/>
+      <q-btn v-if="action === 'view'"
+             class="q-mr-md" outline color="primary"
+             label="Assignments"
+             :to="{ name: 'authorization.roleAssignments', params: { action: 'edit', id } }"/>
+
       <q-btn color="primary"
              v-if="entityModel"
              label="Save"
@@ -113,8 +124,8 @@ import {defineComponent, ref} from 'vue';
 import {useEntityPage} from 'src/shared';
 import EntityPage from 'src/shared/components/EntityPage.vue';
 import {AuthRole, Permission} from 'src/modules/authorization';
-import PermissionDialog from "src/modules/authorization/role/components/PermissionDialog.vue";
-import {useQuasar} from "quasar";
+import PermissionDialog from 'src/modules/authorization/role/components/PermissionDialog.vue';
+import {useQuasar} from 'quasar';
 
 const NAMESPACE = 'authRole'
 
@@ -150,6 +161,15 @@ const COLUMNS = [
   }
 ]
 
+function emptyEntity() {
+  return {
+    id: '',
+    name: '',
+    description: '',
+    permissions: []
+  }
+}
+
 export default defineComponent({
   name: 'AuthRolePage',
   components: {PermissionDialog, EntityPage},
@@ -172,19 +192,12 @@ export default defineComponent({
       return !!nameRef.value.hasError || !!idRef.value.hasError
     }
 
-    const entityPage = useEntityPage<AuthRole>(
-      NAMESPACE,
-      () => {
-        return {
-          id: '',
-          name: '',
-          description: '',
-          permissions: []
-        }
-      },
+    const entityPage = useEntityPage<AuthRole>({
+      namespace: NAMESPACE,
+      emptyEntity,
       formHasError,
       props
-    )
+    })
 
     const columns = ref(COLUMNS)
 
