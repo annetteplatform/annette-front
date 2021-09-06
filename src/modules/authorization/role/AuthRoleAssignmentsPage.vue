@@ -74,7 +74,6 @@
 
             <q-item-section side v-if="action =='edit'">
               <q-btn flat round color="red" size="sm" icon="fas fa-trash"
-                     v-if="!readonly"
                      @click="deletePrincipal(principal)"/>
             </q-item-section>
           </q-item>
