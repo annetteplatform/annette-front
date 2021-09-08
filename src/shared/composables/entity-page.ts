@@ -4,6 +4,7 @@ import {AnnetteError} from 'src/shared';
 import hash from 'object-hash';
 import {useStore} from 'src/store';
 import {useQuasar} from 'quasar';
+import {useRoute, useRouter} from 'vue-router';
 
 export interface UseEntityPageOpt<T> {
   namespace: string,
@@ -20,6 +21,8 @@ export function useEntityPage<T>(
 
   const store = useStore()
   const quasar = useQuasar()
+  const route = useRoute()
+  const router = useRouter()
 
   const {id, action} = toRefs(opt.props)
   const prevProps = ref('')
@@ -94,10 +97,10 @@ export function useEntityPage<T>(
         originEntity.value = {...entity}
         saved.value = true
         error.value = null
+        console.log('route', route)
+        // @ts-ignore
         // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-        action.value = 'edit'
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-        id.value = entity.id
+        void router.push({ name: route.name, params: {...route.params, action: 'edit', id: entity.id}, query: route.query})
       } catch (ex) {
         error.value = ex
       }
@@ -129,6 +132,7 @@ export function useEntityPage<T>(
     action,
     id,
     entityModel,
+    originEntity,
     saved,
     error,
     save,

@@ -3,6 +3,7 @@ import {applicationRoutes} from 'src/modules/application';
 import {personRoutes} from 'src/modules/person';
 import {orgStructureRoutes} from 'src/modules/org-structure';
 import {authorizationRoutes} from 'src/modules/authorization';
+import {principalGroupRoutes} from 'src/modules/principal-group';
 
 const routes: RouteRecordRaw[] = [
   {
@@ -17,7 +18,8 @@ const routes: RouteRecordRaw[] = [
       ...applicationRoutes,
       ...personRoutes,
       ...orgStructureRoutes,
-      ...authorizationRoutes
+      ...authorizationRoutes,
+      ...principalGroupRoutes
     ],
   },
 

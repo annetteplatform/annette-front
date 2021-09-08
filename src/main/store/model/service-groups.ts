@@ -72,7 +72,7 @@ export function serviceGroups(): ServiceGroup[] {
     },
     {
       id: 'ORG_STRUCTURE_GROUP',
-      order: 20,
+      order: 30,
       icon: 'account_balance',
       title: 'Organizational Structure ',
       subtitle: 'Maintain organizational structures and roles',
@@ -107,7 +107,7 @@ export function serviceGroups(): ServiceGroup[] {
     },
     {
       id: 'AUTHORIZATION_GROUP',
-      order: 20,
+      order: 40,
       icon: 'admin_panel_settings',
       title: 'Authorization ',
       subtitle: 'Maintain authorization roles and assign permissions',
@@ -128,6 +128,32 @@ export function serviceGroups(): ServiceGroup[] {
           subtitle: 'View permission assignments to principals',
           action: '/auth/assignments',
         }
+      ]
+    },
+
+    {
+      id: 'PRINCIPAL_GROUP',
+      order: 50,
+      icon: 'groups',
+      title: 'Principal group ',
+      subtitle: 'Maintain principal groups',
+      services: [
+        {
+          id: 'PRINCIPAL_GROUPS',
+          order: 10,
+          icon: 'groups',
+          title: 'Principal groups',
+          subtitle: 'View principal group list, create, update and delete groups',
+          action: {name: 'principalGroup.groups'},
+        },
+        {
+          id: 'PRINCIPAL_GROUP_CATEGORIES',
+          order: 20,
+          icon: 'local_offer',
+          title: 'Group categories',
+          subtitle: 'Maintain principal group categories',
+          action: {name: 'principalGroup.categories'},
+        },
       ]
     },
     // {

@@ -1,6 +1,7 @@
 <template>
   <q-select
     class="full-width"
+    dense
     :model-value="model"
     @update:model-value="select"
     use-input
@@ -31,17 +32,17 @@
 <script lang="ts">
 import {defineComponent, toRef} from 'vue';
 import {useEntitySelector} from 'src/shared';
-import {Person, PersonFilter} from 'src/modules/person';
+import {PrincipalGroup, PrincipalGroupFilter} from 'src/modules/principal-group';
 
 
 export default defineComponent({
-  name: 'PersonSelector',
+  name: 'PrincipalGroupSelector',
   components: {},
   props: {
     label: {
       type: String,
       required: false,
-      default: 'Person'
+      default: 'PrincipalGroup'
     },
     modelValue: {
       type: String,
@@ -58,12 +59,11 @@ export default defineComponent({
 
     const valueRef = toRef(props, 'modelValue')
 
-    const entitySelector = useEntitySelector<Person, PersonFilter>(
-      'personPerson',
-      'PersonSelector',
+    const entitySelector = useEntitySelector<PrincipalGroup, PrincipalGroupFilter>(
+      'principalGroup',
+      'PrincipalGroupSelector',
       valueRef,
       emit)
-
 
     return {
       ...entitySelector,

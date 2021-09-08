@@ -11,10 +11,10 @@
     :label="label"
     :options="items"
     option-value="id"
-    option-label="fullname"
+    option-label="name"
     emit-value
     map-options
-    clearable
+    :clearable="clearable"
     :loading="instance.loading"
     @filter="setFilter"
   >
@@ -30,24 +30,28 @@
 
 <script lang="ts">
 import {defineComponent, toRef} from 'vue';
-import {useEntitySelector} from 'src/shared';
-import {Person, PersonFilter} from 'src/modules/person';
+import {Category, CategoryFilter, useEntitySelector} from 'src/shared';
 
 
 export default defineComponent({
-  name: 'PersonSelector',
+  name: 'PrincipalGroupCategorySelector',
   components: {},
   props: {
     label: {
       type: String,
       required: false,
-      default: 'Person'
+      default: 'Category'
     },
     modelValue: {
       type: String,
       required: true
     },
     readonly: {
+      type: Boolean,
+      default: false,
+      required: false
+    },
+    clearable: {
       type: Boolean,
       default: false,
       required: false
@@ -58,9 +62,9 @@ export default defineComponent({
 
     const valueRef = toRef(props, 'modelValue')
 
-    const entitySelector = useEntitySelector<Person, PersonFilter>(
-      'personPerson',
-      'PersonSelector',
+    const entitySelector = useEntitySelector<Category, CategoryFilter>(
+      'principalGroupCategory',
+      'CategorySelector',
       valueRef,
       emit)
 

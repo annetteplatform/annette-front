@@ -53,6 +53,7 @@
                      v-if="action =='edit'"
                      @click="addPrincipal"
               />
+              <principal-selector-dialog ref="principalSelectorDialog"/>
             </q-item-section>
           </q-item>
           <q-item v-if="principals.length === 0">
@@ -66,11 +67,7 @@
             v-for="principal in principals"
             :key="principal">
 
-            <q-item-section>
-              <q-item-label>
-                {{ principal.principalType }}: {{ principal.principalId }}
-              </q-item-label>
-            </q-item-section>
+            <principal-view-item :principal="principal"/>
 
             <q-item-section side v-if="action =='edit'">
               <q-btn flat round color="red" size="sm" icon="fas fa-trash"
@@ -93,12 +90,14 @@ import {AuthRole} from 'src/modules/authorization';
 import {useQuasar} from 'quasar';
 import {Ref} from '@vue/reactivity';
 import {authorizationService} from 'src/modules/authorization/store/authorization.service';
+import PrincipalSelectorDialog from 'src/shared/components/principal-selector/PrinciplaSelectorDialog.vue';
+import PrincipalViewItem from 'src/shared/components/principal-view/PrincipalViewItem.vue';
 
 const NAMESPACE = 'authRole'
 
 export default defineComponent({
   name: 'AuthRoleAssignmentsPage',
-  components: {EntityPage},
+  components: {PrincipalViewItem, PrincipalSelectorDialog, EntityPage},
   props: {
     id: String,
     action: String
@@ -107,6 +106,8 @@ export default defineComponent({
     const quasar = useQuasar()
 
     const principals: Ref<AnnettePrincipal[]> = ref([])
+    const principalSelectorDialog = ref()
+
 
 
     const loadAssignments = async (action: string, id: string) => {
@@ -124,10 +125,8 @@ export default defineComponent({
 
 
     const addPrincipal = async () => {
-      const principal = {
-        principalType: 'person',
-        principalId: 'P0001'
-      }
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-member-access
+      const principal = await principalSelectorDialog.value.showDialog()
       // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
       await authorizationService.assignPrincipal(entityPage.id.value, principal)
       principals.value = [...principals.value, principal]
@@ -156,6 +155,7 @@ export default defineComponent({
     return {
       ...entityPage,
       principals,
+      principalSelectorDialog,
       addPrincipal,
       deletePrincipal
     };
