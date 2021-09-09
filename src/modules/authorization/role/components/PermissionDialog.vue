@@ -44,11 +44,10 @@
 </template>
 
 <script lang="ts">
-import {computed, ComputedRef, defineComponent, ref} from 'vue';
+import { defineComponent, ref} from 'vue';
 import { Permission} from 'src/modules/authorization';
 import {Ref} from '@vue/reactivity';
-import {useStore} from 'src/store';
-import PermissionSelector from "src/modules/authorization/assignment/components/PermissionSelector.vue";
+import PermissionSelector from 'src/modules/authorization/assignment/components/PermissionSelector.vue';
 
 
 export default defineComponent({

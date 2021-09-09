@@ -11,10 +11,10 @@
 </template>
 
 <script lang="ts">
-import {defineComponent, PropType, toRef} from "vue";
-import {useRouter} from "vue-router";
-import {AuthSource} from "src/modules/authorization";
-import {Ref} from "@vue/reactivity";
+import {defineComponent, PropType, toRef} from 'vue';
+import {useRouter} from 'vue-router';
+import {AuthSource} from 'src/modules/authorization';
+import {Ref} from '@vue/reactivity';
 
 export default defineComponent({
   name: 'AuthSourceChip',

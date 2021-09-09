@@ -71,10 +71,10 @@
 
 <script lang="ts">
 import {defineComponent, PropType, ref, toRefs, watch} from 'vue'
-import {AuthAssignmentFilter} from "src/modules/authorization";
-import PrincipalTypeSelector from "src/modules/authorization/assignment/components/PrincipalTypeSelector.vue";
-import PermissionSelector from "src/modules/authorization/assignment/components/PermissionSelector.vue";
-import {Ref} from "@vue/reactivity";
+import {AuthAssignmentFilter} from 'src/modules/authorization';
+import PrincipalTypeSelector from 'src/modules/authorization/assignment/components/PrincipalTypeSelector.vue';
+import PermissionSelector from 'src/modules/authorization/assignment/components/PermissionSelector.vue';
+import {Ref} from '@vue/reactivity';
 
 // eslint-disable-next-line @typescript-eslint/ban-types
 function deepCopy<T>(object: T): T {

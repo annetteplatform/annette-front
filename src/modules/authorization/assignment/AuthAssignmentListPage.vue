@@ -21,8 +21,8 @@
 import {defineComponent} from 'vue';
 import {useEntityListPage} from 'src/shared';
 import EntityListPage from 'src/shared/components/EntityListPage.vue';
-import AssignmentFilterForm from "src/modules/authorization/assignment/components/AssignmentFilterForm.vue";
-import AuthAssignmentList from "src/modules/authorization/assignment/components/AuthAssignmentList.vue";
+import AssignmentFilterForm from 'src/modules/authorization/assignment/components/AssignmentFilterForm.vue';
+import AuthAssignmentList from 'src/modules/authorization/assignment/components/AuthAssignmentList.vue';
 
 const NAMESPACE = 'authAssignment'
 const INSTANCE_KEY = 'authAssignment'

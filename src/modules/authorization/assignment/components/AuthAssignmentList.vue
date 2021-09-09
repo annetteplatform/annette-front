@@ -35,8 +35,8 @@ import {defineComponent} from 'vue';
 import {useEntityList} from 'src/shared';
 import EntityList from 'src/shared/components/EntityList.vue';
 import {AuthAssignmentFilter, PermissionAssignment} from 'src/modules/authorization';
-import PrincipalViewItem from "src/shared/components/principal-view/PrincipalViewItem.vue";
-import AuthSourceChip from "./AuthSourceChip.vue";
+import PrincipalViewItem from 'src/shared/components/principal-view/PrincipalViewItem.vue';
+import AuthSourceChip from './AuthSourceChip.vue';
 
 const COLUMNS = [
   {
