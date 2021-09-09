@@ -22,6 +22,12 @@ export const authorizationRoutes: RouteRecordRaw[] = [
     props: (route) => ({ id: String(route.params.id),  action: String(route.params.action),}),
     meta: {requiresAuth: true}
   },
+  {
+    path: 'authorization/permission-assignments',
+    name: 'authorization.permissionAssignments',
+    component: () => import('src/modules/authorization/assignment/AuthAssignmentListPage.vue'),
+    meta: {requiresAuth: true}
+  },
 
 ]
 

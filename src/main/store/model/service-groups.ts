@@ -126,7 +126,7 @@ export function serviceGroups(): ServiceGroup[] {
           icon: 'policy',
           title: 'Permission assignments',
           subtitle: 'View permission assignments to principals',
-          action: '/auth/assignments',
+          action: {name: 'authorization.permissionAssignments'},
         }
       ]
     },

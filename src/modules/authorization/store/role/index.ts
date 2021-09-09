@@ -9,8 +9,7 @@ import {AuthRole} from 'src/modules/authorization';
 
 const getters: GetterTree<AuthRoleState, StateInterface> = {
   ...buildGetters<AuthRole, AuthRoleFilter, StateInterface>(),
-  principalTypes: state => state.principalTypes,
-  permissionIds: state => state.permissionIds
+
 }
 
 const mutations: MutationTree<AuthRoleState> = {

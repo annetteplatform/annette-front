@@ -1,6 +1,6 @@
 import axios from 'axios';
 import {AnnettePrincipal, FindResult} from 'src/shared';
-import {AuthRole, AuthRoleFilter} from 'src/modules/authorization';
+import {AssignmentFindResult, AuthAssignmentFilter, AuthRole, AuthRoleFilter} from 'src/modules/authorization';
 
 export const authorizationService = {
 
@@ -58,6 +58,16 @@ export const authorizationService = {
   async unassignPrincipal(roleId: string, principal: AnnettePrincipal) {
     return await axios.post('/api/annette/v1/authorization/unassignPrincipal', { roleId, principal })
       .then(() => true)
+  },
+
+  async findAssignments(filter: AuthAssignmentFilter, page: number, pageSize: number) {
+    const query = {
+      offset: page * pageSize,
+      size: pageSize,
+      ...filter,
+    }
+    return await axios.post<AssignmentFindResult>('/api/annette/v1/authorization/findAssignments', query)
+      .then(result => result.data)
   },
 }
 

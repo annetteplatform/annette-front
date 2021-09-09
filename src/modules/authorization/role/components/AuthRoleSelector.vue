@@ -1,7 +1,6 @@
 <template>
   <q-select
     class="full-width"
-    dense
     :model-value="model"
     @update:model-value="select"
     use-input

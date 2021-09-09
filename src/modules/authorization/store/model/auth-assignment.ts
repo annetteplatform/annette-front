@@ -10,9 +10,7 @@ export interface PermissionAssignment extends BaseEntity {
   updatedBy: AnnettePrincipal
 }
 
-export interface FindAssignmentsQuery {
-  offset: number
-  size: number
+export interface AuthAssignmentFilter {
   permission: Permission,
   principal: AnnettePrincipal,
   source: AuthSource,

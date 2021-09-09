@@ -11,6 +11,7 @@ import {personCategoryStore, personPersonStore} from 'src/modules/person';
 import {orgRoleStore, orgCategoryStore, orgItemStore} from 'src/modules/org-structure';
 import {authRoleStore} from 'src/modules/authorization';
 import {principalGroupCategoryStore, principalGroupStore} from 'src/modules/principal-group';
+import {authAssignmentStore} from 'src/modules/authorization/store/assignment';
 
 /*
  * If not building with SSR mode, you can
@@ -51,6 +52,7 @@ export default store(function (/* { ssrContext } */) {
       orgRole: orgRoleStore,
       orgItem: orgItemStore,
       authRole: authRoleStore,
+      authAssignment: authAssignmentStore,
       principalGroupCategory: principalGroupCategoryStore,
       principalGroup: principalGroupStore
     },

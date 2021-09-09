@@ -38,7 +38,6 @@ export default defineComponent({
     const person: Ref<Person | null> = ref(null)
 
     const loadPrincipal = async () => {
-      console.log('principal.value', principal.value)
       const persons: Person[] = await store.dispatch('personPerson/loadEntitiesIfNotExist', [principal.value.principalId])
       if (persons && persons[0]) {
         person.value = persons[0]

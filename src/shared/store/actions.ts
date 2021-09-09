@@ -1,7 +1,8 @@
 import {EntityMap, EntityState, findFirstNonExistingPage, pageLoaded, totalPages} from './state'
 import {
   BaseEntity,
-  InitInstancePayload, LoadFailurePayload,
+  InitInstancePayload,
+  LoadFailurePayload,
   LoadPayload,
   LoadSuccessPayload,
   PagingMode,
@@ -134,10 +135,19 @@ export function buildActionsWithCustomLoad<E extends BaseEntity, F, R>(
       // console.log('resetInstance', payload)
       // console.log('instance', instance)
       if (instance) {
-        if ( !!payload.page || payload.page === 0 || !!payload.pageSize || !!payload.filter || payload.clear ) {
+        if (!!payload.page || payload.page === 0 || !!payload.pageSize || !!payload.filter || payload.clear) {
+          console.log('!!payload.clear', !!payload.clear)
+          console.log('payload.pageSize ', (payload.pageSize && payload.pageSize !== instance.pageSize))
           // eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/ban-ts-comment
           // @ts-ignore
-          const clear = !!payload.clear || payload.pageSize !== instance.pageSize || hash(payload.filter) === hash(instance.filter)
+          console.log('payload.filter', payload.filter && hash(payload.filter) === hash(instance.filter))
+          // eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/ban-ts-comment
+          // @ts-ignore
+          const clear = !!(
+            !!payload.clear ||
+            (payload.pageSize && payload.pageSize !== instance.pageSize) ||
+            (payload.filter && hash(payload.filter) === hash(instance.filter))
+          )
           const loadPayload: LoadPayload<F> = {
             key: payload.key,
             fromPage: 0,
@@ -186,7 +196,7 @@ export function buildActionsWithCustomLoad<E extends BaseEntity, F, R>(
       return entities
     },
 
-    async loadEntitiesIfNotExist ({ commit, state }, ids: string[]) {
+    async loadEntitiesIfNotExist({commit, state}, ids: string[]) {
       const entitiesToLoad: string[] = ids.filter(id => !state.entities[id])
       if (entitiesToLoad.length > 0) {
         const entities = await getEntitiesById(entitiesToLoad, true)
@@ -217,7 +227,7 @@ export function buildActions<E extends BaseEntity, F, R>(
     let findResults: FindResult
     try {
       findResults = await find(payload.filter, payload.page, payload.pageSize)
-    } catch(ex) {
+    } catch (ex) {
       const loadFailurePayload: LoadFailurePayload = {
         key: payload.key,
         message: ex,
