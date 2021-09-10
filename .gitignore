@@ -1,6 +1,6 @@
+run-local.sh
 .DS_Store
 .thumbs.db
-
 node_modules
 
 # Quasar core related directories
@@ -35,3 +35,4 @@ yarn-error.log*
 *.sln
 
 build-pwa.sh
+set-env.sh
