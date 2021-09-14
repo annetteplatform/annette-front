@@ -15,6 +15,19 @@ export const cmsRoutes: RouteRecordRaw[] = [
     meta: {requiresAuth: true}
   },
   {
+    path: 'cms/post-views',
+    name: 'cms.postViews',
+    component: () => import('src/modules/cms/post/PostListPage.vue'),
+    // component: () => import('src/modules/cms/space-view/PostViewListPage.vue'),
+    meta: {requiresAuth: true}
+  },
+  {
+    path: 'cms/space-views',
+    name: 'cms.spaceViews',
+    component: () => import('src/modules/cms/space-view/SpaceViewListPage.vue'),
+    meta: {requiresAuth: true}
+  },
+  {
     path: 'cms/posts',
     name: 'cms.posts',
     component: () => import('src/modules/cms/post/PostListPage.vue'),

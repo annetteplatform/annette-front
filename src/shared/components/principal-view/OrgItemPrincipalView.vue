@@ -97,7 +97,7 @@ export default defineComponent({
     const openOrgItem = () => {
       if (orgItem.value) {
         // @ts-ignore
-        router.push({name: 'organization.organization', params: {action: 'view', id: orgItem.value.orgId}})
+        router.push({name: 'orgStructure.organization', params: {action: 'view', id: orgItem.value.orgId}})
           .catch(err => console.error(err))
       }
     }

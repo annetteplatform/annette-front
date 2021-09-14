@@ -40,10 +40,8 @@ export function useEntityPage<T>(
     // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
     if (action.value === 'create' && opt.emptyEntity) {
       const entity = opt.emptyEntity()
-      // @ts-ignore
-      entityModel.value = {...entity}
-      // @ts-ignore
-      originEntity.value = {...entity}
+      entityModel.value = extend(true, entityModel.value, entity)
+      originEntity.value = extend(true, originEntity.value, entity)
     } else {
       try {
         let entity: T
@@ -56,8 +54,8 @@ export function useEntityPage<T>(
            // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
            entity = await store.dispatch(`${opt.namespace}/getEntityForEdit`, id.value)
          }
-        entityModel.value = extend(true, entity)
-        originEntity.value = extend(true, entity)
+        entityModel.value = extend(true, entityModel.value, entity)
+        originEntity.value = extend(true, originEntity.value, entity)
         error.value = null
       } catch (ex) {
         error.value = ex
@@ -80,10 +78,8 @@ export function useEntityPage<T>(
     } else if (action.value === 'edit') {
       try {
         const entity = await store.dispatch(`${opt.namespace}/updateEntity`, entityModel.value)
-        // @ts-ignore
-        entityModel.value = extend(true, entity)
-        // @ts-ignore
-        originEntity.value = extend(true, entity)
+        entityModel.value = extend(true, entityModel.value, entity)
+        originEntity.value = extend(true, originEntity.value, entity)
         saved.value = true
         error.value = null
       } catch (ex) {
@@ -93,8 +89,8 @@ export function useEntityPage<T>(
     } else if (action.value === 'create') {
       try {
         const entity = await store.dispatch(`${opt.namespace}/createEntity`, entityModel.value)
-        entityModel.value = extend(true, entity)
-        originEntity.value = extend(true, entity)
+        entityModel.value = extend(true, entityModel.value, entity)
+        originEntity.value = extend(true, originEntity.value, entity)
         saved.value = true
         error.value = null
         console.log('route', route)

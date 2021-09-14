@@ -216,8 +216,7 @@ export function serviceGroups(): ServiceGroup[] {
           icon: 'inventory',
           title: 'Spaces',
           subtitle: 'View list of spaces: blogs & wikies',
-          action: '/404',
-          // action: {name: 'cms.spaceViews'},
+          action: {name: 'cms.spaceViews'},
           actionName: 'View'
         }
       ]

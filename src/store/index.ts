@@ -14,6 +14,7 @@ import {principalGroupCategoryStore, principalGroupStore} from 'src/modules/prin
 import {authAssignmentStore} from 'src/modules/authorization/store/assignment';
 import {cmsCategoryStore, cmsSpaceStore} from 'src/modules/cms';
 import {cmsPostStore} from 'src/modules/cms/store/post';
+import {cmsSpaceViewStore} from 'src/modules/cms/store/space-view';
 
 /*
  * If not building with SSR mode, you can
@@ -59,7 +60,8 @@ export default store(function (/* { ssrContext } */) {
       principalGroup: principalGroupStore,
       cmsCategory: cmsCategoryStore,
       cmsSpace: cmsSpaceStore,
-      cmsPost: cmsPostStore
+      cmsPost: cmsPostStore,
+      cmsSpaceView: cmsSpaceViewStore
     },
 
     // enable strict mode (adds overhead!)

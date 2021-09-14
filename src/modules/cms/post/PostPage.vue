@@ -146,7 +146,7 @@
                 <q-item>
                   <principal-view-item :principal="entityModel.authorId"/>
                   <q-item-section side v-if="action !=='view'">
-                    <q-btn flat round color="red" size="sm" icon="edit"
+                    <q-btn flat round color="primary" size="sm" icon="edit"
                            @click="updateAuthor"/>
                   </q-item-section>
                 </q-item>
@@ -240,7 +240,7 @@
                   :key="principal">
                   <principal-view-item :principal="principal"/>
                   <q-item-section side v-if="action !=='view'">
-                    <q-btn flat round color="primary" size="sm" icon="fas fa-trash"
+                    <q-btn flat round color="negative" size="sm" icon="fas fa-trash"
                            @click="deletePrincipal(principal)"/>
                   </q-item-section>
                 </q-item>
