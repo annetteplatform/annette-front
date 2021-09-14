@@ -8,10 +8,10 @@
         :label="group.title"
         :model-value="!!openGroups[group.id] || false"
         @update:model-value="toggleOpenGroup(group.id)"
-        :content-inset-level="0.4"
+
       >
-        <q-list>
-          <q-item v-for="service in group.services" :key="service.id" :to="service.action">
+        <q-list >
+          <q-item :inset-level="0.2" v-for="service in group.services" :key="service.id" :to="service.action">
             <q-item-section avatar>
               <q-icon color="primary" :name="service.icon"/>
             </q-item-section>

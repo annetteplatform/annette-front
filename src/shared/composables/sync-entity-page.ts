@@ -1,7 +1,6 @@
 import {Ref} from '@vue/reactivity';
-import {ref, toRefs, watch} from 'vue';
+import {ref, toRef, watch} from 'vue';
 import {AnnetteError} from 'src/shared';
-import hash from 'object-hash';
 import {useStore} from 'src/store';
 import {extend, useQuasar} from 'quasar';
 import {useRoute, useRouter} from 'vue-router';
@@ -15,7 +14,7 @@ export interface UseEntityPageOpt<T> {
   onAfterLoad?: (action: string, entity: T) => void
 }
 
-export function useEntityPage<T>(
+export function useSyncEntityPage<T>(
   opt: UseEntityPageOpt<T>
 ) {
 
@@ -24,12 +23,12 @@ export function useEntityPage<T>(
   const route = useRoute()
   const router = useRouter()
 
-  const {id, action} = toRefs(opt.props)
+  const id: Ref<string> = toRef(opt.props, 'id')
+  const action: Ref<string> = toRef(opt.props, 'action')
   const prevProps = ref('')
 
   const entityModel: Ref<T | null> = ref(null)
   const originEntity: Ref<T | null> = ref(null)
-  const saved = ref(false)
   const error: Ref<AnnetteError | null> = ref(null)
 
   const loadEntity = async () => {
@@ -40,10 +39,8 @@ export function useEntityPage<T>(
     // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
     if (action.value === 'create' && opt.emptyEntity) {
       const entity = opt.emptyEntity()
-      // @ts-ignore
-      entityModel.value = {...entity}
-      // @ts-ignore
-      originEntity.value = {...entity}
+      entityModel.value = extend(true, entityModel.value, entity)
+      originEntity.value = extend(true, originEntity.value, entity)
     } else {
       try {
         let entity: T
@@ -56,8 +53,8 @@ export function useEntityPage<T>(
            // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
            entity = await store.dispatch(`${opt.namespace}/getEntityForEdit`, id.value)
          }
-        entityModel.value = extend(true, entity)
-        originEntity.value = extend(true, entity)
+        entityModel.value = extend(true, entityModel.value, entity)
+        originEntity.value = extend(true, originEntity.value, entity)
         error.value = null
       } catch (ex) {
         error.value = ex
@@ -70,6 +67,14 @@ export function useEntityPage<T>(
     }
   }
 
+  const updateEntity = (entity: T | null) => {
+    if (entity) {
+      entityModel.value = extend(true, entityModel.value, entity)
+      originEntity.value = extend(true, originEntity.value, entity)
+    }
+    error.value = null
+  }
+
   const save = async () => {
     if (opt.formHasError && opt.formHasError(entityModel.value)) {
       quasar.notify({
@@ -77,27 +82,10 @@ export function useEntityPage<T>(
         message: 'Form validation failed'
       })
       // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-    } else if (action.value === 'edit') {
-      try {
-        const entity = await store.dispatch(`${opt.namespace}/updateEntity`, entityModel.value)
-        // @ts-ignore
-        entityModel.value = extend(true, entity)
-        // @ts-ignore
-        originEntity.value = extend(true, entity)
-        saved.value = true
-        error.value = null
-      } catch (ex) {
-        error.value = ex
-      }
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
     } else if (action.value === 'create') {
       try {
         const entity = await store.dispatch(`${opt.namespace}/createEntity`, entityModel.value)
-        entityModel.value = extend(true, entity)
-        originEntity.value = extend(true, entity)
-        saved.value = true
-        error.value = null
-        console.log('route', route)
+        updateEntity(entity)
         // @ts-ignore
         // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
         void router.push({ name: route.name, params: {...route.params, action: 'edit', id: entity.id}, query: route.query})
@@ -107,8 +95,16 @@ export function useEntityPage<T>(
     }
   }
 
-  const changed = () => {
-    return hash(entityModel.value) !== hash(originEntity.value)
+
+  const update = async ( updateFn: () => Promise<T | null> ) => {
+    if (action.value && action.value === 'edit') {
+      try {
+        const entity = await updateFn()
+        updateEntity(entity)
+      } catch (ex) {
+        error.value = ex
+      }
+    }
   }
 
   const clearError = () => {
@@ -133,10 +129,9 @@ export function useEntityPage<T>(
     id,
     entityModel,
     originEntity,
-    saved,
     error,
     save,
-    changed,
+    update,
     clearError
   };
 }

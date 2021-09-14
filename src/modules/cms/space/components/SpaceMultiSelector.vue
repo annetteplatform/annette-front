@@ -3,9 +3,9 @@
     class="full-width"
     :model-value="model"
     @update:model-value="select"
+    multiple
     use-input
-    fill-input
-    hide-selected
+    use-chips
     input-debounce="500"
     :readonly="readonly"
     :label="label"
@@ -14,7 +14,7 @@
     option-label="name"
     emit-value
     map-options
-    :clearable="clearable"
+    clearable
     :loading="instance.loading"
     @filter="setFilter"
   >
@@ -30,28 +30,25 @@
 
 <script lang="ts">
 import {defineComponent, toRef} from 'vue';
-import {Category, CategoryFilter, useEntitySelector} from 'src/shared';
+import {Space, SpaceFilter} from 'src/modules/cms';
+import {useEntityMultiSelector} from 'src/shared';
+import {Ref} from "@vue/reactivity";
 
 
 export default defineComponent({
-  name: 'PersonCategorySelector',
+  name: 'SpaceMultiSelector',
   components: {},
   props: {
     label: {
       type: String,
       required: false,
-      default: 'Category'
+      default: 'Spaces'
     },
     modelValue: {
-      type: String,
+      type: Array,
       required: true
     },
     readonly: {
-      type: Boolean,
-      default: false,
-      required: false
-    },
-    clearable: {
       type: Boolean,
       default: false,
       required: false
@@ -60,14 +57,13 @@ export default defineComponent({
   emits: ['update:modelValue'],
   setup(props, {emit}) {
 
-    const valueRef = toRef(props, 'modelValue')
+    const valueRef = toRef(props, 'modelValue') as Ref<string[]>
 
-    const entitySelector = useEntitySelector<Category, CategoryFilter>(
-      'personCategory',
-      'CategorySelector',
+    const entitySelector = useEntityMultiSelector<Space, SpaceFilter>(
+      'cmsSpace',
+      'SpaceMultiSelector',
       valueRef,
       emit)
-
 
     return {
       ...entitySelector,

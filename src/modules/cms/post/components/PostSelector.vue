@@ -11,10 +11,10 @@
     :label="label"
     :options="items"
     option-value="id"
-    option-label="name"
+    option-label="title"
     emit-value
     map-options
-    :clearable="clearable"
+    clearable
     :loading="instance.loading"
     @filter="setFilter"
   >
@@ -30,28 +30,24 @@
 
 <script lang="ts">
 import {defineComponent, toRef} from 'vue';
-import {Category, CategoryFilter, useEntitySelector} from 'src/shared';
+import {useEntitySelector} from 'src/shared';
+import {Post, PostFilter} from 'src/modules/cms';
 
 
 export default defineComponent({
-  name: 'PersonCategorySelector',
+  name: 'PostSelector',
   components: {},
   props: {
     label: {
       type: String,
       required: false,
-      default: 'Category'
+      default: 'Post'
     },
     modelValue: {
       type: String,
       required: true
     },
     readonly: {
-      type: Boolean,
-      default: false,
-      required: false
-    },
-    clearable: {
       type: Boolean,
       default: false,
       required: false
@@ -62,12 +58,11 @@ export default defineComponent({
 
     const valueRef = toRef(props, 'modelValue')
 
-    const entitySelector = useEntitySelector<Category, CategoryFilter>(
-      'personCategory',
-      'CategorySelector',
+    const entitySelector = useEntitySelector<Post, PostFilter>(
+      'post',
+      'PostSelector',
       valueRef,
       emit)
-
 
     return {
       ...entitySelector,

@@ -136,11 +136,9 @@ export function buildActionsWithCustomLoad<E extends BaseEntity, F, R>(
       // console.log('instance', instance)
       if (instance) {
         if (!!payload.page || payload.page === 0 || !!payload.pageSize || !!payload.filter || payload.clear) {
-          console.log('!!payload.clear', !!payload.clear)
-          console.log('payload.pageSize ', (payload.pageSize && payload.pageSize !== instance.pageSize))
-          // eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/ban-ts-comment
-          // @ts-ignore
-          console.log('payload.filter', payload.filter && hash(payload.filter) === hash(instance.filter))
+          // console.log('!!payload.clear', !!payload.clear)
+          // console.log('payload.pageSize ', (payload.pageSize && payload.pageSize !== instance.pageSize))
+          // console.log('payload.filter', payload.filter && hash(payload.filter) === hash(instance.filter))
           // eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/ban-ts-comment
           // @ts-ignore
           const clear = !!(

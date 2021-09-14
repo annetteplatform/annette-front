@@ -89,7 +89,7 @@ export function serviceGroups(): ServiceGroup[] {
         {
           id: 'ORG_CATEGORIES',
           order: 20,
-          icon: 'category',
+          icon: 'local_offer',
           title: 'Org. categories',
           subtitle: 'Maintain org. categories',
           action: {name: 'orgStructure.categories'},
@@ -97,7 +97,7 @@ export function serviceGroups(): ServiceGroup[] {
         {
           id: 'ORG_ROLES',
           order: 30,
-          icon: 'local_offer',
+          icon: 'category',
           title: 'Organizational roles',
           subtitle: 'Maintain organizational roles',
           action: {name: 'orgStructure.roles'},
@@ -135,7 +135,7 @@ export function serviceGroups(): ServiceGroup[] {
       id: 'PRINCIPAL_GROUP',
       order: 50,
       icon: 'groups',
-      title: 'Principal group ',
+      title: 'Principal Group',
       subtitle: 'Maintain principal groups',
       services: [
         {
@@ -156,68 +156,71 @@ export function serviceGroups(): ServiceGroup[] {
         },
       ]
     },
-    // {
-    //   id: 'CMS-VIEW',
-    //   order: 30,
-    //   icon: 'fas fa-rss',
-    //   title: 'CMS View ',
-    //   subtitle: '',
-    //   services: [
-    //     {
-    //       id: 'POST-VIEW',
-    //       order: 10,
-    //       icon: 'fas fa-list',
-    //       title: 'Blog posts',
-    //       subtitle: 'View blog posts',
-    //       action: {name: 'cms.postViews'},
-    //       actionName: 'Open'
-    //     },
-    //     {
-    //       id: 'SPACES',
-    //       order: 20,
-    //       icon: 'fas fa-rss',
-    //       title: 'Spaces',
-    //       subtitle: 'View list of spaces: blogs & wikies',
-    //       action: {name: 'cms.spaceViews'},
-    //       actionName: 'View'
-    //     }
-    //   ]
-    // },
-    // {
-    //   id: 'CMS-EDIT',
-    //   order: 40,
-    //   icon: 'fas fa-rss',
-    //   title: 'CMS maintenance ',
-    //   subtitle: '',
-    //   services: [
-    //     {
-    //       id: 'SPACE_CATEGORIES',
-    //       order: 10,
-    //       icon: 'local_offer',
-    //       title: 'Space categories',
-    //       subtitle: 'Maintain space categories',
-    //       action: {name: 'cms.categories'},
-    //       actionName: 'View'
-    //     },
-    //     {
-    //       id: 'SPACES',
-    //       order: 20,
-    //       icon: 'fas fa-rss',
-    //       title: 'Spaces',
-    //       subtitle: 'View list of spaces: blogs & wikies',
-    //       action: {name: 'cms.spaces'},
-    //       actionName: 'View'
-    //     },
-    //     {
-    //       id: 'POSTS',
-    //       order: 30,
-    //       icon: 'fas fa-list',
-    //       title: 'Posts',
-    //       subtitle: 'View list of posts',
-    //       action: {name: 'cms.posts'},
-    //       actionName: 'View'
-    //     }
-    //   ]
-    // }
+
+    {
+      id: 'CMS',
+      order: 60,
+      icon: 'inventory',
+      title: 'CMS Administration ',
+      subtitle: '',
+      services: [
+        {
+          id: 'SPACE_CATEGORIES',
+          order: 10,
+          icon: 'local_offer',
+          title: 'Space categories',
+          subtitle: 'Maintain space categories',
+          action: {name: 'cms.categories'},
+          actionName: 'View'
+        },
+        {
+          id: 'SPACES',
+          order: 20,
+          icon: 'inventory',
+          title: 'Spaces',
+          subtitle: 'View list of spaces: blogs & wikies',
+          action: {name: 'cms.spaces'},
+          actionName: 'View'
+        },
+        {
+          id: 'POSTS',
+          order: 30,
+          icon: 'feed',
+          title: 'Posts',
+          subtitle: 'View list of posts',
+          action: {name: 'cms.posts'},
+          actionName: 'View'
+        }
+      ]
+    },
+    {
+      id: 'CMS-VIEW',
+      order: 70,
+      icon: 'feed',
+      title: 'CMS View ',
+      subtitle: '',
+      services: [
+        {
+          id: 'POST-VIEW',
+          order: 10,
+          icon: 'feed',
+          title: 'Blog posts',
+          subtitle: 'View blog posts',
+          action: '/404',
+          // action: {name: 'cms.postViews'},
+          actionName: 'Open'
+        },
+        {
+          id: 'SPACES',
+          order: 20,
+          icon: 'inventory',
+          title: 'Spaces',
+          subtitle: 'View list of spaces: blogs & wikies',
+          action: '/404',
+          // action: {name: 'cms.spaceViews'},
+          actionName: 'View'
+        }
+      ]
+    },
   ]
 }

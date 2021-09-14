@@ -14,7 +14,7 @@
     option-label="name"
     emit-value
     map-options
-    :clearable="clearable"
+    clearable
     :loading="instance.loading"
     @filter="setFilter"
   >
@@ -30,28 +30,24 @@
 
 <script lang="ts">
 import {defineComponent, toRef} from 'vue';
-import {Category, CategoryFilter, useEntitySelector} from 'src/shared';
+import {useEntitySelector} from 'src/shared';
+import {Space, SpaceFilter} from 'src/modules/cms';
 
 
 export default defineComponent({
-  name: 'PersonCategorySelector',
+  name: 'SpaceSelector',
   components: {},
   props: {
     label: {
       type: String,
       required: false,
-      default: 'Category'
+      default: 'Space'
     },
     modelValue: {
       type: String,
       required: true
     },
     readonly: {
-      type: Boolean,
-      default: false,
-      required: false
-    },
-    clearable: {
       type: Boolean,
       default: false,
       required: false
@@ -62,12 +58,11 @@ export default defineComponent({
 
     const valueRef = toRef(props, 'modelValue')
 
-    const entitySelector = useEntitySelector<Category, CategoryFilter>(
-      'personCategory',
-      'CategorySelector',
+    const entitySelector = useEntitySelector<Space, SpaceFilter>(
+      'cmsSpace',
+      'SpaceSelector',
       valueRef,
       emit)
-
 
     return {
       ...entitySelector,

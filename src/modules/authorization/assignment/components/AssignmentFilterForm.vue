@@ -60,7 +60,7 @@
             </div>
             <div class="col-auto q-gutter-sm">
               <q-btn flat color="negative" label="Clear" @click="clearFilter"/>
-              <q-btn outline color="primary" label="Filter" @click="setFilter"/>
+              <q-btn outline color="primary" label="Apply" @click="setFilter"/>
             </div>
           </div>
         </q-card-section>

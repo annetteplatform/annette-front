@@ -12,9 +12,14 @@
             @submit="setFilter"
             @reset="clearFilter"
             class="full-width q-pa-md q-gutter-md">
-            <q-input
-              v-model="filterModel.filter"
-              label="Filter"/>
+            <div class="row">
+              <q-input class="full-width"
+                v-model="filterModel.filter"
+                label="Filter"/>
+            </div>
+            <div class="row">
+              <space-multi-selector v-model="filterModel.spaces"/>
+            </div>
           </q-form>
           <q-card-actions vertical class=" q-ml-lg q-mr-lg q-mb-md">
             <q-btn flat color="primary" label="Apply" @click="setFilter"/>
@@ -28,14 +33,16 @@
 
 <script lang="ts">
 import {defineComponent, PropType, ref, toRefs, watch} from 'vue'
-import {SimpleFilter} from 'src/shared';
+import SpaceMultiSelector from 'src/modules/cms/space/components/SpaceMultiSelector.vue';
+import {PostFilter} from 'src/modules/cms';
+import {Ref} from '@vue/reactivity';
 
 export default defineComponent({
-  name: 'SimpleFilterForm',
-  components: {},
+  name: 'PostFilterForm',
+  components: {SpaceMultiSelector},
   props: {
     filter: {
-      type: Object as PropType<SimpleFilter>,
+      type: Object as PropType<PostFilter>,
       required: true
     },
     emptyFilter: {
@@ -47,7 +54,7 @@ export default defineComponent({
     const {filter} = toRefs(props)
     const expanded = ref(true)
 
-    const filterModel: any = ref({...props.filter})
+    const filterModel: Ref<PostFilter> = ref({...props.filter})
 
     const clearFilter = () => {
       if (props.emptyFilter) {

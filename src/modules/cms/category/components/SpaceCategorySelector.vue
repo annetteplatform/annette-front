@@ -34,7 +34,7 @@ import {Category, CategoryFilter, useEntitySelector} from 'src/shared';
 
 
 export default defineComponent({
-  name: 'PersonCategorySelector',
+  name: 'SpaceCategorySelector',
   components: {},
   props: {
     label: {
@@ -63,7 +63,7 @@ export default defineComponent({
     const valueRef = toRef(props, 'modelValue')
 
     const entitySelector = useEntitySelector<Category, CategoryFilter>(
-      'personCategory',
+      'cmsCategory',
       'CategorySelector',
       valueRef,
       emit)
