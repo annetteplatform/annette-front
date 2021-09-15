@@ -28,6 +28,7 @@ import {useEntityListPage} from 'src/shared';
 import EntityListPage from 'src/shared/components/EntityListPage.vue';
 import SimpleFilterForm from 'src/shared/components/SimpleFilterForm.vue';
 import ApplicationList from './components/ApplicationList.vue';
+import {ApplicationFilter} from 'src/modules/application';
 
 
 const NAMESPACE = 'appApplication'
@@ -38,7 +39,10 @@ export default defineComponent({
   components: {ApplicationList, SimpleFilterForm, EntityListPage},
   setup() {
 
-    const entityListPage = useEntityListPage(NAMESPACE, INSTANCE_KEY)
+    const entityListPage = useEntityListPage<ApplicationFilter>({
+      namespace: NAMESPACE,
+      instanceKey: INSTANCE_KEY
+    })
 
     return {
       ...entityListPage

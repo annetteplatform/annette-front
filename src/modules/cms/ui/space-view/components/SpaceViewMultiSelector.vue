@@ -30,13 +30,13 @@
 
 <script lang="ts">
 import {defineComponent, toRef} from 'vue';
-import {Space, SpaceFilter} from 'src/modules/cms';
+import {SpaceView, SpaceViewFilter} from 'src/modules/cms';
 import {useEntityMultiSelector} from 'src/shared';
-import {Ref} from "@vue/reactivity";
+import {Ref} from '@vue/reactivity';
 
 
 export default defineComponent({
-  name: 'SpaceMultiSelector',
+  name: 'SpaceViewMultiSelector',
   components: {},
   props: {
     label: {
@@ -59,9 +59,9 @@ export default defineComponent({
 
     const valueRef = toRef(props, 'modelValue') as Ref<string[]>
 
-    const entitySelector = useEntityMultiSelector<Space, SpaceFilter>(
-      'cmsSpace',
-      'SpaceMultiSelector',
+    const entitySelector = useEntityMultiSelector<SpaceView, SpaceViewFilter>(
+      'cmsSpaceView',
+      'SpaceViewMultiSelector',
       valueRef,
       emit)
 

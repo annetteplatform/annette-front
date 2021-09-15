@@ -26,6 +26,7 @@ import {useEntityListPage} from 'src/shared';
 import PersonList from './components/PersonList.vue';
 import SimpleFilterForm from 'src/shared/components/SimpleFilterForm.vue';
 import EntityListPage from 'src/shared/components/EntityListPage.vue';
+import {PersonFilter} from 'src/modules/person';
 
 const NAMESPACE = 'personPerson';
 const INSTANCE_KEY = 'persons'
@@ -35,7 +36,10 @@ export default defineComponent({
   components: {EntityListPage, PersonList, SimpleFilterForm},
   setup() {
 
-    const entityListPage = useEntityListPage(NAMESPACE, INSTANCE_KEY)
+    const entityListPage = useEntityListPage<PersonFilter>({
+      namespace: NAMESPACE,
+      instanceKey: INSTANCE_KEY,
+    })
 
     return {
       ...entityListPage

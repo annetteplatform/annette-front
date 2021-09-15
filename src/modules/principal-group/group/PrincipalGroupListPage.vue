@@ -26,6 +26,7 @@ import {useEntityListPage} from 'src/shared';
 import PrincipalGroupList from './components/PrincipalGroupList.vue';
 import SimpleFilterForm from 'src/shared/components/SimpleFilterForm.vue';
 import EntityListPage from 'src/shared/components/EntityListPage.vue';
+import {PrincipalGroupFilter} from 'src/modules/principal-group';
 
 const NAMESPACE = 'principalGroup';
 const INSTANCE_KEY = 'principalGroups'
@@ -35,7 +36,10 @@ export default defineComponent({
   components: {EntityListPage, PrincipalGroupList, SimpleFilterForm},
   setup() {
 
-    const entityListPage = useEntityListPage(NAMESPACE, INSTANCE_KEY)
+    const entityListPage = useEntityListPage<PrincipalGroupFilter>({
+      namespace: NAMESPACE,
+      instanceKey: INSTANCE_KEY,
+    })
 
     return {
       ...entityListPage

@@ -5,14 +5,9 @@
 
 <script lang="ts">
 import {computed, defineComponent, toRef} from 'vue';
-import {AnnettePrincipal, useEntityList} from 'src/shared';
-import EntityList from 'src/shared/components/EntityList.vue';
-import {SpaceView, SpaceViewFilter} from 'src/modules/cms';
-import {Ref} from "@vue/reactivity";
-import {useStore} from "src/store";
-
-
-const NAMESPACE = 'cmsSpaceView';
+import {AnnettePrincipal} from 'src/shared';
+import {Ref} from '@vue/reactivity';
+import {useStore} from 'src/store';
 
 export default defineComponent({
   name: 'SubscriptionField',

@@ -33,7 +33,7 @@
 
 <script lang="ts">
 import {defineComponent, PropType, ref, toRefs, watch} from 'vue'
-import SpaceMultiSelector from 'src/modules/cms/space/components/SpaceMultiSelector.vue';
+import SpaceMultiSelector from 'src/modules/cms/ui/space/components/SpaceMultiSelector.vue';
 import {PostFilter} from 'src/modules/cms';
 import {Ref} from '@vue/reactivity';
 

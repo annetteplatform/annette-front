@@ -276,31 +276,7 @@ import {
 } from 'src/modules/cms';
 import {useSyncEntityPage} from 'src/shared/composables/sync-entity-page';
 import {AnnettePrincipal} from 'src/shared';
-import {Ref} from "@vue/reactivity";
-
-function emptyContent(): MarkdownContent {
-  return {
-    type: 'markdown',
-    markdown: ''
-  }
-}
-
-function emptyEntity(): Post {
-  return {
-    id: '',
-    spaceId: '',
-    featured: false,
-    authorId: {
-      principalType: 'person',
-      principalId: ''
-    },
-    title: '',
-    introContent: emptyContent(),
-    content: emptyContent(),
-    publicationStatus: 'draft',
-
-  }
-}
+import {Ref} from '@vue/reactivity';
 
 const NAMESPACE = 'cmsPost';
 
@@ -323,6 +299,7 @@ export default defineComponent({
 
     const principalSelectorDialog = ref()
 
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const formHasError = (entity?: Post | null): boolean => {
       // eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-member-access
       idRef.value.validate()
@@ -346,8 +323,14 @@ export default defineComponent({
           principalId: personId.value || ''
         },
         title: '',
-        introContent: emptyContent(),
-        content: emptyContent(),
+        introContent: {
+          type: 'markdown',
+          markdown: ''
+        } as MarkdownContent,
+        content: {
+          type: 'markdown',
+          markdown: ''
+        } as MarkdownContent,
         publicationStatus: 'draft',
       } as Post
     }

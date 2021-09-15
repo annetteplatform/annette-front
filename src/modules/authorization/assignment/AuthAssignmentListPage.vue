@@ -23,6 +23,7 @@ import {useEntityListPage} from 'src/shared';
 import EntityListPage from 'src/shared/components/EntityListPage.vue';
 import AssignmentFilterForm from 'src/modules/authorization/assignment/components/AssignmentFilterForm.vue';
 import AuthAssignmentList from 'src/modules/authorization/assignment/components/AuthAssignmentList.vue';
+import {AuthAssignmentFilter} from 'src/modules/authorization';
 
 const NAMESPACE = 'authAssignment'
 const INSTANCE_KEY = 'authAssignment'
@@ -32,7 +33,10 @@ export default defineComponent({
   components: {AuthAssignmentList, AssignmentFilterForm,  EntityListPage},
   setup() {
 
-    const entityListPage = useEntityListPage(NAMESPACE, INSTANCE_KEY)
+    const entityListPage = useEntityListPage<AuthAssignmentFilter>({
+      namespace: NAMESPACE,
+      instanceKey: INSTANCE_KEY
+    })
 
     return {
       ...entityListPage

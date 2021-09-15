@@ -40,7 +40,12 @@ export default defineComponent({
   setup() {
 
     const emptyFilter = emptyOrganizationFilter
-    const entityListPage = useEntityListPage<OrgItemFilter>(NAMESPACE, INSTANCE_KEY, emptyFilter())
+    const entityListPage = useEntityListPage<OrgItemFilter>({
+        namespace: NAMESPACE,
+        instanceKey: INSTANCE_KEY,
+        filter: emptyFilter()
+      }
+    )
 
     const createOrgItemDialog = ref()
 

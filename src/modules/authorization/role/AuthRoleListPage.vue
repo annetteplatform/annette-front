@@ -26,6 +26,7 @@ import {useEntityListPage} from 'src/shared';
 import AuthRoleList from './components/AuthRoleList.vue';
 import SimpleFilterForm from 'src/shared/components/SimpleFilterForm.vue';
 import EntityListPage from 'src/shared/components/EntityListPage.vue';
+import {AuthRoleFilter} from 'src/modules/authorization';
 
 const NAMESPACE = 'authRole'
 const INSTANCE_KEY = 'authRoles'
@@ -35,7 +36,10 @@ export default defineComponent({
   components: {AuthRoleList, SimpleFilterForm, EntityListPage},
   setup() {
 
-    const entityListPage = useEntityListPage(NAMESPACE, INSTANCE_KEY)
+    const entityListPage = useEntityListPage<AuthRoleFilter>({
+      namespace: NAMESPACE,
+      instanceKey: INSTANCE_KEY
+    })
 
     return {
       ...entityListPage

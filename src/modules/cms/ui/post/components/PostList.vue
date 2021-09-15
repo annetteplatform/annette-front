@@ -14,6 +14,9 @@
         <q-badge outline color="primary" :label="props.row.spaceId" />
       </q-td>
       <q-td>
+        <featured-field :post-id="props.row.id" />
+      </q-td>
+      <q-td>
         <q-badge outline color="grey-8"
                  v-if="props.row.publicationStatus === 'draft'"
                  class="cursor-pointer"
@@ -46,8 +49,9 @@ import {defineComponent} from 'vue';
 import {useEntityList} from 'src/shared';
 import EntityList from 'src/shared/components/EntityList.vue';
 import {Post, PostFilter} from 'src/modules/cms';
-import {useStore} from "src/store";
-import {date, useQuasar} from "quasar";
+import {useStore} from 'src/store';
+import {date, useQuasar} from 'quasar';
+import FeaturedField from 'src/modules/cms/ui/post/components/FeaturedField.vue';
 
 const COLUMNS = [
 
@@ -64,6 +68,14 @@ const COLUMNS = [
     align: 'left',
     label: 'Space Id',
     field: 'spaceId',
+    sortable: true,
+    classes: 'text-truncate'
+  },
+  {
+    name: 'featured',
+    align: 'left',
+    label: 'Featured',
+    field: 'featured',
     sortable: true,
     classes: 'text-truncate'
   },
@@ -89,7 +101,7 @@ const NAMESPACE = 'cmsPost';
 
 export default defineComponent({
   name: 'PostList',
-  components: {EntityList},
+  components: {FeaturedField, EntityList},
   props: {
     instanceKey: {
       type: String,

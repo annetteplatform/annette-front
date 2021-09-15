@@ -26,6 +26,7 @@ import {useEntityListPage} from 'src/shared';
 import OrgCategoryList from './components/OrgCategoryList.vue';
 import SimpleFilterForm from 'src/shared/components/SimpleFilterForm.vue';
 import EntityListPage from 'src/shared/components/EntityListPage.vue';
+import {OrgCategoryFilter} from 'src/modules/org-structure';
 
 const NAMESPACE = 'orgCategory'
 const INSTANCE_KEY = 'categories'
@@ -35,7 +36,10 @@ export default defineComponent({
   components: {EntityListPage, OrgCategoryList, SimpleFilterForm},
   setup() {
 
-    const entityListPage = useEntityListPage(NAMESPACE, INSTANCE_KEY)
+    const entityListPage = useEntityListPage<OrgCategoryFilter>({
+      namespace: NAMESPACE,
+      instanceKey: INSTANCE_KEY,
+    })
 
     return {
       ...entityListPage

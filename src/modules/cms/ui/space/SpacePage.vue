@@ -109,7 +109,7 @@
 <script lang="ts">
 import {computed, defineComponent, ref} from 'vue';
 import EntityPage from 'src/shared/components/EntityPage.vue';
-import SpaceCategorySelector from 'src/modules/cms/category/components/SpaceCategorySelector.vue';
+import SpaceCategorySelector from 'src/modules/cms/ui/category/components/SpaceCategorySelector.vue';
 import {useStore} from 'src/store';
 import {useQuasar} from 'quasar';
 import PrincipalViewItem from 'src/shared/components/principal-view/PrincipalViewItem.vue';

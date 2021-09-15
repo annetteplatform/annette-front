@@ -206,8 +206,7 @@ export function serviceGroups(): ServiceGroup[] {
           icon: 'feed',
           title: 'Blog posts',
           subtitle: 'View blog posts',
-          action: '/404',
-          // action: {name: 'cms.postViews'},
+          action: {name: 'cms.postViews'},
           actionName: 'Open'
         },
         {

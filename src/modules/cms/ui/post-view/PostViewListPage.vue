@@ -4,19 +4,15 @@
       <q-btn class="q-mr-md" outline color="primary"
              label="Refresh"
              @click="refreshList"/>
-      <q-btn color="primary"
-             label="Create"
-             :disable="!(instance.filter.spaces && instance.filter.spaces.length === 1)"
-             :to="{name: 'cms.post', params: {action: 'create', id: instance.filter.spaces && instance.filter.spaces[0] }}"/>
     </template>
     <template v-slot:filter>
-      <post-filter-form class="q-mb-md"
+      <post-view-filter-form class="q-mb-md"
                         :filter="instance.filter"
                         @filterChanged="onFilterChanged"
                         :empty-filter="emptyFilter"/>
     </template>
     <template v-slot:default>
-      <post-list class="q-mb-md"
+      <postView-list class="q-mb-md"
                  :instance-key="instanceKey"/>
     </template>
   </entity-list-page>
@@ -24,16 +20,16 @@
 
 <script lang="ts">
 import {defineComponent} from 'vue';
-import {useEntityListPage} from 'src/shared';
-import PostList from './components/PostList.vue';
+import {PagingMode, useEntityListPage} from 'src/shared';
+import PostViewList from './components/PostViewList.vue';
 import EntityListPage from 'src/shared/components/EntityListPage.vue';
-import PostFilterForm from 'src/modules/cms/post/components/PostFilterForm.vue';
-import {PostFilter} from 'src/modules/cms';
+import PostViewFilterForm from './components/PostViewFilterForm.vue';
+import {PostViewFilter} from 'src/modules/cms';
 
-const NAMESPACE = 'cmsPost';
-const INSTANCE_KEY = 'posts'
+const NAMESPACE = 'cmsPostView';
+const INSTANCE_KEY = 'postViews'
 
-function emptyFilter(): PostFilter {
+function emptyFilter(): PostViewFilter {
   return {
     filter: '',
     spaces: []
@@ -41,15 +37,16 @@ function emptyFilter(): PostFilter {
 }
 
 export default defineComponent({
-  name: 'PostListPage',
-  components: {PostFilterForm, EntityListPage, PostList},
+  name: 'PostViewListPage',
+  components: {PostViewFilterForm, EntityListPage, PostViewList},
   setup() {
 
-    const entityListPage = useEntityListPage<PostFilter>(
-      NAMESPACE,
-      INSTANCE_KEY,
-      emptyFilter()
-    )
+    const entityListPage = useEntityListPage<PostViewFilter>({
+      namespace: NAMESPACE,
+      instanceKey: INSTANCE_KEY,
+      filter: emptyFilter(),
+      pagingMode: PagingMode.Range
+    })
 
     return {
       ...entityListPage,

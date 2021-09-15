@@ -1,4 +1,4 @@
-import {AnnettePrincipal, BaseEntity, SortBy} from 'src/shared';
+import {AnnettePrincipal, BaseEntity} from 'src/shared';
 
 export interface AuthRole extends BaseEntity {
   id: string,
@@ -21,11 +21,4 @@ export interface AuthRoleDto {
   name: string,
   description: string,
   permissions: Permission[],
-}
-
-export interface AuthRoleFindQuery {
-  offset: number
-  size: number,
-  filter?: string,
-  sortBy?: SortBy[]
 }

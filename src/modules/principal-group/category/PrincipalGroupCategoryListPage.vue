@@ -22,7 +22,7 @@
 
 <script lang="ts">
 import {defineComponent} from 'vue';
-import { useEntityListPage} from 'src/shared';
+import {CategoryFilter, useEntityListPage} from 'src/shared';
 import PrincipalGroupCategoryList from './components/PrincipalGroupCategoryList.vue';
 import EntityListPage from 'src/shared/components/EntityListPage.vue';
 import SimpleFilterForm from 'src/shared/components/SimpleFilterForm.vue';
@@ -35,7 +35,10 @@ export default defineComponent({
   components: {EntityListPage, PrincipalGroupCategoryList, SimpleFilterForm},
   setup() {
 
-    const entityListPage = useEntityListPage(NAMESPACE, INSTANCE_KEY)
+    const entityListPage = useEntityListPage<CategoryFilter>({
+      namespace: NAMESPACE,
+      instanceKey: INSTANCE_KEY,
+    })
 
     return {
       ...entityListPage

@@ -1,9 +1,12 @@
 <template>
-  <entity-list-page narrow caption="Spaces" :namespace="namespace" :instance-key="instanceKey">
+  <entity-list-page narrow caption="Spaces" :namespace="namespace" :instance-key="instanceKey" >
     <template v-slot:toolbar>
       <q-btn class="q-mr-md" outline color="primary"
              label="Refresh"
              @click="refreshList"/>
+      <q-btn color="primary"
+             label="Create"
+             :to="{name: 'cms.space', params: {action: 'create', id: 'new'}}"/>
     </template>
     <template v-slot:filter>
       <simple-filter-form class="q-mb-md"
@@ -11,8 +14,8 @@
                           @filterChanged="onFilterChanged"/>
     </template>
     <template v-slot:default>
-      <space-view-list class="q-mb-md"
-                       :instance-key="instanceKey"/>
+      <space-list class="q-mb-md"
+                   :instance-key="instanceKey"/>
     </template>
   </entity-list-page>
 </template>
@@ -20,20 +23,23 @@
 <script lang="ts">
 import {defineComponent} from 'vue';
 import {useEntityListPage} from 'src/shared';
-import SpaceViewList from './components/SpaceViewList.vue';
+import SpaceList from './components/SpaceList.vue';
 import SimpleFilterForm from 'src/shared/components/SimpleFilterForm.vue';
 import EntityListPage from 'src/shared/components/EntityListPage.vue';
-import {SpaceViewFilter} from 'src/modules/cms';
+import {SpaceFilter} from 'src/modules/cms';
 
-const NAMESPACE = 'cmsSpaceView';
-const INSTANCE_KEY = 'spaceViews'
+const NAMESPACE = 'cmsSpace';
+const INSTANCE_KEY = 'spaces'
 
 export default defineComponent({
-  name: 'SpaceViewListPage',
-  components: {EntityListPage, SpaceViewList, SimpleFilterForm},
+  name: 'SpaceListPage',
+  components: {EntityListPage, SpaceList, SimpleFilterForm},
   setup() {
 
-    const entityListPage = useEntityListPage<SpaceViewFilter>(NAMESPACE, INSTANCE_KEY)
+    const entityListPage = useEntityListPage<SpaceFilter>({
+      namespace: NAMESPACE,
+      instanceKey: INSTANCE_KEY,
+    })
 
     return {
       ...entityListPage

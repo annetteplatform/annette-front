@@ -26,6 +26,7 @@ import {useEntityListPage} from 'src/shared';
 import OrgRoleList from './components/OrgRoleList.vue';
 import SimpleFilterForm from 'src/shared/components/SimpleFilterForm.vue';
 import EntityListPage from 'src/shared/components/EntityListPage.vue';
+import {OrgRoleFilter} from 'src/modules/org-structure';
 
 const NAMESPACE = 'orgRole'
 const INSTANCE_KEY = 'roles'
@@ -35,7 +36,10 @@ export default defineComponent({
   components: {EntityListPage, OrgRoleList, SimpleFilterForm, },
   setup() {
 
-    const entityListPage = useEntityListPage(NAMESPACE, INSTANCE_KEY)
+    const entityListPage = useEntityListPage<OrgRoleFilter>({
+      namespace: NAMESPACE,
+      instanceKey: INSTANCE_KEY,
+    })
 
     return {
       ...entityListPage

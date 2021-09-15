@@ -26,6 +26,7 @@ import {useEntityListPage} from 'src/shared';
 import LanguageList from './components/LanguageList.vue';
 import SimpleFilterForm from 'src/shared/components/SimpleFilterForm.vue';
 import EntityListPage from 'src/shared/components/EntityListPage.vue';
+import {LanguageFilter} from 'src/modules/application';
 
 const NAMESPACE = 'appLanguage'
 const INSTANCE_KEY = 'languages'
@@ -35,7 +36,10 @@ export default defineComponent({
   components: {LanguageList, SimpleFilterForm, EntityListPage},
   setup() {
 
-    const entityListPage = useEntityListPage(NAMESPACE, INSTANCE_KEY)
+    const entityListPage = useEntityListPage<LanguageFilter>({
+      namespace: NAMESPACE,
+      instanceKey: INSTANCE_KEY
+    })
 
     return {
       ...entityListPage

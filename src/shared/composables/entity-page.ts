@@ -3,8 +3,13 @@ import {ref, toRefs, watch} from 'vue';
 import {AnnetteError} from 'src/shared';
 import hash from 'object-hash';
 import {useStore} from 'src/store';
-import {extend, useQuasar} from 'quasar';
+import {useQuasar} from 'quasar';
 import {useRoute, useRouter} from 'vue-router';
+
+function deepCopy<T>(object: T): T {
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+  return JSON.parse(JSON.stringify(object))
+}
 
 export interface UseEntityPageOpt<T> {
   namespace: string,
@@ -32,6 +37,14 @@ export function useEntityPage<T>(
   const saved = ref(false)
   const error: Ref<AnnetteError | null> = ref(null)
 
+  const updateEntity = (entity: T | null) => {
+    if (entity) {
+      entityModel.value = deepCopy(entity)
+      originEntity.value = deepCopy(entity)
+    }
+    error.value = null
+  }
+
   const loadEntity = async () => {
     if (opt.onBeforeLoad) {
       // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
@@ -40,8 +53,7 @@ export function useEntityPage<T>(
     // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
     if (action.value === 'create' && opt.emptyEntity) {
       const entity = opt.emptyEntity()
-      entityModel.value = extend(true, entityModel.value, entity)
-      originEntity.value = extend(true, originEntity.value, entity)
+      updateEntity(entity)
     } else {
       try {
         let entity: T
@@ -54,9 +66,7 @@ export function useEntityPage<T>(
            // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
            entity = await store.dispatch(`${opt.namespace}/getEntityForEdit`, id.value)
          }
-        entityModel.value = extend(true, entityModel.value, entity)
-        originEntity.value = extend(true, originEntity.value, entity)
-        error.value = null
+        updateEntity(entity)
       } catch (ex) {
         error.value = ex
       }
@@ -78,10 +88,8 @@ export function useEntityPage<T>(
     } else if (action.value === 'edit') {
       try {
         const entity = await store.dispatch(`${opt.namespace}/updateEntity`, entityModel.value)
-        entityModel.value = extend(true, entityModel.value, entity)
-        originEntity.value = extend(true, originEntity.value, entity)
+        updateEntity(entity)
         saved.value = true
-        error.value = null
       } catch (ex) {
         error.value = ex
       }
@@ -89,10 +97,8 @@ export function useEntityPage<T>(
     } else if (action.value === 'create') {
       try {
         const entity = await store.dispatch(`${opt.namespace}/createEntity`, entityModel.value)
-        entityModel.value = extend(true, entityModel.value, entity)
-        originEntity.value = extend(true, originEntity.value, entity)
+        updateEntity(entity)
         saved.value = true
-        error.value = null
         console.log('route', route)
         // @ts-ignore
         // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access

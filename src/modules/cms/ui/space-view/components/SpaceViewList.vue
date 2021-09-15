@@ -37,7 +37,7 @@ import {defineComponent} from 'vue';
 import {useEntityList} from 'src/shared';
 import EntityList from 'src/shared/components/EntityList.vue';
 import {SpaceView, SpaceViewFilter} from 'src/modules/cms';
-import SubscriptionField from 'src/modules/cms/space-view/components/SubscriptionField.vue';
+import SubscriptionField from 'src/modules/cms/ui/space-view/components/SubscriptionField.vue';
 
 const COLUMNS = [
   {
