@@ -64,10 +64,10 @@ export const principalGroupService = {
       .then(result => result.data)
   },
 
-  async findPrincipalGroups(filter: PrincipalGroupFilter, page: number, pageSize: number) {
+  async findPrincipalGroups(filter: PrincipalGroupFilter, offset: number, size: number) {
     const query = {
-      offset: page * pageSize,
-      size: pageSize,
+      offset,
+      size,
       ...filter
     }
     return await axios.post<FindResult>('/api/annette/v1/principalGroup/findPrincipalGroups', query)
@@ -103,10 +103,10 @@ export const principalGroupService = {
       .then(result => result.data.map(convertCategory))
   },
 
-  async findCategories(filter: CategoryFilter, page: number, pageSize: number) {
+  async findCategories(filter: CategoryFilter, offset: number, size: number) {
     const query = {
-      offset: page * pageSize,
-      size: pageSize,
+      offset,
+      size,
       ...filter
     }
     return await axios.post<FindResult>('/api/annette/v1/principalGroup/findCategories', query)

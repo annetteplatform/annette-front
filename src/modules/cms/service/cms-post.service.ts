@@ -85,10 +85,10 @@ export const cmsPostService = {
       .then(result => result.data.map(convertPost))
   },
 
-  async findPosts(filter: PostFilter, page: number, pageSize: number) {
+  async findPosts(filter: PostFilter, offset: number, size: number) {
     const query = {
-      offset: page * pageSize,
-      size: pageSize,
+      offset,
+      size,
       ...filter
     }
     if (query.spaces && query.spaces.length === 0) {

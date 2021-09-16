@@ -31,10 +31,10 @@ export const cmsCategoryService = {
       .then(result => result.data.map(convertCategory))
   },
 
-  async findCategories(filter: CategoryFilter, page: number, pageSize: number) {
+  async findCategories(filter: CategoryFilter, offset: number, size: number) {
     const query = {
-      offset: page * pageSize,
-      size: pageSize,
+      offset,
+      size,
       ...filter
     }
     return await axios.post<FindResult>('/api/annette/v1/cms/findCategories', query)

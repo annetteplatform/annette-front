@@ -32,10 +32,10 @@ export const personService = {
       .then(result => result.data.map(convertPerson))
   },
 
-  async findPersons(filter: PersonFilter, page: number, pageSize: number) {
+  async findPersons(filter: PersonFilter, offset: number, size: number) {
     const query = {
-      offset: page * pageSize,
-      size: pageSize,
+      offset,
+      size,
       ...filter
     }
     return await axios.post<FindResult>('/api/annette/v1/person/findPersons', query)
@@ -71,10 +71,10 @@ export const personService = {
       .then(result => result.data.map(convertCategory))
   },
 
-  async findCategories(filter: CategoryFilter, page: number, pageSize: number) {
+  async findCategories(filter: CategoryFilter, offset: number, size: number) {
     const query = {
-      offset: page * pageSize,
-      size: pageSize,
+      offset,
+      size,
       ...filter
     }
     return await axios.post<FindResult>('/api/annette/v1/person/findCategories', query)

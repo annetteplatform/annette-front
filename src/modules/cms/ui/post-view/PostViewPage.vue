@@ -8,9 +8,9 @@
 
 <script lang="ts">
 import {computed, defineComponent, toRef, watch} from 'vue';
-import {useStore} from "src/store";
-import {Ref} from "@vue/reactivity";
-import PostViewCard from "src/modules/cms/ui/post-view/components/PostViewCard.vue";
+import {useStore} from 'src/store';
+import {Ref} from '@vue/reactivity';
+import PostViewCard from 'src/modules/cms/ui/post-view/components/PostViewCard.vue';
 
 export default defineComponent({
   name: 'PostViewPage',

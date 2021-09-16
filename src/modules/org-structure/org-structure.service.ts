@@ -56,10 +56,10 @@ export const orgStructureService = {
       .then(result => result.data.map(convertOrgCategory))
   },
 
-  async findCategories(filter: CategoryFilter, page: number, pageSize: number) {
+  async findCategories(filter: CategoryFilter, offset: number, size: number) {
     const query = {
-      offset: page * pageSize,
-      size: pageSize,
+      offset,
+      size,
       ...filter
     }
     return await axios.post<FindResult>('/api/annette/v1/orgStructure/findCategories', query)
@@ -95,10 +95,10 @@ export const orgStructureService = {
       .then(result => result.data.map(convertOrgRole))
   },
 
-  async findOrgRoles(filter: OrgRoleFilter, page: number, pageSize: number) {
+  async findOrgRoles(filter: OrgRoleFilter, offset: number, size: number) {
     const query = {
-      offset: page * pageSize,
-      size: pageSize,
+      offset,
+      size,
       ...filter
     }
     return await axios.post<FindResult>('/api/annette/v1/orgStructure/findOrgRoles', query)
@@ -195,10 +195,10 @@ export const orgStructureService = {
       .then(result => result.data.map(convertOrgItem))
   },
 
-  async findOrgItems(filter: OrgItemFilter, page: number, pageSize: number) {
+  async findOrgItems(filter: OrgItemFilter, offset: number, size: number) {
     const query = {
-      offset: page * pageSize,
-      size: pageSize,
+      offset,
+      size,
       ...filter
     }
     return await axios.post<FindResult>('/api/annette/v1/orgStructure/findOrgItems', query)

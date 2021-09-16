@@ -4,10 +4,10 @@ import { PostMetric, PostView, PostViewFilter } from './model';
 
 export const cmsPostViewService = {
 
-  async findPostViews(filter: PostViewFilter, page: number, pageSize: number) {
+  async findPostViews(filter: PostViewFilter, offset: number, size: number) {
     const query = {
-      offset: page * pageSize,
-      size: pageSize,
+      offset,
+      size,
       ...filter
     }
     if (query.spaces && query.spaces.length === 0) {
