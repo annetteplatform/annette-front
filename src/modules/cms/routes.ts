@@ -38,10 +38,11 @@ export const cmsRoutes: RouteRecordRaw[] = [
     path: 'cms/post-views',
     name: 'cms.postViews',
     component: () => import('src/modules/cms/ui/post-view/PostViewListPage.vue'),
+    props: (route) => ({ spaces: String(route.query.spaces)}),
     meta: {requiresAuth: true}
   },
   {
-    path: 'cms/post-view/:id',
+    path: 'cms/post-view/:id/',
     name: 'cms.postView',
     component: () => import('src/modules/cms/ui/post-view/PostViewPage.vue'),
     props: (route) => ({ id: String(route.params.id)}),

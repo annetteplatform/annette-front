@@ -9,6 +9,7 @@ export interface UseEntityListPageOpt<F> {
   filter?: F,
   pagingMode?: PagingMode
   page?: number
+  onInstanceUpdate?: (instance: InstanceState<F>) => void
 }
 
 export function useEntityListPage<F>(opt: UseEntityListPageOpt<F>) {
@@ -28,10 +29,13 @@ export function useEntityListPage<F>(opt: UseEntityListPageOpt<F>) {
     }
 
     void store.dispatch(`${opt.namespace}/initInstance`, initInstancePayload)
+  } else if (opt.onInstanceUpdate) {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-return,@typescript-eslint/no-unsafe-member-access
+    opt.onInstanceUpdate(store.getters[`${opt.namespace}/instance`](opt.instanceKey))
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-return,@typescript-eslint/no-unsafe-member-access
-  const instance:Ref<InstanceState<F>> = computed(() => store.getters[`${opt.namespace}/instance`](opt.instanceKey))
+  const instance: Ref<InstanceState<F>> = computed(() => store.getters[`${opt.namespace}/instance`](opt.instanceKey))
 
   const refreshList = () => {
     void store.dispatch(`${opt.namespace}/refresh`, {key: opt.instanceKey})

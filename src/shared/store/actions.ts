@@ -210,7 +210,7 @@ export function buildActionsWithCustomLoad<E extends BaseEntity, F, R>(
 }
 
 export function buildActions<E extends BaseEntity, F, R>(
-  find: (query: F, page: number, pageSize: number) => Promise<FindResult>,
+  find: (query: F, offset: number, size: number) => Promise<FindResult>,
   getEntityById: (id: string, readSide: boolean) => Promise<E>,
   getEntitiesById: (ids: string[], readSide: boolean) => Promise<E[]>
 ): ActionTree<EntityState<E, F>, R> {
@@ -223,8 +223,10 @@ export function buildActions<E extends BaseEntity, F, R>(
     }
     commit('loadStarted', payload.key)
     let findResults: FindResult
+    const offset = payload.fromPage * payload.pageSize
+    const size = (payload.toPage + 1)* payload.pageSize
     try {
-      findResults = await find(payload.filter, payload.page, payload.pageSize)
+      findResults = await find(payload.filter, offset, size)
     } catch (ex) {
       const loadFailurePayload: LoadFailurePayload = {
         key: payload.key,
