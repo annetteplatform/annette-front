@@ -16,7 +16,9 @@ async function load({commit, state}: Store<EntityState<PermissionAssignment, Aut
   commit('loadStarted', {key: payload.key})
 
   try {
-    const findResponse: AssignmentFindResult = await authorizationService.findAssignments(payload.filter, payload.page, payload.pageSize)
+    const offset = payload.fromPage * payload.pageSize
+    const size = (payload.toPage + 1)* payload.pageSize
+    const findResponse: AssignmentFindResult = await authorizationService.findAssignments(payload.filter, offset, size)
 
     const entities: PermissionAssignment[] = findResponse.hits.map(
       hit => {

@@ -4,10 +4,10 @@ import {SpaceView, SpaceViewFilter} from 'src/modules/cms';
 
 export const cmsSpaceViewService = {
 
-  async findSpaceViews(filter: SpaceViewFilter, page: number, pageSize: number) {
+  async findSpaceViews(filter: SpaceViewFilter, offset: number, size: number) {
     const query = {
-      offset: page * pageSize,
-      size: pageSize,
+      offset,
+      size,
       ...filter
     }
     return await axios.post<FindResult>('/api/annette/v1/cms/findSpaceViews', query)

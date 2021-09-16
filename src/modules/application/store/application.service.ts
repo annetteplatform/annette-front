@@ -41,10 +41,10 @@ export const applicationService = {
       .then(result => result.data.map(convertApplication))
   },
 
-  async findApplications(filter: ApplicationFilter, page: number, pageSize: number) {
+  async findApplications(filter: ApplicationFilter, offset: number, size: number) {
     const query = {
-      offset: page * pageSize,
-      size: pageSize,
+      offset,
+      size,
       ...filter
     }
     return await axios.post<FindResult>('/api/annette/v1/application/findApplications', query)
@@ -87,10 +87,10 @@ export const applicationService = {
       .then(result => result.data.map(convertLanguage))
   },
 
-  async findLanguages(filter: LanguageFilter, page: number, pageSize: number) {
+  async findLanguages(filter: LanguageFilter, offset: number, size: number) {
     const query = {
-      offset: page * pageSize,
-      size: pageSize,
+      offset,
+      size,
       ...filter
     }
     return await axios.post<FindResult>('/api/annette/v1/application/findLanguages', query)
@@ -126,10 +126,10 @@ export const applicationService = {
       .then(result => result.data.map(convertTranslation))
   },
 
-  async findTranslations(filter: TranslationFilter, page: number, pageSize: number) {
+  async findTranslations(filter: TranslationFilter, offset: number, size: number) {
     const query = {
-      offset: page * pageSize,
-      size: pageSize,
+      offset,
+      size,
       ...filter
     }
     return await axios.post<FindResult>('/api/annette/v1/application/findTranslations', query)

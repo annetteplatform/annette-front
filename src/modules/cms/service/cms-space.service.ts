@@ -69,10 +69,10 @@ export const cmsSpaceService = {
       .then(result => result.data.map(convertSpace))
   },
 
-  async findSpaces(filter: SpaceFilter, page: number, pageSize: number) {
+  async findSpaces(filter: SpaceFilter, offset: number, size: number) {
     const query = {
-      offset: page * pageSize,
-      size: pageSize,
+      offset,
+      size,
       ...filter
     }
     return await axios.post<FindResult>('/api/annette/v1/cms/findSpaces', query)

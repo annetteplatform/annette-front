@@ -34,10 +34,10 @@ export const authorizationService = {
       .then(result => result.data.map(convertRole))
   },
 
-  async findRoles(filter: AuthRoleFilter, page: number, pageSize: number) {
+  async findRoles(filter: AuthRoleFilter, offset: number, size: number) {
     const query = {
-      offset: page * pageSize,
-      size: pageSize,
+      offset,
+      size,
       ...filter
     }
     return await axios.post<FindResult>('/api/annette/v1/authorization/findRoles', query)
@@ -60,10 +60,10 @@ export const authorizationService = {
       .then(() => true)
   },
 
-  async findAssignments(filter: AuthAssignmentFilter, page: number, pageSize: number) {
+  async findAssignments(filter: AuthAssignmentFilter, offset: number, size: number) {
     const query = {
-      offset: page * pageSize,
-      size: pageSize,
+      offset,
+      size,
       ...filter,
     }
     return await axios.post<AssignmentFindResult>('/api/annette/v1/authorization/findAssignments', query)
