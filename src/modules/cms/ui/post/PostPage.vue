@@ -167,14 +167,15 @@
               />
             </div>
 
-            <div class="row">
-              <q-input
-                class="col-md-12 col-sm-12 col-xs-12"
-                v-if="entityModel.introContent.type == 'markdown'"
-                :model-value="entityModel.introContent.markdown"
-                @update:model-value="updateIntroContent"
-                debounce="1000"
-                type="textarea" label="Intro content"/>
+            <div class="row q-mt-md">
+              <div class="col-md-12 col-sm-12 col-xs-12 markdown"
+                   v-if="entityModel.introContent.type == 'markdown'">
+                <q-input outlined
+                  :model-value="entityModel.introContent.markdown"
+                  @update:model-value="updateIntroContent"
+                  debounce="1000"
+                  type="textarea" label="Intro content"/>
+              </div>
               <q-editor
                 class="col-md-12 col-sm-12 col-xs-12 q-mt-md"
                 v-else
@@ -264,7 +265,7 @@
               />
             </div>
 
-            <div class="row q-mt-md">
+            <div class="row q-mt-md ">
               <q-select
                 class="col-md-12 col-sm-12 col-xs-12"
                 v-model="entityModel.content.type"
@@ -274,14 +275,15 @@
               />
             </div>
 
-            <div class="row">
-              <q-input
-                class="col-md-12 col-sm-12 col-xs-12"
-                v-if="entityModel.content.type == 'markdown'"
-                :model-value="entityModel.content.markdown"
-                @update:model-value="updateContent"
-                debounce="1000"
-                type="textarea" label="Content"/>
+            <div class="row q-mt-md ">
+              <div class="col-md-12 col-sm-12 col-xs-12 markdown"
+                   v-if="entityModel.content.type == 'markdown'">
+                <q-input outlined
+                         :model-value="entityModel.content.markdown"
+                         @update:model-value="updateContent"
+                         debounce="1000"
+                         type="textarea" label="Content"/>
+              </div>
               <q-editor
                 class="col-md-12 col-sm-12 col-xs-12 q-mt-md"
                 v-else
@@ -787,3 +789,12 @@ export default defineComponent({
   }
 });
 </script>
+
+<style>
+.markdown textarea {
+  font-family: Fira code, Fira Mono, Consolas, Menlo, Courier, monospace;
+  font-size: 14px;
+  line-height: 1.5;
+  padding: 5px;
+}
+</style>
