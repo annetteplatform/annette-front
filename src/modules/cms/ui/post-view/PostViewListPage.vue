@@ -25,8 +25,8 @@ import PostViewList from './components/PostViewList.vue';
 import EntityListPage from 'src/shared/components/EntityListPage.vue';
 import PostViewFilterForm from './components/PostViewFilterForm.vue';
 import {PostViewFilter} from 'src/modules/cms';
-import {Ref} from "@vue/reactivity";
-import {useStore} from "src/store";
+import {Ref} from '@vue/reactivity';
+import {useStore} from 'src/store';
 
 const NAMESPACE = 'cmsPostView';
 const INSTANCE_KEY = 'postViews'
