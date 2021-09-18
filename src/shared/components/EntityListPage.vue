@@ -1,5 +1,5 @@
 <template>
-  <div :class="{ 'narrow-layout': narrow }">
+  <div :class="narrow ? 'narrow-layout': 'q-ma-md'">
     <div class="row">
       <div class="col-md-12 q-pa-md">
         <q-item class="q-mr-none">
