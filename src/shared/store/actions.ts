@@ -135,17 +135,15 @@ export function buildActionsWithCustomLoad<E extends BaseEntity, F, R>(
       // console.log('resetInstance', payload)
       // console.log('instance', instance)
       if (instance) {
-        if (!!payload.page || payload.page === 0 || !!payload.pageSize || !!payload.filter || payload.clear) {
-          // console.log('!!payload.clear', !!payload.clear)
-          // console.log('payload.pageSize ', (payload.pageSize && payload.pageSize !== instance.pageSize))
-          // console.log('payload.filter', payload.filter && hash(payload.filter) === hash(instance.filter))
+        const pageSet = !!payload.page || payload.page === 0
+        const pageSizeSet = !!payload.pageSize
+        const pageSizeChanged = !!payload.pageSize && payload.pageSize !== instance.pageSize
+        const filterSet = !!payload.filter
+        const filterChanged = !!payload.filter && hash(payload.filter) === hash(instance.filter)
+        if (pageSet || pageSizeSet || filterSet || payload.clear) {
           // eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/ban-ts-comment
           // @ts-ignore
-          const clear = !!(
-            !!payload.clear ||
-            (payload.pageSize && payload.pageSize !== instance.pageSize) ||
-            (payload.filter && hash(payload.filter) === hash(instance.filter))
-          )
+          const clear = payload.clear || pageSizeChanged  || filterChanged
           const loadPayload: LoadPayload<F> = {
             key: payload.key,
             fromPage: 0,
