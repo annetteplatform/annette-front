@@ -75,6 +75,24 @@
           :readonly="action ==='view'"
           label="Phone number "/>
       </div>
+      <div class="row">
+        <q-input
+          class="col-md-12 col-sm-12 col-xs-12 q-pr-md"
+          debounce="500"
+          v-model="entityModel.source"
+          label="Source"
+          :readonly="action === 'view'"
+        />
+      </div>
+
+      <div class="row">
+        <q-input
+          class="col-md-12 col-sm-12 col-xs-12 q-pr-md"
+          v-model="entityModel.externalId"
+          label="External Id"
+          :readonly="action === 'view'"
+        />
+      </div>
     </template>
   </entity-page>
 </template>
@@ -96,6 +114,8 @@ function emptyEntity() {
     categoryId: '',
     phone: '',
     email: '',
+    source: '',
+    externalId: ''
   }
 }
 

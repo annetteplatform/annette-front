@@ -9,6 +9,8 @@ export interface Person extends BaseEntity {
   categoryId: string,
   phone?: string,
   email?: string,
+  source?: string,
+  externalId?: string,
   updatedAt?: Date,
   updatedBy?: AnnettePrincipal
 }
@@ -21,5 +23,7 @@ export interface PersonFilter {
   categories?: string[],
   phone?: string,
   email?: string,
+  sources?: string[]
+  externalIds?: string[]
   sortBy?: SortBy[]
 }
