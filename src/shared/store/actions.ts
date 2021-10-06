@@ -219,7 +219,7 @@ export function buildActions<E extends BaseEntity, F, R>(
     if (!instance) {
       throw new Error(`Instance ${payload.key} isn't initialised`)
     }
-    commit('loadStarted', payload.key)
+    commit('loadStarted', {key: payload.key})
     let findResults: FindResult
     const offset = payload.fromPage * payload.pageSize
     const size = (payload.toPage + 1)* payload.pageSize
