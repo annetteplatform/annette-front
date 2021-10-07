@@ -49,6 +49,7 @@
                   :readonly="action !== 'create'"
                   option-value="id"
                   option-label="name"
+                  emit-value
                   map-options
                   label="Space Type"/>
       </div>
