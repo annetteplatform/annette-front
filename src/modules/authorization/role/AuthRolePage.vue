@@ -21,11 +21,11 @@
       <q-btn v-if="action === 'edit'"
              class="q-mr-md" outline color="primary"
              label="Assignments"
-             :to="{ name: 'authorization.roleAssignments', params: { action: 'view', id } }"/>
+             :to="{ name: 'authorization.roleAssignments', params: { action: 'edit', id } }"/>
       <q-btn v-if="action === 'view'"
              class="q-mr-md" outline color="primary"
              label="Assignments"
-             :to="{ name: 'authorization.roleAssignments', params: { action: 'edit', id } }"/>
+             :to="{ name: 'authorization.roleAssignments', params: { action: 'view', id } }"/>
 
       <q-btn v-if="action !== 'view'"
              color="primary"

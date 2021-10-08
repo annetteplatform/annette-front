@@ -8,7 +8,6 @@
         :label="group.title"
         :model-value="!!openGroups[group.id] || false"
         @update:model-value="toggleOpenGroup(group.id)"
-
       >
         <q-list >
           <q-item :inset-level="0.2" v-for="service in group.services" :key="service.id" :to="service.action">
