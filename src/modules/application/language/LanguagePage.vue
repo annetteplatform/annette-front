@@ -16,8 +16,8 @@
              class="q-mr-md" outline color="primary"
              label="Edit"
              :to="{ name: 'application.language', params: { action: 'edit', id } }"/>
-      <q-btn color="primary"
-             v-if="entityModel"
+      <q-btn v-if="action !== 'view'"
+             color="primary"
              label="Save"
              @click="save"/>
     </template>

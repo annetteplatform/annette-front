@@ -17,7 +17,7 @@
              label="Edit"
              :to="{ name: 'principalGroup.category', params: { action: 'edit', id } }"/>
       <q-btn color="primary"
-             v-if="entityModel"
+             v-if="action !== 'view'"
              label="Save"
              @click="save"/>
     </template>

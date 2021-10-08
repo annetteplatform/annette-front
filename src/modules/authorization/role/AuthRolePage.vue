@@ -27,8 +27,8 @@
              label="Assignments"
              :to="{ name: 'authorization.roleAssignments', params: { action: 'edit', id } }"/>
 
-      <q-btn color="primary"
-             v-if="entityModel"
+      <q-btn v-if="action !== 'view'"
+             color="primary"
              label="Save"
              @click="save"/>
     </template>

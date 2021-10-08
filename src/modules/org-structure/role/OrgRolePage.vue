@@ -17,7 +17,7 @@
              label="Edit"
              :to="{ name: 'orgStructure.role', params: { action: 'edit', id } }"/>
       <q-btn color="primary"
-             v-if="entityModel"
+             v-if="action !== 'view'"
              label="Save"
              @click="save"/>
     </template>
