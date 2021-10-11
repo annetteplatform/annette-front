@@ -2,7 +2,12 @@
   <q-card flat bordered class="q-mb-md" :key="post.id">
 
     <q-card-section>
-      <div v-if="spaces[post.spaceId]" class="text-overline q-mb-xs">{{ spaces[post.spaceId].name }}</div>
+      <div class="float-right" v-if="post.featured">
+        <q-icon name="bolt" color="red" size="sm"/>
+      </div>
+      <div v-if="spaces[post.spaceId]" class="text-overline q-mb-xs">
+        {{ spaces[post.spaceId].name }}
+      </div>
       <router-link v-if="annotationMode" class="text-h6" style="text-decoration: none; color: black;"
                    :to="{ name: 'cms.postView', params: {id: post.id }}">{{ post.title }}</router-link>
       <div v-if="!annotationMode" class="text-h4">{{ post.title }}</div>

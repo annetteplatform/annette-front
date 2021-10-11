@@ -6,7 +6,7 @@
                @clearError="clearError">
     <template v-slot:toolbar>
       <q-btn class="q-mr-md" outline color="primary"
-             label="Groups"
+             label="Spaces"
              :to="{name: 'cms.spaces'}"/>
       <q-btn class="q-mr-md" outline color="primary"
              v-if="action === 'edit'"
