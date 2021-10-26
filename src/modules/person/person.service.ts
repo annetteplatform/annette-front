@@ -1,5 +1,11 @@
 import axios from 'axios'
-import {Category, CategoryFilter, FindResult} from 'src/shared'
+import {
+  AttributeValues,
+  Category,
+  CategoryFilter, EntitiesAttributeValues, EntityAttributesMetadata,
+  FindResult,
+  UpdateAttributesPayload
+} from 'src/shared'
 import {Person, PersonFilter} from 'src/modules/person/store';
 
 export const personService = {
@@ -39,6 +45,31 @@ export const personService = {
       ...filter
     }
     return await axios.post<FindResult>('/api/annette/v1/person/findPersons', query)
+      .then(result => result.data)
+  },
+
+  // ************************** Person Attributes API **************************
+
+  async updatePersonAttributes(payload: UpdateAttributesPayload) {
+    return await axios.post<AttributeValues>('/api/annette/v1/person/updatePersonAttributes', payload)
+      .then(result => result.data)
+  },
+
+  async getPersonMetadata() {
+    // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
+    return await axios.get<EntityAttributesMetadata>('/api/annette/v1/person/getPersonMetadata')
+      .then(result => result.data)
+  },
+
+  async getPersonAttributes(id: string, readSide = true, attributes: string) {
+    // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
+    return await axios.get<AttributeValues>(`/api/annette/v1/person/getPersonAttributes/${id}/${readSide}?attributes=${attributes}`)
+      .then(result => result.data)
+  },
+
+  async getPersonsAttributes(ids: string[], readSide = true, attributes: string) {
+    // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
+    return await axios.post<EntitiesAttributeValues>(`/api/annette/v1/person/getPersonsAttributes/${readSide}?attributes=${attributes}`, ids)
       .then(result => result.data)
   },
 

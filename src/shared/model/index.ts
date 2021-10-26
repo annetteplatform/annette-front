@@ -1,3 +1,4 @@
+export * from './attributes'
 export * from './caption'
 export * from './category'
 export * from './filter'

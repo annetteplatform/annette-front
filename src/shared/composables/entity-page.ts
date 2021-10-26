@@ -1,6 +1,6 @@
 import {Ref} from '@vue/reactivity';
 import {ref, toRefs, watch} from 'vue';
-import {AnnetteError} from 'src/shared';
+import {AnnetteError, AttributeValues, EntityAttributesMetadata} from 'src/shared';
 import hash from 'object-hash';
 import {useStore} from 'src/store';
 import {useQuasar} from 'quasar';
@@ -16,8 +16,11 @@ export interface UseEntityPageOpt<T> {
   emptyEntity?: () => T,
   formHasError?: (entity?: T | null) => boolean,
   props: any,
-  onBeforeLoad?: (action: string, id: string) => void
-  onAfterLoad?: (action: string, entity: T) => void
+  onBeforeLoad?: (action: string, id: string) => void,
+  onAfterLoad?: (action: string, entity: T) => void,
+  enableAttributes?: boolean
+  getAttributes?:  (id: string, readSide: boolean, attributes: string) => Promise<AttributeValues> ,
+  getMetadata?: () => Promise<EntityAttributesMetadata>
 }
 
 export function useEntityPage<T>(
@@ -37,6 +40,9 @@ export function useEntityPage<T>(
   const saved = ref(false)
   const error: Ref<AnnetteError | null> = ref(null)
 
+  const attributes: Ref<AttributeValues> = ref({})
+  const metadata: Ref<EntityAttributesMetadata> = ref({})
+
   const updateEntity = (entity: T | null) => {
     if (entity) {
       entityModel.value = deepCopy(entity)
@@ -46,6 +52,10 @@ export function useEntityPage<T>(
   }
 
   const loadEntity = async () => {
+    if (opt.enableAttributes) {
+      attributes.value = {}
+      metadata.value = {}
+    }
     if (opt.onBeforeLoad) {
       // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
       opt.onBeforeLoad(action.value, id.value)
@@ -54,15 +64,28 @@ export function useEntityPage<T>(
     if (action.value === 'create' && opt.emptyEntity) {
       const entity = opt.emptyEntity()
       updateEntity(entity)
+      if (opt.enableAttributes && opt.getMetadata && opt.getAttributes ){
+        void opt.getMetadata().then(data => metadata.value = data)
+      }
     } else {
       try {
         let entity: T
         // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
          if (action.value === 'view') {
+           if (opt.enableAttributes && opt.getMetadata && opt.getAttributes ){
+             void opt.getMetadata().then(data => metadata.value = data)
+             // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+             void opt.getAttributes(id.value, true, 'all').then(data => attributes.value = data)
+           }
            // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
            const entities: T[] = await store.dispatch(`${opt.namespace}/loadEntitiesIfNotExist`, [id.value])
            entity = entities[0]
          } else {
+           if (opt.enableAttributes && opt.getMetadata && opt.getAttributes ){
+             void opt.getMetadata().then(data => metadata.value = data)
+             // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+             void opt.getAttributes(id.value, false, 'all').then(data => attributes.value = data)
+           }
            // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
            entity = await store.dispatch(`${opt.namespace}/getEntityForEdit`, id.value)
          }
@@ -87,7 +110,13 @@ export function useEntityPage<T>(
       // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
     } else if (action.value === 'edit') {
       try {
-        const entity = await store.dispatch(`${opt.namespace}/updateEntity`, entityModel.value)
+        const entityToSave = { ...entityModel.value }
+        if (opt.enableAttributes) {
+          // @ts-ignore
+          entityToSave.attributes = {...attributes.value}
+          console.log(entityToSave)
+        }
+        const entity = await store.dispatch(`${opt.namespace}/updateEntity`, entityToSave)
         updateEntity(entity)
         saved.value = true
       } catch (ex) {
@@ -96,7 +125,12 @@ export function useEntityPage<T>(
       // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
     } else if (action.value === 'create') {
       try {
-        const entity = await store.dispatch(`${opt.namespace}/createEntity`, entityModel.value)
+        const entityToSave = { ...entityModel.value }
+        if (opt.enableAttributes) {
+          // @ts-ignore
+          entityToSave.attributes = {...attributes.value}
+        }
+        const entity = await store.dispatch(`${opt.namespace}/createEntity`, entityToSave)
         updateEntity(entity)
         saved.value = true
         console.log('route', route)
@@ -139,6 +173,8 @@ export function useEntityPage<T>(
     error,
     save,
     changed,
-    clearError
+    clearError,
+    attributes,
+    metadata
   };
 }

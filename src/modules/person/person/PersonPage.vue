@@ -77,7 +77,7 @@
       </div>
       <div class="row">
         <q-input
-          class="col-md-12 col-sm-12 col-xs-12 q-pr-md"
+          class="col-md-12 col-sm-12 col-xs-12 "
           debounce="500"
           v-model="entityModel.source"
           label="Source"
@@ -87,11 +87,15 @@
 
       <div class="row">
         <q-input
-          class="col-md-12 col-sm-12 col-xs-12 q-pr-md"
+          class="col-md-12 col-sm-12 col-xs-12 "
           v-model="entityModel.externalId"
           label="External Id"
           :readonly="action === 'view'"
         />
+      </div>
+
+      <div class="q-pt-md q-pb-md">
+      <attributes-form v-if="attributes && metadata" v-model="attributes" :metadata="metadata" :readonly="action === 'view'"/>
       </div>
     </template>
   </entity-page>
@@ -101,9 +105,10 @@
 import {defineComponent, ref} from 'vue';
 
 import {useEntityPage} from 'src/shared';
-import {Person} from 'src/modules/person';
+import {Person, personService} from 'src/modules/person';
 import PersonCategorySelector from 'src/modules/person/category/components/PersonCategorySelector.vue'
 import EntityPage from 'src/shared/components/EntityPage.vue';
+import AttributesForm from 'src/shared/components/attributes/AttributesForm.vue';
 
 function emptyEntity() {
   return {
@@ -123,7 +128,7 @@ const NAMESPACE = 'personPerson';
 
 export default defineComponent({
   name: 'PersonPage',
-  components: {EntityPage, PersonCategorySelector},
+  components: {AttributesForm, EntityPage, PersonCategorySelector},
   props: {
     id: String,
     action: String
@@ -151,7 +156,12 @@ export default defineComponent({
       namespace: NAMESPACE,
       emptyEntity,
       formHasError,
-      props
+      props,
+      enableAttributes: true,
+      // eslint-disable-next-line @typescript-eslint/unbound-method
+      getAttributes: personService.getPersonAttributes,
+      // eslint-disable-next-line @typescript-eslint/unbound-method
+      getMetadata: personService.getPersonMetadata
     })
 
     return {

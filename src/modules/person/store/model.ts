@@ -1,4 +1,4 @@
-import {AnnettePrincipal, BaseEntity, SortBy} from 'src/shared';
+import {AnnettePrincipal, AttributeValues, BaseEntity, SortBy} from 'src/shared';
 
 export interface Person extends BaseEntity {
   id: string,
@@ -11,6 +11,7 @@ export interface Person extends BaseEntity {
   email?: string,
   source?: string,
   externalId?: string,
+  attributes?: AttributeValues,
   updatedAt?: Date,
   updatedBy?: AnnettePrincipal
 }
