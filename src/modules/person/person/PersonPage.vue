@@ -95,7 +95,10 @@
       </div>
 
       <div class="q-pt-md q-pb-md">
-      <attributes-form v-if="attributes && metadata" v-model="attributes" :metadata="metadata" :readonly="action === 'view'"/>
+      <attributes-form v-if="attributes && metadata"
+                       v-model="attributes"
+                       :metadata="metadata"
+                       :readonly="action === 'view'"/>
       </div>
     </template>
   </entity-page>

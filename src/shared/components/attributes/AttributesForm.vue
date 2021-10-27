@@ -5,14 +5,16 @@
     </q-card-section>
 
     <q-card-section class="q-pt-none">
-      <div class="row" v-for="meta in sortedMeta" :key="meta.name">
+      <div class="row" v-for="meta in metadata" :key="meta.name">
         <q-select class="col-md-12 col-sm-12 col-xs-12 "
                   v-if="meta.type == 'string' && meta.allowedValues"
                   :model-value="modelValue[meta.name]"
                   @update:model-value="setAttribute($event, meta)"
                   :label="getCaption(meta)"
-                  :options="meta.allowedValues"
-                  :readonly="readonly"/>
+                  :options="[ '', ...meta.allowedValues]"
+                  :readonly="readonly"
+                  stack-label
+        />
         <q-checkbox class="q-pt-md q-b-md"
                     v-else-if="meta.type == 'boolean'"
                     :model-value="modelValue[meta.name] === 'true' ? true : modelValue[meta.name] === 'false' ? false : ''"
@@ -21,7 +23,8 @@
                     :disable="readonly"
                     indeterminate-value=""
                     toggle-indeterminate
-                    left-label/>
+                    left-label
+        />
         <q-input v-else-if="meta.type == 'json'"
                  class="col-md-12 col-sm-12 col-xs-12 "
                  stack-label
@@ -29,7 +32,8 @@
                  :model-value="modelValue[meta.name]"
                  @update:model-value="setAttribute($event, meta)"
                  :label="getCaption(meta)"
-                 :readonly="readonly"/>
+                 :readonly="readonly"
+        />
         <q-input v-else
                  class="col-md-12 col-sm-12 col-xs-12 "
                  stack-label
@@ -45,11 +49,10 @@
 </template>
 
 <script lang="ts">
-import {computed, defineComponent, PropType, toRef} from 'vue';
+import {defineComponent, PropType, toRef} from 'vue';
 import {
   AttributeMetadata,
   AttributeValues,
-  EntityAttributesMetadata,
   TextCaption,
   TranslationCaption
 } from 'src/shared'
@@ -64,7 +67,7 @@ export default defineComponent({
       required: true
     },
     metadata: {
-      type: Object as PropType<EntityAttributesMetadata>,
+      type: Object as PropType<AttributeMetadata[]>,
       required: true
     },
     readonly: {
@@ -75,10 +78,8 @@ export default defineComponent({
   },
   emits: ['update:modelValue'],
   setup(props, {emit}) {
-    const metadata: Ref<EntityAttributesMetadata> = toRef(props, "metadata")
-    const attributes: Ref<AttributeValues> = toRef(props, "modelValue")
+    const attributes: Ref<AttributeValues> = toRef(props, 'modelValue')
 
-    const sortedMeta = computed(() => Object.values(metadata.value).sort((a, b) => a.name < b.name ? -1 : 1))
 
     const getCaption = (meta: AttributeMetadata) => {
       const caption = meta.caption.type == 'text' ? (meta.caption as TextCaption).text : (meta.caption as TranslationCaption).translationId
@@ -96,7 +97,6 @@ export default defineComponent({
     }
 
     return {
-      sortedMeta,
       getCaption,
       setAttribute
     }

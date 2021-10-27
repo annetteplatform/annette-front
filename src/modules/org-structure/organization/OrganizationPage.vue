@@ -19,9 +19,9 @@
 
     </template>
     <template v-slot:status>
-<!--      <div class="q-ml-md q-mr-md">-->
-<!--        <q-chip outline square color="green" text-color="white" label="Some status info"/>-->
-<!--      </div>-->
+      <!--      <div class="q-ml-md q-mr-md">-->
+      <!--        <q-chip outline square color="green" text-color="white" label="Some status info"/>-->
+      <!--      </div>-->
     </template>
     <template v-slot:default>
       <div class="q-ml-md q-mr-md "
@@ -68,7 +68,8 @@
                 v-model:expanded="expanded"
                 v-model:selected="selected"
                 selected-color="primary"
-                @lazy-load="onLazyLoad"/>
+                @lazy-load="onLazyLoad"
+              />
             </q-scroll-area>
           </div>
           <div class="col-md-6 col-sm-12 col-xs-12 q-pr-md">
@@ -77,14 +78,22 @@
               v-if="selectedItem && selectedItem.itemType==='unit'"
               :entity="selectedItem"
               :action="action"
-              @nameUpdated="itemNameUpdated"/>
+              @nameUpdated="itemNameUpdated"
+            />
 
             <org-position-form
               v-if="selectedItem && selectedItem.itemType==='position'"
               :entity="selectedItem"
               :action="action"
-              @nameUpdated="itemNameUpdated"/>
+              @nameUpdated="itemNameUpdated"
+            />
 
+            <org-item-attributes-form
+              v-if="selected && metadata"
+              :id="selected"
+              :metadata="metadata"
+              :readonly="action === 'view'"
+            />
           </div>
         </div>
 
@@ -99,7 +108,7 @@
 <script lang="ts">
 import {computed, defineComponent, ref, toRefs, watch} from 'vue';
 
-import {OrgItem, OrgUnit} from 'src/modules/org-structure';
+import {OrgItem, orgStructureService, OrgUnit} from 'src/modules/org-structure';
 import EntityPage from 'src/shared/components/EntityPage.vue';
 import {Ref} from '@vue/reactivity';
 import {useStore} from 'src/store';
@@ -109,10 +118,12 @@ import OrgUnitForm from './components/OrgUnitForm.vue';
 import OrgPositionForm from './components/OrgPositionForm.vue';
 import {orgItemToOrgNode, OrgNode} from './components/org-node';
 import {useQuasar} from 'quasar';
+import {AttributeMetadata} from 'src/shared';
+import OrgItemAttributesForm from 'src/modules/org-structure/organization/components/OrgItemAttributesForm.vue';
 
 export default defineComponent({
   name: 'OrganizationPage',
-  components: {OrgPositionForm, OrgUnitForm, CreateOrgItemDialog, EntityPage},
+  components: {OrgItemAttributesForm, OrgPositionForm, OrgUnitForm, CreateOrgItemDialog, EntityPage},
   props: {
     id: String,
     action: String
@@ -131,6 +142,8 @@ export default defineComponent({
     const nodes: Ref<OrgNode[]> = ref([])
     const selected = ref('')
     const expanded: Ref<string[]> = ref([])
+
+    const metadata: Ref<AttributeMetadata[]> = ref([])
 
     // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access,@typescript-eslint/no-unsafe-return
     const entities = computed(() => store.getters['orgItem/entities'])
@@ -153,6 +166,9 @@ export default defineComponent({
     }
 
     const loadEntity = async () => {
+      void orgStructureService
+        .getOrgItemMetadata()
+        .then(data => metadata.value = Object.values(data).sort((a, b) => a.name < b.name ? -1 : 1))
       const entity: OrgUnit = await store.dispatch('orgItem/getEntityForEdit', id.value)
       const node = orgItemToOrgNode(entity)
       if (entity.children.length > 0) {
@@ -274,8 +290,8 @@ export default defineComponent({
     }
 
     void loadEntity()
-    watch(id,watcher )
-    watch(action,watcher )
+    watch(id, watcher)
+    watch(action, watcher)
 
     return {
       createOrgItemDialog,
@@ -292,7 +308,8 @@ export default defineComponent({
       orgItemCreated,
       moveItem,
       deleteItem,
-      itemNameUpdated
+      itemNameUpdated,
+      metadata
     };
   }
 });

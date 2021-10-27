@@ -1,6 +1,6 @@
 import {Ref} from '@vue/reactivity';
 import {ref, toRefs, watch} from 'vue';
-import {AnnetteError, AttributeValues, EntityAttributesMetadata} from 'src/shared';
+import {AnnetteError, AttributeMetadata, AttributeValues, EntityAttributesMetadata} from 'src/shared';
 import hash from 'object-hash';
 import {useStore} from 'src/store';
 import {useQuasar} from 'quasar';
@@ -41,7 +41,7 @@ export function useEntityPage<T>(
   const error: Ref<AnnetteError | null> = ref(null)
 
   const attributes: Ref<AttributeValues> = ref({})
-  const metadata: Ref<EntityAttributesMetadata> = ref({})
+  const metadata: Ref<AttributeMetadata[]> = ref([])
 
   const updateEntity = (entity: T | null) => {
     if (entity) {
@@ -54,7 +54,7 @@ export function useEntityPage<T>(
   const loadEntity = async () => {
     if (opt.enableAttributes) {
       attributes.value = {}
-      metadata.value = {}
+      metadata.value = []
     }
     if (opt.onBeforeLoad) {
       // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
@@ -65,7 +65,7 @@ export function useEntityPage<T>(
       const entity = opt.emptyEntity()
       updateEntity(entity)
       if (opt.enableAttributes && opt.getMetadata && opt.getAttributes ){
-        void opt.getMetadata().then(data => metadata.value = data)
+        void opt.getMetadata().then(data => metadata.value = Object.values(data).sort((a, b) => a.name < b.name ? -1 : 1))
       }
     } else {
       try {
@@ -73,7 +73,7 @@ export function useEntityPage<T>(
         // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
          if (action.value === 'view') {
            if (opt.enableAttributes && opt.getMetadata && opt.getAttributes ){
-             void opt.getMetadata().then(data => metadata.value = data)
+             void opt.getMetadata().then(data => metadata.value = Object.values(data).sort((a, b) => a.name < b.name ? -1 : 1))
              // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
              void opt.getAttributes(id.value, true, 'all').then(data => attributes.value = data)
            }
@@ -82,7 +82,7 @@ export function useEntityPage<T>(
            entity = entities[0]
          } else {
            if (opt.enableAttributes && opt.getMetadata && opt.getAttributes ){
-             void opt.getMetadata().then(data => metadata.value = data)
+             void opt.getMetadata().then(data => metadata.value = Object.values(data).sort((a, b) => a.name < b.name ? -1 : 1))
              // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
              void opt.getAttributes(id.value, false, 'all').then(data => attributes.value = data)
            }
@@ -175,6 +175,6 @@ export function useEntityPage<T>(
     changed,
     clearError,
     attributes,
-    metadata
+    metadata,
   };
 }

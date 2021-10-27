@@ -1,5 +1,11 @@
 import axios from 'axios'
-import {CategoryFilter, FindResult} from 'src/shared'
+import {
+  AttributeValues,
+  CategoryFilter, EntitiesAttributeValues,
+  EntityAttributesMetadata,
+  FindResult,
+  UpdateAttributesPayload
+} from 'src/shared'
 import {
   AssignCategoryPayloadDto,
   AssignChiefPayloadDto,
@@ -181,9 +187,6 @@ export const orgStructureService = {
       .then(() => true)
   },
 
-  // async getOrganizationById(orgId: string): Future[Organization]
-  // async getOrganizationTree(orgId: string, itemId: string): Future[OrganizationTree]
-
   async getOrgItemById(id: string, fromReadSide: boolean) {
     // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
     return await axios.get<OrgItem>(`/api/annette/v1/orgStructure/getOrgItemById/${id}/${fromReadSide}`)
@@ -207,6 +210,32 @@ export const orgStructureService = {
 
   // async getPersonPrincipals(personId: PersonId): Future[Set[AnnettePrincipal]]
   // async getPersonPositions(personId: PersonId): Future[Set[PersonPosition]]
+
+  // ************************** Person Attributes API **************************
+
+  async updateOrgItemAttributes(payload: UpdateAttributesPayload) {
+    return await axios.post<AttributeValues>('/api/annette/v1/orgStructure/updateOrgItemAttributes', payload)
+      .then(result => result.data)
+  },
+
+  async getOrgItemMetadata() {
+    // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
+    return await axios.get<EntityAttributesMetadata>('/api/annette/v1/orgStructure/getOrgItemMetadata')
+      .then(result => result.data)
+  },
+
+  async getOrgItemAttributes(id: string, readSide = true, attributes: string) {
+    // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
+    return await axios.get<AttributeValues>(`/api/annette/v1/orgStructure/getOrgItemAttributes/${id}/${readSide}?attributes=${attributes}`)
+      .then(result => result.data)
+  },
+
+  async getOrgItemsAttributes(ids: string[], readSide = true, attributes: string) {
+    // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
+    return await axios.post<EntitiesAttributeValues>(`/api/annette/v1/orgStructure/getOrgItemsAttributes/${readSide}?attributes=${attributes}`, ids)
+      .then(result => result.data)
+  },
+
 
 }
 
