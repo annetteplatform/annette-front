@@ -21,7 +21,7 @@
 
 <script lang="ts">
 import {defineComponent, PropType, ref, toRef, watch} from 'vue';
-import {AttributeMetadata, AttributeValues, TextCaption, TranslationCaption, UpdateAttributesPayload} from 'src/shared'
+import {AttributeMetadata, AttributeValues, UpdateAttributesPayload} from 'src/shared'
 import {Ref} from '@vue/reactivity';
 import {orgStructureService} from 'src/modules/org-structure';
 import AttributeField from 'src/shared/components/attributes/AttributeField.vue';
@@ -44,8 +44,7 @@ export default defineComponent({
     }
 
   },
-  emits: ['update:modelValue'],
-  setup(props, {emit}) {
+  setup(props) {
     const id: Ref<string> = toRef(props, 'id')
     const readonly: Ref<boolean> = toRef(props, 'readonly')
     const attributes: Ref<AttributeValues> = ref({})

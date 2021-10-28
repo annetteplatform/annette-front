@@ -50,7 +50,6 @@
 import {computed, defineComponent, PropType, ref, toRef, watch} from 'vue';
 import {
   AttributeMetadata,
-  AttributeValues,
   TextCaption,
   TranslationCaption
 } from 'src/shared'
