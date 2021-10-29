@@ -2,23 +2,23 @@ import {RouteRecordRaw} from 'vue-router';
 
 export const cmsRoutes: RouteRecordRaw[] = [
   {
-    path: 'cms/spaces',
-    name: 'cms.spaces',
-    component: () => import('src/modules/cms/ui/space/SpaceListPage.vue'),
+    path: 'cms/blogs',
+    name: 'cms.blogs',
+    component: () => import('src/modules/cms/ui/blog/BlogListPage.vue'),
     meta: {requiresAuth: true}
   },
   {
-    path: 'cms/space/:action/:id',
-    name: 'cms.space',
-    component: () => import('src/modules/cms/ui/space/SpacePage.vue'),
+    path: 'cms/blog/:action/:id',
+    name: 'cms.blog',
+    component: () => import('src/modules/cms/ui/blog/BlogPage.vue'),
     props: (route) => ({ id: String(route.params.id),  action: String(route.params.action),}),
     meta: {requiresAuth: true}
   },
 
   {
-    path: 'cms/space-views',
-    name: 'cms.spaceViews',
-    component: () => import('src/modules/cms/ui/space-view/SpaceViewListPage.vue'),
+    path: 'cms/blog-views',
+    name: 'cms.blogViews',
+    component: () => import('src/modules/cms/ui/blog-view/BlogViewListPage.vue'),
     meta: {requiresAuth: true}
   },
   {
@@ -38,7 +38,7 @@ export const cmsRoutes: RouteRecordRaw[] = [
     path: 'cms/post-views',
     name: 'cms.postViews',
     component: () => import('src/modules/cms/ui/post-view/PostViewListPage.vue'),
-    props: (route) => ({ spaces: String(route.query.spaces)}),
+    props: (route) => ({ blogs: String(route.query.blogs)}),
     meta: {requiresAuth: true}
   },
   {
@@ -49,15 +49,15 @@ export const cmsRoutes: RouteRecordRaw[] = [
     meta: {requiresAuth: true}
   },
   {
-    path: 'cms/categories',
-    name: 'cms.categories',
-    component: () => import('src/modules/cms/ui/category/SpaceCategoryListPage.vue'),
+    path: 'cms/blog-categories',
+    name: 'cms.blogCategories',
+    component: () => import('src/modules/cms/ui/blog-category/BlogCategoryListPage.vue'),
     meta: {requiresAuth: true}
   },
   {
-    path: 'cms/category/:action/:id',
-    name: 'cms.category',
-    component: () => import('src/modules/cms/ui/category/SpaceCategoryPage.vue'),
+    path: 'cms/blog-category/:action/:id',
+    name: 'cms.blogCategory',
+    component: () => import('src/modules/cms/ui/blog-category/BlogCategoryPage.vue'),
     props: (route) => ({ id: String(route.params.id),  action: String(route.params.action),}),
     meta: {requiresAuth: true}
   }

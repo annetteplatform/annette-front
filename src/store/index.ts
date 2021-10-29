@@ -12,7 +12,7 @@ import {orgRoleStore, orgCategoryStore, orgItemStore} from 'src/modules/org-stru
 import {authRoleStore} from 'src/modules/authorization';
 import {principalGroupCategoryStore, principalGroupStore} from 'src/modules/principal-group';
 import {authAssignmentStore} from 'src/modules/authorization/store/assignment';
-import {cmsCategoryStore, cmsPostStore, cmsPostViewStore, cmsSpaceStore, cmsSpaceViewStore} from 'src/modules/cms';
+import {cmsBlogCategoryStore, cmsPostStore, cmsPostViewStore, cmsBlogStore, cmsBlogViewStore} from 'src/modules/cms';
 
 /*
  * If not building with SSR mode, you can
@@ -56,10 +56,10 @@ export default store(function (/* { ssrContext } */) {
       authAssignment: authAssignmentStore,
       principalGroupCategory: principalGroupCategoryStore,
       principalGroup: principalGroupStore,
-      cmsCategory: cmsCategoryStore,
-      cmsSpace: cmsSpaceStore,
+      cmsBlogCategory: cmsBlogCategoryStore,
+      cmsBlog: cmsBlogStore,
       cmsPost: cmsPostStore,
-      cmsSpaceView: cmsSpaceViewStore,
+      cmsBlogView: cmsBlogViewStore,
       cmsPostView: cmsPostViewStore
     },
 

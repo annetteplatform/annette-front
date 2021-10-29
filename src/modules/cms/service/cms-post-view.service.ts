@@ -10,8 +10,8 @@ export const cmsPostViewService = {
       size,
       ...filter
     }
-    if (query.spaces && query.spaces.length === 0) {
-      query.spaces = undefined
+    if (query.blogs && query.blogs.length === 0) {
+      query.blogs = undefined
     }
     return await axios.post<FindResult>('/api/annette/v1/cms/findPostViews', query)
       .then(result => result.data)

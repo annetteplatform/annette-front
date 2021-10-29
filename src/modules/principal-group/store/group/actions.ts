@@ -38,7 +38,7 @@ export const actions: ActionTree<PrincipalGroupState, StateInterface> = {
     return newEntity
   },
 
-  async updateEntityCategory ({ commit }, entity: UpdatePrincipalGroupCategoryDto) {
+  async updateEntityCategoryId ({ commit }, entity: UpdatePrincipalGroupCategoryDto) {
     const newEntity = await principalGroupService.updatePrincipalGroupCategory(entity)
     commit('storeEntity', newEntity)
     return newEntity

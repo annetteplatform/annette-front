@@ -18,7 +18,7 @@
                 label="Filter"/>
             </div>
             <div class="row">
-              <space-multi-selector v-model="filterModel.spaces"/>
+              <blog-multi-selector v-model="filterModel.blogs"/>
             </div>
           </q-form>
           <q-card-actions vertical class=" q-ml-lg q-mr-lg q-mb-md">
@@ -33,13 +33,13 @@
 
 <script lang="ts">
 import {defineComponent, PropType, ref, toRefs, watch} from 'vue'
-import SpaceMultiSelector from 'src/modules/cms/ui/space/components/SpaceMultiSelector.vue';
+import BlogMultiSelector from 'src/modules/cms/ui/blog/components/BlogMultiSelector.vue';
 import {PostFilter} from 'src/modules/cms';
 import {Ref} from '@vue/reactivity';
 
 export default defineComponent({
   name: 'PostFilterForm',
-  components: {SpaceMultiSelector},
+  components: {BlogMultiSelector},
   props: {
     filter: {
       type: Object as PropType<PostFilter>,

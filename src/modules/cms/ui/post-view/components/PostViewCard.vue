@@ -5,8 +5,8 @@
       <div class="float-right" v-if="post.featured">
         <q-icon name="bolt" color="red" size="sm"/>
       </div>
-      <div v-if="spaces[post.spaceId]" class="text-overline q-mb-xs">
-        {{ spaces[post.spaceId].name }}
+      <div v-if="blogs[post.blogId]" class="text-overline q-mb-xs">
+        {{ blogs[post.blogId].name }}
       </div>
       <router-link v-if="annotationMode" class="text-h6" style="text-decoration: none; color: black;"
                    :to="{ name: 'cms.postView', params: {id: post.id }}">{{ post.title }}</router-link>
@@ -64,14 +64,14 @@ export default defineComponent({
     const post = toRef(props, 'post') as Ref<PostView>
 
     // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access,@typescript-eslint/no-unsafe-return
-    const spaces = computed( () => store.getters['cmsSpaceView/entities'])
-    const postSpace = computed( () => post.value.spaceId)
-    watch(postSpace, (spaceId: string) => {
-      void store.dispatch('cmsSpaceView/loadSpacesIfNotExist', [spaceId])
+    const blogs = computed( () => store.getters['cmsBlogView/entities'])
+    const postBlog = computed( () => post.value.blogId)
+    watch(postBlog, (blogId: string) => {
+      void store.dispatch('cmsBlogView/loadBlogsIfNotExist', [blogId])
     })
 
     return {
-      spaces
+      blogs
     };
   }
 });

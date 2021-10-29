@@ -3,7 +3,7 @@ import {PostContent} from 'src/modules/cms';
 
 export interface PostView extends BaseEntity {
   id: string,
-  spaceId: string,
+  blogId: string,
   featured: boolean,
   authorId: AnnettePrincipal,
   title: string,
@@ -25,7 +25,7 @@ export interface PostMetric extends PostContent{
 
 export interface PostViewFilter {
   filter?: string,
-  spaces?: string[],
+  blogs?: string[],
   featured?: boolean,
   authors?: AnnettePrincipal[],
   sortBy?: SortBy[]

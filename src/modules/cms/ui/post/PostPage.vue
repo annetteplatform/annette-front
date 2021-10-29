@@ -32,10 +32,10 @@
                  ref="idRef"
                  label="Id"/>
         <q-input class="col-md-8 col-sm-12 col-xs-12 "
-                 v-if="space"
-                 v-model="space.name"
+                 v-if="blog"
+                 v-model="blog.name"
                  readonly
-                 label="Space"/>
+                 label="Blog"/>
       </div>
 
       <div class="row">
@@ -430,7 +430,7 @@ import {
   MarkdownContent,
   Post,
   PostContent,
-  Space,
+  Blog,
   UpdatePostContentPayloadDto,
   UpdatePostFeaturedPayloadDto,
   UpdatePostIntroPayloadDto,
@@ -479,7 +479,7 @@ export default defineComponent({
     const emptyEntity = () => {
       return {
         id: uid(),
-        spaceId: id.value || '',
+        blogId: id.value || '',
         featured: false,
         authorId: {
           principalType: 'person',
@@ -498,14 +498,14 @@ export default defineComponent({
       } as Post
     }
 
-    const space: Ref<Space | undefined> = ref()
+    const blog: Ref<Blog | undefined> = ref()
 
     const onAfterLoad = async (action: string, entity: Post) => {
-      const spaces: Space[] = await store.dispatch('cmsSpace/loadEntitiesIfNotExist', [entity.spaceId])
-      if (spaces && spaces[0]) {
-        space.value = spaces[0]
+      const blogs: Blog[] = await store.dispatch('cmsBlog/loadEntitiesIfNotExist', [entity.blogId])
+      if (blogs && blogs[0]) {
+        blog.value = blogs[0]
       } else {
-        space.value = undefined
+        blog.value = undefined
       }
     }
 
@@ -768,7 +768,7 @@ export default defineComponent({
       idRef,
       titleRef,
       tab,
-      space,
+      blog,
       ...entityPage,
       principalSelectorDialog,
       updateTitle,

@@ -158,28 +158,28 @@ export function serviceGroups(): ServiceGroup[] {
     },
 
     {
-      id: 'CMS',
+      id: 'BLOG',
       order: 60,
       icon: 'inventory',
-      title: 'CMS Administration ',
+      title: 'Blog Administration ',
       subtitle: '',
       services: [
         {
-          id: 'SPACE_CATEGORIES',
+          id: 'BLOG_CATEGORIES',
           order: 10,
           icon: 'local_offer',
-          title: 'Space categories',
-          subtitle: 'Maintain space categories',
-          action: {name: 'cms.categories'},
+          title: 'Blog categories',
+          subtitle: 'Maintain blog categories',
+          action: {name: 'cms.blogCategories'},
           actionName: 'View'
         },
         {
-          id: 'SPACES',
+          id: 'BLOGS',
           order: 20,
           icon: 'inventory',
-          title: 'Spaces',
-          subtitle: 'View list of spaces: blogs & wikies',
-          action: {name: 'cms.spaces'},
+          title: 'Blogs',
+          subtitle: 'View list of blogs',
+          action: {name: 'cms.blogs'},
           actionName: 'View'
         },
         {
@@ -194,10 +194,10 @@ export function serviceGroups(): ServiceGroup[] {
       ]
     },
     {
-      id: 'CMS-VIEW',
+      id: 'BLOG-VIEW',
       order: 70,
       icon: 'feed',
-      title: 'CMS View ',
+      title: 'Blog View ',
       subtitle: '',
       services: [
         {
@@ -210,12 +210,12 @@ export function serviceGroups(): ServiceGroup[] {
           actionName: 'Open'
         },
         {
-          id: 'SPACES',
+          id: 'BLOGS',
           order: 20,
           icon: 'inventory',
-          title: 'Spaces',
-          subtitle: 'View list of spaces: blogs & wikies',
-          action: {name: 'cms.spaceViews'},
+          title: 'Blogs',
+          subtitle: 'View list of blogs',
+          action: {name: 'cms.blogViews'},
           actionName: 'View'
         }
       ]

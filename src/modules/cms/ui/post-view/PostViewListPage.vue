@@ -36,7 +36,7 @@ export default defineComponent({
   name: 'PostViewListPage',
   components: {PostViewFilterForm, EntityListPage, PostViewList},
   props: {
-    spaces: {
+    blogs: {
       type: String,
       required: false
     }
@@ -45,27 +45,27 @@ export default defineComponent({
 
     const store = useStore()
 
-    const spaces = toRef(props, 'spaces') as Ref<string>
+    const blogs = toRef(props, 'blogs') as Ref<string>
 
     function emptyFilter(): PostViewFilter {
-      console.log('emptyFilter', spaces.value)
-      let spaceArr: string[] = []
-      if (spaces.value && spaces.value !== 'undefined') {
-        spaceArr = spaces.value.split(',')
+      console.log('emptyFilter', blogs.value)
+      let blogArr: string[] = []
+      if (blogs.value && blogs.value !== 'undefined') {
+        blogArr = blogs.value.split(',')
       }
       return {
         filter: '',
-        spaces: spaceArr
+        blogs: blogArr
       }
     }
 
-    const updateSpaceFilter = (instance: InstanceState<PostViewFilter>) => {
-      console.log('updateSpaceFilter', spaces.value)
+    const updateBlogFilter = (instance: InstanceState<PostViewFilter>) => {
+      console.log('updateBlogFilter', blogs.value)
       const newFilter = {
         ...instance.filter,
       }
-      if (spaces.value && spaces.value !== 'undefined') {
-        newFilter.spaces = spaces.value.split(',')
+      if (blogs.value && blogs.value !== 'undefined') {
+        newFilter.blogs = blogs.value.split(',')
       }
       void store.dispatch(`${NAMESPACE}/setFilter`, {key: INSTANCE_KEY, filter: newFilter})
     }
@@ -76,15 +76,15 @@ export default defineComponent({
       instanceKey: INSTANCE_KEY,
       filter: emptyFilter(),
       pagingMode: PagingMode.Range,
-      onInstanceUpdate: updateSpaceFilter
+      onInstanceUpdate: updateBlogFilter
     })
 
-    watch(spaces, () => updateSpaceFilter(entityListPage.instance.value))
+    watch(blogs, () => updateBlogFilter(entityListPage.instance.value))
 
     return {
       ...entityListPage,
       emptyFilter,
-      sp: spaces
+      sp: blogs
     };
   }
 });

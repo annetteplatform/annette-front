@@ -11,7 +11,7 @@
         {{ props.row.title }}
       </q-td>
       <q-td>
-        <q-badge outline color="primary" :label="props.row.spaceId" />
+        <q-badge outline color="primary" :label="props.row.blogId" />
       </q-td>
       <q-td>
         <featured-field :post-id="props.row.id" />
@@ -64,10 +64,10 @@ const COLUMNS = [
     classes: 'text-truncate'
   },
   {
-    name: 'spaceId',
+    name: 'blogId',
     align: 'left',
-    label: 'Space Id',
-    field: 'spaceId',
+    label: 'Blog Id',
+    field: 'blogId',
     sortable: true,
     classes: 'text-truncate'
   },

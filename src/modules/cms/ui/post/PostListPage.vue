@@ -6,8 +6,8 @@
              @click="refreshList"/>
       <q-btn color="primary"
              label="Create"
-             :disable="!(instance.filter.spaces && instance.filter.spaces.length === 1)"
-             :to="{name: 'cms.post', params: {action: 'create', id: instance.filter.spaces && instance.filter.spaces[0] }}"/>
+             :disable="!(instance.filter.blogs && instance.filter.blogs.length === 1)"
+             :to="{name: 'cms.post', params: {action: 'create', id: instance.filter.blogs && instance.filter.blogs[0] }}"/>
     </template>
     <template v-slot:filter>
       <post-filter-form class="q-mb-md"
@@ -36,7 +36,7 @@ const INSTANCE_KEY = 'posts'
 function emptyFilter(): PostFilter {
   return {
     filter: '',
-    spaces: []
+    blogs: []
   }
 }
 

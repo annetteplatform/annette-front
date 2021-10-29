@@ -4,7 +4,7 @@ import {AnnettePrincipal, BaseEntity, SortBy} from 'src/shared';
 
 export interface Post extends BaseEntity {
   id: string,
-  spaceId: string,
+  blogId: string,
   featured: boolean,
   authorId: AnnettePrincipal,
   title: string,
@@ -47,7 +47,7 @@ export interface HtmlContent extends PostContent{
 export interface PostFilter {
   filter: string,
   postIds?: string[],
-  spaces?: string[],
+  blogs?: string[],
   featured?: boolean,
   authors?: AnnettePrincipal[],
   publicationStatus?: string,
@@ -60,7 +60,7 @@ export interface PostFilter {
 
 export interface  CreatePostPayloadDto {
   id: string,
-  spaceId: string,
+  blogId: string,
   parent?: string,
   featured: boolean,
   authorId: AnnettePrincipal,
