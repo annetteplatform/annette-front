@@ -1,5 +1,5 @@
 import {AnnettePrincipal, BaseEntity, SortBy} from 'src/shared';
-import {PostContent} from 'src/modules/cms';
+import {WidgetContent} from 'src/modules/cms';
 
 export interface PostView extends BaseEntity {
   id: string,
@@ -7,8 +7,8 @@ export interface PostView extends BaseEntity {
   featured: boolean,
   authorId: AnnettePrincipal,
   title: string,
-  introContent: PostContent,
-  content?: PostContent,
+  introContent: WidgetContent[],
+  content?: WidgetContent[],
   publicationStatus: string,
   publicationTimestamp?: Date,
   metric?: PostMetric
@@ -16,7 +16,7 @@ export interface PostView extends BaseEntity {
   updatedBy?: AnnettePrincipal
 }
 
-export interface PostMetric extends PostContent{
+export interface PostMetric {
   id: string,
   views: number,
   likes: number,

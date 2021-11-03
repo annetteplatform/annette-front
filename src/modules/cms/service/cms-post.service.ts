@@ -1,14 +1,18 @@
 import axios from 'axios'
-import { FindResult} from 'src/shared'
+import {FindResult} from 'src/shared'
 import {
   AssignPostTargetPrincipalPayloadDto,
+  ChangePostWidgetContentOrderPayloadDto,
   CreatePostPayloadDto,
+  DeletePostWidgetContentPayloadDto,
   Post,
   PostFilter,
-  UnassignPostTargetPrincipalPayloadDto, UpdatePostAuthorPayloadDto, UpdatePostContentPayloadDto,
-  UpdatePostFeaturedPayloadDto, UpdatePostIntroPayloadDto,
+  UnassignPostTargetPrincipalPayloadDto,
+  UpdatePostAuthorPayloadDto,
+  UpdatePostFeaturedPayloadDto,
   UpdatePostPublicationTimestampPayloadDto,
   UpdatePostTitlePayloadDto,
+  UpdatePostWidgetContentPayloadDto,
 } from './model';
 
 export const cmsPostService = {
@@ -33,13 +37,18 @@ export const cmsPostService = {
       .then(result => convertPost(result.data))
   },
 
-  async updatePostIntro(payload: UpdatePostIntroPayloadDto) {
-    return await axios.post<Post>('/api/annette/v1/cms/updatePostIntro', payload)
+  async updatePostWidgetContent(payload: UpdatePostWidgetContentPayloadDto) {
+    return await axios.post<Post>('/api/annette/v1/cms/updatePostWidgetContent', payload)
       .then(result => convertPost(result.data))
   },
 
-  async updatePostContent(payload: UpdatePostContentPayloadDto) {
-    return await axios.post<Post>('/api/annette/v1/cms/updatePostContent', payload)
+  async changePostWidgetContentOrder(payload: ChangePostWidgetContentOrderPayloadDto) {
+    return await axios.post<Post>('/api/annette/v1/cms/changePostWidgetContentOrder', payload)
+      .then(result => convertPost(result.data))
+  },
+
+  async deletePostWidgetContent(payload: DeletePostWidgetContentPayloadDto) {
+    return await axios.post<Post>('/api/annette/v1/cms/deletePostWidgetContent', payload)
       .then(result => convertPost(result.data))
   },
 

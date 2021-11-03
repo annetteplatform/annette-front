@@ -15,9 +15,11 @@
       <post-view-status-line v-if="!annotationMode" :post="post"/>
     </q-card-section>
 
-    <q-card-section class="q-pt-none">
-      <post-content-view v-if="annotationMode && post.introContent" :content="post.introContent"/>
-      <post-content-view v-if="!annotationMode && post.content" :content="post.content"/>
+    <q-card-section class="q-pt-none" v-if="annotationMode">
+      <WidgetContentView v-for="widgetContent in post.introContent" :content="widgetContent" :key="widgetContent.id"/>
+    </q-card-section>
+    <q-card-section class="q-pt-none" v-else>
+      <WidgetContentView v-for="widgetContent in post.content" :content="widgetContent" :key="widgetContent.id"/>
     </q-card-section>
 
     <q-card-section v-if="annotationMode" class="q-pt-none">
@@ -25,13 +27,6 @@
     </q-card-section>
 
     <post-view-status-line v-if="annotationMode" :post="post"/>
-
-<!--    <q-separator v-if="!annotationMode"  />-->
-<!--    <q-card-section v-if="!annotationMode && post.updatedAt && post.updatedBy">-->
-<!--      <updated-fields-->
-<!--        :updated-at="post.updatedAt"-->
-<!--        :updated-by="post.updatedBy"/>-->
-<!--    </q-card-section>-->
   </q-card>
 
 </template>
@@ -43,11 +38,11 @@ import {useStore} from 'src/store';
 import {Ref} from '@vue/reactivity';
 import PrincipalViewItem from 'src/shared/components/principal-view/PrincipalViewItem.vue';
 import PostViewStatusLine from 'src/modules/cms/ui/post-view/components/PostViewStatusLine.vue';
-import PostContentView from 'src/modules/cms/ui/post-view/components/PostContentView.vue';
+import WidgetContentView from 'src/shared/components/widget-content/WidgetContentView.vue';
 
 export default defineComponent({
   name: 'PostViewCard',
-  components: {PostContentView, PostViewStatusLine, PrincipalViewItem},
+  components: {WidgetContentView, PostViewStatusLine, PrincipalViewItem},
   props: {
     post: {
       type: Object as PropType<PostView>,

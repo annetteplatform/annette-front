@@ -59,7 +59,6 @@
           narrow-indicator
         >
           <q-tab name="general" label="General"/>
-          <q-tab name="content" label="Content"/>
           <q-tab name="targets" label="Targets" v-if="action !== 'create'"/>
         </q-tabs>
 
@@ -67,6 +66,12 @@
 
         <q-tab-panels v-model="tab" animated>
           <q-tab-panel name="general">
+
+            <div class="row q-mt-md"
+                 v-if="action !== 'create'">
+              <q-btn color="primary" label="Edit Intro Content" @click="openIntroContentEditor"/>
+              <q-btn class="q-ml-md" color="primary" label="Edit Post Content" @click="openPostContentEditor"/>
+            </div>
 
             <div class="row q-mt-md">
               <q-checkbox
@@ -155,227 +160,6 @@
 
           </q-tab-panel>
 
-          <q-tab-panel name="content">
-
-            <div class="row">
-              <q-select
-                class="col-md-12 col-sm-12 col-xs-12"
-                v-model="entityModel.introContent.type"
-                :options="contentTypes"
-                label="Intro Content Type"
-                @update:model-value="introContentTypeChange"
-              />
-            </div>
-
-            <div class="row q-mt-md">
-              <div class="col-md-12 col-sm-12 col-xs-12 markdown"
-                   v-if="entityModel.introContent.type == 'markdown'">
-                <q-input outlined
-                  :model-value="entityModel.introContent.markdown"
-                  @update:model-value="updateIntroContent"
-                  debounce="1000"
-                  type="textarea" label="Intro content"/>
-              </div>
-              <q-editor
-                class="col-md-12 col-sm-12 col-xs-12 q-mt-md"
-                v-else
-                :model-value="entityModel.introContent.html"
-                @update:model-value="updateIntroContent"
-                debounce="1000"
-                min-height="10rem"
-                :toolbar="[
-                  [
-                    {
-                      label: $q.lang.editor.align,
-                      icon: $q.iconSet.editor.align,
-                      fixedLabel: true,
-                      list: 'only-icons',
-                      options: ['left', 'center', 'right', 'justify']
-                    }
-                  ],
-                  ['bold', 'italic', 'strike', 'underline', 'subscript', 'superscript'],
-                  ['token', 'hr', 'link', 'custom_btn'],
-                  ['print', 'fullscreen'],
-                  [
-                    {
-                      label: $q.lang.editor.formatting,
-                      icon: $q.iconSet.editor.formatting,
-                      list: 'no-icons',
-                      options: [
-                        'p',
-                        'h1',
-                        'h2',
-                        'h3',
-                        'h4',
-                        'h5',
-                        'h6',
-                        'code'
-                      ]
-                    },
-                    {
-                      label: $q.lang.editor.fontSize,
-                      icon: $q.iconSet.editor.fontSize,
-                      fixedLabel: true,
-                      fixedIcon: true,
-                      list: 'no-icons',
-                      options: [
-                        'size-1',
-                        'size-2',
-                        'size-3',
-                        'size-4',
-                        'size-5',
-                        'size-6',
-                        'size-7'
-                      ]
-                    },
-                    {
-                      label: $q.lang.editor.defaultFont,
-                      icon: $q.iconSet.editor.font,
-                      fixedIcon: true,
-                      list: 'no-icons',
-                      options: [
-                        'default_font',
-                        'arial',
-                        'arial_black',
-                        'comic_sans',
-                        'courier_new',
-                        'impact',
-                        'lucida_grande',
-                        'times_new_roman',
-                        'verdana'
-                      ]
-                    },
-                    'removeFormat'
-                  ],
-                  ['quote', 'unordered', 'ordered', 'outdent', 'indent'],
-
-                  ['undo', 'redo'],
-                  ['viewsource']
-                ]"
-                :fonts="{
-                  arial: 'Arial',
-                  arial_black: 'Arial Black',
-                  comic_sans: 'Comic Sans MS',
-                  courier_new: 'Courier New',
-                  impact: 'Impact',
-                  lucida_grande: 'Lucida Grande',
-                  times_new_roman: 'Times New Roman',
-                  verdana: 'Verdana'
-                }"
-              />
-            </div>
-
-            <div class="row q-mt-md ">
-              <q-select
-                class="col-md-12 col-sm-12 col-xs-12"
-                v-model="entityModel.content.type"
-                :options="contentTypes"
-                label="Content Type"
-                @update:model-value="contentTypeChange"
-              />
-            </div>
-
-            <div class="row q-mt-md ">
-              <div class="col-md-12 col-sm-12 col-xs-12 markdown"
-                   v-if="entityModel.content.type == 'markdown'">
-                <q-input outlined
-                         :model-value="entityModel.content.markdown"
-                         @update:model-value="updateContent"
-                         debounce="1000"
-                         type="textarea" label="Content"/>
-              </div>
-              <q-editor
-                class="col-md-12 col-sm-12 col-xs-12 q-mt-md"
-                v-else
-                :model-value="entityModel.content.html"
-                @update:model-value="updateContent"
-                debounce="1000"
-                min-height="10rem" height="50vh"
-                :dense="$q.screen.lt.md"
-                :toolbar="[
-                  [
-                    {
-                      label: $q.lang.editor.align,
-                      icon: $q.iconSet.editor.align,
-                      fixedLabel: true,
-                      list: 'only-icons',
-                      options: ['left', 'center', 'right', 'justify']
-                    }
-                  ],
-                  ['bold', 'italic', 'strike', 'underline', 'subscript', 'superscript'],
-                  ['token', 'hr', 'link', 'custom_btn'],
-                  ['print', 'fullscreen'],
-                  [
-                    {
-                      label: $q.lang.editor.formatting,
-                      icon: $q.iconSet.editor.formatting,
-                      list: 'no-icons',
-                      options: [
-                        'p',
-                        'h1',
-                        'h2',
-                        'h3',
-                        'h4',
-                        'h5',
-                        'h6',
-                        'code'
-                      ]
-                    },
-                    {
-                      label: $q.lang.editor.fontSize,
-                      icon: $q.iconSet.editor.fontSize,
-                      fixedLabel: true,
-                      fixedIcon: true,
-                      list: 'no-icons',
-                      options: [
-                        'size-1',
-                        'size-2',
-                        'size-3',
-                        'size-4',
-                        'size-5',
-                        'size-6',
-                        'size-7'
-                      ]
-                    },
-                    {
-                      label: $q.lang.editor.defaultFont,
-                      icon: $q.iconSet.editor.font,
-                      fixedIcon: true,
-                      list: 'no-icons',
-                      options: [
-                        'default_font',
-                        'arial',
-                        'arial_black',
-                        'comic_sans',
-                        'courier_new',
-                        'impact',
-                        'lucida_grande',
-                        'times_new_roman',
-                        'verdana'
-                      ]
-                    },
-                    'removeFormat'
-                  ],
-                  ['quote', 'unordered', 'ordered', 'outdent', 'indent'],
-
-                  ['undo', 'redo'],
-                  ['viewsource']
-                ]"
-                :fonts="{
-                  arial: 'Arial',
-                  arial_black: 'Arial Black',
-                  comic_sans: 'Comic Sans MS',
-                  courier_new: 'Courier New',
-                  impact: 'Impact',
-                  lucida_grande: 'Lucida Grande',
-                  times_new_roman: 'Times New Roman',
-                  verdana: 'Verdana'
-                }"
-              />
-            </div>
-
-          </q-tab-panel>
-
           <q-tab-panel name="targets" v-if="action !== 'create'">
             <div class="row q-mt-md">
               <q-list bordered class="full-width" separator>
@@ -414,6 +198,18 @@
         </q-tab-panels>
       </q-card>
       <principal-selector-dialog ref="principalSelectorDialog"/>
+      <ContentEditor :show="showIntroContentEditor"
+                           :content="entityModel.introContent"
+                           @changeOrder="changeWidgetContentOrder($event, 'intro')"
+                           @update="updateWidgetContent($event, 'intro')"
+                           @delete="deleteWidgetContent($event, 'intro')"
+                           @close="closeIntroContentEditor"/>
+      <ContentEditor :show="showPostContentEditor"
+                           :content="entityModel.content"
+                           @changeOrder="changeWidgetContentOrder($event, 'post')"
+                           @update="updateWidgetContent($event, 'post')"
+                           @delete="deleteWidgetContent($event, 'post')"
+                           @close="closePostContentEditor"/>
     </template>
   </entity-page>
 </template>
@@ -426,26 +222,25 @@ import {date, uid, useQuasar} from 'quasar';
 import PrincipalViewItem from 'src/shared/components/principal-view/PrincipalViewItem.vue';
 import PrincipalSelectorDialog from 'src/shared/components/principal-selector/PrinciplaSelectorDialog.vue';
 import {
-  HtmlContent,
-  MarkdownContent,
-  Post,
-  PostContent,
   Blog,
-  UpdatePostContentPayloadDto,
+  ChangePostWidgetContentOrderPayloadDto,
+  DeletePostWidgetContentPayloadDto,
+  Post,
   UpdatePostFeaturedPayloadDto,
-  UpdatePostIntroPayloadDto,
   UpdatePostPublicationTimestampPayloadDto,
-  UpdatePostTitlePayloadDto
+  UpdatePostTitlePayloadDto,
+  UpdatePostWidgetContentPayloadDto
 } from 'src/modules/cms';
 import {useSyncEntityPage} from 'src/shared/composables/sync-entity-page';
 import {AnnettePrincipal} from 'src/shared';
 import {Ref} from '@vue/reactivity';
+import ContentEditor from 'src/shared/components/widget-content/editor/ContentEditor.vue';
 
 const NAMESPACE = 'cmsPost';
 
 export default defineComponent({
   name: 'PostPage',
-  components: {PrincipalSelectorDialog, PrincipalViewItem, EntityPage},
+  components: {PrincipalSelectorDialog, PrincipalViewItem, EntityPage, ContentEditor},
   props: {
     id: String,
     action: String
@@ -486,14 +281,8 @@ export default defineComponent({
           principalId: personId.value || ''
         },
         title: '',
-        introContent: {
-          type: 'markdown',
-          markdown: ''
-        } as MarkdownContent,
-        content: {
-          type: 'markdown',
-          markdown: ''
-        } as MarkdownContent,
+        introContent: [],
+        content: [],
         publicationStatus: 'draft',
       } as Post
     }
@@ -592,124 +381,6 @@ export default defineComponent({
       }
     }
 
-    const contentTypes = ['markdown', 'html']
-
-    const introContentTypeChange = (data: string) => {
-      let introContent: PostContent
-      if (data === 'markdown') {
-        introContent = {
-          type: data,
-          // @ts-ignore
-          markdown: (entityPage.entityModel.value.introContent as HtmlContent).html
-        } as MarkdownContent
-      } else {
-        introContent = {
-          type: data,
-          // @ts-ignore
-          html: (entityPage.entityModel.value.introContent as MarkdownContent).markdown
-        } as HtmlContent
-      }
-      if (entityPage.action.value === 'edit') {
-        const payload: UpdatePostIntroPayloadDto = {
-          // @ts-ignore
-          id: entityPage.entityModel.value.id,
-          introContent
-        }
-        void entityPage.update(() => {
-          return store.dispatch('cmsPost/updateEntityIntro', payload) as Promise<Post>
-        })
-      } else if (entityPage.action.value === 'create' && entityPage.entityModel.value) {
-        entityPage.entityModel.value.introContent = introContent
-      }
-    }
-
-    const updateIntroContent = (contentData: string) => {
-      // @ts-ignore
-      const type = entityPage.entityModel.value.introContent.type
-      let introContent: PostContent
-      if (type === 'markdown') {
-        introContent = {
-          type,
-          markdown: contentData
-        } as MarkdownContent
-      } else {
-        introContent = {
-          type,
-          html: contentData
-        } as HtmlContent
-      }
-      if (entityPage.action.value === 'edit') {
-        const payload: UpdatePostIntroPayloadDto = {
-          // @ts-ignore
-          id: entityPage.entityModel.value.id,
-          introContent
-        }
-        void entityPage.update(() => {
-          return store.dispatch('cmsPost/updateEntityIntro', payload) as Promise<Post>
-        })
-      } else if (entityPage.action.value === 'create' && entityPage.entityModel.value) {
-        entityPage.entityModel.value.introContent = introContent
-      }
-    }
-
-    const contentTypeChange = (data: string) => {
-      let content: PostContent
-      if (data === 'markdown') {
-        content = {
-          type: data,
-          // @ts-ignore
-          markdown: (entityPage.entityModel.value.content as HtmlContent).html
-        } as MarkdownContent
-      } else {
-        content = {
-          type: data,
-          // @ts-ignore
-          html: (entityPage.entityModel.value.content as MarkdownContent).markdown
-        } as HtmlContent
-      }
-      if (entityPage.action.value === 'edit') {
-        const payload: UpdatePostContentPayloadDto = {
-          // @ts-ignore
-          id: entityPage.entityModel.value.id,
-          content
-        }
-        void entityPage.update(() => {
-          return store.dispatch('cmsPost/updateEntityContent', payload) as Promise<Post>
-        })
-      } else if (entityPage.action.value === 'create' && entityPage.entityModel.value) {
-        entityPage.entityModel.value.content = content
-      }
-    }
-
-    const updateContent = (contentData: string) => {
-      // @ts-ignore
-      const type = entityPage.entityModel.value.content.type
-      let content: PostContent
-      if (type === 'markdown') {
-        content = {
-          type,
-          markdown: contentData
-        } as MarkdownContent
-      } else {
-        content = {
-          type,
-          html: contentData
-        } as HtmlContent
-      }
-      if (entityPage.action.value === 'edit') {
-        const payload: UpdatePostContentPayloadDto = {
-          // @ts-ignore
-          id: entityPage.entityModel.value.id,
-          content
-        }
-        void entityPage.update(() => {
-          return store.dispatch('cmsPost/updateEntityContent', payload) as Promise<Post>
-        })
-      } else if (entityPage.action.value === 'create' && entityPage.entityModel.value) {
-        entityPage.entityModel.value.content = content
-      }
-    }
-
     const clearPublicationTimestamp = () => {
       const payload: UpdatePostPublicationTimestampPayloadDto = {
         // @ts-ignore
@@ -764,6 +435,71 @@ export default defineComponent({
       })
     }
 
+    const showIntroContentEditor = ref(false)
+
+    const openIntroContentEditor = () => {
+      showIntroContentEditor.value = true
+    }
+    const closeIntroContentEditor = () => {
+      showIntroContentEditor.value = false
+    }
+
+    const showPostContentEditor = ref(false)
+
+    const openPostContentEditor = () => {
+      showPostContentEditor.value = true
+    }
+    const closePostContentEditor = () => {
+      showPostContentEditor.value = false
+    }
+
+    // @ts-ignore
+    const changeWidgetContentOrder = (data, contentType: string) => {
+      const payload: ChangePostWidgetContentOrderPayloadDto = {
+        id: entityPage.id.value,
+        contentType,
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+        widgetContentId: data.widgetContentId,
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+        order: data.order
+      }
+
+      void entityPage.update(() => {
+        return store.dispatch('cmsPost/changePostWidgetContentOrder', payload) as Promise<Post>
+      })
+
+    }
+
+    // @ts-ignore
+    const updateWidgetContent = (data, contentType: string) => {
+      const payload: UpdatePostWidgetContentPayloadDto = {
+        id: entityPage.id.value,
+        contentType,
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+        widgetContent: data.widgetContent,
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+        order: data.order
+      }
+
+      void entityPage.update(() => {
+        return store.dispatch('cmsPost/updatePostWidgetContent', payload) as Promise<Post>
+      })
+
+    }
+
+// @ts-ignore
+    const deleteWidgetContent = (widgetContentId: string, contentType: string) => {
+      const payload: DeletePostWidgetContentPayloadDto = {
+        id: entityPage.id.value,
+        contentType,
+        widgetContentId: widgetContentId,
+      }
+      void entityPage.update(() => {
+        return store.dispatch('cmsPost/deletePostWidgetContent', payload) as Promise<Post>
+      })
+
+    }
+
     return {
       idRef,
       titleRef,
@@ -777,14 +513,19 @@ export default defineComponent({
       updatePublicationStatus,
       updatePublicationTimestamp,
       clearPublicationTimestamp,
-      contentTypes,
-      introContentTypeChange,
-      updateIntroContent,
-      contentTypeChange,
-      updateContent,
       formatDate,
       addPrincipal,
-      deletePrincipal
+      deletePrincipal,
+      showIntroContentEditor,
+      openIntroContentEditor,
+      closeIntroContentEditor,
+      showPostContentEditor,
+      openPostContentEditor,
+      closePostContentEditor,
+      changeWidgetContentOrder,
+      updateWidgetContent,
+      deleteWidgetContent
+
     };
   }
 });
