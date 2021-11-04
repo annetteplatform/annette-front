@@ -1,12 +1,12 @@
 <template>
   <QMarkdown class="markdown"
              :id="content.id"
-            v-if="content.widgetType == 'markdown'"
-            :src="content.data"
-            />
-  <div  v-if="content.widgetType == 'html'"
-        :id="content.id"
-        v-html="content.html"></div>
+             v-if="content.widgetType == 'markdown'"
+             :src="content.data"
+  />
+  <div v-if="content.widgetType == 'html'"
+       :id="content.id"
+       v-html="content.data"></div>
 </template>
 
 <script lang="ts">
@@ -31,4 +31,4 @@ export default defineComponent({
 })
 </script>
 
-<style src="node_modules/@quasar/quasar-ui-qmarkdown/dist/index.css"></style>
+<style src="@quasar/quasar-ui-qmarkdown/dist/index.css"></style>

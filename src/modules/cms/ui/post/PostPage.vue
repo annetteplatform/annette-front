@@ -67,10 +67,14 @@
         <q-tab-panels v-model="tab" animated>
           <q-tab-panel name="general">
 
-            <div class="row q-mt-md"
+            <div class="row q-mt-md q-col-gutter-sm"
                  v-if="action !== 'create'">
-              <q-btn color="primary" label="Edit Intro Content" @click="openIntroContentEditor"/>
-              <q-btn class="q-ml-md" color="primary" label="Edit Post Content" @click="openPostContentEditor"/>
+              <div class="col-6 ">
+                <q-btn class="full-width" color="primary" label="Intro Content" @click="openIntroContentEditor"/>
+              </div>
+              <div class="col-6 ">
+                <q-btn class="full-width" color="primary" label="Post Content" @click="openPostContentEditor"/>
+              </div>
             </div>
 
             <div class="row q-mt-md">
@@ -78,6 +82,7 @@
                 class="col-md-12 col-sm-12 col-xs-12 q-pr-md"
                 v-model="entityModel.featured"
                 @update:model-value="updateFeatured"
+                :disable="action === 'view'"
                 label="Featured"/>
             </div>
 
@@ -91,6 +96,7 @@
                 <q-checkbox
                   :model-value="entityModel.publicationStatus === 'published'"
                   @update:model-value="updatePublicationStatus"
+                  :disable="action === 'view'"
                   label="Published"/>
               </q-field>
 
@@ -99,10 +105,12 @@
                 <q-input
                   :model-value="formatDate(entityModel.publicationTimestamp)"
                   @update:model-value="updatePublicationTimestamp"
+                  :readonly="action === 'view'"
                   debounce="1000"
                   label="Publication date"
                 >
-                  <template v-slot:prepend>
+                  <template v-slot:prepend
+                            v-if="action !== 'view'">
                     <q-icon name="event" class="cursor-pointer">
                       <q-popup-proxy transition-show="scale" transition-hide="scale">
                         <q-date
@@ -118,7 +126,8 @@
                     </q-icon>
                   </template>
 
-                  <template v-slot:append>
+                  <template v-slot:append
+                            v-if="action !== 'view'">
                     <q-icon name="access_time" class="cursor-pointer">
                       <q-popup-proxy transition-show="scale" transition-hide="scale">
                         <q-time
@@ -133,8 +142,7 @@
                       </q-popup-proxy>
                     </q-icon>
                     <q-icon name="clear" class="cursor-pointer"
-                            @click="clearPublicationTimestamp"
-                    />
+                            @click="clearPublicationTimestamp"/>
                   </template>
                 </q-input>
               </div>
@@ -199,17 +207,19 @@
       </q-card>
       <principal-selector-dialog ref="principalSelectorDialog"/>
       <ContentEditor :show="showIntroContentEditor"
-                           :content="entityModel.introContent"
-                           @changeOrder="changeWidgetContentOrder($event, 'intro')"
-                           @update="updateWidgetContent($event, 'intro')"
-                           @delete="deleteWidgetContent($event, 'intro')"
-                           @close="closeIntroContentEditor"/>
+                     :content="entityModel.introContent"
+                     :readonly="action ==='view'"
+                     @changeOrder="changeWidgetContentOrder($event, 'intro')"
+                     @update="updateWidgetContent($event, 'intro')"
+                     @delete="deleteWidgetContent($event, 'intro')"
+                     @close="closeIntroContentEditor"/>
       <ContentEditor :show="showPostContentEditor"
-                           :content="entityModel.content"
-                           @changeOrder="changeWidgetContentOrder($event, 'post')"
-                           @update="updateWidgetContent($event, 'post')"
-                           @delete="deleteWidgetContent($event, 'post')"
-                           @close="closePostContentEditor"/>
+                     :content="entityModel.content"
+                     :readonly="action ==='view'"
+                     @changeOrder="changeWidgetContentOrder($event, 'post')"
+                     @update="updateWidgetContent($event, 'post')"
+                     @delete="deleteWidgetContent($event, 'post')"
+                     @close="closePostContentEditor"/>
     </template>
   </entity-page>
 </template>

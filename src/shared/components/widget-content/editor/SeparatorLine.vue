@@ -1,10 +1,10 @@
 <template>
-  <div class="q-pt-xs q-pb-xs">
-    <div style="border-top: #1D1D1D 1px dashed; padding-top: -12px"></div>
+  <div class="row q-py-xs">
+    <div class="full-width" style="border-top: #1D1D1D 1px dashed; padding-top: -12px"></div>
     <div style="width: 50%">
       <q-btn round
              class="float-right"
-             style="margin-top: -13px"
+             style="margin-top: -13px; margin-right: -13px;"
              icon="add"
              color="primary"
              size="xs"
