@@ -38,10 +38,3 @@ export default defineComponent({
   }
 })
 </script>
-
-<style>
-.add-button {
-
-
-}
-</style>

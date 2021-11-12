@@ -11,21 +11,8 @@ export interface Post extends BaseEntity {
   publicationStatus: string,
   publicationTimestamp?: Date,
   targets?: AnnettePrincipal[],
-  media?: { [key: string]: Media },
-  docs?: { [key: string]: Doc },
   updatedAt?: Date,
   updatedBy?: AnnettePrincipal
-}
-
-export interface Media {
-  id: string,
-  filename: string
-}
-
-export interface Doc {
-  id: string,
-  name: string
-  filename: string
 }
 
 export interface WidgetContent {

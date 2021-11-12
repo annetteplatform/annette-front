@@ -96,6 +96,9 @@ module.exports = configure(function (ctx) {
           // secure: false,
           changeOrigin: true
         }
+      },
+      headers: {
+        'X-Frame-Options': 'sameorigin'
       }
     },
 

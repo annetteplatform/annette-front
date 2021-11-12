@@ -59,6 +59,8 @@
           narrow-indicator
         >
           <q-tab name="general" label="General"/>
+          <q-tab name="media" label="Media" v-if="action !== 'create'"/>
+          <q-tab name="docs" label="Docs" v-if="action !== 'create'"/>
           <q-tab name="targets" label="Targets" v-if="action !== 'create'"/>
         </q-tabs>
 
@@ -168,6 +170,64 @@
 
           </q-tab-panel>
 
+          <q-tab-panel name="media" v-if="action !== 'create'">
+            <q-uploader class="full-width"
+                        flat bordered
+                        :url="`/api/annette/v1/cms/uploadPostFile/${entityModel.id}/media`"
+                        label="Upload media"
+                        @uploaded="mediaUploaded"
+                        multiple
+                        ref="mediaUploaderRef"
+            />
+
+            <div class="row items-start q-mt-md">
+              <div class="col-md-2" v-for="file in files.media" :key="file.fileId">
+                <q-card class="q-ma-sm" flat>
+                  <q-video v-if="file.contentType.includes('video')"
+                           :src="`/api/annette/v1/cms/file/${file.objectId}/media/${file.fileId}`"
+                  />
+                  <q-img v-else fit="contain" :width="'149px'" :height="'149px'"
+                         :src="`/api/annette/v1/cms/file/${file.objectId}/media/${file.fileId}`"/>
+                  <q-card-actions align="center" v-if="action === 'edit'">
+                    <q-btn flat round color="negative" size="sm" icon="fas fa-trash" @click="deleteFile(file)"/>
+                  </q-card-actions>
+                </q-card>
+              </div>
+            </div>
+
+          </q-tab-panel>
+
+          <q-tab-panel name="docs" v-if="action !== 'create'">
+            <q-uploader class="full-width"
+                        flat bordered
+                        :url="`/api/annette/v1/cms/uploadPostFile/${entityModel.id}/doc`"
+                        label="Upload documents"
+                        @uploaded="docsUploaded"
+                        multiple
+                        ref="docUploaderRef"
+            />
+            <q-list class="q-mt-md">
+              <q-item v-for="file in files.docs" :key="file.fileId">
+                <q-item-section>
+                  <q-item-label>{{ file.filename }}</q-item-label>
+                  <q-item-label caption lines="2">{{ file.contentType }}</q-item-label>
+                </q-item-section>
+
+                <q-item-section side top>
+                  <div>
+
+                    <q-btn flat round color="primary" size="sm" icon="fa fa-download"
+                           @click="downloadFile(file)"/>
+                    <q-btn flat round color="negative" size="sm" icon="fas fa-trash"
+                           v-if="action === 'edit'"
+                           @click="deleteFile(file)"/>
+                  </div>
+                </q-item-section>
+              </q-item>
+            </q-list>
+          </q-tab-panel>
+
+
           <q-tab-panel name="targets" v-if="action !== 'create'">
             <div class="row q-mt-md">
               <q-list bordered class="full-width" separator>
@@ -228,13 +288,15 @@
 import {computed, defineComponent, ref, toRef} from 'vue';
 import EntityPage from 'src/shared/components/EntityPage.vue';
 import {useStore} from 'src/store';
-import {date, uid, useQuasar} from 'quasar';
+import {date, openURL, uid, useQuasar} from 'quasar';
 import PrincipalViewItem from 'src/shared/components/principal-view/PrincipalViewItem.vue';
 import PrincipalSelectorDialog from 'src/shared/components/principal-selector/PrinciplaSelectorDialog.vue';
 import {
   Blog,
   ChangePostWidgetContentOrderPayloadDto,
   DeletePostWidgetContentPayloadDto,
+  FileDescriptor,
+  Files,
   Post,
   UpdatePostFeaturedPayloadDto,
   UpdatePostPublicationTimestampPayloadDto,
@@ -245,6 +307,7 @@ import {useSyncEntityPage} from 'src/shared/composables/sync-entity-page';
 import {AnnettePrincipal} from 'src/shared';
 import {Ref} from '@vue/reactivity';
 import ContentEditor from 'src/shared/components/widget-content/editor/ContentEditor.vue';
+import {cmsPostService} from 'src/modules/cms/service/cms-post.service';
 
 const NAMESPACE = 'cmsPost';
 
@@ -308,11 +371,52 @@ export default defineComponent({
       }
     }
 
+    const files: Ref<Files> = ref({media: [], docs: []})
+    const mediaUploaderRef = ref()
+    const docUploaderRef = ref()
+    const onBeforeLoad = async (action: string, id: string) => {
+      if (action !== 'create') {
+        files.value = await cmsPostService.getPostFiles(id)
+      }
+    }
+
+    const deleteFile = async (file: FileDescriptor) => {
+      await cmsPostService.removePostFile(id.value as string, file.fileType, file.fileId)
+      if (file.fileType === 'doc') {
+        files.value.docs = files.value.docs.filter(fd => fd !== file)
+      } else {
+        files.value.media = files.value.media.filter(fd => fd !== file)
+      }
+    }
+
+    const docsUploaded = (info: any) => {
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+      const response = JSON.parse(info.xhr.response) as FileDescriptor
+      const docFiles = [...files.value.docs, response]
+      files.value.docs = docFiles.sort((a, b) => a.filename < b.filename ? -1 : 1)
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-member-access
+      docUploaderRef.value.removeUploadedFiles()
+    }
+
+    const mediaUploaded = (info: any) => {
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+      const response = JSON.parse(info.xhr.response) as FileDescriptor
+      const mediaFiles = [...files.value.media, response]
+      files.value.media = mediaFiles.sort((a, b) => a.filename < b.filename ? -1 : 1)
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-member-access
+      mediaUploaderRef.value.removeUploadedFiles()
+    }
+
+    const downloadFile = (file: FileDescriptor) => {
+      openURL(`/api/annette/v1/cms/file/${file.objectId}/${file.fileType}/${file.fileId}`)
+    }
+
     const entityPage = useSyncEntityPage<Post>({
       namespace: NAMESPACE,
       emptyEntity,
       formHasError,
       props,
+      onBeforeLoad,
       onAfterLoad
     })
 
@@ -534,8 +638,14 @@ export default defineComponent({
       closePostContentEditor,
       changeWidgetContentOrder,
       updateWidgetContent,
-      deleteWidgetContent
-
+      deleteWidgetContent,
+      files,
+      mediaUploaderRef,
+      docUploaderRef,
+      deleteFile,
+      downloadFile,
+      docsUploaded,
+      mediaUploaded
     };
   }
 });

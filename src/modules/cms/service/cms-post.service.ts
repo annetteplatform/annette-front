@@ -5,6 +5,8 @@ import {
   ChangePostWidgetContentOrderPayloadDto,
   CreatePostPayloadDto,
   DeletePostWidgetContentPayloadDto,
+  FileDescriptor,
+  Files,
   Post,
   PostFilter,
   UnassignPostTargetPrincipalPayloadDto,
@@ -106,7 +108,43 @@ export const cmsPostService = {
     return await axios.post<FindResult>('/api/annette/v1/cms/findPosts', query)
       .then(result => result.data)
   },
+
+  async getPostFiles(id: string) {
+    // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
+    return await axios.get<FileDescriptor[]>(`/api/annette/v1/cms/getPostFiles/${id}`)
+      .then(result => {
+        const files: Files = {
+          docs: result.data
+            .filter(d => d.fileType === 'doc')
+            .map(convertFileDescriptor)
+            .sort((a, b) => a.filename < b.filename ? -1 : 1),
+          media: result.data
+            .filter(d => d.fileType === 'media')
+            .map(convertFileDescriptor)
+            .sort((a, b) => a.filename < b.filename ? -1 : 1),
+        }
+        return files
+      })
+  },
+
+  async removePostFile(postId: string,
+                       fileType: string,
+                       fileId: string,) {
+    // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
+    return await axios.post(`/api/annette/v1/cms/removePostFile/${postId}/${fileType}/${fileId}`)
+      .then(() => true)
+  },
 }
+
+
+function convertFileDescriptor(rawFD: FileDescriptor): FileDescriptor {
+  const fd: FileDescriptor = {...rawFD}
+  if (rawFD.updatedAt) {
+    fd.updatedAt = new Date(rawFD.updatedAt)
+  }
+  return fd
+}
+
 
 function convertPost(rawPost: Post): Post {
   const post: Post = {...rawPost}
