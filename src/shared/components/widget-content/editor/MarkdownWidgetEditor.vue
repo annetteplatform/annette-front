@@ -4,8 +4,7 @@
       <q-input outlined
                :model-value="modelValue.data"
                @update:model-value="update"
-               style="height: 600px;"
-               autogrow
+               style="height: 80vh;"
                type="textarea"
                label="Markdown Content"/>
     </div>

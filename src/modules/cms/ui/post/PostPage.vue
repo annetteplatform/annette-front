@@ -180,19 +180,33 @@
                         ref="mediaUploaderRef"
             />
 
-            <div class="row items-start q-mt-md">
-              <div class="col-md-2" v-for="file in files.media" :key="file.fileId">
-                <q-card class="q-ma-sm" flat>
-                  <q-video v-if="file.contentType.includes('video')"
-                           :src="`/api/annette/v1/cms/file/${file.objectId}/media/${file.fileId}`"
-                  />
-                  <q-img v-else fit="contain" :width="'149px'" :height="'149px'"
-                         :src="`/api/annette/v1/cms/file/${file.objectId}/media/${file.fileId}`"/>
-                  <q-card-actions align="center" v-if="action === 'edit'">
-                    <q-btn flat round color="negative" size="sm" icon="fas fa-trash" @click="deleteFile(file)"/>
-                  </q-card-actions>
-                </q-card>
-              </div>
+            <div class="q-pt-md row items-start q-gutter-md">
+              <q-card v-for="file in files.media" :key="file.fileId" class="image-card" flat bordered>
+                <q-card-section>
+                <q-avatar v-if="file.contentType.includes('video')"
+                          class="full-width"
+                          style="height:160px;"
+                          text-color="grey"
+                          font-size="64px"
+                          icon="videocam"
+                />
+
+                <q-img v-else style="height:160px;" class="full-width"
+                       fit="scale-down"
+                       :src="`/api/annette/v1/cms/file/${file.objectId}/media/${file.fileId}`"/>
+                </q-card-section>
+                <q-card-section>
+                  <q-item-label caption lines="1">{{ file.filename }}</q-item-label>
+                  <q-tooltip>
+                    {{ file.filename }}
+                  </q-tooltip>
+                </q-card-section>
+                <q-separator/>
+                <q-card-actions align="right" v-if="action === 'edit'">
+                  <q-btn flat round color="negative" size="sm" icon="fas fa-trash" @click="deleteFile(file)"/>
+                </q-card-actions>
+              </q-card>
+
             </div>
 
           </q-tab-panel>
@@ -393,7 +407,7 @@ export default defineComponent({
       // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
       const response = JSON.parse(info.xhr.response) as FileDescriptor
       const docFiles = [...files.value.docs, response]
-      files.value.docs = docFiles.sort((a, b) => a.filename < b.filename ? -1 : 1)
+      files.value.docs = docFiles.sort((a, b) => a.filename.toLowerCase() < b.filename.toLowerCase() ? -1 : 1)
       // eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-member-access
       docUploaderRef.value.removeUploadedFiles()
     }
@@ -402,7 +416,7 @@ export default defineComponent({
       // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
       const response = JSON.parse(info.xhr.response) as FileDescriptor
       const mediaFiles = [...files.value.media, response]
-      files.value.media = mediaFiles.sort((a, b) => a.filename < b.filename ? -1 : 1)
+      files.value.media = mediaFiles.sort((a, b) => a.filename.toLowerCase() < b.filename.toLowerCase() ? -1 : 1)
       // eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-member-access
       mediaUploaderRef.value.removeUploadedFiles()
     }
@@ -657,5 +671,10 @@ export default defineComponent({
   font-size: 14px;
   line-height: 1.5;
   padding: 5px;
+}
+
+.image-card {
+  width: 100%;
+  max-width: 235px;
 }
 </style>

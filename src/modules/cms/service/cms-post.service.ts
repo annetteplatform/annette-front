@@ -117,11 +117,11 @@ export const cmsPostService = {
           docs: result.data
             .filter(d => d.fileType === 'doc')
             .map(convertFileDescriptor)
-            .sort((a, b) => a.filename < b.filename ? -1 : 1),
+            .sort((a, b) => a.filename.toLowerCase() < b.filename.toLowerCase() ? -1 : 1),
           media: result.data
             .filter(d => d.fileType === 'media')
             .map(convertFileDescriptor)
-            .sort((a, b) => a.filename < b.filename ? -1 : 1),
+            .sort((a, b) => a.filename.toLowerCase() < b.filename.toLowerCase() ? -1 : 1),
         }
         return files
       })

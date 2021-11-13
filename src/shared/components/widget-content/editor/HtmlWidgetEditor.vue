@@ -6,6 +6,7 @@
         @update:model-value="update"
         debounce="1000"
         min-height="10rem"
+        height="90vh"
         :toolbar="[
                   [
                     {
