@@ -23,8 +23,8 @@
 <script lang="ts">
 import {defineComponent, PropType, ref, toRef} from 'vue';
 import {FileDescriptor, WidgetContent} from 'src/modules/cms';
-import ImageSelector from "src/shared/components/widget-content/file-selector/ImageSelector.vue";
-import DocSelector from "src/shared/components/widget-content/file-selector/DocSelector.vue";
+import ImageSelector from 'src/shared/components/widget-content/file-selector/ImageSelector.vue';
+import DocSelector from 'src/shared/components/widget-content/file-selector/DocSelector.vue';
 
 export default defineComponent({
   name: 'MarkdownWidgetEditor',
@@ -74,17 +74,10 @@ export default defineComponent({
       // get cursor's position:
       var startPos = tArea.selectionStart,
         endPos = tArea.selectionEnd,
-        cursorPos = startPos,
         tmpStr = tArea.value;
 
       const content = tmpStr.substring(0, startPos) + insert + tmpStr.substring(endPos, tmpStr.length);
       update(content)
-
-      // // move cursor:
-      // setTimeout(() => {
-      //   cursorPos += insert.length;
-      //   tArea.selectionStart = tArea.selectionEnd = cursorPos;
-      // }, 10);
     }
 
     const selectImage = (file: FileDescriptor) => {
