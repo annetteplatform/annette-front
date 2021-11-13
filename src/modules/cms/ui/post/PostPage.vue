@@ -171,7 +171,7 @@
           </q-tab-panel>
 
           <q-tab-panel name="media" v-if="action !== 'create'">
-            <q-uploader class="full-width"
+            <q-uploader style="width: 450px"
                         flat bordered
                         :url="`/api/annette/v1/cms/uploadPostFile/${entityModel.id}/media`"
                         label="Upload media"
@@ -212,7 +212,7 @@
           </q-tab-panel>
 
           <q-tab-panel name="docs" v-if="action !== 'create'">
-            <q-uploader class="full-width"
+            <q-uploader style="width: 450px"
                         flat bordered
                         :url="`/api/annette/v1/cms/uploadPostFile/${entityModel.id}/doc`"
                         label="Upload documents"
@@ -286,14 +286,20 @@
                      @changeOrder="changeWidgetContentOrder($event, 'intro')"
                      @update="updateWidgetContent($event, 'intro')"
                      @delete="deleteWidgetContent($event, 'intro')"
-                     @close="closeIntroContentEditor"/>
+                     @close="closeIntroContentEditor"
+                     :media="files.media"
+                     :docs="files.docs"
+      />
       <ContentEditor :show="showPostContentEditor"
                      :content="entityModel.content"
                      :readonly="action ==='view'"
                      @changeOrder="changeWidgetContentOrder($event, 'post')"
                      @update="updateWidgetContent($event, 'post')"
                      @delete="deleteWidgetContent($event, 'post')"
-                     @close="closePostContentEditor"/>
+                     @close="closePostContentEditor"
+                     :media="files.media"
+                     :docs="files.docs"
+      />
     </template>
   </entity-page>
 </template>

@@ -2,11 +2,12 @@
   <div class="row q-mt-md">
     <div class="col-md-12 col-sm-12 col-xs-12">
       <q-editor
+        ref="qEditor"
         :model-value="modelValue.data"
         @update:model-value="update"
         debounce="1000"
         min-height="10rem"
-        height="90vh"
+        height="80vh"
         :toolbar="[
                   [
                     {
@@ -18,7 +19,7 @@
                     }
                   ],
                   ['bold', 'italic', 'strike', 'underline', 'subscript', 'superscript'],
-                  ['token', 'hr', 'link', 'custom_btn'],
+                  [ 'hr', 'link', 'image', 'doc'],
                   ['print', 'fullscreen'],
                   [
                     {
@@ -72,9 +73,8 @@
                     'removeFormat'
                   ],
                   ['quote', 'unordered', 'ordered', 'outdent', 'indent'],
-
                   ['undo', 'redo'],
-                  ['viewsource']
+                  [ 'viewsource']
                 ]"
         :fonts="{
                   arial: 'Arial',
@@ -86,28 +86,60 @@
                   times_new_roman: 'Times New Roman',
                   verdana: 'Verdana'
                 }"
+        :definitions="{
+                  image: {
+                    tip: 'Insert image',
+                    icon: 'image',
+                    handler: insertImage
+                   },
+                   doc: {
+                    tip: 'Insert doc',
+                    icon: 'article',
+                    handler: insertDoc
+                   },
+        }
+"
       />
     </div>
+    <ImageSelector ref="imageSelector" :files="media" @select="selectImage"/>
+    <DocSelector ref="docSelector" :files="docs" @select="selectDoc"/>
   </div>
 
 </template>
 
 <script lang="ts">
-import {defineComponent, PropType, toRef} from 'vue';
-import {WidgetContent} from 'src/modules/cms';
+import {defineComponent, PropType, ref, toRef} from 'vue';
+import {FileDescriptor, WidgetContent} from 'src/modules/cms';
+import ImageSelector from 'src/shared/components/widget-content/file-selector/ImageSelector.vue';
+import DocSelector from 'src/shared/components/widget-content/file-selector/DocSelector.vue';
 
 export default defineComponent({
   name: 'HtmlWidgetEditor',
-  components: {},
+  components: {DocSelector, ImageSelector},
   props: {
     modelValue: {
       type: Object as PropType<WidgetContent>,
       required: true
+    },
+    media: {
+      type: Array as PropType<FileDescriptor[]>,
+      default: () => {
+        return []
+      }
+    },
+    docs: {
+      type: Array as PropType<FileDescriptor[]>,
+      default: () => {
+        return []
+      }
     }
   },
   emits: ['update:modelValue'],
   setup(props, {emit}) {
 
+    const qEditor = ref()
+    const imageSelector = ref()
+    const docSelector = ref()
     const modelValue = toRef(props, 'modelValue')
     const update = (content: string) => {
       const data = {
@@ -117,8 +149,40 @@ export default defineComponent({
       }
       emit('update:modelValue', data)
     }
+
+    const insertImage = () => {
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-member-access
+      imageSelector.value.showDialog()
+    }
+
+    const selectImage = (file: FileDescriptor) => {
+      console.log(file)
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-member-access
+      qEditor.value.runCmd('insertImage', `/api/annette/v1/cms/file/${file.objectId}/media/${file.fileId}`)
+    }
+
+    const insertDoc = () => {
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-member-access
+      docSelector.value.showDialog()
+    }
+
+    const selectDoc = (file: FileDescriptor) => {
+      console.log(file)
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-member-access
+      qEditor.value.runCmd('insertHTML',
+        `<a href="/api/annette/v1/cms/file/${file.objectId}/doc/${file.fileId}">${file.filename}</a>`)
+    }
+
+
     return {
-      update
+      qEditor,
+      imageSelector,
+      docSelector,
+      update,
+      insertImage,
+      selectImage,
+      insertDoc,
+      selectDoc
     }
   }
 })

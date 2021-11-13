@@ -21,10 +21,12 @@
       </q-drawer>
 
       <q-drawer v-model="showWidgetContentEditor"
-                side="right" overlay bordered
-                :width="600">
+                side="right" bordered
+                :width="750">
         <WidgetContentEditor v-if="selectedWidgetContentIndex !== null && entityContent[selectedWidgetContentIndex]"
                              v-model="entityContent[selectedWidgetContentIndex]"
+                             :media="media"
+                             :docs="docs"
                              @cancel="cancelEdit"
                              @save="save"/>
       </q-drawer>
@@ -88,7 +90,7 @@
 <script lang="ts">
 import {defineComponent, PropType, ref, toRef, watch} from 'vue';
 import SeparatorLine from 'src/shared/components/widget-content/editor/SeparatorLine.vue';
-import {WidgetContent} from 'src/modules/cms';
+import {FileDescriptor, WidgetContent} from 'src/modules/cms';
 import {extend, uid} from 'quasar';
 import WidgetContentView from 'src/shared/components/widget-content/WidgetContentView.vue';
 import {Ref} from '@vue/reactivity';
@@ -114,6 +116,14 @@ export default defineComponent({
     content: {
       type: Array as PropType<WidgetContent[]>,
       required: true
+    },
+    media: {
+      type: Array as PropType<FileDescriptor[]>,
+      default:() => { return [] }
+    },
+    docs: {
+      type: Array as PropType<FileDescriptor[]>,
+      default:() => { return [] }
     }
   },
   emits: ['close', 'changeOrder', 'update', 'delete'],

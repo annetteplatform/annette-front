@@ -9,10 +9,14 @@
       <MarkdownWidgetEditor v-if="modelValue && modelValue.widgetType === 'markdown'"
                             :model-value="modelValue"
                             @update:model-value="update"
+                            :media="media"
+                            :docs="docs"
       />
       <HtmlWidgetEditor v-if="modelValue && modelValue.widgetType === 'html'"
                         :model-value="modelValue"
-                        @update:model-value="update"/>
+                        @update:model-value="update"
+                        :media="media"
+                        :docs="docs"/>
     </q-card-section>
   </q-card>
 
@@ -20,7 +24,7 @@
 
 <script lang="ts">
 import {defineComponent, PropType} from 'vue';
-import {WidgetContent} from 'src/modules/cms';
+import {FileDescriptor, WidgetContent} from 'src/modules/cms';
 import MarkdownWidgetEditor from 'src/shared/components/widget-content/editor/MarkdownWidgetEditor.vue';
 import HtmlWidgetEditor from 'src/shared/components/widget-content/editor/HtmlWidgetEditor.vue';
 
@@ -32,6 +36,14 @@ export default defineComponent({
     modelValue: {
       type: Object as PropType<WidgetContent>,
       required: true
+    },
+    media: {
+      type: Array as PropType<FileDescriptor[]>,
+      default:() => { return [] }
+    },
+    docs: {
+      type: Array as PropType<FileDescriptor[]>,
+      default:() => { return [] }
     }
   },
   emits: ['update:modelValue', 'cancel', 'save'],
