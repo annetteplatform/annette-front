@@ -12,11 +12,15 @@
                             :media="media"
                             :docs="docs"
       />
-      <HtmlWidgetEditor v-if="modelValue && modelValue.widgetType === 'html'"
+      <HtmlWidgetEditor v-else-if="modelValue && modelValue.widgetType === 'html'"
                         :model-value="modelValue"
                         @update:model-value="update"
                         :media="media"
                         :docs="docs"/>
+      <ParalaxWidgetEditor v-else-if="modelValue && modelValue.widgetType === 'paralax'"
+                           :model-value="modelValue"
+                           @update:model-value="update"
+                           :media="media"/>
     </q-card-section>
   </q-card>
 
@@ -25,13 +29,14 @@
 <script lang="ts">
 import {defineComponent, PropType} from 'vue';
 import {FileDescriptor, WidgetContent} from 'src/modules/cms';
-import MarkdownWidgetEditor from 'src/shared/components/widget-content/editor/MarkdownWidgetEditor.vue';
-import HtmlWidgetEditor from 'src/shared/components/widget-content/editor/HtmlWidgetEditor.vue';
+import MarkdownWidgetEditor from 'src/shared/components/widget-content/widgets/MarkdownWidgetEditor.vue';
+import HtmlWidgetEditor from 'src/shared/components/widget-content/widgets/HtmlWidgetEditor.vue';
+import ParalaxWidgetEditor from "src/shared/components/widget-content/widgets/ParalaxWidgetEditor.vue";
 
 
 export default defineComponent({
   name: 'WidgetContentEditor',
-  components: {HtmlWidgetEditor, MarkdownWidgetEditor},
+  components: {ParalaxWidgetEditor, HtmlWidgetEditor, MarkdownWidgetEditor},
   props: {
     modelValue: {
       type: Object as PropType<WidgetContent>,

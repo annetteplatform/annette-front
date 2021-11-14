@@ -1,24 +1,20 @@
 <template>
-  <QMarkdown class="markdown"
-             :id="content.id"
-             v-if="content.widgetType == 'markdown'"
-             :src="content.data"
-  />
-  <div v-if="content.widgetType == 'html'"
-       :id="content.id"
-       v-html="content.data"></div>
+  <MarkdownWidgetViewer v-if="content.widgetType === 'markdown'" :content="content" />
+  <HtmlWidgetViewer v-else-if="content.widgetType === 'html'" :content="content" />
+  <ParalaxWidgetViewer v-else-if="content.widgetType === 'paralax'" :content="content" />
 </template>
 
 <script lang="ts">
 import {defineComponent, PropType} from 'vue';
-// @ts-ignore
-import {QMarkdown} from '@quasar/quasar-ui-qmarkdown/dist/index.esm.js'
 import {WidgetContent} from 'src/modules/cms';
+import HtmlWidgetViewer from 'src/shared/components/widget-content/widgets/HtmlWidgetViewer.vue';
+import MarkdownWidgetViewer from 'src/shared/components/widget-content/widgets/MarkdownWidgetViewer.vue';
+import ParalaxWidgetViewer from 'src/shared/components/widget-content/widgets/ParalaxWidgetViewer.vue';
 
 
 export default defineComponent({
   name: 'WidgetContentView',
-  components: {QMarkdown},
+  components: {ParalaxWidgetViewer, MarkdownWidgetViewer, HtmlWidgetViewer},
   props: {
     content: {
       type: Object as PropType<WidgetContent>,
@@ -30,5 +26,3 @@ export default defineComponent({
   }
 })
 </script>
-
-<style src="@quasar/quasar-ui-qmarkdown/dist/index.css"></style>
