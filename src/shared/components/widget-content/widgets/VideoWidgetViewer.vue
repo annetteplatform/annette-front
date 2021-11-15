@@ -1,9 +1,10 @@
 <template>
-  <q-parallax
-    :src="content.data.src"
-    :height="toNumber(content.data.height)"
-    :speed="toNumber(content.data.speed)"
-  />
+  <div class="q-my-md">
+    <q-video :style="{ height: content.data.height+'px' }"
+             :ratio="content.data.rate"
+             :src="content.data.src"
+    />
+  </div>
 </template>
 
 <script lang="ts">
@@ -12,7 +13,7 @@ import {WidgetContent} from 'src/modules/cms';
 
 
 export default defineComponent({
-  name: 'ParallaxWidgetViewer',
+  name: 'VideoWidgetViewer',
   components: {},
   props: {
     content: {
@@ -20,12 +21,15 @@ export default defineComponent({
       required: true
     }
   },
-  setup() {
+  setup(props) {
     const toNumber = (s: string) => {
       const parsed = parseFloat(s);
-      if (isNaN(parsed)) { return undefined; }
+      if (isNaN(parsed)) {
+        return undefined;
+      }
       return parsed
     }
+
     return {
       toNumber
     }

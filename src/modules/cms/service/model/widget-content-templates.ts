@@ -70,6 +70,20 @@ export function widgetContentTemplates(): WidgetContentTemplate[] {
         },
         indexData: ''
       }
+    },
+    {
+      id: 'Video-01',
+      name: 'Video',
+      widgetContent: {
+        id: '',
+        widgetType: 'video',
+        data: {
+          src: 'http://www.peach.themazzone.com/durian/movies/sintel-2048-surround.mp4',
+          ratio: '1.777777',
+          height: '400'
+        },
+        indexData: ''
+      }
     }
   ]
 }

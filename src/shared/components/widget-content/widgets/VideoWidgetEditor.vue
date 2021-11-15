@@ -1,6 +1,5 @@
 <template>
   <div>
-
     <div class="row q-mt-md">
       <q-input class="full-width" bottom-slots
                :model-value="modelValue.data.src"
@@ -12,6 +11,7 @@
       </q-input>
       <ImageSelector ref="imageSelector" :files="media" @select="selectImage"/>
     </div>
+
     <div class="row">
       <q-input class="full-width" bottom-slots
                :model-value="modelValue.data.height"
@@ -19,11 +19,12 @@
                label="Height">
       </q-input>
     </div>
+
     <div class="row">
       <q-input class="full-width" bottom-slots
-               :model-value="modelValue.data.speed"
-               @update:model-value="updateSpeed"
-               label="Speed">
+               :model-value="modelValue.data.ratio"
+               @update:model-value="updateRatio"
+               label="Ratio">
       </q-input>
     </div>
   </div>
@@ -35,7 +36,7 @@ import {FileDescriptor, WidgetContent} from 'src/modules/cms';
 import ImageSelector from 'src/shared/components/widget-content/file-selector/ImageSelector.vue';
 
 export default defineComponent({
-  name: 'ParallaxWidgetEditor',
+  name: 'VideoWidgetEditor',
   components: {ImageSelector},
   props: {
     modelValue: {
@@ -80,12 +81,12 @@ export default defineComponent({
       emit('update:modelValue', updated)
     }
 
-    const updateSpeed = (src: string) => {
+    const updateRatio = (ratio: string) => {
       const updated = {
         ...modelValue.value,
       }
       // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-      updated.data.speed = src
+      updated.data.ratio = ratio
       emit('update:modelValue', updated)
     }
 
@@ -105,8 +106,8 @@ export default defineComponent({
       selectImage,
       update,
       updateSource,
-      updateHeight,
-      updateSpeed
+      updateRatio,
+      updateHeight
     }
   }
 })

@@ -18,9 +18,13 @@
                         :media="media"
                         :docs="docs"/>
       <ParallaxWidgetEditor v-else-if="modelValue && modelValue.widgetType === 'parallax'"
-                           :model-value="modelValue"
-                           @update:model-value="update"
-                           :media="media"/>
+                            :model-value="modelValue"
+                            @update:model-value="update"
+                            :media="media"/>
+      <VideoWidgetEditor v-else-if="modelValue && modelValue.widgetType === 'video'"
+                         :model-value="modelValue"
+                         @update:model-value="update"
+                         :media="media"/>
     </q-card-section>
   </q-card>
 
@@ -32,11 +36,12 @@ import {FileDescriptor, WidgetContent} from 'src/modules/cms';
 import MarkdownWidgetEditor from 'src/shared/components/widget-content/widgets/MarkdownWidgetEditor.vue';
 import HtmlWidgetEditor from 'src/shared/components/widget-content/widgets/HtmlWidgetEditor.vue';
 import ParallaxWidgetEditor from 'src/shared/components/widget-content/widgets/ParallaxWidgetEditor.vue';
+import VideoWidgetEditor from "src/shared/components/widget-content/widgets/VideoWidgetEditor.vue";
 
 
 export default defineComponent({
   name: 'WidgetContentEditor',
-  components: {ParallaxWidgetEditor, HtmlWidgetEditor, MarkdownWidgetEditor},
+  components: {VideoWidgetEditor, ParallaxWidgetEditor, HtmlWidgetEditor, MarkdownWidgetEditor},
   props: {
     modelValue: {
       type: Object as PropType<WidgetContent>,
@@ -44,11 +49,15 @@ export default defineComponent({
     },
     media: {
       type: Array as PropType<FileDescriptor[]>,
-      default:() => { return [] }
+      default: () => {
+        return []
+      }
     },
     docs: {
       type: Array as PropType<FileDescriptor[]>,
-      default:() => { return [] }
+      default: () => {
+        return []
+      }
     }
   },
   emits: ['update:modelValue', 'cancel', 'save'],
