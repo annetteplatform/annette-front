@@ -58,15 +58,15 @@ export function widgetContentTemplates(): WidgetContentTemplate[] {
       }
     },
     {
-      id: 'paralax-01',
-      name: 'Paralax',
+      id: 'parallax-01',
+      name: 'Parallax',
       widgetContent: {
         id: '',
-        widgetType: 'paralax',
+        widgetType: 'parallax',
         data: {
           src: 'https://cdn.quasar.dev/img/parallax1.jpg',
-          height: "200",
-          speed: "0.5"
+          height: '200',
+          speed: '0.5'
         },
         indexData: ''
       }

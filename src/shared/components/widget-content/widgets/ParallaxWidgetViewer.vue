@@ -12,7 +12,7 @@ import {WidgetContent} from 'src/modules/cms';
 
 
 export default defineComponent({
-  name: 'ParalaxWidgetViewer',
+  name: 'ParallaxWidgetViewer',
   components: {},
   props: {
     content: {

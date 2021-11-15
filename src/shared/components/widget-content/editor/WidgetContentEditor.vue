@@ -17,7 +17,7 @@
                         @update:model-value="update"
                         :media="media"
                         :docs="docs"/>
-      <ParalaxWidgetEditor v-else-if="modelValue && modelValue.widgetType === 'paralax'"
+      <ParallaxWidgetEditor v-else-if="modelValue && modelValue.widgetType === 'parallax'"
                            :model-value="modelValue"
                            @update:model-value="update"
                            :media="media"/>
@@ -31,12 +31,12 @@ import {defineComponent, PropType} from 'vue';
 import {FileDescriptor, WidgetContent} from 'src/modules/cms';
 import MarkdownWidgetEditor from 'src/shared/components/widget-content/widgets/MarkdownWidgetEditor.vue';
 import HtmlWidgetEditor from 'src/shared/components/widget-content/widgets/HtmlWidgetEditor.vue';
-import ParalaxWidgetEditor from "src/shared/components/widget-content/widgets/ParalaxWidgetEditor.vue";
+import ParallaxWidgetEditor from 'src/shared/components/widget-content/widgets/ParallaxWidgetEditor.vue';
 
 
 export default defineComponent({
   name: 'WidgetContentEditor',
-  components: {ParalaxWidgetEditor, HtmlWidgetEditor, MarkdownWidgetEditor},
+  components: {ParallaxWidgetEditor, HtmlWidgetEditor, MarkdownWidgetEditor},
   props: {
     modelValue: {
       type: Object as PropType<WidgetContent>,

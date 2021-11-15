@@ -35,7 +35,7 @@ import {FileDescriptor, WidgetContent} from 'src/modules/cms';
 import ImageSelector from 'src/shared/components/widget-content/file-selector/ImageSelector.vue';
 
 export default defineComponent({
-  name: 'ParalaxWidgetEditor',
+  name: 'ParallaxWidgetEditor',
   components: {ImageSelector},
   props: {
     modelValue: {
