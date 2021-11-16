@@ -1,12 +1,8 @@
 <template>
   <div class="q-my-md">
-<!--    <q-video :style="{ height: content.data.height+'px' }"-->
-<!--             :ratio="content.data.rate"-->
-<!--             :src="content.data.src"-->
-<!--    />-->
-    <q-media-player
-      type="video"
-      :sources="sources"
+    <q-video :style="{ height: content.data.height+'px' }"
+             :ratio="content.data.rate"
+             :src="content.data.src"
     />
   </div>
 </template>
@@ -17,7 +13,7 @@ import {WidgetContent} from 'src/modules/cms';
 
 
 export default defineComponent({
-  name: 'VideoWidgetViewer',
+  name: 'YouTubeWidgetViewer',
   components: {},
   props: {
     content: {
@@ -34,7 +30,7 @@ export default defineComponent({
           // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
           src: content.value.data.src,
           // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-          type: content.value.data.type
+          type: content.value.data.type || 'video/mp4'
         }
       ]
     })

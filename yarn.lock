@@ -1449,10 +1449,22 @@
   resolved "https://registry.yarnpkg.com/@quasar/extras/-/extras-1.10.8.tgz#250a0b4d75f8a8085318fc1059000c7d24bb813d"
   integrity sha512-s/uTQ/NVQIExOZjXJ0LnpPlqiiuGV0PFw5UKbXypWMhPpfQInnic/uU3SR8ZGtlNC3KHV5U+NTk9K9muTtoDpA==
 
+"@quasar/extras@^1.11.3":
+  version "1.12.0"
+  resolved "https://registry.yarnpkg.com/@quasar/extras/-/extras-1.12.0.tgz#677fb0fe15a4d62a422d34b09e89911e768866ac"
+  integrity sha512-X4oBMf5xcwk8+z2SrVU3AJ2dbFWZ4+LkjZCcXf4sgfY652CatzX+uaZl5UJtQEnl62PwwFTSPXPGy8t0uWF3sA==
+
 "@quasar/fastclick@1.1.4":
   version "1.1.4"
   resolved "https://registry.yarnpkg.com/@quasar/fastclick/-/fastclick-1.1.4.tgz#21ed3e9a4387dcb43022a08af4ef08a5f1abf159"
   integrity sha512-i9wbyV4iT+v4KhtHJynUFhH5LiEPvAEgSnwMqPN4hf/8uRe82nDl5qP5agrp2el1h0HzyBpbvHaW7NB0BPrtvA==
+
+"@quasar/quasar-app-extension-qmediaplayer@^2.0.0-beta.3":
+  version "2.0.0-beta.3"
+  resolved "https://registry.yarnpkg.com/@quasar/quasar-app-extension-qmediaplayer/-/quasar-app-extension-qmediaplayer-2.0.0-beta.3.tgz#038083009c707a7c3eb1504d78cffe3ae3200f1a"
+  integrity sha512-lA6PZH2w3NTXkxSpogykF3ZVCI18o4XWP81q+XCYxFXhIyeciSUrJpba6qGChBOHcB3yUxllTq6ArTuiZ02SdQ==
+  dependencies:
+    "@quasar/quasar-ui-qmediaplayer" "^2.0.0-beta.3"
 
 "@quasar/quasar-ui-qmarkdown@^2.0.0-alpha.6":
   version "2.0.0-alpha.6"
@@ -1473,6 +1485,13 @@
     markdown-it-task-lists "^2.1.1"
     markdown-it-toc-and-anchor "^4.2.0"
     prismjs "^1.24.1"
+
+"@quasar/quasar-ui-qmediaplayer@^2.0.0-beta.3":
+  version "2.0.0-beta.3"
+  resolved "https://registry.yarnpkg.com/@quasar/quasar-ui-qmediaplayer/-/quasar-ui-qmediaplayer-2.0.0-beta.3.tgz#1c1d183352cb422e06d58d9f0f3c13f72ed93176"
+  integrity sha512-NafLQwVCD0HZulMtdlm/RXgTXfhXaA5qZl2+yYmMmuI7flDypN5kaSeBLjESCk7t4cHQDKjb8Xc1eK1e6JWz+A==
+  dependencies:
+    "@quasar/extras" "^1.11.3"
 
 "@quasar/ssr-helpers@2.1.1":
   version "2.1.1"

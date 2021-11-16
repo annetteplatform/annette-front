@@ -84,6 +84,20 @@ export function widgetContentTemplates(): WidgetContentTemplate[] {
         },
         indexData: ''
       }
+    },
+    {
+      id: 'YouTube-01',
+      name: 'YouTube Video',
+      widgetContent: {
+        id: '',
+        widgetType: 'youtube',
+        data: {
+          src: 'http://youtube.com/embed/D9y2Ex3NN34',
+          ratio: '1.777777',
+          height: '400'
+        },
+        indexData: ''
+      }
     }
   ]
 }

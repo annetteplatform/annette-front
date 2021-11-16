@@ -14,13 +14,19 @@
 
     <div class="row">
       <q-input class="full-width" bottom-slots
-               :model-value="modelValue.data.type"
-               @update:model-value="updateType"
-               label="Type">
+               :model-value="modelValue.data.height"
+               @update:model-value="updateHeight"
+               label="Height">
       </q-input>
     </div>
 
-
+    <div class="row">
+      <q-input class="full-width" bottom-slots
+               :model-value="modelValue.data.ratio"
+               @update:model-value="updateRatio"
+               label="Ratio">
+      </q-input>
+    </div>
   </div>
 </template>
 
@@ -30,7 +36,7 @@ import {FileDescriptor, WidgetContent} from 'src/modules/cms';
 import ImageSelector from 'src/shared/components/widget-content/file-selector/ImageSelector.vue';
 
 export default defineComponent({
-  name: 'VideoWidgetEditor',
+  name: 'YouTubeWidgetEditor',
   components: {ImageSelector},
   props: {
     modelValue: {
@@ -66,13 +72,21 @@ export default defineComponent({
       updated.data.src = src
       emit('update:modelValue', updated)
     }
-
-    const updateType = (type: string) => {
+    const updateHeight = (src: string) => {
       const updated = {
         ...modelValue.value,
       }
       // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-      updated.data.type = type
+      updated.data.height = src
+      emit('update:modelValue', updated)
+    }
+
+    const updateRatio = (ratio: string) => {
+      const updated = {
+        ...modelValue.value,
+      }
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+      updated.data.ratio = ratio
       emit('update:modelValue', updated)
     }
 
@@ -82,14 +96,7 @@ export default defineComponent({
     }
 
     const selectImage = (file: FileDescriptor) => {
-      const updated = {
-        ...modelValue.value,
-        data: {
-          src: `/api/annette/v1/cms/file/${file.objectId}/media/${file.fileId}`,
-          type: file.contentType
-        }
-      }
-      emit('update:modelValue', updated)
+      updateSource(`/api/annette/v1/cms/file/${file.objectId}/media/${file.fileId}`)
     }
 
     return {
@@ -99,7 +106,8 @@ export default defineComponent({
       selectImage,
       update,
       updateSource,
-      updateType,
+      updateRatio,
+      updateHeight
     }
   }
 })

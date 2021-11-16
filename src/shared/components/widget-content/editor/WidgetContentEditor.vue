@@ -25,6 +25,10 @@
                          :model-value="modelValue"
                          @update:model-value="update"
                          :media="media"/>
+      <YouTubeWidgetEditor v-else-if="modelValue && modelValue.widgetType === 'youtube'"
+                           :model-value="modelValue"
+                           @update:model-value="update"
+                           :media="media"/>
     </q-card-section>
   </q-card>
 
@@ -36,12 +40,13 @@ import {FileDescriptor, WidgetContent} from 'src/modules/cms';
 import MarkdownWidgetEditor from 'src/shared/components/widget-content/widgets/MarkdownWidgetEditor.vue';
 import HtmlWidgetEditor from 'src/shared/components/widget-content/widgets/HtmlWidgetEditor.vue';
 import ParallaxWidgetEditor from 'src/shared/components/widget-content/widgets/ParallaxWidgetEditor.vue';
-import VideoWidgetEditor from "src/shared/components/widget-content/widgets/VideoWidgetEditor.vue";
+import VideoWidgetEditor from 'src/shared/components/widget-content/widgets/VideoWidgetEditor.vue';
+import YouTubeWidgetEditor from 'src/shared/components/widget-content/widgets/YouTubeWidgetEditor.vue';
 
 
 export default defineComponent({
   name: 'WidgetContentEditor',
-  components: {VideoWidgetEditor, ParallaxWidgetEditor, HtmlWidgetEditor, MarkdownWidgetEditor},
+  components: {YouTubeWidgetEditor, VideoWidgetEditor, ParallaxWidgetEditor, HtmlWidgetEditor, MarkdownWidgetEditor},
   props: {
     modelValue: {
       type: Object as PropType<WidgetContent>,
