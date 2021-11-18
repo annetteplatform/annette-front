@@ -1,7 +1,7 @@
 <template>
   <entity-page narrow
                caption="Post"
-               :show-form="!!entityModel"
+               :show-form="!!post"
                :error="error"
                @clearError="clearError">
     <template v-slot:toolbar>
@@ -17,7 +17,7 @@
              label="Edit"
              :to="{name: 'cms.post', params: { action: 'edit', id}}"/>
       <q-btn color="primary"
-             v-if="entityModel && action === 'create'"
+             v-if="post && action === 'create'"
              label="Save"
              @click="save"/>
     </template>
@@ -26,21 +26,22 @@
     <template v-slot:default>
       <div class="row">
         <q-input class="col-md-4 col-sm-12 col-xs-12 q-pr-md"
-                 v-model="entityModel.id"
+                 :model-value="post.id"
+                 @update:model-value="updateId"
                  :rules="[val => !!val || 'Field is required']"
                  :readonly="action!=='create'"
                  ref="idRef"
                  label="Id"/>
         <q-input class="col-md-8 col-sm-12 col-xs-12 "
-                 v-if="blog"
-                 v-model="blog.name"
+                 v-if="state.blogName"
+                 :model-value="state.blogName"
                  readonly
                  label="Blog"/>
       </div>
 
       <div class="row">
         <q-input class="col-md-12 col-sm-12 col-xs-12 "
-                 v-model="entityModel.title"
+                 :model-value="post.title"
                  @update:model-value="updateTitle"
                  debounce="700"
                  :rules="[val => !!val || 'Field is required']"
@@ -82,7 +83,7 @@
             <div class="row q-mt-md">
               <q-checkbox
                 class="col-md-12 col-sm-12 col-xs-12 q-pr-md"
-                v-model="entityModel.featured"
+                :model-value="post.featured"
                 @update:model-value="updateFeatured"
                 :disable="action === 'view'"
                 label="Featured"/>
@@ -96,7 +97,7 @@
                 borderless>
 
                 <q-checkbox
-                  :model-value="entityModel.publicationStatus === 'published'"
+                  :model-value="post.publicationStatus === 'published'"
                   @update:model-value="updatePublicationStatus"
                   :disable="action === 'view'"
                   label="Published"/>
@@ -105,7 +106,7 @@
               <div class="col-md-6 col-sm-6 col-xs-12 q-pr-md"
                    style="max-width: 300px">
                 <q-input
-                  :model-value="formatDate(entityModel.publicationTimestamp)"
+                  :model-value="formatDate(post.publicationTimestamp)"
                   @update:model-value="updatePublicationTimestamp"
                   :readonly="action === 'view'"
                   debounce="1000"
@@ -116,7 +117,7 @@
                     <q-icon name="event" class="cursor-pointer">
                       <q-popup-proxy transition-show="scale" transition-hide="scale">
                         <q-date
-                          :model-value="formatDate(entityModel.publicationTimestamp)"
+                          :model-value="formatDate(post.publicationTimestamp)"
                           @update:model-value="updatePublicationTimestamp"
                           debounce="1000"
                           mask="YYYY-MM-DD HH:mm">
@@ -133,7 +134,7 @@
                     <q-icon name="access_time" class="cursor-pointer">
                       <q-popup-proxy transition-show="scale" transition-hide="scale">
                         <q-time
-                          :model-value="formatDate(entityModel.publicationTimestamp)"
+                          :model-value="formatDate(post.publicationTimestamp)"
                           @update:model-value="updatePublicationTimestamp"
                           debounce="1000"
                           mask="YYYY-MM-DD HH:mm" format24h>
@@ -159,7 +160,7 @@
 
                 </q-item>
                 <q-item>
-                  <principal-view-item :principal="entityModel.authorId"/>
+                  <principal-view-item :principal="post.authorId"/>
                   <q-item-section side v-if="action !=='view'">
                     <q-btn flat round color="primary" size="sm" icon="edit"
                            @click="updateAuthor"/>
@@ -173,15 +174,15 @@
           <q-tab-panel name="media" v-if="action !== 'create'">
             <q-uploader style="width: 450px"
                         flat bordered
-                        :url="`/api/annette/v1/cms/uploadPostFile/${entityModel.id}/media`"
+                        :url="`/api/annette/v1/cms/uploadPostFile/${post.id}/media`"
                         label="Upload media"
-                        @uploaded="mediaUploaded"
+                        @uploaded="fileUploaded"
                         multiple
                         ref="mediaUploaderRef"
             />
 
             <div class="q-pt-md row items-start q-gutter-md">
-              <q-card v-for="file in files.media" :key="file.fileId" class="image-card" flat bordered>
+              <q-card v-for="file in state.files.media" :key="file.fileId" class="image-card" flat bordered>
                 <q-card-section>
                 <q-avatar v-if="file.contentType.includes('video')"
                           class="full-width"
@@ -214,14 +215,14 @@
           <q-tab-panel name="docs" v-if="action !== 'create'">
             <q-uploader style="width: 450px"
                         flat bordered
-                        :url="`/api/annette/v1/cms/uploadPostFile/${entityModel.id}/doc`"
+                        :url="`/api/annette/v1/cms/uploadPostFile/${post.id}/doc`"
                         label="Upload documents"
-                        @uploaded="docsUploaded"
+                        @uploaded="fileUploaded"
                         multiple
                         ref="docUploaderRef"
             />
             <q-list class="q-mt-md">
-              <q-item v-for="file in files.docs" :key="file.fileId">
+              <q-item v-for="file in state.files.docs" :key="file.fileId">
                 <q-item-section>
                   <q-item-label>{{ file.filename }}</q-item-label>
                   <q-item-label caption lines="2">{{ file.contentType }}</q-item-label>
@@ -257,7 +258,7 @@
                     />
                   </q-item-section>
                 </q-item>
-                <q-item v-if="entityModel.targets.length === 0">
+                <q-item v-if="post.targets.length === 0">
                   <q-item-section>
                     <q-item-label caption>
                       Principals not assigned
@@ -265,7 +266,7 @@
                   </q-item-section>
                 </q-item>
                 <q-item
-                  v-for="principal in entityModel.targets"
+                  v-for="principal in post.targets"
                   :key="principal">
                   <principal-view-item :principal="principal"/>
                   <q-item-section side v-if="action !=='view'">
@@ -281,55 +282,48 @@
       </q-card>
       <principal-selector-dialog ref="principalSelectorDialog"/>
       <ContentEditor :show="showIntroContentEditor"
-                     :content="entityModel.introContent"
+                     :content="post.introContent"
                      :readonly="action ==='view'"
                      @changeOrder="changeWidgetContentOrder($event, 'intro')"
                      @update="updateWidgetContent($event, 'intro')"
                      @delete="deleteWidgetContent($event, 'intro')"
                      @close="closeIntroContentEditor"
-                     :media="files.media"
-                     :docs="files.docs"
+                     :media="state.files.media"
+                     :docs="state.files.docs"
       />
       <ContentEditor :show="showPostContentEditor"
-                     :content="entityModel.content"
+                     :content="post.content"
                      :readonly="action ==='view'"
                      @changeOrder="changeWidgetContentOrder($event, 'post')"
                      @update="updateWidgetContent($event, 'post')"
                      @delete="deleteWidgetContent($event, 'post')"
                      @close="closePostContentEditor"
-                     :media="files.media"
-                     :docs="files.docs"
+                     :media="state.files.media"
+                     :docs="state.files.docs"
       />
     </template>
   </entity-page>
 </template>
 
 <script lang="ts">
-import {computed, defineComponent, ref, toRef} from 'vue';
+import {computed, defineComponent, ref, toRef, watch} from 'vue';
 import EntityPage from 'src/shared/components/EntityPage.vue';
 import {useStore} from 'src/store';
-import {date, openURL, uid, useQuasar} from 'quasar';
+import {date, openURL, useQuasar} from 'quasar';
 import PrincipalViewItem from 'src/shared/components/principal-view/PrincipalViewItem.vue';
 import PrincipalSelectorDialog from 'src/shared/components/principal-selector/PrinciplaSelectorDialog.vue';
 import {
-  Blog,
   ChangePostWidgetContentOrderPayloadDto,
   DeletePostWidgetContentPayloadDto,
   FileDescriptor,
-  Files,
   Post,
-  UpdatePostFeaturedPayloadDto,
-  UpdatePostPublicationTimestampPayloadDto,
-  UpdatePostTitlePayloadDto,
   UpdatePostWidgetContentPayloadDto
 } from 'src/modules/cms';
-import {useSyncEntityPage} from 'src/shared/composables/sync-entity-page';
-import {AnnettePrincipal} from 'src/shared';
+import {AnnetteError, AnnettePrincipal} from 'src/shared';
 import {Ref} from '@vue/reactivity';
 import ContentEditor from 'src/shared/components/widget-content/editor/ContentEditor.vue';
-import {cmsPostService} from 'src/modules/cms/service/cms-post.service';
-
-const NAMESPACE = 'cmsPost';
+import {DeleteFilePayload, InitPayload, PostEditState, toAction} from 'src/modules/cms/store/post-edit';
+import {useRoute, useRouter} from 'vue-router';
 
 export default defineComponent({
   name: 'PostPage',
@@ -342,6 +336,8 @@ export default defineComponent({
 
     const store = useStore()
     const quasar = useQuasar()
+    const route = useRoute()
+    const router = useRouter()
 
     const idRef = ref()
     const titleRef = ref()
@@ -351,7 +347,7 @@ export default defineComponent({
     const principalSelectorDialog = ref()
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const formHasError = (entity?: Post | null): boolean => {
+    const formHasError = (): boolean => {
       // eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-member-access
       idRef.value.validate()
       // eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-member-access
@@ -361,184 +357,139 @@ export default defineComponent({
     }
 
     const id = toRef(props, 'id')
+    const action = toRef(props, 'action')
+    const prevProps = ref('')
     // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access,@typescript-eslint/no-unsafe-return
     const personId: Ref<string> = computed(() => store.getters['main/personId'])
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access,@typescript-eslint/no-unsafe-return
+    const state: Ref<PostEditState> = computed(() => store.getters['cmsPostEdit/state'])
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access,@typescript-eslint/no-unsafe-return
+    const post: Ref<Post> = computed(() => store.getters['cmsPostEdit/post'])
+    const error: Ref<AnnetteError | null> = ref(null)
 
-    const emptyEntity = () => {
-      return {
-        id: uid(),
-        blogId: id.value || '',
-        featured: false,
-        authorId: {
-          principalType: 'person',
-          principalId: personId.value || ''
-        },
-        title: '',
-        introContent: [],
-        content: [],
-        publicationStatus: 'draft',
-      } as Post
+    // *********************************************
+
+    const loadEntity =() => {
+      const payload: InitPayload = {
+        action: toAction(action.value as string),
+        id: id.value as string,
+        blogId: action.value === 'create' ? id.value : undefined,
+        personId: action.value === 'create' ? personId.value : undefined,
+      }
+      console.log('loadEntity')
+      console.log(payload)
+      void store.dispatch('cmsPostEdit/init', payload)
     }
 
-    const blog: Ref<Blog | undefined> = ref()
+    const save = async () => {
+      if (formHasError()) {
+        quasar.notify({
+          color: 'negative',
+          message: 'Form validation failed'
+        })
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+      } else if (action.value === 'create') {
+        try {
+          const entity = await store.dispatch('cmsPostEdit/save')
 
-    const onAfterLoad = async (action: string, entity: Post) => {
-      const blogs: Blog[] = await store.dispatch('cmsBlog/loadEntitiesIfNotExist', [entity.blogId])
-      if (blogs && blogs[0]) {
-        blog.value = blogs[0]
-      } else {
-        blog.value = undefined
+          void router.push({
+            // @ts-ignore
+            name: route.name,
+            // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+            params: {...route.params, action: 'edit', id: entity.id},
+            query: route.query
+          })
+        } catch (ex) {
+          error.value = ex
+        }
       }
     }
 
-    const files: Ref<Files> = ref({media: [], docs: []})
+    const clearError = () => {
+      error.value = null
+    }
+
+    const watcher = () => {
+      // eslint-disable-next-line @typescript-eslint/restrict-template-expressions,@typescript-eslint/no-unsafe-member-access
+      const newProps = `${action.value}/${id.value}`
+      if (prevProps.value !== newProps) {
+        loadEntity()
+      }
+      prevProps.value = newProps
+    }
+
+    void loadEntity()
+    watch(id, watcher)
+    watch(action, watcher)
+
     const mediaUploaderRef = ref()
     const docUploaderRef = ref()
-    const onBeforeLoad = async (action: string, id: string) => {
-      if (action !== 'create') {
-        files.value = await cmsPostService.getPostFiles(id)
-      }
-    }
 
     const deleteFile = async (file: FileDescriptor) => {
-      await cmsPostService.removePostFile(id.value as string, file.fileType, file.fileId)
-      if (file.fileType === 'doc') {
-        files.value.docs = files.value.docs.filter(fd => fd !== file)
-      } else {
-        files.value.media = files.value.media.filter(fd => fd !== file)
+      const payload: DeleteFilePayload = {
+        id: id.value as string,
+        file,
       }
+      await store.dispatch('cmsPostEdit/deleteFile', payload)
     }
 
-    const docsUploaded = (info: any) => {
+    const fileUploaded = (info: any) => {
       // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-      const response = JSON.parse(info.xhr.response) as FileDescriptor
-      const docFiles = [...files.value.docs, response]
-      files.value.docs = docFiles.sort((a, b) => a.filename.toLowerCase() < b.filename.toLowerCase() ? -1 : 1)
+      const file = JSON.parse(info.xhr.response) as FileDescriptor
+      store.commit('fileUploaded', file)
       // eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-member-access
       docUploaderRef.value.removeUploadedFiles()
-    }
-
-    const mediaUploaded = (info: any) => {
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-      const response = JSON.parse(info.xhr.response) as FileDescriptor
-      const mediaFiles = [...files.value.media, response]
-      files.value.media = mediaFiles.sort((a, b) => a.filename.toLowerCase() < b.filename.toLowerCase() ? -1 : 1)
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-member-access
-      mediaUploaderRef.value.removeUploadedFiles()
     }
 
     const downloadFile = (file: FileDescriptor) => {
       openURL(`/api/annette/v1/cms/file/${file.objectId}/${file.fileType}/${file.fileId}`)
     }
 
-    const entityPage = useSyncEntityPage<Post>({
-      namespace: NAMESPACE,
-      emptyEntity,
-      formHasError,
-      props,
-      onBeforeLoad,
-      onAfterLoad
-    })
+    const updateId = async (data: string) => {
+      void store.commit('cmsPostEdit/updateId', data)
+    }
 
-    const updateTitle = (data: string) => {
-      const payload: UpdatePostTitlePayloadDto = {
-        // @ts-ignore
-        id: entityPage.entityModel.value?.id,
-        title: data
-      }
-      void entityPage.update(() => {
-        return store.dispatch('cmsPost/updateEntityTitle', payload) as Promise<Post>
-      })
+    const updateTitle = async (data: string) => {
+      void await store.dispatch('cmsPostEdit/updateTitle', data)
     }
 
     const updateAuthor = async () => {
       // eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-member-access
       const author = await principalSelectorDialog.value.showDialog()
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-      if (entityPage.action.value === 'edit') {
-        void entityPage.update(() => {
-          return store.dispatch('cmsPost/updateEntityAuthor', {
-            id: entityPage.id.value,
-            authorId: author
-          }) as Promise<Post>
-        })
-      } else if (entityPage.action.value === 'create' && entityPage.entityModel.value && entityPage.entityModel.value?.authorId) {
-        entityPage.entityModel.value.authorId = author
-      }
+      void await store.dispatch('cmsPostEdit/updateAuthor', author)
     }
 
-    const updateFeatured = (data: boolean) => {
-      const payload: UpdatePostFeaturedPayloadDto = {
-        // @ts-ignore
-        id: entityPage.entityModel.value?.id,
-        featured: data
-      }
-      if (entityPage.action.value === 'edit') {
-        void entityPage.update(() => {
-          return store.dispatch('cmsPost/updateEntityFeatured', payload) as Promise<Post>
-        })
-      } else if (entityPage.action.value === 'create' && entityPage.entityModel.value) {
-        entityPage.entityModel.value.featured = data
-      }
+    const updateFeatured = async (data: boolean) => {
+      void await store.dispatch('cmsPostEdit/updateFeatured', data)
     }
 
-    const updatePublicationStatus = (publish: boolean) => {
-      void entityPage.update(() => {
-        if (publish) {
-          return store.dispatch('cmsPost/publishEntity', entityPage.entityModel.value?.id) as Promise<Post>
-        } else {
-          return store.dispatch('cmsPost/unpublishEntity', entityPage.entityModel.value?.id) as Promise<Post>
-        }
-      })
+    const updatePublicationStatus = async(data: boolean) => {
+      void await store.dispatch('cmsPostEdit/updatePublicationStatus', data)
     }
+
 
     const formatDate = (timestamp: Date) => {
       return date.formatDate(timestamp, 'YYYY-MM-DD HH:mm')
     }
 
 
-    const updatePublicationTimestamp = (newTimestamp: string) => {
+    const updatePublicationTimestamp = async  (newTimestamp: string) => {
       const publicationTimestamp = date.extractDate(newTimestamp, 'YYYY-MM-DD HH:mm')
       if (publicationTimestamp.getFullYear() !== 1899) {
-        console.log(publicationTimestamp)
-        const payload: UpdatePostPublicationTimestampPayloadDto = {
-          // @ts-ignore
-          id: entityPage.entityModel.value.id,
-          // @ts-ignore
-          publicationTimestamp: publicationTimestamp
-        }
-        void entityPage.update(() => {
-          return store.dispatch('cmsPost/updateEntityPublicationTimestamp', payload) as Promise<Post>
-        })
+        void await store.dispatch('cmsPostEdit/updatePublicationTimestamp', publicationTimestamp)
       } else {
         console.log('error')
       }
     }
 
-    const clearPublicationTimestamp = () => {
-      const payload: UpdatePostPublicationTimestampPayloadDto = {
-        // @ts-ignore
-        id: entityPage.entityModel.value.id,
-      }
-      void entityPage.update(() => {
-        return store.dispatch('cmsPost/updateEntityPublicationTimestamp', payload) as Promise<Post>
-      })
+    const clearPublicationTimestamp = async () => {
+      void await store.dispatch('cmsPostEdit/updatePublicationTimestamp', undefined)
     }
 
     const addPrincipal = async () => {
       // eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-member-access
       const principal = await principalSelectorDialog.value.showDialog()
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-      if (entityPage.action.value === 'edit') {
-        void entityPage.update(() => {
-          return store.dispatch('cmsPost/assignEntityTargetPrincipal', {
-            id: entityPage.id.value,
-            principal
-          }) as Promise<Post>
-        })
-      } else if (entityPage.action.value === 'create' && entityPage.entityModel.value && entityPage.entityModel.value.targets) {
-        entityPage.entityModel.value.targets = [...entityPage.entityModel.value.targets, principal]
-      }
+      await store.dispatch('cmsPostEdit/assignTargetPrincipal', principal)
     }
 
 
@@ -552,17 +503,7 @@ export default defineComponent({
             label: 'Delete',
             color: 'white',
             handler: async () => {
-              if (entityPage.action.value === 'edit') {
-                await entityPage.update(() => {
-                  // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-                  return store.dispatch('cmsPost/unassignEntityTargetPrincipal', {
-                    id: entityPage.id.value,
-                    principal
-                  }) as Promise<Post>
-                })
-              } else if (entityPage.action.value === 'create' && entityPage.entityModel.value && entityPage.entityModel.value.targets) {
-                entityPage.entityModel.value.targets = entityPage.entityModel.value.targets.filter(p => p !== principal)
-              }
+              await store.dispatch('cmsPostEdit/unassignTargetPrincipal', principal)
             }
           }
         ]
@@ -588,59 +529,55 @@ export default defineComponent({
     }
 
     // @ts-ignore
-    const changeWidgetContentOrder = (data, contentType: string) => {
+    const changeWidgetContentOrder = async (data, contentType: string) => {
       const payload: ChangePostWidgetContentOrderPayloadDto = {
-        id: entityPage.id.value,
+        id: id.value as string,
         contentType,
         // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
         widgetContentId: data.widgetContentId,
         // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
         order: data.order
       }
-
-      void entityPage.update(() => {
-        return store.dispatch('cmsPost/changePostWidgetContentOrder', payload) as Promise<Post>
-      })
-
+      await store.dispatch('cmsPostEdit/changeWidgetContentOrder', payload)
     }
 
     // @ts-ignore
-    const updateWidgetContent = (data, contentType: string) => {
+    const updateWidgetContent = async (data, contentType: string) => {
       const payload: UpdatePostWidgetContentPayloadDto = {
-        id: entityPage.id.value,
+        id: id.value as string,
         contentType,
         // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
         widgetContent: data.widgetContent,
         // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
         order: data.order
       }
-
-      void entityPage.update(() => {
-        return store.dispatch('cmsPost/updatePostWidgetContent', payload) as Promise<Post>
-      })
+      await store.dispatch('cmsPostEdit/updateWidgetContent', payload)
 
     }
 
-// @ts-ignore
-    const deleteWidgetContent = (widgetContentId: string, contentType: string) => {
+    const deleteWidgetContent = async(widgetContentId: string, contentType: string) => {
       const payload: DeletePostWidgetContentPayloadDto = {
-        id: entityPage.id.value,
+        id: id.value as string,
         contentType,
         widgetContentId: widgetContentId,
       }
-      void entityPage.update(() => {
-        return store.dispatch('cmsPost/deletePostWidgetContent', payload) as Promise<Post>
-      })
-
+      await store.dispatch('cmsPostEdit/deleteWidgetContent', payload)
     }
 
     return {
       idRef,
       titleRef,
       tab,
-      blog,
-      ...entityPage,
+
+      post,
+      state,
+
+      save,
+      error,
+      clearError,
+
       principalSelectorDialog,
+      updateId,
       updateTitle,
       updateAuthor,
       updateFeatured,
@@ -659,13 +596,16 @@ export default defineComponent({
       changeWidgetContentOrder,
       updateWidgetContent,
       deleteWidgetContent,
-      files,
+
       mediaUploaderRef,
       docUploaderRef,
+      fileUploaded,
       deleteFile,
       downloadFile,
-      docsUploaded,
-      mediaUploaded
+
+
+
+
     };
   }
 });

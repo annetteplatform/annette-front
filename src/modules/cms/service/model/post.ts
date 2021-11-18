@@ -38,7 +38,6 @@ export interface PostFilter {
 export interface CreatePostPayloadDto {
   id: string,
   blogId: string,
-  parent?: string,
   featured: boolean,
   authorId: AnnettePrincipal,
   title: string,

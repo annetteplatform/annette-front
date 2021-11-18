@@ -17,6 +17,7 @@ export function useEntityListPage<F>(opt: UseEntityListPageOpt<F>) {
 
   const store = useStore()
 
+
   // eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-member-access
   if (!store.getters[`${opt.namespace}/instance`](opt.instanceKey)) {
     const initInstancePayload: InitInstancePayload<F> = {

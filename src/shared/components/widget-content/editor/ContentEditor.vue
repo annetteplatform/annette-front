@@ -38,7 +38,7 @@
               <div class="q-pa-md ">
                 <SeparatorLine v-if="!readonly"
                                :showButton="mode === 'main'"
-                               @add="setSelectionMode(0)"/>
+                               @add="setTemplateSelectionMode(0)"/>
 
                 <div class="full-width"
                      v-for="(widgetContent, index) in entityContent"
@@ -76,7 +76,7 @@
 
                   <SeparatorLine v-if="!readonly"
                                  :showButton="mode === 'main'"
-                                 @add="setSelectionMode(index + 1)"/>
+                                 @add="setTemplateSelectionMode(index + 1)"/>
                 </div>
               </div>
             </q-card>
@@ -98,7 +98,7 @@ import WidgetContentEditor from './WidgetContentEditor.vue';
 import WidgetTemplateSelector from './WidgetTemplateSelector.vue';
 
 const MAIN_MODE = 'main'
-const SELECTION_MODE = 'selection'
+const TEMPLATE_SELECTION_MODE = 'selection'
 const EDIT_MODE = 'edit'
 
 export default defineComponent({
@@ -131,7 +131,8 @@ export default defineComponent({
 
     const show = toRef(props, 'show')
     const content = toRef(props, 'content')
-    const entityContent = ref([...props.content])
+
+    const entityContent: Ref<WidgetContent[]> = ref(extend(true, [], props.content))
 
     const mode = ref(MAIN_MODE)
     const selectedWidgetContentId = ref('')
@@ -151,8 +152,8 @@ export default defineComponent({
       showWidgetTemplateSelector.value = false
     }
 
-    const setSelectionMode = (order: number) => {
-      mode.value = SELECTION_MODE
+    const setTemplateSelectionMode = (order: number) => {
+      mode.value = TEMPLATE_SELECTION_MODE
       selectedWidgetContentId.value = ''
       selectedWidgetContentIndex.value = null
       originalWidgetContent.value = null
@@ -163,7 +164,7 @@ export default defineComponent({
 
     const setEditMode = (widgetContent: WidgetContent) => {
       showWidgetTemplateSelector.value = false
-      if (mode.value === SELECTION_MODE) {
+      if (mode.value === TEMPLATE_SELECTION_MODE) {
         originalWidgetContent.value = null
         // @ts-ignore
         entityContent.value.splice(selectedWidgetContentOrder.value, 0, widgetContent)
@@ -186,7 +187,7 @@ export default defineComponent({
 
     watch(content, () => {
       console.log('watch content')
-      entityContent.value = content.value
+      entityContent.value = extend(true, [], content.value)
     })
 
     const close = () => {
@@ -267,7 +268,7 @@ export default defineComponent({
       originalWidgetContent,
       close,
       setMainMode,
-      setSelectionMode,
+      setTemplateSelectionMode,
       setEditMode,
       cancelEdit,
       save,

@@ -1,5 +1,6 @@
 export * from './blog-category'
 export * from './post'
+export * from './post-edit'
 export * from './post-view'
 export * from './blog'
 export * from './blog-view'

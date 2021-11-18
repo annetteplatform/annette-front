@@ -84,15 +84,27 @@ export const cmsPostService = {
       .then(result => result.data)
   },
 
-  async getPostById(id: string, readSide = true) {
+  async getPostAnnotationById(id: string, readSide = true) {
     // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
     return await axios.get<Post>(`/api/annette/v1/cms/getPostById/${id}/${readSide}`)
       .then(result => convertPost(result.data))
   },
 
-  async getPostsById(ids: string[], readSide = true) {
+  async getPostById(id: string, readSide = true) {
+    // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
+    return await axios.get<Post>(`/api/annette/v1/cms/getPostById/${id}/${readSide}?withIntro=true&withContent=true&withTargets=true`)
+      .then(result => convertPost(result.data))
+  },
+
+  async getPostsAnnotationById(ids: string[], readSide = true) {
     // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
     return await axios.post<Post[]>(`/api/annette/v1/cms/getPostsById/${readSide}`, ids)
+      .then(result => result.data.map(convertPost))
+  },
+
+  async getPostsById(ids: string[], readSide = true) {
+    // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
+    return await axios.post<Post[]>(`/api/annette/v1/cms/getPostsById/${readSide}?withIntro=true&withContent=true&withTargets=true`, ids)
       .then(result => result.data.map(convertPost))
   },
 
