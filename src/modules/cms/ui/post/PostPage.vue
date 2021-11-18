@@ -436,9 +436,14 @@ export default defineComponent({
     const fileUploaded = (info: any) => {
       // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
       const file = JSON.parse(info.xhr.response) as FileDescriptor
-      store.commit('fileUploaded', file)
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-member-access
-      docUploaderRef.value.removeUploadedFiles()
+      store.commit('cmsPostEdit/fileUploaded', file)
+      if (file.fileType === 'doc') {
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-member-access
+        docUploaderRef.value.removeUploadedFiles()
+      } else {
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-member-access
+        mediaUploaderRef.value.removeUploadedFiles()
+      }
     }
 
     const downloadFile = (file: FileDescriptor) => {
