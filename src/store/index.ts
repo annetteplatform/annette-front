@@ -18,7 +18,6 @@ import {
   cmsPostViewStore,
   cmsBlogStore,
   cmsBlogViewStore,
-  cmsPostEditStore
 } from 'src/modules/cms';
 
 /*
@@ -68,7 +67,6 @@ export default store(function (/* { ssrContext } */) {
       cmsPost: cmsPostStore,
       cmsBlogView: cmsBlogViewStore,
       cmsPostView: cmsPostViewStore,
-      cmsPostEdit: cmsPostEditStore
     },
 
     // enable strict mode (adds overhead!)

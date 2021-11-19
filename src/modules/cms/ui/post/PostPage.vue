@@ -313,16 +313,15 @@ import {date, openURL, useQuasar} from 'quasar';
 import PrincipalViewItem from 'src/shared/components/principal-view/PrincipalViewItem.vue';
 import PrincipalSelectorDialog from 'src/shared/components/principal-selector/PrinciplaSelectorDialog.vue';
 import {
-  ChangePostWidgetContentOrderPayloadDto,
+  ChangePostWidgetContentOrderPayloadDto, DeleteFilePayload,
   DeletePostWidgetContentPayloadDto,
-  FileDescriptor,
-  Post,
+  FileDescriptor, InitPostEditorPayload,
+  Post, PostEditor, toAction,
   UpdatePostWidgetContentPayloadDto
 } from 'src/modules/cms';
 import {AnnetteError, AnnettePrincipal} from 'src/shared';
 import {Ref} from '@vue/reactivity';
 import ContentEditor from 'src/shared/components/widget-content/editor/ContentEditor.vue';
-import {DeleteFilePayload, InitPayload, PostEditState, toAction} from 'src/modules/cms/store/post-edit';
 import {useRoute, useRouter} from 'vue-router';
 
 export default defineComponent({
@@ -362,15 +361,15 @@ export default defineComponent({
     // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access,@typescript-eslint/no-unsafe-return
     const personId: Ref<string> = computed(() => store.getters['main/personId'])
     // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access,@typescript-eslint/no-unsafe-return
-    const state: Ref<PostEditState> = computed(() => store.getters['cmsPostEdit/state'])
+    const state: Ref<PostEditor> = computed(() => store.getters['cmsPost/editor'])
     // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access,@typescript-eslint/no-unsafe-return
-    const post: Ref<Post> = computed(() => store.getters['cmsPostEdit/post'])
+    const post: Ref<Post> = computed(() => store.getters['cmsPost/post'])
     const error: Ref<AnnetteError | null> = ref(null)
 
     // *********************************************
 
     const loadEntity =() => {
-      const payload: InitPayload = {
+      const payload: InitPostEditorPayload = {
         action: toAction(action.value as string),
         id: id.value as string,
         blogId: action.value === 'create' ? id.value : undefined,
@@ -378,7 +377,7 @@ export default defineComponent({
       }
       console.log('loadEntity')
       console.log(payload)
-      void store.dispatch('cmsPostEdit/init', payload)
+      void store.dispatch('cmsPost/initPostEditor', payload)
     }
 
     const save = async () => {
@@ -390,7 +389,7 @@ export default defineComponent({
         // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
       } else if (action.value === 'create') {
         try {
-          const entity = await store.dispatch('cmsPostEdit/save')
+          const entity = await store.dispatch('cmsPost/saveEditor')
 
           void router.push({
             // @ts-ignore
@@ -430,13 +429,13 @@ export default defineComponent({
         id: id.value as string,
         file,
       }
-      await store.dispatch('cmsPostEdit/deleteFile', payload)
+      await store.dispatch('cmsPost/deleteEditorFile', payload)
     }
 
     const fileUploaded = (info: any) => {
       // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
       const file = JSON.parse(info.xhr.response) as FileDescriptor
-      store.commit('cmsPostEdit/fileUploaded', file)
+      store.commit('cmsPost/editorFileUploaded', file)
       if (file.fileType === 'doc') {
         // eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-member-access
         docUploaderRef.value.removeUploadedFiles()
@@ -450,26 +449,26 @@ export default defineComponent({
       openURL(`/api/annette/v1/cms/file/${file.objectId}/${file.fileType}/${file.fileId}`)
     }
 
-    const updateId = async (data: string) => {
-      void store.commit('cmsPostEdit/updateId', data)
+    const updateId =  (data: string) => {
+      void store.commit('cmsPost/updateEditorId', data)
     }
 
     const updateTitle = async (data: string) => {
-      void await store.dispatch('cmsPostEdit/updateTitle', data)
+      void await store.dispatch('cmsPost/updateEditorTitle', data)
     }
 
     const updateAuthor = async () => {
       // eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-member-access
       const author = await principalSelectorDialog.value.showDialog()
-      void await store.dispatch('cmsPostEdit/updateAuthor', author)
+      void await store.dispatch('cmsPost/updateEditorAuthor', author)
     }
 
     const updateFeatured = async (data: boolean) => {
-      void await store.dispatch('cmsPostEdit/updateFeatured', data)
+      void await store.dispatch('cmsPost/updateEditorFeatured', data)
     }
 
     const updatePublicationStatus = async(data: boolean) => {
-      void await store.dispatch('cmsPostEdit/updatePublicationStatus', data)
+      void await store.dispatch('cmsPost/updateEditorPublicationStatus', data)
     }
 
 
@@ -481,20 +480,20 @@ export default defineComponent({
     const updatePublicationTimestamp = async  (newTimestamp: string) => {
       const publicationTimestamp = date.extractDate(newTimestamp, 'YYYY-MM-DD HH:mm')
       if (publicationTimestamp.getFullYear() !== 1899) {
-        void await store.dispatch('cmsPostEdit/updatePublicationTimestamp', publicationTimestamp)
+        void await store.dispatch('cmsPost/updateEditorPublicationTimestamp', publicationTimestamp)
       } else {
         console.log('error')
       }
     }
 
     const clearPublicationTimestamp = async () => {
-      void await store.dispatch('cmsPostEdit/updatePublicationTimestamp', undefined)
+      void await store.dispatch('cmsPost/updateEditorPublicationTimestamp', undefined)
     }
 
     const addPrincipal = async () => {
       // eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-member-access
       const principal = await principalSelectorDialog.value.showDialog()
-      await store.dispatch('cmsPostEdit/assignTargetPrincipal', principal)
+      await store.dispatch('cmsPost/assignEditorTargetPrincipal', principal)
     }
 
 
@@ -508,7 +507,7 @@ export default defineComponent({
             label: 'Delete',
             color: 'white',
             handler: async () => {
-              await store.dispatch('cmsPostEdit/unassignTargetPrincipal', principal)
+              await store.dispatch('cmsPost/unassignEditorTargetPrincipal', principal)
             }
           }
         ]
@@ -543,7 +542,7 @@ export default defineComponent({
         // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
         order: data.order
       }
-      await store.dispatch('cmsPostEdit/changeWidgetContentOrder', payload)
+      await store.dispatch('cmsPost/changeEditorWidgetContentOrder', payload)
     }
 
     // @ts-ignore
@@ -556,7 +555,7 @@ export default defineComponent({
         // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
         order: data.order
       }
-      await store.dispatch('cmsPostEdit/updateWidgetContent', payload)
+      await store.dispatch('cmsPost/updateEditorWidgetContent', payload)
 
     }
 
@@ -566,7 +565,7 @@ export default defineComponent({
         contentType,
         widgetContentId: widgetContentId,
       }
-      await store.dispatch('cmsPostEdit/deleteWidgetContent', payload)
+      await store.dispatch('cmsPost/deleteEditorWidgetContent', payload)
     }
 
     return {
