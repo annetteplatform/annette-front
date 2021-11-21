@@ -10,6 +10,7 @@ import {
   Post,
   PostFilter,
   UnassignPostTargetPrincipalPayloadDto,
+  Updated,
   UpdatePostAuthorPayloadDto,
   UpdatePostFeaturedPayloadDto,
   UpdatePostPublicationTimestampPayloadDto,
@@ -25,63 +26,63 @@ export const cmsPostService = {
   },
 
   async updatePostFeatured(payload: UpdatePostFeaturedPayloadDto) {
-    return await axios.post<Post>('/api/annette/v1/cms/updatePostFeatured', payload)
-      .then(result => convertPost(result.data))
+    return await axios.post<Updated>('/api/annette/v1/cms/updatePostFeatured', payload)
+      .then(result => convertUpdated(result.data))
   },
 
   async updatePostTitle(payload: UpdatePostTitlePayloadDto) {
-    return await axios.post<Post>('/api/annette/v1/cms/updatePostTitle', payload)
-      .then(result => convertPost(result.data))
+    return await axios.post<Updated>('/api/annette/v1/cms/updatePostTitle', payload)
+      .then(result => convertUpdated(result.data))
   },
 
   async updatePostAuthor(payload: UpdatePostAuthorPayloadDto) {
-    return await axios.post<Post>('/api/annette/v1/cms/updatePostAuthor', payload)
-      .then(result => convertPost(result.data))
+    return await axios.post<Updated>('/api/annette/v1/cms/updatePostAuthor', payload)
+      .then(result => convertUpdated(result.data))
   },
 
   async updatePostWidgetContent(payload: UpdatePostWidgetContentPayloadDto) {
-    return await axios.post<Post>('/api/annette/v1/cms/updatePostWidgetContent', payload)
-      .then(result => convertPost(result.data))
+    return await axios.post<Updated>('/api/annette/v1/cms/updatePostWidgetContent', payload)
+      .then(result => convertUpdated(result.data))
   },
 
   async changePostWidgetContentOrder(payload: ChangePostWidgetContentOrderPayloadDto) {
-    return await axios.post<Post>('/api/annette/v1/cms/changePostWidgetContentOrder', payload)
-      .then(result => convertPost(result.data))
+    return await axios.post<Updated>('/api/annette/v1/cms/changePostWidgetContentOrder', payload)
+      .then(result => convertUpdated(result.data))
   },
 
   async deletePostWidgetContent(payload: DeletePostWidgetContentPayloadDto) {
-    return await axios.post<Post>('/api/annette/v1/cms/deletePostWidgetContent', payload)
-      .then(result => convertPost(result.data))
+    return await axios.post<Updated>('/api/annette/v1/cms/deletePostWidgetContent', payload)
+      .then(result => convertUpdated(result.data))
   },
 
   async updatePostPublicationTimestamp(payload: UpdatePostPublicationTimestampPayloadDto) {
-    return await axios.post<Post>('/api/annette/v1/cms/updatePostPublicationTimestamp', payload)
-      .then(result => convertPost(result.data))
+    return await axios.post<Updated>('/api/annette/v1/cms/updatePostPublicationTimestamp', payload)
+      .then(result => convertUpdated(result.data))
   },
 
   async assignPostTargetPrincipal(payload: AssignPostTargetPrincipalPayloadDto) {
-    return await axios.post<Post>('/api/annette/v1/cms/assignPostTargetPrincipal', payload)
-      .then(result => convertPost(result.data))
+    return await axios.post<Updated>('/api/annette/v1/cms/assignPostTargetPrincipal', payload)
+      .then(result => convertUpdated(result.data))
   },
 
   async unassignPostTargetPrincipal(payload: UnassignPostTargetPrincipalPayloadDto) {
-    return await axios.post<Post>('/api/annette/v1/cms/unassignPostTargetPrincipal', payload)
-      .then(result => convertPost(result.data))
+    return await axios.post<Updated>('/api/annette/v1/cms/unassignPostTargetPrincipal', payload)
+      .then(result => convertUpdated(result.data))
   },
 
   async publishPost(id: string) {
-    return await axios.post<Post>(`/api/annette/v1/cms/publishPost/${id}`)
-      .then(result => result.data)
+    return await axios.post<Updated>(`/api/annette/v1/cms/publishPost/${id}`)
+      .then(result => convertUpdated(result.data))
   },
 
   async unpublishPost(id: string) {
-    return await axios.post<Post>(`/api/annette/v1/cms/unpublishPost/${id}`)
-      .then(result => result.data)
+    return await axios.post<Updated>(`/api/annette/v1/cms/unpublishPost/${id}`)
+      .then(result => convertUpdated(result.data))
   },
 
   async deletePost(id: string) {
-    return await axios.post<Post>('/api/annette/v1/cms/deletePost', {id})
-      .then(result => result.data)
+    return await axios.post<Updated>('/api/annette/v1/cms/deletePost', {id})
+      .then(result => convertUpdated(result.data))
   },
 
   async getPostAnnotationById(id: string, readSide = true) {
@@ -90,9 +91,14 @@ export const cmsPostService = {
       .then(result => convertPost(result.data))
   },
 
-  async getPostById(id: string, readSide = true) {
+  async getPostById(id: string,
+                    readSide = true,
+                    withIntro: boolean,
+                    withContent: boolean,
+                    withTargets: boolean,
+  ) {
     // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-    return await axios.get<Post>(`/api/annette/v1/cms/getPostById/${id}/${readSide}?withIntro=true&withContent=true&withTargets=true`)
+    return await axios.get<Post>(`/api/annette/v1/cms/getPostById/${id}/${readSide}?withIntro=${withIntro}&withContent=${withContent}&withTargets=${withTargets}`)
       .then(result => convertPost(result.data))
   },
 
@@ -164,4 +170,11 @@ function convertPost(rawPost: Post): Post {
     post.updatedAt = new Date(rawPost.updatedAt)
   }
   return post
+}
+
+function convertUpdated(updated: Updated): Updated {
+  if (updated.updatedAt) {
+    updated.updatedAt = new Date(updated.updatedAt)
+  }
+  return updated
 }

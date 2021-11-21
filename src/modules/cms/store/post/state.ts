@@ -1,5 +1,5 @@
 import {EntityState} from 'src/shared';
-import { Files, Post, PostFilter} from 'src/modules/cms';
+import {Files, Post, PostFilter, Updated} from 'src/modules/cms';
 
 export const POST_DEFAULT_PAGE_SIZE = 10
 
@@ -29,6 +29,7 @@ export function emptyPostFilter() {
 export interface PostEditor {
   action?: Action,
   id?: string
+  contentType?: string
   post?: Post
   blogName?: string
   files: Files
@@ -59,6 +60,17 @@ export interface InitPostEditorPayload {
   id: string,
   blogId?: string // only for create action
   personId?: string // only for create action
+}
+
+export interface InitPostContentEditorPayload {
+  action: Action,
+  id: string,
+  contentType: string
+}
+
+export interface UpdateResponse<T> {
+  payload: T,
+  updated: Updated
 }
 
 

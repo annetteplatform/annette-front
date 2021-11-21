@@ -70,19 +70,12 @@
         <q-tab-panels v-model="tab" animated>
           <q-tab-panel name="general">
 
-            <div class="row q-mt-md q-col-gutter-sm"
-                 v-if="action !== 'create'">
-              <div class="col-6 ">
-                <q-btn class="full-width" color="primary" label="Intro Content" @click="openIntroContentEditor"/>
-              </div>
-              <div class="col-6 ">
-                <q-btn class="full-width" color="primary" label="Post Content" @click="openPostContentEditor"/>
-              </div>
-            </div>
+
 
             <div class="row q-mt-md">
               <q-checkbox
                 class="col-md-12 col-sm-12 col-xs-12 q-pr-md"
+                v-if="action !== 'create'"
                 :model-value="post.featured"
                 @update:model-value="updateFeatured"
                 :disable="action === 'view'"
@@ -111,6 +104,7 @@
                   :readonly="action === 'view'"
                   debounce="1000"
                   label="Publication date"
+                  stack-label
                 >
                   <template v-slot:prepend
                             v-if="action !== 'view'">
@@ -167,6 +161,19 @@
                   </q-item-section>
                 </q-item>
               </q-list>
+            </div>
+
+            <div class="row q-mt-md q-col-gutter-sm"
+                 v-if="action !== 'create'">
+              <div class="col-6 ">
+                <q-btn class="full-width" color="primary" label="Intro Content"
+                       :to="{name: 'cms.post-content', params: {contentType: 'intro', action, id }}"
+                />
+              </div>
+              <div class="col-6 ">
+                <q-btn class="full-width" color="primary" label="Post Content"
+                       :to="{name: 'cms.post-content', params: {contentType: 'post', action, id }}"/>
+              </div>
             </div>
 
           </q-tab-panel>
@@ -281,26 +288,6 @@
         </q-tab-panels>
       </q-card>
       <principal-selector-dialog ref="principalSelectorDialog"/>
-      <ContentEditor :show="showIntroContentEditor"
-                     :content="post.introContent"
-                     :readonly="action ==='view'"
-                     @changeOrder="changeWidgetContentOrder($event, 'intro')"
-                     @update="updateWidgetContent($event, 'intro')"
-                     @delete="deleteWidgetContent($event, 'intro')"
-                     @close="closeIntroContentEditor"
-                     :media="state.files.media"
-                     :docs="state.files.docs"
-      />
-      <ContentEditor :show="showPostContentEditor"
-                     :content="post.content"
-                     :readonly="action ==='view'"
-                     @changeOrder="changeWidgetContentOrder($event, 'post')"
-                     @update="updateWidgetContent($event, 'post')"
-                     @delete="deleteWidgetContent($event, 'post')"
-                     @close="closePostContentEditor"
-                     :media="state.files.media"
-                     :docs="state.files.docs"
-      />
     </template>
   </entity-page>
 </template>
@@ -313,7 +300,7 @@ import {date, openURL, useQuasar} from 'quasar';
 import PrincipalViewItem from 'src/shared/components/principal-view/PrincipalViewItem.vue';
 import PrincipalSelectorDialog from 'src/shared/components/principal-selector/PrinciplaSelectorDialog.vue';
 import {
-  ChangePostWidgetContentOrderPayloadDto, DeleteFilePayload,
+  ChangePostWidgetContentOrderPayloadDto, RemoveFilePayload,
   DeletePostWidgetContentPayloadDto,
   FileDescriptor, InitPostEditorPayload,
   Post, PostEditor, toAction,
@@ -321,12 +308,11 @@ import {
 } from 'src/modules/cms';
 import {AnnetteError, AnnettePrincipal} from 'src/shared';
 import {Ref} from '@vue/reactivity';
-import ContentEditor from 'src/shared/components/widget-content/editor/ContentEditor.vue';
 import {useRoute, useRouter} from 'vue-router';
 
 export default defineComponent({
   name: 'PostPage',
-  components: {PrincipalSelectorDialog, PrincipalViewItem, EntityPage, ContentEditor},
+  components: {PrincipalSelectorDialog, PrincipalViewItem, EntityPage},
   props: {
     id: String,
     action: String
@@ -389,7 +375,7 @@ export default defineComponent({
         // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
       } else if (action.value === 'create') {
         try {
-          const entity = await store.dispatch('cmsPost/saveEditor')
+          const entity = await store.dispatch('cmsPost/createEditorPost')
 
           void router.push({
             // @ts-ignore
@@ -425,7 +411,7 @@ export default defineComponent({
     const docUploaderRef = ref()
 
     const deleteFile = async (file: FileDescriptor) => {
-      const payload: DeleteFilePayload = {
+      const payload: RemoveFilePayload = {
         id: id.value as string,
         file,
       }
@@ -514,60 +500,6 @@ export default defineComponent({
       })
     }
 
-    const showIntroContentEditor = ref(false)
-
-    const openIntroContentEditor = () => {
-      showIntroContentEditor.value = true
-    }
-    const closeIntroContentEditor = () => {
-      showIntroContentEditor.value = false
-    }
-
-    const showPostContentEditor = ref(false)
-
-    const openPostContentEditor = () => {
-      showPostContentEditor.value = true
-    }
-    const closePostContentEditor = () => {
-      showPostContentEditor.value = false
-    }
-
-    // @ts-ignore
-    const changeWidgetContentOrder = async (data, contentType: string) => {
-      const payload: ChangePostWidgetContentOrderPayloadDto = {
-        id: id.value as string,
-        contentType,
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-        widgetContentId: data.widgetContentId,
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-        order: data.order
-      }
-      await store.dispatch('cmsPost/changeEditorWidgetContentOrder', payload)
-    }
-
-    // @ts-ignore
-    const updateWidgetContent = async (data, contentType: string) => {
-      const payload: UpdatePostWidgetContentPayloadDto = {
-        id: id.value as string,
-        contentType,
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-        widgetContent: data.widgetContent,
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-        order: data.order
-      }
-      await store.dispatch('cmsPost/updateEditorWidgetContent', payload)
-
-    }
-
-    const deleteWidgetContent = async(widgetContentId: string, contentType: string) => {
-      const payload: DeletePostWidgetContentPayloadDto = {
-        id: id.value as string,
-        contentType,
-        widgetContentId: widgetContentId,
-      }
-      await store.dispatch('cmsPost/deleteEditorWidgetContent', payload)
-    }
-
     return {
       idRef,
       titleRef,
@@ -591,15 +523,6 @@ export default defineComponent({
       formatDate,
       addPrincipal,
       deletePrincipal,
-      showIntroContentEditor,
-      openIntroContentEditor,
-      closeIntroContentEditor,
-      showPostContentEditor,
-      openPostContentEditor,
-      closePostContentEditor,
-      changeWidgetContentOrder,
-      updateWidgetContent,
-      deleteWidgetContent,
 
       mediaUploaderRef,
       docUploaderRef,

@@ -2,26 +2,29 @@ import {ActionTree, Commit, Store} from 'vuex';
 import {StateInterface} from 'src/store';
 import {
   Action,
-  AssignPostTargetPrincipalPayloadDto, Blog,
+  AssignPostTargetPrincipalPayloadDto,
+  Blog,
   ChangePostWidgetContentOrderPayloadDto,
   CreatePostPayloadDto,
-  DeleteFilePayload, DeletePostWidgetContentPayloadDto,
+  DeletePostWidgetContentPayloadDto,
+  InitPostContentEditorPayload,
   InitPostEditorPayload,
   Post,
   PostFilter,
   PostState,
+  RemoveFilePayload,
   UnassignPostTargetPrincipalPayloadDto,
+  Updated,
   UpdatePostAuthorPayloadDto,
   UpdatePostFeaturedPayloadDto,
   UpdatePostPublicationTimestampPayloadDto,
-  UpdatePostTitlePayloadDto, UpdatePostWidgetContentPayloadDto,
+  UpdatePostTitlePayloadDto,
+  UpdatePostWidgetContentPayloadDto,
 } from 'src/modules/cms';
 import {AnnettePrincipal, buildActions} from 'src/shared';
 import {cmsPostService} from '../../service/cms-post.service';
 
 async function loadBlogName(blogId: string, store: Store<StateInterface>) {
-  console.log('loadBlogName')
-  console.log(store)
   const blogs: Blog[] = await store.dispatch('cmsBlog/loadEntitiesIfNotExist', [blogId])
   if (blogs && blogs[0]) {
     return blogs[0].name
@@ -30,12 +33,24 @@ async function loadBlogName(blogId: string, store: Store<StateInterface>) {
   }
 }
 
-async function loadPost(payload: InitPostEditorPayload, commit: Commit, fromReadSide: boolean, store: Store<StateInterface>) {
+async function loadPost(
+  payload: InitPostEditorPayload,
+  commit: Commit,
+  fromReadSide: boolean,
+  withIntro: boolean,
+  withContent: boolean,
+  withTargets: boolean,
+  store: Store<StateInterface>) {
   void cmsPostService.getPostFiles(payload.id).then(files => commit('updateEditorFiles', files))
-  const post = await cmsPostService.getPostById(payload.id, fromReadSide)
+  const post = await cmsPostService.getPostById(
+    payload.id,
+    fromReadSide,
+    withIntro,
+    withContent,
+    withTargets
+  )
   commit('updateEditorPost', post)
-  commit('storeEntity', post)
-  const blogName = await loadBlogName(post.blogId, store )
+  const blogName = await loadBlogName(post.blogId, store)
   commit('updateEditorBlogName', blogName)
   return post
 }
@@ -50,28 +65,32 @@ export const actions: ActionTree<PostState, StateInterface> = {
     cmsPostService.getPostsAnnotationById,
   ),
 
-  async updateEntityFeatured({commit}, payload: UpdatePostFeaturedPayloadDto) {
-    const newEntity = await cmsPostService.updatePostFeatured(payload)
-    commit('storeEntity', newEntity)
-    return newEntity
+  // PostList actions
+
+  async updatePostFeatured({commit}, payload: UpdatePostFeaturedPayloadDto) {
+    const updated = await cmsPostService.updatePostFeatured(payload)
+    commit('updatePostFeatured', {payload, updated})
+    return updated
   },
 
-  async publishEntity({commit}, id: string) {
-    const newEntity = await cmsPostService.publishPost(id)
-    commit('storeEntity', newEntity)
-    return newEntity
+  async publishPost({commit}, id: string) {
+    const updated = await cmsPostService.publishPost(id)
+    commit('publishPost', {payload: id, updated})
+    return updated
   },
 
-  async unpublishEntity({commit}, id: string) {
-    const newEntity = await cmsPostService.unpublishPost(id)
-    commit('storeEntity', newEntity)
-    return newEntity
+  async unpublishPost({commit}, id: string) {
+    const updated = await cmsPostService.unpublishPost(id)
+    commit('unpublishPost', {payload: id, updated})
+    return updated
   },
 
   async deleteEntity({commit}, id: string) {
     await cmsPostService.deletePost(id)
     commit('removeEntity', id)
   },
+
+  // ******************** Post Editor ********************
 
   async initPostEditor({commit, state}, payload: InitPostEditorPayload) {
     console.log('init')
@@ -83,20 +102,33 @@ export const actions: ActionTree<PostState, StateInterface> = {
         const blogName = await loadBlogName(payload.blogId)
         commit('updateEditorBlogName', blogName)
         return state.editor.post
-        break
       }
       case Action.Edit: {
-        return await loadPost(payload, commit, false, this)
-        break
+        return await loadPost(
+          payload,
+          commit,
+          false,
+          false,
+          false,
+          true,
+          this
+        )
       }
       case Action.View: {
-        return await loadPost(payload, commit, true, this)
-        break
+        return await loadPost(
+          payload,
+          commit,
+          true,
+          false,
+          false,
+          true,
+          this
+        )
       }
     }
   },
 
-  async saveEditor({commit, state}) {
+  async createEditorPost({commit, state}) {
     if (state.editor.action === Action.Create) {
       // @ts-ignore
       const post: Post = state.editor.post
@@ -111,15 +143,9 @@ export const actions: ActionTree<PostState, StateInterface> = {
         content: post.content,
       }
       const updatedPost = await cmsPostService.createPost(payload)
-      commit('updateEditorPost', updatedPost)
-      commit('storeEntity', post)
+      commit('createPost', updatedPost)
       return updatedPost
     }
-  },
-
-  async deleteEditorFile({commit}, payload: DeleteFilePayload) {
-    await cmsPostService.removePostFile(payload.id, payload.file.fileType, payload.file.fileId)
-    commit('deleteEditorFile', payload)
   },
 
   async updateEditorTitle({commit, state}, data: string) {
@@ -131,10 +157,9 @@ export const actions: ActionTree<PostState, StateInterface> = {
         id: state.editor.id as string,
         title: data
       }
-      const updatedPost = await cmsPostService.updatePostTitle(payload)
-      commit('updateEditorPost', updatedPost)
-      commit('storeEntity', updatedPost)
-      return updatedPost
+      const updated = await cmsPostService.updatePostTitle(payload)
+      commit('updatePostTitle', {payload, updated})
+      return updated
     }
   },
 
@@ -147,123 +172,140 @@ export const actions: ActionTree<PostState, StateInterface> = {
         id: state.editor.id as string,
         authorId: data,
       }
-      const updatedPost = await cmsPostService.updatePostAuthor(payload)
-      commit('updateEditorPost', updatedPost)
-      commit('storeEntity', updatedPost)
-      return updatedPost
+      const updated = await cmsPostService.updatePostAuthor(payload)
+      commit('updatePostAuthor', {payload, updated})
+      return updated
     }
   },
 
   async updateEditorFeatured({commit, state}, data: boolean) {
-    if (state.editor.action === Action.Create) {
-      commit('updateEditorFeatured', data)
-      return state.editor.post
-    } else {
+    if (state.editor.action === Action.Edit) {
       const payload: UpdatePostFeaturedPayloadDto = {
         id: state.editor.id as string,
         featured: data,
       }
-      const updatedPost = await cmsPostService.updatePostFeatured(payload)
-      commit('updateEditorPost', updatedPost)
-      commit('storeEntity', updatedPost)
-      return updatedPost
+      const updated = await cmsPostService.updatePostFeatured(payload)
+      commit('updatePostFeatured', {payload, updated})
+      return updated
     }
   },
 
   async updateEditorPublicationStatus({commit, state}, published: boolean) {
-    if (state.editor.action === Action.Create) {
-      commit('updateEditorPublicationStatus', published)
-      return state.editor.post
-    } else {
-      let updatedPost: Post
+    if (state.editor.action === Action.Edit) {
+      let updated: Updated
       if (published) {
-        updatedPost = await cmsPostService.publishPost(state.editor.id as string)
+        updated = await cmsPostService.publishPost(state.editor.id as string)
+        commit('publishPost', {payload: state.editor.id, updated})
       } else {
-        updatedPost = await cmsPostService.unpublishPost(state.editor.id as string)
+        updated = await cmsPostService.unpublishPost(state.editor.id as string)
+        commit('unpublishPost', {payload: state.editor.id, updated})
       }
-      commit('updateEditorPost', updatedPost)
-      commit('storeEntity', updatedPost)
-      return updatedPost
+      return updated
     }
   },
 
   async updateEditorPublicationTimestamp({commit, state}, timestamp: Date) {
-    if (state.editor.action === Action.Create) {
-      commit('updateEditorPublicationTimestamp', timestamp)
-      return state.editor.post
-    } else {
+    if (state.editor.action === Action.Edit) {
       const payload: UpdatePostPublicationTimestampPayloadDto = {
         id: state.editor.id as string,
         publicationTimestamp: timestamp
       }
-      const updatedPost = await cmsPostService.updatePostPublicationTimestamp(payload)
-      commit('updateEditorPost', updatedPost)
-      commit('storeEntity', updatedPost)
-      return updatedPost
+      const updated = await cmsPostService.updatePostPublicationTimestamp(payload)
+      commit('updatePostPublicationTimestamp', {payload, updated})
+      return updated
     }
   },
 
   async assignEditorTargetPrincipal({commit, state}, data: AnnettePrincipal) {
-    if (state.editor.action === Action.Create) {
-      commit('assignEditorTargetPrincipal', data)
-      return state.editor.post
-    } else {
+    if (state.editor.action === Action.Edit) {
       const payload: AssignPostTargetPrincipalPayloadDto = {
         id: state.editor.id as string,
         principal: data
       }
-      const updatedPost = await cmsPostService.assignPostTargetPrincipal(payload)
-      commit('updateEditorPost', updatedPost)
-      commit('storeEntity', updatedPost)
-      return updatedPost
+      const updated = await cmsPostService.assignPostTargetPrincipal(payload)
+      commit('assignPostTargetPrincipal', {payload, updated})
+      return updated
     }
   },
 
   async unassignEditorTargetPrincipal({commit, state}, data: AnnettePrincipal) {
-    if (state.editor.action === Action.Create) {
-      commit('unassignEditorTargetPrincipal', data)
-      return state.editor.post
-    } else {
+    if (state.editor.action === Action.Edit) {
       const payload: UnassignPostTargetPrincipalPayloadDto = {
         id: state.editor.id as string,
         principal: data
       }
-      const updatedPost = await cmsPostService.unassignPostTargetPrincipal(payload)
-      commit('updateEditorPost', updatedPost)
-      commit('storeEntity', updatedPost)
-      return updatedPost
+      const updated = await cmsPostService.unassignPostTargetPrincipal(payload)
+      commit('unassignPostTargetPrincipal', {payload, updated})
+      return updated
+    }
+  },
+
+  // ******************** Content Editor ********************
+
+  async initPostContentEditor({commit}, payload: InitPostContentEditorPayload) {
+    commit('initPostContentEditor', payload)
+    switch (payload.action) {
+      case Action.Edit: {
+        return await loadPost(
+          payload,
+          commit,
+          false,
+          payload.contentType === 'intro',
+          payload.contentType !== 'intro',
+          false,
+          this
+        )
+      }
+      case Action.View: {
+        return await loadPost(
+          payload,
+          commit,
+          true,
+          payload.contentType === 'intro',
+          payload.contentType !== 'intro',
+          true,
+          this
+        )
+      }
+    }
+  },
+
+
+  async updateEditorWidgetContent({commit, state}, payload: UpdatePostWidgetContentPayloadDto) {
+    if (state.editor.action === Action.Edit) {
+      payload.id = state.editor.id as string
+      const updated = await cmsPostService.updatePostWidgetContent(payload)
+      commit('updateEditorWidgetContent', { payload, updated })
+      return updated
     }
   },
 
   async changeEditorWidgetContentOrder({commit, state}, payload: ChangePostWidgetContentOrderPayloadDto) {
     if (state.editor.action === Action.Edit) {
       payload.id = state.editor.id as string
-      const updatedPost = await cmsPostService.changePostWidgetContentOrder(payload)
-      commit('updateEditorPost', updatedPost)
-      commit('storeEntity', updatedPost)
-      return updatedPost
-    }
-  },
-
-  async updateEditorWidgetContent({commit, state}, payload: UpdatePostWidgetContentPayloadDto) {
-    if (state.editor.action === Action.Edit) {
-      payload.id = state.editor.id as string
-      const updatedPost = await cmsPostService.updatePostWidgetContent(payload)
-      commit('updateEditorPost', updatedPost)
-      commit('storeEntity', updatedPost)
-      return updatedPost
+      const updated = await cmsPostService.changePostWidgetContentOrder(payload)
+      commit('changeEditorWidgetContentOrder', { payload, updated })
+      return updated
     }
   },
 
   async deleteEditorWidgetContent({commit, state}, payload: DeletePostWidgetContentPayloadDto) {
     if (state.editor.action === Action.Edit) {
       payload.id = state.editor.id as string
-      const updatedPost = await cmsPostService.deletePostWidgetContent(payload)
-      commit('updateEditorPost', updatedPost)
-      commit('storeEntity', updatedPost)
-      return updatedPost
+      const updated = await cmsPostService.deletePostWidgetContent(payload)
+      commit('deleteEditorWidgetContent', { payload, updated })
+      return updated
     }
   },
+
+  // File editor
+
+  async removePostFile({commit}, payload: RemoveFilePayload) {
+    await cmsPostService.removePostFile(payload.id, payload.file.fileType, payload.file.fileId)
+    commit('removePostFile', payload)
+  },
+
+
 }
 
 

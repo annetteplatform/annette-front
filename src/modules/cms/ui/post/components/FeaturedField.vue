@@ -44,7 +44,7 @@ export default defineComponent({
         id: postId.value,
         featured: flag
       }
-      void store.dispatch('cmsPost/updateEntityFeatured', payload)
+      void store.dispatch('cmsPost/updatePostFeatured', payload)
     }
 
     return {

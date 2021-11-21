@@ -13,6 +13,14 @@ const getters: GetterTree<PostState, StateInterface> = {
   state: state => state,
   editor: state => state.editor,
   post: state => state.editor.post,
+  introContent: state => {
+    if (state.editor.post)  { return state.editor.post.introContent }
+    else return null
+  },
+  content: state => {
+    if (state.editor.post)  { return state.editor.post.content }
+    else return null
+  }
 }
 
 export const cmsPostStore: Module<PostState, StateInterface> = {

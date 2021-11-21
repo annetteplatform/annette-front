@@ -11,7 +11,7 @@ export const cmsRoutes: RouteRecordRaw[] = [
     path: 'cms/blog/:action/:id',
     name: 'cms.blog',
     component: () => import('src/modules/cms/ui/blog/BlogPage.vue'),
-    props: (route) => ({ id: String(route.params.id),  action: String(route.params.action),}),
+    props: (route) => ({id: String(route.params.id), action: String(route.params.action),}),
     meta: {requiresAuth: true}
   },
 
@@ -31,21 +31,22 @@ export const cmsRoutes: RouteRecordRaw[] = [
     path: 'cms/post/:action/:id',
     name: 'cms.post',
     component: () => import('src/modules/cms/ui/post/PostPage.vue'),
-    props: (route) => ({ id: String(route.params.id),  action: String(route.params.action),}),
+    props: (route) => ({id: String(route.params.id), action: String(route.params.action),}),
     meta: {requiresAuth: true}
   },
+
   {
     path: 'cms/post-views',
     name: 'cms.postViews',
     component: () => import('src/modules/cms/ui/post-view/PostViewListPage.vue'),
-    props: (route) => ({ blogs: String(route.query.blogs)}),
+    props: (route) => ({blogs: String(route.query.blogs)}),
     meta: {requiresAuth: true}
   },
   {
     path: 'cms/post-view/:id/',
     name: 'cms.postView',
     component: () => import('src/modules/cms/ui/post-view/PostViewPage.vue'),
-    props: (route) => ({ id: String(route.params.id)}),
+    props: (route) => ({id: String(route.params.id)}),
     meta: {requiresAuth: true}
   },
   {
@@ -58,9 +59,23 @@ export const cmsRoutes: RouteRecordRaw[] = [
     path: 'cms/blog-category/:action/:id',
     name: 'cms.blogCategory',
     component: () => import('src/modules/cms/ui/blog-category/BlogCategoryPage.vue'),
-    props: (route) => ({ id: String(route.params.id),  action: String(route.params.action),}),
+    props: (route) => ({id: String(route.params.id), action: String(route.params.action),}),
     meta: {requiresAuth: true}
   }
 ]
+
+export const cmsExtRoutes: RouteRecordRaw[] = [
+  {
+    path: '/cms/post-content/:contentType/:action/:id',
+    name: 'cms.post-content',
+    component: () => import('src/modules/cms/ui/post/PostContentPage.vue'),
+    props: (route) => ({
+      contentType: String(route.params.contentType),
+      id: String(route.params.id),
+      action: String(route.params.action)
+    }),
+    meta: {requiresAuth: true}
+  },
+  ]
 
 

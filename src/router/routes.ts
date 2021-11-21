@@ -4,7 +4,7 @@ import {personRoutes} from 'src/modules/person';
 import {orgStructureRoutes} from 'src/modules/org-structure';
 import {authorizationRoutes} from 'src/modules/authorization';
 import {principalGroupRoutes} from 'src/modules/principal-group';
-import {cmsRoutes} from 'src/modules/cms';
+import {cmsExtRoutes, cmsRoutes} from 'src/modules/cms';
 
 const routes: RouteRecordRaw[] = [
   {
@@ -24,6 +24,7 @@ const routes: RouteRecordRaw[] = [
         ...cmsRoutes
     ],
   },
+  ...cmsExtRoutes,
 
   // Always leave this as last one,
   // but you can also remove it

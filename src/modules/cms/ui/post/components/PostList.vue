@@ -128,7 +128,7 @@ export default defineComponent({
             label: 'Publish',
             color: 'white',
             handler: () => {
-              store.dispatch('cmsPost/publishEntity', id)
+              store.dispatch('cmsPost/publishPost', id)
                 // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
                 .catch(ex => entityList.showErrorNotification(ex.code))
             }
@@ -151,7 +151,7 @@ export default defineComponent({
             label: 'Unpublish',
             color: 'white',
             handler: () => {
-              store.dispatch('cmsPost/unpublishEntity', id)
+              store.dispatch('cmsPost/unpublishPost', id)
                 // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
                 .catch(ex => entityList.showErrorNotification(ex.code))
             }

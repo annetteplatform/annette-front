@@ -1,5 +1,5 @@
 import {AnnettePrincipal, BaseEntity, SortBy} from 'src/shared';
-import { FileDescriptor} from 'src/modules/cms';
+import {FileDescriptor} from 'src/modules/cms';
 
 export interface Post extends BaseEntity {
   id: string,
@@ -96,8 +96,13 @@ export interface UnassignPostTargetPrincipalPayloadDto {
   principal: AnnettePrincipal
 }
 
-export interface DeleteFilePayload {
+export interface RemoveFilePayload {
   id: string,
   file: FileDescriptor
+}
+
+export interface Updated {
+  updatedAt: Date,
+  updatedBy: AnnettePrincipal
 }
 

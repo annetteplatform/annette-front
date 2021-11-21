@@ -1,90 +1,85 @@
 <template>
-  <q-dialog persistent
-            :model-value="show"
-            :maximized="show">
+  <q-layout view="hHh lpR fFf">
 
-    <q-layout view="hHh lpR fFf">
+    <q-header elevated class="bg-primary text-white">
+      <q-toolbar>
+        <q-btn dense flat round icon="arrow_back" @click="close"/>
 
-      <q-header elevated class="bg-primary text-white">
-        <q-toolbar>
-          <q-btn dense flat round icon="arrow_back" @click="close"/>
+        <q-toolbar-title>
+          Content editor
+        </q-toolbar-title>
 
-          <q-toolbar-title>
-            Content editor
-          </q-toolbar-title>
+      </q-toolbar>
+    </q-header>
 
-        </q-toolbar>
-      </q-header>
+    <q-drawer v-model="showWidgetTemplateSelector" side="left" overlay bordered>
+      <WidgetTemplateSelector @select="setEditMode" @cancel="setMainMode"/>
+    </q-drawer>
 
-      <q-drawer v-model="showWidgetTemplateSelector" side="left" overlay bordered>
-        <WidgetTemplateSelector @select="setEditMode" @cancel="setMainMode"/>
-      </q-drawer>
+    <q-drawer v-model="showWidgetContentEditor"
+              side="right" bordered
+              :width="750">
+      <WidgetContentEditor v-if="selectedWidgetContentIndex !== null && entityContent[selectedWidgetContentIndex]"
+                           v-model="entityContent[selectedWidgetContentIndex]"
+                           :media="media"
+                           :docs="docs"
+                           @cancel="cancelEdit"
+                           @save="save"/>
+    </q-drawer>
 
-      <q-drawer v-model="showWidgetContentEditor"
-                side="right" bordered
-                :width="750">
-        <WidgetContentEditor v-if="selectedWidgetContentIndex !== null && entityContent[selectedWidgetContentIndex]"
-                             v-model="entityContent[selectedWidgetContentIndex]"
-                             :media="media"
-                             :docs="docs"
-                             @cancel="cancelEdit"
-                             @save="save"/>
-      </q-drawer>
+    <q-page-container>
+      <q-page style="background-color: white">
+        <div class="narrow-layout q-pa-md ">
+          <q-card flat bordered>
+            <div class="q-pa-md ">
+              <SeparatorLine v-if="!readonly"
+                             :showButton="mode === 'main'"
+                             @add="setTemplateSelectionMode(0)"/>
 
-      <q-page-container>
-        <q-page style="background-color: white">
-          <div class="narrow-layout q-pa-md ">
-            <q-card flat bordered>
-              <div class="q-pa-md ">
+              <div class="full-width"
+                   v-for="(widgetContent, index) in entityContent"
+                   :key="widgetContent.id">
+
+                <div class=" q-mt-xs q-mb-xs z-top"
+                     v-if="!readonly && selectedWidgetContentId === widgetContent.id">
+                  <div class="float-right1">
+                    <q-btn-group>
+                      <q-btn color="primary" size="xs" icon="edit"
+                             @click.stop="setEditMode(widgetContent)"
+                             :disable="mode !== 'main'"/>
+                      <q-btn color="primary" size="xs" icon="content_copy"
+                             @click.stop="duplicate(widgetContent, index + 1)"
+                             :disable="mode !== 'main'"/>
+
+                    </q-btn-group>
+                    <q-btn-group class="q-ml-md">
+                      <q-btn color="primary" size="xs" label="" icon="arrow_upward"
+                             @click.stop="changeOrder(widgetContent, index - 1)"
+                             :disable="mode !== 'main' || index === 0"/>
+                      <q-btn color="primary" size="xs" icon="arrow_downward"
+                             @click.stop="changeOrder(widgetContent, index + 1)"
+                             :disable="mode !== 'main' || index === entityContent.length-1"/>
+                    </q-btn-group>
+                    <q-btn class="q-ml-lg" color="negative" size="xs" icon="delete"
+                           @click.stop="deleteWidgetContent(widgetContent)"
+                           :disable="mode !== 'main'"/>
+                  </div>
+                </div>
+
+                <div @click="toggleWidgetContent(widgetContent.id, index)">
+                  <WidgetContentView :content="widgetContent"/>&nbsp;
+                </div>
+
                 <SeparatorLine v-if="!readonly"
                                :showButton="mode === 'main'"
-                               @add="setTemplateSelectionMode(0)"/>
-
-                <div class="full-width"
-                     v-for="(widgetContent, index) in entityContent"
-                     :key="widgetContent.id">
-
-                  <div class=" q-mt-xs q-mb-xs z-top"
-                       v-if="!readonly && selectedWidgetContentId === widgetContent.id">
-                    <div class="float-right1">
-                      <q-btn-group>
-                        <q-btn color="primary" size="xs" icon="edit"
-                               @click.stop="setEditMode(widgetContent)"
-                               :disable="mode !== 'main'"/>
-                        <q-btn color="primary" size="xs" icon="content_copy"
-                               @click.stop="duplicate(widgetContent, index + 1)"
-                               :disable="mode !== 'main'"/>
-
-                      </q-btn-group>
-                      <q-btn-group class="q-ml-md">
-                        <q-btn color="primary" size="xs" label="" icon="arrow_upward"
-                               @click.stop="changeOrder(widgetContent, index - 1)"
-                               :disable="mode !== 'main' || index === 0"/>
-                        <q-btn color="primary" size="xs" icon="arrow_downward"
-                               @click.stop="changeOrder(widgetContent, index + 1)"
-                               :disable="mode !== 'main' || index === entityContent.length-1"/>
-                      </q-btn-group>
-                      <q-btn class="q-ml-lg" color="negative" size="xs" icon="delete"
-                             @click.stop="deleteWidgetContent(widgetContent)"
-                             :disable="mode !== 'main'"/>
-                    </div>
-                  </div>
-
-                  <div @click="toggleWidgetContent(widgetContent.id, index)">
-                    <WidgetContentView :content="widgetContent"/>&nbsp;
-                  </div>
-
-                  <SeparatorLine v-if="!readonly"
-                                 :showButton="mode === 'main'"
-                                 @add="setTemplateSelectionMode(index + 1)"/>
-                </div>
+                               @add="setTemplateSelectionMode(index + 1)"/>
               </div>
-            </q-card>
-          </div>
-        </q-page>
-      </q-page-container>
-    </q-layout>
-  </q-dialog>
+            </div>
+          </q-card>
+        </div>
+      </q-page>
+    </q-page-container>
+  </q-layout>
 </template>
 
 <script lang="ts">
@@ -96,6 +91,7 @@ import WidgetContentView from 'src/shared/components/widget-content/WidgetConten
 import {Ref} from '@vue/reactivity';
 import WidgetContentEditor from './WidgetContentEditor.vue';
 import WidgetTemplateSelector from './WidgetTemplateSelector.vue';
+import {useRouter} from 'vue-router';
 
 const MAIN_MODE = 'main'
 const TEMPLATE_SELECTION_MODE = 'selection'
@@ -105,10 +101,6 @@ export default defineComponent({
   name: 'ContentEditor',
   components: {WidgetTemplateSelector, WidgetContentEditor, SeparatorLine, WidgetContentView},
   props: {
-    show: {
-      type: Boolean,
-      required: true
-    },
     readonly: {
       type: Boolean,
       required: true
@@ -119,17 +111,21 @@ export default defineComponent({
     },
     media: {
       type: Array as PropType<FileDescriptor[]>,
-      default:() => { return [] }
+      default: () => {
+        return []
+      }
     },
     docs: {
       type: Array as PropType<FileDescriptor[]>,
-      default:() => { return [] }
+      default: () => {
+        return []
+      }
     }
   },
-  emits: ['close', 'changeOrder', 'update', 'delete'],
+  emits: ['changeOrder', 'update', 'delete'],
   setup(props, {emit}) {
+    const router = useRouter()
 
-    const show = toRef(props, 'show')
     const content = toRef(props, 'content')
 
     const entityContent: Ref<WidgetContent[]> = ref(extend(true, [], props.content))
@@ -179,11 +175,7 @@ export default defineComponent({
       showWidgetContentEditor.value = true
     }
 
-    watch(show, () => {
-      if (show.value) {
-        setMainMode()
-      }
-    })
+
 
     watch(content, () => {
       console.log('watch content')
@@ -191,7 +183,7 @@ export default defineComponent({
     })
 
     const close = () => {
-      emit('close')
+      router.go(-1)
     }
 
     const toggleWidgetContent = (id: string, index: number) => {
@@ -208,7 +200,6 @@ export default defineComponent({
 
 
     const cancelEdit = () => {
-
       showWidgetContentEditor.value = false
       selectedWidgetContentOrder.value = null
       if (originalWidgetContent.value && selectedWidgetContentIndex.value !== null) {
@@ -257,6 +248,8 @@ export default defineComponent({
     const deleteWidgetContent = (widgetContent: WidgetContent) => {
       emit('delete', widgetContent.id)
     }
+
+    setMainMode()
 
     return {
       mode,
