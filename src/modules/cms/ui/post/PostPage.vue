@@ -71,7 +71,6 @@
           <q-tab-panel name="general">
 
 
-
             <div class="row q-mt-md">
               <q-checkbox
                 class="col-md-12 col-sm-12 col-xs-12 q-pr-md"
@@ -191,17 +190,17 @@
             <div class="q-pt-md row items-start q-gutter-md">
               <q-card v-for="file in state.files.media" :key="file.fileId" class="image-card" flat bordered>
                 <q-card-section>
-                <q-avatar v-if="file.contentType.includes('video')"
-                          class="full-width"
-                          style="height:160px;"
-                          text-color="grey"
-                          font-size="64px"
-                          icon="videocam"
-                />
+                  <q-avatar v-if="file.contentType.includes('video')"
+                            class="full-width"
+                            style="height:160px;"
+                            text-color="grey"
+                            font-size="64px"
+                            icon="videocam"
+                  />
 
-                <q-img v-else style="height:160px;" class="full-width"
-                       fit="scale-down"
-                       :src="`/api/annette/v1/cms/file/${file.objectId}/media/${file.fileId}`"/>
+                  <q-img v-else style="height:160px;" class="full-width"
+                         fit="scale-down"
+                         :src="`/api/annette/v1/cms/file/${file.objectId}/media/${file.fileId}`"/>
                 </q-card-section>
                 <q-card-section>
                   <q-item-label caption lines="1">{{ file.filename }}</q-item-label>
@@ -299,13 +298,7 @@ import {useStore} from 'src/store';
 import {date, openURL, useQuasar} from 'quasar';
 import PrincipalViewItem from 'src/shared/components/principal-view/PrincipalViewItem.vue';
 import PrincipalSelectorDialog from 'src/shared/components/principal-selector/PrinciplaSelectorDialog.vue';
-import {
-  ChangePostWidgetContentOrderPayloadDto, RemoveFilePayload,
-  DeletePostWidgetContentPayloadDto,
-  FileDescriptor, InitPostEditorPayload,
-  Post, PostEditor, toAction,
-  UpdatePostWidgetContentPayloadDto
-} from 'src/modules/cms';
+import {FileDescriptor, InitPostEditorPayload, Post, PostEditor, RemoveFilePayload, toAction,} from 'src/modules/cms';
 import {AnnetteError, AnnettePrincipal} from 'src/shared';
 import {Ref} from '@vue/reactivity';
 import {useRoute, useRouter} from 'vue-router';
@@ -354,7 +347,7 @@ export default defineComponent({
 
     // *********************************************
 
-    const loadEntity =() => {
+    const loadEntity = () => {
       const payload: InitPostEditorPayload = {
         action: toAction(action.value as string),
         id: id.value as string,
@@ -415,7 +408,7 @@ export default defineComponent({
         id: id.value as string,
         file,
       }
-      await store.dispatch('cmsPost/deleteEditorFile', payload)
+      await store.dispatch('cmsPost/removePostFile', payload)
     }
 
     const fileUploaded = (info: any) => {
@@ -435,7 +428,7 @@ export default defineComponent({
       openURL(`/api/annette/v1/cms/file/${file.objectId}/${file.fileType}/${file.fileId}`)
     }
 
-    const updateId =  (data: string) => {
+    const updateId = (data: string) => {
       void store.commit('cmsPost/updateEditorId', data)
     }
 
@@ -453,7 +446,7 @@ export default defineComponent({
       void await store.dispatch('cmsPost/updateEditorFeatured', data)
     }
 
-    const updatePublicationStatus = async(data: boolean) => {
+    const updatePublicationStatus = async (data: boolean) => {
       void await store.dispatch('cmsPost/updateEditorPublicationStatus', data)
     }
 
@@ -463,7 +456,7 @@ export default defineComponent({
     }
 
 
-    const updatePublicationTimestamp = async  (newTimestamp: string) => {
+    const updatePublicationTimestamp = async (newTimestamp: string) => {
       const publicationTimestamp = date.extractDate(newTimestamp, 'YYYY-MM-DD HH:mm')
       if (publicationTimestamp.getFullYear() !== 1899) {
         void await store.dispatch('cmsPost/updateEditorPublicationTimestamp', publicationTimestamp)
@@ -529,8 +522,6 @@ export default defineComponent({
       fileUploaded,
       deleteFile,
       downloadFile,
-
-
 
 
     };

@@ -3,19 +3,20 @@
     <div class="row q-mt-md">
       <q-btn outline color="primary" label="Image" @click="insertImage"/>
       <q-btn class="q-ml-md" outline color="primary" label="Doc" @click="insertDoc"/>
-    </div>
-    <div class="row q-mt-md">
-      <div class="col-md-12 col-sm-12 col-xs-12 markdown">
-        <q-input outlined
-                 ref="qInput"
-                 :model-value="modelValue.data"
-                 @update:model-value="update"
-                 style="height: 80vh;"
-                 type="textarea"
-                 label="Markdown Content"/>
-      </div>
       <ImageSelector ref="imageSelector" :files="media" @select="selectImage"/>
       <DocSelector ref="docSelector" :files="docs" @select="selectDoc"/>
+    </div>
+    <div class="row q-mt-md">
+      <div class="col-md-12 col-sm-12 col-xs-12 ">
+        <v-ace-editor
+          ref="editor"
+          :value="modelValue.data"
+          @update:value="update"
+          lang="markdown"
+          theme="chrome"
+          :options="options"
+          style="height: 75vh"/>
+      </div>
     </div>
   </div>
 </template>
@@ -25,10 +26,14 @@ import {defineComponent, PropType, ref, toRef} from 'vue';
 import {FileDescriptor, WidgetContent} from 'src/modules/cms';
 import ImageSelector from 'src/shared/components/widget-content/file-selector/ImageSelector.vue';
 import DocSelector from 'src/shared/components/widget-content/file-selector/DocSelector.vue';
+import { VAceEditor } from 'vue3-ace-editor';
+
+import 'ace-builds/src-noconflict/mode-markdown';
+import 'ace-builds/src-noconflict/theme-chrome';
 
 export default defineComponent({
   name: 'MarkdownWidgetEditor',
-  components: {DocSelector, ImageSelector},
+  components: {DocSelector, ImageSelector, VAceEditor},
   props: {
     modelValue: {
       type: Object as PropType<WidgetContent>,
@@ -49,9 +54,13 @@ export default defineComponent({
   },
   emits: ['update:modelValue'],
   setup(props, {emit}) {
-    const qInput = ref()
+    const editor = ref()
     const imageSelector = ref()
     const docSelector = ref()
+
+    const options = {
+      wrap: 80
+    }
 
     const modelValue = toRef(props, 'modelValue')
     const update = (content: string) => {
@@ -70,19 +79,13 @@ export default defineComponent({
 
     const insertText = (insert: string) => {
       // eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-member-access
-      const tArea = qInput.value.getNativeElement() as HTMLTextAreaElement
-      // get cursor's position:
-      var startPos = tArea.selectionStart,
-        endPos = tArea.selectionEnd,
-        tmpStr = tArea.value;
+      editor.value._editor.session.insert(editor.value._editor.getCursorPosition(), insert)
 
-      const content = tmpStr.substring(0, startPos) + insert + tmpStr.substring(endPos, tmpStr.length);
-      update(content)
     }
 
     const selectImage = (file: FileDescriptor) => {
       const insert = `![${file.filename}](/api/annette/v1/cms/file/${file.objectId}/media/${file.fileId})`
-     insertText(insert)
+      insertText(insert)
     }
 
     const insertDoc = () => {
@@ -96,9 +99,10 @@ export default defineComponent({
     }
 
     return {
-      qInput,
+      editor,
       imageSelector,
       docSelector,
+      options,
       insertImage,
       selectImage,
       insertDoc,
