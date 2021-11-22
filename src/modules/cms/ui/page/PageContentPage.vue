@@ -1,36 +1,38 @@
 <template>
-      <ContentEditor v-if="content"
-                     :content="content"
-                     :readonly="action ==='view'"
-                     @changeOrder="changeWidgetContentOrder"
-                     @update="updateWidgetContent"
-                     @delete="deleteWidgetContent"
-                     :media="state.files.media"
-                     :docs="state.files.docs"
-                     :narrow="true"
-      />
+  <ContentEditor v-if="content"
+                 :content="content"
+                 :readonly="action ==='view'"
+                 @changeOrder="changeWidgetContentOrder"
+                 @update="updateWidgetContent"
+                 @delete="deleteWidgetContent"
+                 :media="state.files.media"
+                 :docs="state.files.docs"
+                 :narrow="false"
+  />
 </template>
 
 <script lang="ts">
-import {computed, defineComponent, ref, toRef, watch} from 'vue';
+import {computed, ComputedRef, defineComponent, ref, toRef, watch} from 'vue';
 import {useStore} from 'src/store';
 import {
-  ChangePostWidgetContentOrderPayloadDto,
-  DeletePostWidgetContentPayloadDto,
- PostEditor, toAction,
-  UpdatePostWidgetContentPayloadDto, InitPostContentEditorPayload, WidgetContent
+  ChangePageWidgetContentOrderPayloadDto,
+  DeletePageWidgetContentPayloadDto,
+  InitPageContentEditorPayload,
+  PageEditor,
+  toAction,
+  UpdatePageWidgetContentPayloadDto,
+  WidgetContent
 } from 'src/modules/cms';
 import {AnnetteError} from 'src/shared';
 import {Ref} from '@vue/reactivity';
 import ContentEditor from 'src/shared/components/widget-content/editor/ContentEditor.vue';
 
 export default defineComponent({
-  name: 'PostIntroContentPage',
+  name: 'PageIntroContentPage',
   components: {ContentEditor},
   props: {
     id: String,
     action: String,
-    contentType: String
   },
   setup(props) {
 
@@ -38,30 +40,25 @@ export default defineComponent({
 
     const id = toRef(props, 'id')
     const action = toRef(props, 'action')
-    const contentType = toRef(props, 'contentType')
     const prevProps = ref('')
 
     // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access,@typescript-eslint/no-unsafe-return
-    const state: Ref<PostEditor> = computed(() => store.getters['cmsPost/editor'])
+    const state: Ref<PageEditor> = computed(() => store.getters['cmsPage/editor'])
 
-    const content: Ref<WidgetContent[]> = computed(() => {
     // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access,@typescript-eslint/no-unsafe-return
-      if (contentType.value === 'intro') { return store.getters['cmsPost/introContent'] }
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access,@typescript-eslint/no-unsafe-return
-      else { return store.getters['cmsPost/content'] }
-    })
+    const content: ComputedRef<WidgetContent[]> = computed(() => store.getters['cmsPage/content'])
+
 
     const error: Ref<AnnetteError | null> = ref(null)
 
     // *********************************************
 
-    const loadEntity =() => {
-      const payload: InitPostContentEditorPayload = {
+    const loadEntity = () => {
+      const payload: InitPageContentEditorPayload = {
         action: toAction(action.value as string),
         id: id.value as string,
-        contentType: contentType.value as string
       }
-      void store.dispatch('cmsPost/initPostContentEditor', payload)
+      void store.dispatch('cmsPage/initPageContentEditor', payload)
     }
 
     const clearError = () => {
@@ -70,7 +67,7 @@ export default defineComponent({
 
     const watcher = () => {
       // eslint-disable-next-line @typescript-eslint/restrict-template-expressions,@typescript-eslint/no-unsafe-member-access
-      const newProps = `${action.value}/${id.value}/${contentType.value}`
+      const newProps = `${action.value}/${id.value}`
       if (prevProps.value !== newProps) {
         loadEntity()
       }
@@ -80,42 +77,39 @@ export default defineComponent({
     void loadEntity()
     watch(id, watcher)
     watch(action, watcher)
-    watch(contentType, watcher)
+
 
     // @ts-ignore
     const changeWidgetContentOrder = async (data) => {
-      const payload: ChangePostWidgetContentOrderPayloadDto = {
+      const payload: ChangePageWidgetContentOrderPayloadDto = {
         id: id.value as string,
-        contentType: contentType.value as string,
         // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
         widgetContentId: data.widgetContentId,
         // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
         order: data.order
       }
-      await store.dispatch('cmsPost/changeEditorWidgetContentOrder', payload)
+      await store.dispatch('cmsPage/changeEditorWidgetContentOrder', payload)
     }
 
     // @ts-ignore
     const updateWidgetContent = async (data) => {
-      const payload: UpdatePostWidgetContentPayloadDto = {
+      const payload: UpdatePageWidgetContentPayloadDto = {
         id: id.value as string,
-        contentType: contentType.value as string,
         // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
         widgetContent: data.widgetContent,
         // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
         order: data.order
       }
-      await store.dispatch('cmsPost/updateEditorWidgetContent', payload)
+      await store.dispatch('cmsPage/updateEditorWidgetContent', payload)
 
     }
 
-    const deleteWidgetContent = async(widgetContentId: string) => {
-      const payload: DeletePostWidgetContentPayloadDto = {
+    const deleteWidgetContent = async (widgetContentId: string) => {
+      const payload: DeletePageWidgetContentPayloadDto = {
         id: id.value as string,
-        contentType: contentType.value as string,
         widgetContentId: widgetContentId,
       }
-      await store.dispatch('cmsPost/deleteEditorWidgetContent', payload)
+      await store.dispatch('cmsPage/deleteEditorWidgetContent', payload)
     }
 
     return {

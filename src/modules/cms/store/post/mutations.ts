@@ -1,11 +1,9 @@
 import {MutationTree} from 'vuex';
 import {
-  Action,
   emptyPostFilter, InitPostContentEditorPayload,
   InitPostEditorPayload,
   POST_DEFAULT_PAGE_SIZE,
   PostState,
-  UpdateResponse
 } from './state';
 import {
   AssignPostTargetPrincipalPayloadDto,
@@ -22,7 +20,7 @@ import {
   UpdatePostWidgetContentPayloadDto,
   WidgetContent,
   DeletePostWidgetContentPayloadDto,
-  ChangePostWidgetContentOrderPayloadDto
+  ChangePostWidgetContentOrderPayloadDto, UpdateResponse, Action
 } from 'src/modules/cms';
 import {uid} from 'quasar';
 import {AnnettePrincipal, buildMutations} from 'src/shared';

@@ -2,6 +2,19 @@ import {RouteRecordRaw} from 'vue-router';
 
 export const cmsRoutes: RouteRecordRaw[] = [
   {
+    path: 'cms/blog-categories',
+    name: 'cms.blogCategories',
+    component: () => import('src/modules/cms/ui/blog-category/BlogCategoryListPage.vue'),
+    meta: {requiresAuth: true}
+  },
+  {
+    path: 'cms/blog-category/:action/:id',
+    name: 'cms.blogCategory',
+    component: () => import('src/modules/cms/ui/blog-category/BlogCategoryPage.vue'),
+    props: (route) => ({id: String(route.params.id), action: String(route.params.action),}),
+    meta: {requiresAuth: true}
+  },
+  {
     path: 'cms/blogs',
     name: 'cms.blogs',
     component: () => import('src/modules/cms/ui/blog/BlogListPage.vue'),
@@ -50,18 +63,45 @@ export const cmsRoutes: RouteRecordRaw[] = [
     meta: {requiresAuth: true}
   },
   {
-    path: 'cms/blog-categories',
-    name: 'cms.blogCategories',
-    component: () => import('src/modules/cms/ui/blog-category/BlogCategoryListPage.vue'),
+    path: 'cms/space-categories',
+    name: 'cms.spaceCategories',
+    component: () => import('src/modules/cms/ui/space-category/SpaceCategoryListPage.vue'),
     meta: {requiresAuth: true}
   },
   {
-    path: 'cms/blog-category/:action/:id',
-    name: 'cms.blogCategory',
-    component: () => import('src/modules/cms/ui/blog-category/BlogCategoryPage.vue'),
+    path: 'cms/space-category/:action/:id',
+    name: 'cms.spaceCategory',
+    component: () => import('src/modules/cms/ui/space-category/SpaceCategoryPage.vue'),
     props: (route) => ({id: String(route.params.id), action: String(route.params.action),}),
     meta: {requiresAuth: true}
-  }
+  },
+  {
+    path: 'cms/spaces',
+    name: 'cms.spaces',
+    component: () => import('src/modules/cms/ui/space/SpaceListPage.vue'),
+    meta: {requiresAuth: true}
+  },
+  {
+    path: 'cms/space/:action/:id',
+    name: 'cms.space',
+    component: () => import('src/modules/cms/ui/space/SpacePage.vue'),
+    props: (route) => ({id: String(route.params.id), action: String(route.params.action),}),
+    meta: {requiresAuth: true}
+  },
+  {
+    path: 'cms/pages',
+    name: 'cms.pages',
+    component: () => import('src/modules/cms/ui/page/PageListPage.vue'),
+    meta: {requiresAuth: true}
+  },
+  {
+    path: 'cms/page/:action/:id',
+    name: 'cms.page',
+    component: () => import('src/modules/cms/ui/page/PagePage.vue'),
+    props: (route) => ({id: String(route.params.id), action: String(route.params.action),}),
+    meta: {requiresAuth: true}
+  },
+
 ]
 
 export const cmsExtRoutes: RouteRecordRaw[] = [
@@ -71,6 +111,16 @@ export const cmsExtRoutes: RouteRecordRaw[] = [
     component: () => import('src/modules/cms/ui/post/PostContentPage.vue'),
     props: (route) => ({
       contentType: String(route.params.contentType),
+      id: String(route.params.id),
+      action: String(route.params.action)
+    }),
+    meta: {requiresAuth: true}
+  },
+  {
+    path: '/cms/page-content/:action/:id',
+    name: 'cms.page-content',
+    component: () => import('src/modules/cms/ui/page/PageContentPage.vue'),
+    props: (route) => ({
       id: String(route.params.id),
       action: String(route.params.action)
     }),

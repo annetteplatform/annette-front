@@ -29,9 +29,9 @@
 
     <q-page-container>
       <q-page style="background-color: white">
-        <div class="narrow-layout q-pa-md ">
-          <q-card flat bordered>
-            <div class="q-pa-md ">
+        <div :class="{ 'narrow-layout': narrow, 'q-pa-md': narrow}">
+          <q-card flat :bordered="narrow" >
+            <div :class="{'q-pa-md': narrow} ">
               <SeparatorLine v-if="!readonly"
                              :showButton="mode === 'main'"
                              @add="setTemplateSelectionMode(0)"/>
@@ -120,7 +120,11 @@ export default defineComponent({
       default: () => {
         return []
       }
-    }
+    },
+    narrow: {
+      type: Boolean,
+      required: true
+    },
   },
   emits: ['changeOrder', 'update', 'delete'],
   setup(props, {emit}) {

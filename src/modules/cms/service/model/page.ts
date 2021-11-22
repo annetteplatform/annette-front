@@ -1,13 +1,11 @@
 import {AnnettePrincipal, BaseEntity, SortBy} from 'src/shared';
 import {WidgetContent} from './widget-content';
 
-export interface Post extends BaseEntity {
+export interface Page extends BaseEntity {
   id: string,
-  blogId: string,
-  featured: boolean,
+  spaceId: string,
   authorId: AnnettePrincipal,
   title: string,
-  introContent: WidgetContent[],
   content?: WidgetContent[],
   publicationStatus: string,
   publicationTimestamp?: Date,
@@ -17,11 +15,11 @@ export interface Post extends BaseEntity {
 }
 
 
-export interface PostFilter {
+
+export interface PageFilter {
   filter: string,
-  postIds?: string[],
-  blogs?: string[],
-  featured?: boolean,
+  pageIds?: string[],
+  spaces?: string[],
   authors?: AnnettePrincipal[],
   publicationStatus?: string,
   publicationTimestampFrom?: Date,
@@ -30,62 +28,58 @@ export interface PostFilter {
   sortBy?: SortBy[]
 }
 
-export interface CreatePostPayloadDto {
+export interface CreatePagePayloadDto {
   id: string,
-  blogId: string,
-  featured: boolean,
+  spaceId: string,
   authorId: AnnettePrincipal,
   title: string,
-  introContent: WidgetContent[],
   content: WidgetContent[]
 }
 
-export interface UpdatePostFeaturedPayloadDto {
-  id: string,
-  featured: boolean
-}
 
-export interface UpdatePostTitlePayloadDto {
+export interface UpdatePageTitlePayloadDto {
   id: string,
   title: string
 }
 
-export interface UpdatePostAuthorPayloadDto {
+export interface UpdatePageAuthorPayloadDto {
   id: string,
   authorId: AnnettePrincipal
 }
 
-export interface UpdatePostWidgetContentPayloadDto {
+export interface UpdatePageWidgetContentPayloadDto {
   id: string,
-  contentType: string,
   widgetContent: WidgetContent,
   order?: number
 }
 
-export interface ChangePostWidgetContentOrderPayloadDto {
+export interface ChangePageWidgetContentOrderPayloadDto {
   id: string,
-  contentType: string,
   widgetContentId: string,
   order: number
 }
 
-export interface DeletePostWidgetContentPayloadDto {
+export interface DeletePageWidgetContentPayloadDto {
   id: string,
-  contentType: string,
   widgetContentId: string,
 }
 
-export interface UpdatePostPublicationTimestampPayloadDto {
+export interface UpdatePagePublicationTimestampPayloadDto {
   id: string,
   publicationTimestamp?: Date
 }
 
-export interface AssignPostTargetPrincipalPayloadDto {
+export interface AssignPageTargetPrincipalPayloadDto {
   id: string,
   principal: AnnettePrincipal
 }
 
-export interface UnassignPostTargetPrincipalPayloadDto {
+export interface UnassignPageTargetPrincipalPayloadDto {
   id: string,
   principal: AnnettePrincipal
 }
+
+
+
+
+

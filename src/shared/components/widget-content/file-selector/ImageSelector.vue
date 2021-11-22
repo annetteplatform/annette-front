@@ -76,3 +76,12 @@ export default defineComponent({
   }
 })
 </script>
+
+<style>
+
+
+.image-card {
+  width: 100%;
+  max-width: 235px;
+}
+</style>

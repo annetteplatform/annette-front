@@ -220,5 +220,69 @@ export function serviceGroups(): ServiceGroup[] {
         }
       ]
     },
+
+    {
+      id: 'SPACE',
+      order: 60,
+      icon: 'inventory',
+      title: 'Pages Administration ',
+      subtitle: '',
+      services: [
+        {
+          id: 'SPACE_CATEGORIES',
+          order: 10,
+          icon: 'local_offer',
+          title: 'Space categories',
+          subtitle: 'Maintain space categories',
+          action: {name: 'cms.spaceCategories'},
+          actionName: 'View'
+        },
+        {
+          id: 'SPACES',
+          order: 20,
+          icon: 'inventory',
+          title: 'Spaces',
+          subtitle: 'View list of spaces',
+          action: {name: 'cms.spaces'},
+          actionName: 'View'
+        },
+        {
+          id: 'PAGES',
+          order: 30,
+          icon: 'feed',
+          title: 'Pages',
+          subtitle: 'View list of pages',
+          action: {name: 'cms.pages'},
+          actionName: 'View'
+        }
+      ]
+    },
+    // {
+    //   id: 'SPACE-VIEW',
+    //   order: 70,
+    //   icon: 'feed',
+    //   title: 'Space View ',
+    //   subtitle: '',
+    //   services: [
+    //     {
+    //       id: 'PAGE-VIEW',
+    //       order: 10,
+    //       icon: 'feed',
+    //       title: 'Space pages',
+    //       subtitle: 'View space pages',
+    //       action: {name: 'cms.pageViews'},
+    //       actionName: 'Open'
+    //     },
+    //     {
+    //       id: 'SPACES',
+    //       order: 20,
+    //       icon: 'inventory',
+    //       title: 'Spaces',
+    //       subtitle: 'View list of spaces',
+    //       action: {name: 'cms.spaceViews'},
+    //       actionName: 'View'
+    //     }
+    //   ]
+    // },
   ]
 }

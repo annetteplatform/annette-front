@@ -1,4 +1,4 @@
-import {WidgetContent} from './post';
+import {WidgetContent} from './widget-content';
 
 export interface WidgetContentTemplate {
   id: string,

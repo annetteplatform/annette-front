@@ -14,3 +14,10 @@ export interface Files {
   media: FileDescriptor[]
   docs: FileDescriptor[]
 }
+
+
+export interface RemoveFilePayload {
+  id: string,
+  file: FileDescriptor
+}
+

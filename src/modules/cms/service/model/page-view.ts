@@ -1,31 +1,30 @@
 import {AnnettePrincipal, BaseEntity, SortBy} from 'src/shared';
 import {WidgetContent} from './widget-content';
 
-export interface PostView extends BaseEntity {
+export interface PageView extends BaseEntity {
   id: string,
-  blogId: string,
+  spaceId: string,
   featured: boolean,
   authorId: AnnettePrincipal,
   title: string,
-  introContent: WidgetContent[],
   content?: WidgetContent[],
   publicationStatus: string,
   publicationTimestamp?: Date,
-  metric?: PostMetric
+  metric?: PageMetric
   updatedAt: Date,
   updatedBy?: AnnettePrincipal
 }
 
-export interface PostMetric {
+export interface PageMetric {
   id: string,
   views: number,
   likes: number,
   likedByMe: boolean
 }
 
-export interface PostViewFilter {
+export interface PageViewFilter {
   filter?: string,
-  blogs?: string[],
+  spaces?: string[],
   featured?: boolean,
   authors?: AnnettePrincipal[],
   sortBy?: SortBy[]
