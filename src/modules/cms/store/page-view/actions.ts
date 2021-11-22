@@ -12,7 +12,7 @@ export const actions: ActionTree<PageViewState, StateInterface> = {
     // eslint-disable-next-line @typescript-eslint/unbound-method
     cmsPageViewService.getPageViewById,
     // eslint-disable-next-line @typescript-eslint/unbound-method
-    cmsPageViewService.getPageViewAnnotationsById,
+    cmsPageViewService.getPageViewsById,
   ),
 
   async getPageView ({ commit }, id: string) {

@@ -56,7 +56,7 @@ export const cmsRoutes: RouteRecordRaw[] = [
     meta: {requiresAuth: true}
   },
   {
-    path: 'cms/post-view/:id/',
+    path: 'cms/post-view/:id',
     name: 'cms.postView',
     component: () => import('src/modules/cms/ui/post-view/PostViewPage.vue'),
     props: (route) => ({id: String(route.params.id)}),
@@ -89,6 +89,12 @@ export const cmsRoutes: RouteRecordRaw[] = [
     meta: {requiresAuth: true}
   },
   {
+    path: 'cms/space-views',
+    name: 'cms.spaceViews',
+    component: () => import('src/modules/cms/ui/space-view/SpaceViewListPage.vue'),
+    meta: {requiresAuth: true}
+  },
+  {
     path: 'cms/pages',
     name: 'cms.pages',
     component: () => import('src/modules/cms/ui/page/PageListPage.vue'),
@@ -99,6 +105,20 @@ export const cmsRoutes: RouteRecordRaw[] = [
     name: 'cms.page',
     component: () => import('src/modules/cms/ui/page/PagePage.vue'),
     props: (route) => ({id: String(route.params.id), action: String(route.params.action),}),
+    meta: {requiresAuth: true}
+  },
+  {
+    path: 'cms/page-views',
+    name: 'cms.pageViews',
+    component: () => import('src/modules/cms/ui/page-view/PageViewListPage.vue'),
+    props: (route) => ({spaces: String(route.query.spaces)}),
+    meta: {requiresAuth: true}
+  },
+  {
+    path: 'cms/page-view/:id',
+    name: 'cms.pageView',
+    component: () => import('src/modules/cms/ui/page-view/PageViewPage.vue'),
+    props: (route) => ({id: String(route.params.id)}),
     meta: {requiresAuth: true}
   },
 
