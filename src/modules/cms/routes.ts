@@ -146,6 +146,6 @@ export const cmsExtRoutes: RouteRecordRaw[] = [
     }),
     meta: {requiresAuth: true}
   },
-  ]
+]
 
 
