@@ -7,8 +7,6 @@ import {computed, defineComponent, PropType, toRef, watch} from 'vue';
 import {PageView} from 'src/modules/cms';
 import {useStore} from 'src/store';
 import {Ref} from '@vue/reactivity';
-import PrincipalViewItem from 'src/shared/components/principal-view/PrincipalViewItem.vue';
-import PageViewStatusLine from 'src/modules/cms/ui/page-view/components/PageViewStatusLine.vue';
 import WidgetContentView from 'src/shared/components/widget-content/WidgetContentView.vue';
 
 export default defineComponent({

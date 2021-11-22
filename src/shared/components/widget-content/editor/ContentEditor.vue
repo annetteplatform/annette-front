@@ -30,7 +30,7 @@
     <q-page-container>
       <q-page style="background-color: white">
         <div :class="{ 'narrow-layout': narrow, 'q-pa-md': narrow}">
-          <q-card flat :bordered="narrow" >
+          <q-card flat  >
             <div :class="{'q-pa-md': narrow} ">
               <SeparatorLine v-if="!readonly"
                              :showButton="mode === 'main'"

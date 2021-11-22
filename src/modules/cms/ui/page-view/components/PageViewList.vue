@@ -31,8 +31,7 @@ import {defineComponent} from 'vue';
 import {useEntityList} from 'src/shared';
 import EntityList from 'src/shared/components/EntityList.vue';
 import {Page, PageFilter} from 'src/modules/cms';
-import {useStore} from 'src/store';
-import {date, useQuasar} from 'quasar';
+import {date} from 'quasar';
 
 const COLUMNS = [
 

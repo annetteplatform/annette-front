@@ -1,5 +1,5 @@
 <template>
-  <q-card flat bordered class="q-mb-md" :key="post.id">
+  <q-card flat :bordered="annotationMode" class="q-mb-md" :key="post.id">
 
     <q-card-section>
       <div class="float-right" v-if="post.featured">
