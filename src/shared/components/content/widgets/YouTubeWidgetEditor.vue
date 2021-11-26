@@ -32,15 +32,15 @@
 
 <script lang="ts">
 import {defineComponent, PropType, ref, toRef} from 'vue';
-import {FileDescriptor, WidgetContent} from 'src/modules/cms';
-import ImageSelector from 'src/shared/components/widget-content/file-selector/ImageSelector.vue';
+import {FileDescriptor, Widget} from 'src/modules/cms';
+import ImageSelector from 'src/shared/components/content/file-selector/ImageSelector.vue';
 
 export default defineComponent({
   name: 'YouTubeWidgetEditor',
   components: {ImageSelector},
   props: {
     modelValue: {
-      type: Object as PropType<WidgetContent>,
+      type: Object as PropType<Widget>,
       required: true
     },
     media: {

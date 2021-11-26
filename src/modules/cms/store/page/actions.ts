@@ -4,9 +4,9 @@ import {
   Action,
   AssignPageTargetPrincipalPayloadDto,
   Space,
-  ChangePageWidgetContentOrderPayloadDto,
+  ChangeWidgetOrderPayloadDto,
   CreatePagePayloadDto,
-  DeletePageWidgetContentPayloadDto,
+  DeleteWidgetPayloadDto,
   InitPageContentEditorPayload,
   InitPageEditorPayload,
   Page,
@@ -18,7 +18,7 @@ import {
   UpdatePageAuthorPayloadDto,
   UpdatePagePublicationTimestampPayloadDto,
   UpdatePageTitlePayloadDto,
-  UpdatePageWidgetContentPayloadDto,
+  UpdateWidgetPayloadDto, UpdateContentSettingsPayloadDto,
 } from 'src/modules/cms';
 import {AnnettePrincipal, buildActions} from 'src/shared';
 import {cmsPageService} from '../../service/cms-page.service';
@@ -243,30 +243,38 @@ export const actions: ActionTree<PageState, StateInterface> = {
     }
   },
 
-
-  async updateEditorWidgetContent({commit, state}, payload: UpdatePageWidgetContentPayloadDto) {
+  async updateEditorContentSettings({commit, state}, payload: UpdateContentSettingsPayloadDto) {
     if (state.editor.action === Action.Edit) {
       payload.id = state.editor.id as string
-      const updated = await cmsPageService.updatePageWidgetContent(payload)
-      commit('updateEditorWidgetContent', { payload, updated })
+      const updated = await cmsPageService.updatePageContentSettings(payload)
+      commit('updateEditorContentSettings', { payload, updated })
       return updated
     }
   },
 
-  async changeEditorWidgetContentOrder({commit, state}, payload: ChangePageWidgetContentOrderPayloadDto) {
+  async updateEditorWidget({commit, state}, payload: UpdateWidgetPayloadDto) {
     if (state.editor.action === Action.Edit) {
       payload.id = state.editor.id as string
-      const updated = await cmsPageService.changePageWidgetContentOrder(payload)
-      commit('changeEditorWidgetContentOrder', { payload, updated })
+      const updated = await cmsPageService.updatePageWidget(payload)
+      commit('updateEditorWidget', { payload, updated })
       return updated
     }
   },
 
-  async deleteEditorWidgetContent({commit, state}, payload: DeletePageWidgetContentPayloadDto) {
+  async changeEditorWidgetOrder({commit, state}, payload: ChangeWidgetOrderPayloadDto) {
     if (state.editor.action === Action.Edit) {
       payload.id = state.editor.id as string
-      const updated = await cmsPageService.deletePageWidgetContent(payload)
-      commit('deleteEditorWidgetContent', { payload, updated })
+      const updated = await cmsPageService.changePageWidgetOrder(payload)
+      commit('changeEditorWidgetOrder', { payload, updated })
+      return updated
+    }
+  },
+
+  async deleteEditorWidget({commit, state}, payload: DeleteWidgetPayloadDto) {
+    if (state.editor.action === Action.Edit) {
+      payload.id = state.editor.id as string
+      const updated = await cmsPageService.deletePageWidget(payload)
+      commit('deleteEditorWidget', { payload, updated })
       return updated
     }
   },

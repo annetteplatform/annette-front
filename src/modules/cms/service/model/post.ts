@@ -1,5 +1,5 @@
 import {AnnettePrincipal, BaseEntity, SortBy} from 'src/shared';
-import {WidgetContent} from './widget-content';
+import {Content} from './content';
 
 export interface Post extends BaseEntity {
   id: string,
@@ -7,8 +7,8 @@ export interface Post extends BaseEntity {
   featured: boolean,
   authorId: AnnettePrincipal,
   title: string,
-  introContent: WidgetContent[],
-  content?: WidgetContent[],
+  introContent: Content,
+  content?: Content,
   publicationStatus: string,
   publicationTimestamp?: Date,
   targets?: AnnettePrincipal[],
@@ -36,8 +36,8 @@ export interface CreatePostPayloadDto {
   featured: boolean,
   authorId: AnnettePrincipal,
   title: string,
-  introContent: WidgetContent[],
-  content: WidgetContent[]
+  introContent: Content,
+  content: Content
 }
 
 export interface UpdatePostFeaturedPayloadDto {
@@ -55,25 +55,6 @@ export interface UpdatePostAuthorPayloadDto {
   authorId: AnnettePrincipal
 }
 
-export interface UpdatePostWidgetContentPayloadDto {
-  id: string,
-  contentType: string,
-  widgetContent: WidgetContent,
-  order?: number
-}
-
-export interface ChangePostWidgetContentOrderPayloadDto {
-  id: string,
-  contentType: string,
-  widgetContentId: string,
-  order: number
-}
-
-export interface DeletePostWidgetContentPayloadDto {
-  id: string,
-  contentType: string,
-  widgetContentId: string,
-}
 
 export interface UpdatePostPublicationTimestampPayloadDto {
   id: string,

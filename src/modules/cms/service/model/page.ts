@@ -1,19 +1,18 @@
 import {AnnettePrincipal, BaseEntity, SortBy} from 'src/shared';
-import {WidgetContent} from './widget-content';
+import {Content} from './content';
 
 export interface Page extends BaseEntity {
   id: string,
   spaceId: string,
   authorId: AnnettePrincipal,
   title: string,
-  content?: WidgetContent[],
+  content?: Content,
   publicationStatus: string,
   publicationTimestamp?: Date,
   targets?: AnnettePrincipal[],
   updatedAt?: Date,
   updatedBy?: AnnettePrincipal
 }
-
 
 
 export interface PageFilter {
@@ -33,9 +32,8 @@ export interface CreatePagePayloadDto {
   spaceId: string,
   authorId: AnnettePrincipal,
   title: string,
-  content: WidgetContent[]
+  content: Content
 }
-
 
 export interface UpdatePageTitlePayloadDto {
   id: string,
@@ -45,23 +43,6 @@ export interface UpdatePageTitlePayloadDto {
 export interface UpdatePageAuthorPayloadDto {
   id: string,
   authorId: AnnettePrincipal
-}
-
-export interface UpdatePageWidgetContentPayloadDto {
-  id: string,
-  widgetContent: WidgetContent,
-  order?: number
-}
-
-export interface ChangePageWidgetContentOrderPayloadDto {
-  id: string,
-  widgetContentId: string,
-  order: number
-}
-
-export interface DeletePageWidgetContentPayloadDto {
-  id: string,
-  widgetContentId: string,
 }
 
 export interface UpdatePagePublicationTimestampPayloadDto {

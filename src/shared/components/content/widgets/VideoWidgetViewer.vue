@@ -1,9 +1,5 @@
 <template>
   <div class="q-my-md">
-<!--    <q-video :style="{ height: content.data.height+'px' }"-->
-<!--             :ratio="content.data.rate"-->
-<!--             :src="content.data.src"-->
-<!--    />-->
     <q-media-player
       type="video"
       :sources="sources"
@@ -13,39 +9,32 @@
 
 <script lang="ts">
 import {computed, defineComponent, PropType, toRef} from 'vue';
-import {WidgetContent} from 'src/modules/cms';
+import {Widget} from 'src/modules/cms';
 
 
 export default defineComponent({
   name: 'VideoWidgetViewer',
   components: {},
   props: {
-    content: {
-      type: Object as PropType<WidgetContent>,
+    widget: {
+      type: Object as PropType<Widget>,
       required: true
-    }
+    },
+
   },
   setup(props) {
-    const content = toRef(props, 'content')
+    const widget = toRef(props, 'widget')
 
     const sources = computed(() => {
       return [
         {
           // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-          src: content.value.data.src,
+          src: widget.value.data.src,
           // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-          type: content.value.data.type
+          type: widget.value.data.type
         }
       ]
     })
-
-    // const toNumber = (s: string) => {
-    //   const parsed = parseFloat(s);
-    //   if (isNaN(parsed)) {
-    //     return undefined;
-    //   }
-    //   return parsed
-    // }
 
     return {
       sources

@@ -2,19 +2,19 @@ import axios from 'axios'
 import {FindResult} from 'src/shared'
 import {
   AssignPageTargetPrincipalPayloadDto,
-  ChangePageWidgetContentOrderPayloadDto,
+  ChangeWidgetOrderPayloadDto,
   CreatePagePayloadDto,
-  DeletePageWidgetContentPayloadDto,
+  DeleteWidgetPayloadDto,
   FileDescriptor,
   Files,
   Page,
   PageFilter,
-  UnassignPageTargetPrincipalPayloadDto,
+  UnassignPageTargetPrincipalPayloadDto, UpdateContentSettingsPayloadDto,
   Updated,
   UpdatePageAuthorPayloadDto,
   UpdatePagePublicationTimestampPayloadDto,
   UpdatePageTitlePayloadDto,
-  UpdatePageWidgetContentPayloadDto,
+  UpdateWidgetPayloadDto,
 } from './model';
 
 export const cmsPageService = {
@@ -34,18 +34,23 @@ export const cmsPageService = {
       .then(result => convertUpdated(result.data))
   },
 
-  async updatePageWidgetContent(payload: UpdatePageWidgetContentPayloadDto) {
-    return await axios.post<Updated>('/api/annette/v1/cms/updatePageWidgetContent', payload)
+  async updatePageContentSettings(payload: UpdateContentSettingsPayloadDto) {
+    return await axios.post<Updated>('/api/annette/v1/cms/updatePageContentSettings', payload)
       .then(result => convertUpdated(result.data))
   },
 
-  async changePageWidgetContentOrder(payload: ChangePageWidgetContentOrderPayloadDto) {
-    return await axios.post<Updated>('/api/annette/v1/cms/changePageWidgetContentOrder', payload)
+  async updatePageWidget(payload: UpdateWidgetPayloadDto) {
+    return await axios.post<Updated>('/api/annette/v1/cms/updatePageWidget', payload)
       .then(result => convertUpdated(result.data))
   },
 
-  async deletePageWidgetContent(payload: DeletePageWidgetContentPayloadDto) {
-    return await axios.post<Updated>('/api/annette/v1/cms/deletePageWidgetContent', payload)
+  async changePageWidgetOrder(payload: ChangeWidgetOrderPayloadDto) {
+    return await axios.post<Updated>('/api/annette/v1/cms/changePageWidgetOrder', payload)
+      .then(result => convertUpdated(result.data))
+  },
+
+  async deletePageWidget(payload: DeleteWidgetPayloadDto) {
+    return await axios.post<Updated>('/api/annette/v1/cms/deletePageWidget', payload)
       .then(result => convertUpdated(result.data))
   },
 

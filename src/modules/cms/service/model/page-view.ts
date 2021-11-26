@@ -1,5 +1,5 @@
 import {AnnettePrincipal, BaseEntity, SortBy} from 'src/shared';
-import {WidgetContent} from './widget-content';
+import {Content} from './content';
 
 export interface PageView extends BaseEntity {
   id: string,
@@ -7,7 +7,7 @@ export interface PageView extends BaseEntity {
   featured: boolean,
   authorId: AnnettePrincipal,
   title: string,
-  content?: WidgetContent[],
+  content?: Content,
   publicationStatus: string,
   publicationTimestamp?: Date,
   metric?: PageMetric

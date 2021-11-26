@@ -1,21 +1,21 @@
 <template>
-  <div :id="content.id"
-       v-html="content.data"></div>
+  <div :id="widget.id"
+       v-html="widget.data"></div>
 </template>
 
 <script lang="ts">
 import {defineComponent, PropType} from 'vue';
-import {WidgetContent} from 'src/modules/cms';
+import {Widget} from 'src/modules/cms';
 
 
 export default defineComponent({
   name: 'HtmlWidgetViewer',
   components: {},
   props: {
-    content: {
-      type: Object as PropType<WidgetContent>,
+    widget: {
+      type: Object as PropType<Widget>,
       required: true
-    }
+    },
   },
   setup() {
     return {}

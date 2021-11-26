@@ -9,8 +9,8 @@ import {
 import {
   Action,
   AssignPageTargetPrincipalPayloadDto,
-  ChangePageWidgetContentOrderPayloadDto,
-  DeletePageWidgetContentPayloadDto,
+  ChangeWidgetOrderPayloadDto,
+  DeleteWidgetPayloadDto,
   FileDescriptor,
   Files,
   Page,
@@ -20,9 +20,9 @@ import {
   UpdatePageAuthorPayloadDto,
   UpdatePagePublicationTimestampPayloadDto,
   UpdatePageTitlePayloadDto,
-  UpdatePageWidgetContentPayloadDto,
+  UpdateWidgetPayloadDto,
   UpdateResponse,
-  WidgetContent
+  UpdateContentSettingsPayloadDto
 } from 'src/modules/cms';
 import {uid} from 'quasar';
 import {AnnettePrincipal, buildMutations} from 'src/shared';
@@ -37,8 +37,11 @@ function emptyEntity(id: string, spaceId: string, personId: string) {
       principalId: personId
     },
     title: '',
-    introContent: [],
-    content: [],
+    content: {
+      settings: {},
+      widgetOrder: [],
+      widgets: {}
+    },
     publicationStatus: 'draft',
   } as Page
 }
@@ -205,60 +208,66 @@ export const mutations: MutationTree<PageState> = {
     state.editor.spaceName = undefined
   },
 
-  updateEditorWidgetContent: (state: PageState, data: UpdateResponse<UpdatePageWidgetContentPayloadDto>) => {
+  updateEditorContentSettings: (state: PageState, data: UpdateResponse<UpdateContentSettingsPayloadDto>) => {
     const payload = data.payload
-    if (state.editor.page) {
-      let content: WidgetContent[]
-      content = [...state.editor.page.content as WidgetContent[]]
-      const currentIndex = content.findIndex(c => c.id === payload.widgetContent.id)
+    if (state.editor.page && state.editor.page.content) {
+      state.editor.page.content.settings = payload.settings
+      state.editor.page.updatedAt = data.updated.updatedAt
+      state.editor.page.updatedBy = data.updated.updatedBy
+    }
+  },
+
+  updateEditorWidget: (state: PageState, data: UpdateResponse<UpdateWidgetPayloadDto>) => {
+    const payload = data.payload
+    if (state.editor.page && state.editor.page.content) {
+      const widgetOrderLength = state.editor.page.content.widgetOrder.length
+      const currentIndex = state.editor.page.content?.widgetOrder.findIndex(c => c === payload.widget.id)
       if (currentIndex === -1) {
-        // new widget content
-        const newIndex = payload.order === undefined ? content.length : payload.order
+        // new widget
+        const newIndex = payload.order === undefined ? widgetOrderLength : payload.order
         if (newIndex <= 0) {
-          content = [payload.widgetContent, ...content]
-        } else if (newIndex >= content.length) {
-          content = [...content, payload.widgetContent,]
+          state.editor.page.content.widgetOrder = [payload.widget.id, ...state.editor.page.content.widgetOrder]
+        } else if (newIndex >= widgetOrderLength) {
+          state.editor.page.content.widgetOrder = [...state.editor.page.content.widgetOrder, payload.widget.id]
         } else {
-          content.splice(newIndex, 0, payload.widgetContent)
+          state.editor.page.content.widgetOrder.splice(newIndex, 0, payload.widget.id)
         }
-      } else {
-        content[currentIndex] = payload.widgetContent
+        state.editor.page.content.widgets[payload.widget.id] = payload.widget
       }
-      state.editor.page.content = content
+      state.editor.page.content.widgets[payload.widget.id] = payload.widget
       state.editor.page.updatedAt = data.updated.updatedAt
       state.editor.page.updatedBy = data.updated.updatedBy
     }
   },
 
-  deleteEditorWidgetContent: (state: PageState, data: UpdateResponse<DeletePageWidgetContentPayloadDto>) => {
+  changeEditorWidgetOrder: (state: PageState, data: UpdateResponse<ChangeWidgetOrderPayloadDto>) => {
     const payload = data.payload
-    if (state.editor.page) {
-      // @ts-ignore
-      state.editor.page.content = state.editor.page.content.filter(c => c.id !== payload.widgetContentId)
-      state.editor.page.updatedAt = data.updated.updatedAt
-      state.editor.page.updatedBy = data.updated.updatedBy
-    }
-  },
-
-  changeEditorWidgetContentOrder: (state: PageState, data: UpdateResponse<ChangePageWidgetContentOrderPayloadDto>) => {
-    const payload = data.payload
-    if (state.editor.page) {
-      // @ts-ignore
-      const content = [...state.editor.page.content as WidgetContent[]]
-      let newIndex = payload.order === undefined ? content.length : payload.order
+    if (state.editor.page && state.editor.page.content) {
+      const widgetOrderLength = state.editor.page.content.widgetOrder.length
+      let newIndex = payload.order === undefined ? widgetOrderLength : payload.order
       if (newIndex < 0) newIndex = 0
-      else if (newIndex >= content.length) newIndex = content.length - 1
-      const currentIndex = content.findIndex(c => c.id === payload.widgetContentId)
+      else if (newIndex >= widgetOrderLength) newIndex = widgetOrderLength - 1
+      const currentIndex = state.editor.page.content.widgetOrder.findIndex(c => c === payload.widgetId)
       if (currentIndex !== -1) {
-        const swap = content[currentIndex]
-        content[currentIndex] = content[newIndex]
-        content[newIndex] = swap
-        state.editor.page.content = content
+        const swap = state.editor.page.content.widgetOrder[currentIndex]
+        state.editor.page.content.widgetOrder[currentIndex] = state.editor.page.content.widgetOrder[newIndex]
+        state.editor.page.content.widgetOrder[newIndex] = swap
         state.editor.page.updatedAt = data.updated.updatedAt
         state.editor.page.updatedBy = data.updated.updatedBy
       }
     }
   },
+
+  deleteEditorWidget: (state: PageState, data: UpdateResponse<DeleteWidgetPayloadDto>) => {
+    const payload = data.payload
+    if (state.editor.page && state.editor.page.content) {
+      state.editor.page.content.widgetOrder = state.editor.page.content.widgetOrder.filter(c => c !== payload.widgetId)
+      delete state.editor.page.content.widgets[payload.widgetId]
+      state.editor.page.updatedAt = data.updated.updatedAt
+      state.editor.page.updatedBy = data.updated.updatedBy
+    }
+  },
+
 
   // ******************** Files ********************
 

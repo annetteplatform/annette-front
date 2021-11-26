@@ -1,5 +1,5 @@
 import {AnnettePrincipal, BaseEntity, SortBy} from 'src/shared';
-import {WidgetContent} from './widget-content';
+import {Content} from './content';
 
 export interface PostView extends BaseEntity {
   id: string,
@@ -7,8 +7,8 @@ export interface PostView extends BaseEntity {
   featured: boolean,
   authorId: AnnettePrincipal,
   title: string,
-  introContent: WidgetContent[],
-  content?: WidgetContent[],
+  introContent: Content,
+  content?: Content,
   publicationStatus: string,
   publicationTimestamp?: Date,
   metric?: PostMetric

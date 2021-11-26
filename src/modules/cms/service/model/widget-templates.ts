@@ -1,17 +1,17 @@
-import {WidgetContent} from './widget-content';
+import {Widget} from './content';
 
-export interface WidgetContentTemplate {
+export interface WidgetTemplate {
   id: string,
   name: string,
-  widgetContent: WidgetContent
+  widget: Widget
 }
 
-export function widgetContentTemplates(): WidgetContentTemplate[] {
+export function widgetTemplates(): WidgetTemplate[] {
   return [
     {
       id: 'markdown-01',
       name: 'Markdown: Empty',
-      widgetContent: {
+      widget: {
         id: '',
         widgetType: 'markdown',
         data: '',
@@ -22,7 +22,7 @@ export function widgetContentTemplates(): WidgetContentTemplate[] {
     {
       id: 'markdown-02',
       name: 'Markdown: lorem ipsum',
-      widgetContent: {
+      widget: {
         id: '',
         widgetType: 'markdown',
         data: '# Lorem ipsum!\n\n' +
@@ -37,7 +37,7 @@ export function widgetContentTemplates(): WidgetContentTemplate[] {
     {
       id: 'html-01',
       name: 'HTML: Empty',
-      widgetContent: {
+      widget: {
         id: '',
         widgetType: 'html',
         data: '',
@@ -47,7 +47,7 @@ export function widgetContentTemplates(): WidgetContentTemplate[] {
     {
       id: 'html-02',
       name: 'HTML: Lorem ipsum',
-      widgetContent: {
+      widget: {
         id: '',
         widgetType: 'html',
         data:
@@ -60,7 +60,7 @@ export function widgetContentTemplates(): WidgetContentTemplate[] {
     {
       id: 'parallax-01',
       name: 'Parallax',
-      widgetContent: {
+      widget: {
         id: '',
         widgetType: 'parallax',
         data: {
@@ -74,7 +74,7 @@ export function widgetContentTemplates(): WidgetContentTemplate[] {
     {
       id: 'Video-01',
       name: 'Video',
-      widgetContent: {
+      widget: {
         id: '',
         widgetType: 'video',
         data: {
@@ -88,7 +88,7 @@ export function widgetContentTemplates(): WidgetContentTemplate[] {
     {
       id: 'YouTube-01',
       name: 'YouTube Video',
-      widgetContent: {
+      widget: {
         id: '',
         widgetType: 'youtube',
         data: {

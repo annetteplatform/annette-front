@@ -10,8 +10,10 @@ export * from './page-view'
 export * from './space'
 export * from './space-view'
 export * from './file'
-export * from './widget-content'
-export * from './widget-content-templates'
+export * from './content'
+export * from './content-settings'
+export * from './content-settings-defaults'
+export * from './widget-templates'
 
 
 export interface Updated {

@@ -1,24 +1,24 @@
 <template>
   <QMarkdown class="markdown"
-             :id="content.id"
-             :src="content.data"/>
+             :id="widget.id"
+             :src="widget.data"/>
 </template>
 
 <script lang="ts">
 import {defineComponent, PropType} from 'vue';
 // @ts-ignore
 import {QMarkdown} from '@quasar/quasar-ui-qmarkdown/dist/index.esm.js'
-import {WidgetContent} from 'src/modules/cms';
+import {Widget} from 'src/modules/cms';
 
 
 export default defineComponent({
   name: 'MarkdownWidgetViewer',
   components: {QMarkdown},
   props: {
-    content: {
-      type: Object as PropType<WidgetContent>,
+    widget: {
+      type: Object as PropType<Widget>,
       required: true
-    }
+    },
   },
   setup() {
     return {}

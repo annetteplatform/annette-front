@@ -1,26 +1,29 @@
 import {MutationTree} from 'vuex';
 import {
-  emptyPostFilter, InitPostContentEditorPayload,
+  emptyPostFilter,
+  InitPostContentEditorPayload,
   InitPostEditorPayload,
   POST_DEFAULT_PAGE_SIZE,
   PostState,
 } from './state';
 import {
+  Action,
   AssignPostTargetPrincipalPayloadDto,
-  RemoveFilePayload,
+  ChangeWidgetOrderPayloadDto,
+  DeleteWidgetPayloadDto,
   FileDescriptor,
   Files,
   Post,
   PostFilter,
+  RemoveFilePayload,
   UnassignPostTargetPrincipalPayloadDto,
+  UpdateContentSettingsPayloadDto,
   UpdatePostAuthorPayloadDto,
   UpdatePostFeaturedPayloadDto,
   UpdatePostPublicationTimestampPayloadDto,
   UpdatePostTitlePayloadDto,
-  UpdatePostWidgetContentPayloadDto,
-  WidgetContent,
-  DeletePostWidgetContentPayloadDto,
-  ChangePostWidgetContentOrderPayloadDto, UpdateResponse, Action
+  UpdateResponse,
+  UpdateWidgetPayloadDto
 } from 'src/modules/cms';
 import {uid} from 'quasar';
 import {AnnettePrincipal, buildMutations} from 'src/shared';
@@ -35,8 +38,16 @@ function emptyEntity(id: string, blogId: string, personId: string) {
       principalId: personId
     },
     title: '',
-    introContent: [],
-    content: [],
+    introContent: {
+      settings: {},
+      widgetOrder: [],
+      widgets: {}
+    },
+    content: {
+      settings: {},
+      widgetOrder: [],
+      widgets: {}
+    },
     publicationStatus: 'draft',
   } as Post
 }
@@ -54,7 +65,6 @@ export const mutations: MutationTree<PostState> = {
     }
     state.entities[post.id] = post
   },
-
 
 
   updatePostTitle: (state: PostState, data: UpdateResponse<UpdatePostTitlePayloadDto>) => {
@@ -217,70 +227,105 @@ export const mutations: MutationTree<PostState> = {
     state.editor.blogName = undefined
   },
 
-  updateEditorWidgetContent: (state: PostState, data: UpdateResponse<UpdatePostWidgetContentPayloadDto>) => {
+  updateEditorContentSettings: (state: PostState, data: UpdateResponse<UpdateContentSettingsPayloadDto>) => {
+    const payload = data.payload
+    if (state.editor.post && state.editor.post.content) {
+      if (payload.contentType === 'intro') {
+        state.editor.post.introContent.settings = payload.settings
+      } else {
+        state.editor.post.content.settings = payload.settings
+      }
+      state.editor.post.updatedAt = data.updated.updatedAt
+      state.editor.post.updatedBy = data.updated.updatedBy
+    }
+  },
+
+  updateEditorWidget: (state: PostState, data: UpdateResponse<UpdateWidgetPayloadDto>) => {
     const payload = data.payload
     if (state.editor.post) {
-      let content: WidgetContent[]
-      if (payload.contentType === 'intro') content = [...state.editor.post.introContent]
-      else  content = [...state.editor.post.content as WidgetContent[]]
-      const currentIndex = content.findIndex(c => c.id === payload.widgetContent.id)
+      let widgetOrder: string[]
+      if (payload.contentType === 'intro') {
+        widgetOrder = state.editor.post.introContent.widgetOrder
+      } else {
+        // @ts-ignore
+        widgetOrder = state.editor.post.content.widgetOrder
+      }
+      const currentIndex = widgetOrder.findIndex(c => c === payload.widget.id)
       if (currentIndex === -1) {
         // new widget content
-        const newIndex = payload.order === undefined ? content.length : payload.order
-        if (newIndex <= 0 ) {
-          content = [payload.widgetContent, ... content]
-        }
-        else if(newIndex >= content.length) {
-          content = [...content, payload.widgetContent,]
+        const newIndex = payload.order === undefined ? widgetOrder.length : payload.order
+        if (newIndex <= 0) {
+          widgetOrder = [payload.widget.id, ...widgetOrder]
+        } else if (newIndex >= widgetOrder.length) {
+          widgetOrder = [...widgetOrder, payload.widget.id,]
         } else {
-          content.splice(newIndex, 0, payload.widgetContent)
+          widgetOrder.splice(newIndex, 0, payload.widget.id)
         }
-      } else {
-        content[currentIndex] = payload.widgetContent
       }
-      if (payload.contentType === 'intro') state.editor.post.introContent = content
-      else  state.editor.post.content = content
-      state.editor.post.updatedAt = data.updated.updatedAt
-      state.editor.post.updatedBy = data.updated.updatedBy
-    }
-  },
-
-  deleteEditorWidgetContent: (state: PostState, data: UpdateResponse<DeletePostWidgetContentPayloadDto>) => {
-    const payload = data.payload
-    if (state.editor.post) {
       if (payload.contentType === 'intro') {
-        state.editor.post.introContent = state.editor.post.introContent.filter(c => c.id !== payload.widgetContentId)
-      }
-      else  {
+        state.editor.post.introContent.widgetOrder = widgetOrder
+        state.editor.post.introContent.widgets[payload.widget.id] = payload.widget
+      } else {
         // @ts-ignore
-        state.editor.post.content = state.editor.post.content.filter(c => c.id !== payload.widgetContentId)
+        state.editor.post.content.widgetOrder = widgetOrder
+        // @ts-ignore
+        state.editor.post.content.widgets[payload.widget.id] = payload.widget
       }
       state.editor.post.updatedAt = data.updated.updatedAt
       state.editor.post.updatedBy = data.updated.updatedBy
     }
   },
 
-  changeEditorWidgetContentOrder: (state: PostState, data: UpdateResponse<ChangePostWidgetContentOrderPayloadDto>) => {
+  changeEditorWidgetOrder: (state: PostState, data: UpdateResponse<ChangeWidgetOrderPayloadDto>) => {
     const payload = data.payload
     if (state.editor.post) {
-      let content: WidgetContent[]
-      if (payload.contentType === 'intro') content = [...state.editor.post.introContent]
-      else  content = [...state.editor.post.content as WidgetContent[]]
-      let newIndex = payload.order === undefined ? content.length : payload.order
+      let widgetOrder: string[]
+      if (payload.contentType === 'intro') {
+        widgetOrder = state.editor.post.introContent.widgetOrder
+      } else {
+        // @ts-ignore
+        widgetOrder = state.editor.post.content.widgetOrder
+      }
+      let newIndex = payload.order === undefined ? widgetOrder.length : payload.order
       if (newIndex < 0) newIndex = 0
-      else if (newIndex >= content.length) newIndex = content.length - 1
-      const currentIndex = content.findIndex(c => c.id === payload.widgetContentId)
+      else if (newIndex >= widgetOrder.length) newIndex = widgetOrder.length - 1
+      const currentIndex = widgetOrder.findIndex(c => c === payload.widgetId)
       if (currentIndex !== -1) {
-        const swap = content[currentIndex]
-        content[currentIndex] = content[newIndex]
-        content[newIndex] = swap
-        if (payload.contentType === 'intro') state.editor.post.introContent = content
-        else  state.editor.post.content = content
+        const swap = widgetOrder[currentIndex]
+        widgetOrder[currentIndex] = widgetOrder[newIndex]
+        widgetOrder[newIndex] = swap
+        if (payload.contentType === 'intro') {
+          state.editor.post.introContent.widgetOrder = widgetOrder
+        } else {
+          // @ts-ignore
+          state.editor.post.content.widgetOrder = widgetOrder
+        }
         state.editor.post.updatedAt = data.updated.updatedAt
         state.editor.post.updatedBy = data.updated.updatedBy
       }
     }
   },
+
+  deleteEditorWidget: (state: PostState, data: UpdateResponse<DeleteWidgetPayloadDto>) => {
+    const payload = data.payload
+    console.log('mutation deleteEditorWidget')
+    if (state.editor.post) {
+      console.log('mutation deleteEditorWidget2')
+      if (payload.contentType === 'intro') {
+        console.log('mutation deleteEditorWidget3')
+        state.editor.post.introContent.widgetOrder = state.editor.post.introContent.widgetOrder.filter(c => c !== payload.widgetId)
+        delete state.editor.post.introContent.widgets[payload.widgetId]
+      } else {
+        // @ts-ignore
+        state.editor.post.content.widgetOrder = state.editor.post.content.widgetOrder.filter(c => c !== payload.widgetId)
+        // @ts-ignore
+        delete state.editor.post.content.widgets[payload.widgetId]
+      }
+      state.editor.post.updatedAt = data.updated.updatedAt
+      state.editor.post.updatedBy = data.updated.updatedBy
+    }
+  },
+
 
   // ******************** Files ********************
 

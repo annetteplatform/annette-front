@@ -36,12 +36,12 @@
 
 <script lang="ts">
 import {defineComponent, PropType} from 'vue';
-import {FileDescriptor, WidgetContent} from 'src/modules/cms';
-import MarkdownWidgetEditor from 'src/shared/components/widget-content/widgets/MarkdownWidgetEditor.vue';
-import HtmlWidgetEditor from 'src/shared/components/widget-content/widgets/HtmlWidgetEditor.vue';
-import ParallaxWidgetEditor from 'src/shared/components/widget-content/widgets/ParallaxWidgetEditor.vue';
-import VideoWidgetEditor from 'src/shared/components/widget-content/widgets/VideoWidgetEditor.vue';
-import YouTubeWidgetEditor from 'src/shared/components/widget-content/widgets/YouTubeWidgetEditor.vue';
+import {FileDescriptor, Widget} from 'src/modules/cms';
+import MarkdownWidgetEditor from 'src/shared/components/content/widgets/MarkdownWidgetEditor.vue';
+import HtmlWidgetEditor from 'src/shared/components/content/widgets/HtmlWidgetEditor.vue';
+import ParallaxWidgetEditor from 'src/shared/components/content/widgets/ParallaxWidgetEditor.vue';
+import VideoWidgetEditor from 'src/shared/components/content/widgets/VideoWidgetEditor.vue';
+import YouTubeWidgetEditor from 'src/shared/components/content/widgets/YouTubeWidgetEditor.vue';
 
 
 export default defineComponent({
@@ -49,7 +49,7 @@ export default defineComponent({
   components: {YouTubeWidgetEditor, VideoWidgetEditor, ParallaxWidgetEditor, HtmlWidgetEditor, MarkdownWidgetEditor},
   props: {
     modelValue: {
-      type: Object as PropType<WidgetContent>,
+      type: Object as PropType<Widget>,
       required: true
     },
     media: {
@@ -68,7 +68,7 @@ export default defineComponent({
   emits: ['update:modelValue', 'cancel', 'save'],
   setup(props, {emit}) {
 
-    const update = (newModelValue: WidgetContent) => {
+    const update = (newModelValue: Widget) => {
       emit('update:modelValue', newModelValue)
     }
 

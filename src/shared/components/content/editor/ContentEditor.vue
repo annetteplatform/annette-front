@@ -16,11 +16,11 @@
       <WidgetTemplateSelector @select="setEditMode" @cancel="setMainMode"/>
     </q-drawer>
 
-    <q-drawer v-model="showWidgetContentEditor"
+    <q-drawer v-model="showWidgetEditor"
               side="right" bordered
               :width="750">
-      <WidgetContentEditor v-if="selectedWidgetContentIndex !== null && entityContent[selectedWidgetContentIndex]"
-                           v-model="entityContent[selectedWidgetContentIndex]"
+      <WidgetContentEditor v-if="selectedWidgetId !== null && entityContent.widgets[selectedWidgetId]"
+                           v-model="entityContent.widgets[selectedWidgetId]"
                            :media="media"
                            :docs="docs"
                            @cancel="cancelEdit"
@@ -37,37 +37,37 @@
                              @add="setTemplateSelectionMode(0)"/>
 
               <div class="full-width"
-                   v-for="(widgetContent, index) in entityContent"
-                   :key="widgetContent.id">
+                   v-for="(widget, index) in entityContentWidgets"
+                   :key="widget.id">
 
                 <div class=" q-mt-xs q-mb-xs z-top"
-                     v-if="!readonly && selectedWidgetContentId === widgetContent.id">
+                     v-if="!readonly && selectedWidgetId === widget.id">
                   <div class="float-right1">
                     <q-btn-group>
                       <q-btn color="primary" size="xs" icon="edit"
-                             @click.stop="setEditMode(widgetContent)"
+                             @click.stop="setEditMode(widget)"
                              :disable="mode !== 'main'"/>
                       <q-btn color="primary" size="xs" icon="content_copy"
-                             @click.stop="duplicate(widgetContent, index + 1)"
+                             @click.stop="duplicate(widget, index + 1)"
                              :disable="mode !== 'main'"/>
 
                     </q-btn-group>
                     <q-btn-group class="q-ml-md">
                       <q-btn color="primary" size="xs" label="" icon="arrow_upward"
-                             @click.stop="changeOrder(widgetContent, index - 1)"
+                             @click.stop="changeOrder(widget, index - 1)"
                              :disable="mode !== 'main' || index === 0"/>
                       <q-btn color="primary" size="xs" icon="arrow_downward"
-                             @click.stop="changeOrder(widgetContent, index + 1)"
-                             :disable="mode !== 'main' || index === entityContent.length-1"/>
+                             @click.stop="changeOrder(widget, index + 1)"
+                             :disable="mode !== 'main' || index === entityContentWidgets.length-1"/>
                     </q-btn-group>
                     <q-btn class="q-ml-lg" color="negative" size="xs" icon="delete"
-                           @click.stop="deleteWidgetContent(widgetContent)"
+                           @click.stop="deleteWidget(widget)"
                            :disable="mode !== 'main'"/>
                   </div>
                 </div>
 
-                <div @click="toggleWidgetContent(widgetContent.id, index)">
-                  <WidgetContentView :content="widgetContent"/>&nbsp;
+                <div @click="toggleWidget(widget.id, index)">
+                  <WidgetView :widget="widget" />&nbsp;
                 </div>
 
                 <SeparatorLine v-if="!readonly"
@@ -83,11 +83,11 @@
 </template>
 
 <script lang="ts">
-import {defineComponent, PropType, ref, toRef, watch} from 'vue';
-import SeparatorLine from 'src/shared/components/widget-content/editor/SeparatorLine.vue';
-import {FileDescriptor, WidgetContent} from 'src/modules/cms';
+import {computed, defineComponent, PropType, ref, toRef, watch} from 'vue';
+import SeparatorLine from 'src/shared/components/content/editor/SeparatorLine.vue';
+import {Content, FileDescriptor, Widget} from 'src/modules/cms';
 import {extend, uid} from 'quasar';
-import WidgetContentView from 'src/shared/components/widget-content/WidgetContentView.vue';
+import WidgetView from 'src/shared/components/content/WidgetView.vue';
 import {Ref} from '@vue/reactivity';
 import WidgetContentEditor from './WidgetContentEditor.vue';
 import WidgetTemplateSelector from './WidgetTemplateSelector.vue';
@@ -99,14 +99,14 @@ const EDIT_MODE = 'edit'
 
 export default defineComponent({
   name: 'ContentEditor',
-  components: {WidgetTemplateSelector, WidgetContentEditor, SeparatorLine, WidgetContentView},
+  components: {WidgetTemplateSelector, WidgetContentEditor, SeparatorLine, WidgetView},
   props: {
     readonly: {
       type: Boolean,
       required: true
     },
     content: {
-      type: Array as PropType<WidgetContent[]>,
+      type: Object as PropType<Content>,
       required: true
     },
     media: {
@@ -132,89 +132,105 @@ export default defineComponent({
 
     const content = toRef(props, 'content')
 
-    const entityContent: Ref<WidgetContent[]> = ref(extend(true, [], props.content))
+
+
+    const entityContent: Ref<Content> = ref(extend(true, {}, props.content))
+    const entityContentWidgets = computed(() => {
+      if (entityContent.value) {
+        return entityContent.value.widgetOrder
+          // @ts-ignore
+          .map(id => entityContent.value.widgets[id])
+          .filter(c => c)
+
+      } else {
+        return []
+      }
+    })
 
     const mode = ref(MAIN_MODE)
-    const selectedWidgetContentId = ref('')
-    const selectedWidgetContentIndex: Ref<number | null> = ref(null)
-    const selectedWidgetContentOrder: Ref<number | null> = ref(null)
-    const originalWidgetContent: Ref<WidgetContent | null> = ref(null)
-    const showWidgetContentEditor = ref(false)
+    const selectedWidgetId = ref('')
+    const selectedWidgetIndex: Ref<number | null> = ref(null)
+    const selectedWidgetOrder: Ref<number | null> = ref(null)
+    const originalWidget: Ref<Widget | null> = ref(null)
+    const showWidgetEditor = ref(false)
     const showWidgetTemplateSelector = ref(false)
 
     const setMainMode = () => {
       mode.value = MAIN_MODE
-      selectedWidgetContentId.value = ''
-      selectedWidgetContentIndex.value = null
-      selectedWidgetContentOrder.value = null
-      originalWidgetContent.value = null
-      showWidgetContentEditor.value = false
+      selectedWidgetId.value = ''
+      selectedWidgetIndex.value = null
+      selectedWidgetOrder.value = null
+      originalWidget.value = null
+      showWidgetEditor.value = false
       showWidgetTemplateSelector.value = false
     }
 
     const setTemplateSelectionMode = (order: number) => {
       mode.value = TEMPLATE_SELECTION_MODE
-      selectedWidgetContentId.value = ''
-      selectedWidgetContentIndex.value = null
-      originalWidgetContent.value = null
-      showWidgetContentEditor.value = false
+      selectedWidgetId.value = ''
+      selectedWidgetIndex.value = null
+      originalWidget.value = null
+      showWidgetEditor.value = false
       showWidgetTemplateSelector.value = true
-      selectedWidgetContentOrder.value = order
+      selectedWidgetOrder.value = order
     }
 
-    const setEditMode = (widgetContent: WidgetContent) => {
+    const setEditMode = (widget: Widget) => {
       showWidgetTemplateSelector.value = false
       if (mode.value === TEMPLATE_SELECTION_MODE) {
-        originalWidgetContent.value = null
+        originalWidget.value = null
         // @ts-ignore
-        entityContent.value.splice(selectedWidgetContentOrder.value, 0, widgetContent)
-        selectedWidgetContentIndex.value = selectedWidgetContentOrder.value
-        selectedWidgetContentId.value = widgetContent.widgetType
+        entityContent.value.widgetOrder.splice(selectedWidgetOrder.value, 0, widget.id)
+        entityContent.value.widgets[widget.id] = widget
+        selectedWidgetIndex.value = selectedWidgetOrder.value
+        selectedWidgetId.value = widget.id
       } else {
-        let original: WidgetContent = {data: undefined, id: '', widgetType: ''}
-        extend(true, original, widgetContent)
-        originalWidgetContent.value = original
+        let original: Widget = {data: undefined, id: '', widgetType: ''}
+        extend(true, original, widget)
+        originalWidget.value = original
       }
       mode.value = EDIT_MODE
-      showWidgetContentEditor.value = true
+      showWidgetEditor.value = true
     }
 
 
 
     watch(content, () => {
-      console.log('watch content')
-      entityContent.value = extend(true, [], content.value)
-    })
+      entityContent.value = extend(true, {}, content.value)
+    }, {deep: true})
 
     const close = () => {
       router.go(-1)
     }
 
-    const toggleWidgetContent = (id: string, index: number) => {
+    const toggleWidget = (id: string, index: number) => {
       if (mode.value == MAIN_MODE) {
-        if (selectedWidgetContentId.value == id) {
-          selectedWidgetContentId.value = ''
-          selectedWidgetContentIndex.value = null
+        if (selectedWidgetId.value == id) {
+          selectedWidgetId.value = ''
+          selectedWidgetIndex.value = null
         } else {
-          selectedWidgetContentId.value = id
-          selectedWidgetContentIndex.value = index
+          selectedWidgetId.value = id
+          selectedWidgetIndex.value = index
         }
       }
     }
 
 
     const cancelEdit = () => {
-      showWidgetContentEditor.value = false
-      selectedWidgetContentOrder.value = null
-      if (originalWidgetContent.value && selectedWidgetContentIndex.value !== null) {
+      showWidgetEditor.value = false
+      selectedWidgetOrder.value = null
+      if (originalWidget.value && selectedWidgetIndex.value !== null) {
         console.log('cancelEdit: update')
-        entityContent.value[selectedWidgetContentIndex.value] = originalWidgetContent.value
+        entityContent.value.widgets[selectedWidgetId.value] = originalWidget.value
       } else {
-        console.log('cancelEdit: new, index ', selectedWidgetContentIndex.value)
+        console.log('cancelEdit: new, index ', selectedWidgetIndex.value)
         // @ts-ignore
-        entityContent.value.splice(selectedWidgetContentIndex.value, 1)
-        selectedWidgetContentIndex.value = null
-        selectedWidgetContentId.value = ''
+        const widgetId = entityContent.value.widgetOrder[selectedWidgetIndex.value] as string
+        delete entityContent.value.widgets[widgetId]
+        // @ts-ignore
+        entityContent.value.widgetOrder.splice(selectedWidgetIndex.value, 1)
+        selectedWidgetIndex.value = null
+        selectedWidgetId.value = ''
       }
       mode.value = MAIN_MODE
     }
@@ -222,35 +238,35 @@ export default defineComponent({
     const save = () => {
       const data = {
         // @ts-ignore
-        widgetContent: entityContent.value[selectedWidgetContentIndex.value],
-        order: selectedWidgetContentOrder.value != null ? selectedWidgetContentOrder.value : undefined
+        widget: entityContent.value.widgets[selectedWidgetId.value],
+        order: selectedWidgetOrder.value != null ? selectedWidgetOrder.value : undefined
       }
-      selectedWidgetContentOrder.value = null
-      originalWidgetContent.value = null
-      showWidgetContentEditor.value = false
+      selectedWidgetOrder.value = null
+      originalWidget.value = null
+      showWidgetEditor.value = false
       emit('update', data)
       mode.value = MAIN_MODE
     }
 
-    const changeOrder = (widgetContent: WidgetContent, order: number) => {
+    const changeOrder = (widget: Widget, order: number) => {
       const data = {
-        widgetContentId: widgetContent.id,
+        widgetId: widget.id,
         order: order
       }
       emit('changeOrder', data)
     }
 
-    const duplicate = (widgetContent: WidgetContent, order: number) => {
+    const duplicate = (widget: Widget, order: number) => {
       const data = {
-        widgetContent: {...widgetContent},
+        widget: {...widget},
         order: order
       }
-      data.widgetContent.id = uid()
+      data.widget.id = uid()
       emit('update', data)
     }
 
-    const deleteWidgetContent = (widgetContent: WidgetContent) => {
-      emit('delete', widgetContent.id)
+    const deleteWidget = (widget: Widget) => {
+      emit('delete', widget.id)
     }
 
     setMainMode()
@@ -258,21 +274,22 @@ export default defineComponent({
     return {
       mode,
       entityContent,
+      entityContentWidgets,
       showWidgetTemplateSelector,
-      showWidgetContentEditor,
-      selectedWidgetContentId,
-      selectedWidgetContentIndex,
-      originalWidgetContent,
+      showWidgetEditor,
+      selectedWidgetId,
+      selectedWidgetIndex,
+      originalWidget,
       close,
       setMainMode,
       setTemplateSelectionMode,
       setEditMode,
       cancelEdit,
       save,
-      toggleWidgetContent,
+      toggleWidget,
       changeOrder,
       duplicate,
-      deleteWidgetContent,
+      deleteWidget,
     }
   }
 })

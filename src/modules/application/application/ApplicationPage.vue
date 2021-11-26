@@ -58,7 +58,7 @@
         />
       </div>
       <div class="row q-pb-md"
-           v-if="entityModel.caption.type === 'TextCaption'">
+           v-if="entityModel.caption.type === 'text'">
         <q-input class="col-md-12 col-sm-12 col-xs-12 "
                  v-model="entityModel.caption.text"
                  :readonly="action ==='view'"
@@ -137,7 +137,7 @@ function emptyEntity() {
     id: '',
     name: '',
     caption: {
-      type: 'TextCaption',
+      type: 'text',
       text: ''
     },
     translations: [],
@@ -176,25 +176,25 @@ export default defineComponent({
     const captionTypes = [
       {
         label: 'Text Caption',
-        value: 'TextCaption'
+        value: 'text'
       },
       {
         label: 'Translation Caption',
-        value: 'TranslationCaption'
+        value: 'translation'
       },
     ]
 
     const changeCaptionType = (captionType: string) => {
-      if (captionType === 'TextCaption') {
+      if (captionType === 'text') {
         const caption: TextCaption = {
-          type: 'TextCaption',
+          type: 'text',
           text: ''
         }
         // @ts-ignore
         entityPage.entityModel.value.caption = caption
       } else {
         const caption: TranslationCaption = {
-          type: 'TranslationCaption',
+          type: 'translation',
           translationId: ''
         }
         // @ts-ignore

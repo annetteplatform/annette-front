@@ -23,9 +23,9 @@
 
 <script lang="ts">
 import {defineComponent, PropType, ref, toRef} from 'vue';
-import {FileDescriptor, WidgetContent} from 'src/modules/cms';
-import ImageSelector from 'src/shared/components/widget-content/file-selector/ImageSelector.vue';
-import DocSelector from 'src/shared/components/widget-content/file-selector/DocSelector.vue';
+import {FileDescriptor, Widget} from 'src/modules/cms';
+import ImageSelector from 'src/shared/components/content/file-selector/ImageSelector.vue';
+import DocSelector from 'src/shared/components/content/file-selector/DocSelector.vue';
 import { VAceEditor } from 'vue3-ace-editor';
 
 import 'ace-builds/src-noconflict/mode-markdown';
@@ -36,7 +36,7 @@ export default defineComponent({
   components: {DocSelector, ImageSelector, VAceEditor},
   props: {
     modelValue: {
-      type: Object as PropType<WidgetContent>,
+      type: Object as PropType<Widget>,
       required: true
     },
     media: {

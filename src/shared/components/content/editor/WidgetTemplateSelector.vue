@@ -36,7 +36,7 @@
 
 <script lang="ts">
 import {computed, defineComponent, ref} from 'vue';
-import {WidgetContentTemplate, widgetContentTemplates} from 'src/modules/cms';
+import {WidgetTemplate, widgetTemplates} from 'src/modules/cms';
 import {extend, uid} from 'quasar';
 
 
@@ -47,13 +47,13 @@ export default defineComponent({
   setup(props, {emit}) {
 
     const templateFilter = ref('')
-    const templates = widgetContentTemplates()
+    const templates = widgetTemplates()
     const filteredTemplates = computed(() => {
       if (templateFilter.value === '') {
         return templates
       } else {
         return templates
-          .filter((t: WidgetContentTemplate) => t.name.toLowerCase().includes(templateFilter.value.toLowerCase()))
+          .filter((t: WidgetTemplate) => t.name.toLowerCase().includes(templateFilter.value.toLowerCase()))
       }
     })
 
@@ -61,9 +61,9 @@ export default defineComponent({
       emit('cancel')
     }
 
-    const select = (template: WidgetContentTemplate) => {
+    const select = (template: WidgetTemplate) => {
       let data = {}
-      extend(true, data, template.widgetContent)
+      extend(true, data, template.widget)
       // @ts-ignore
       data.id = uid()
       emit('select', data)
