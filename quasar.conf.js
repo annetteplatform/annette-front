@@ -82,6 +82,13 @@ module.exports = configure(function (ctx) {
 
       env: {
         KEYCLOAK_CONFIG: process.env.KEYCLOAK_CONFIG
+      },
+
+      // https://twitter.com/quasarframework/status/1464241424401055761?s=12
+      extendWebpack (cfg) {
+        cfg.cache = {
+          type: 'filesystem'
+        }
       }
     },
 
