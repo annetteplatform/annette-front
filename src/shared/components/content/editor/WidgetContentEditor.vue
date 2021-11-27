@@ -49,7 +49,7 @@ export default defineComponent({
   components: {YouTubeWidgetEditor, VideoWidgetEditor, ParallaxWidgetEditor, HtmlWidgetEditor, MarkdownWidgetEditor},
   props: {
     modelValue: {
-      type: Object as PropType<Widget>,
+      type: Object as PropType<Widget<any>>,
       required: true
     },
     media: {
@@ -68,7 +68,7 @@ export default defineComponent({
   emits: ['update:modelValue', 'cancel', 'save'],
   setup(props, {emit}) {
 
-    const update = (newModelValue: Widget) => {
+    const update = (newModelValue: Widget<any>) => {
       emit('update:modelValue', newModelValue)
     }
 

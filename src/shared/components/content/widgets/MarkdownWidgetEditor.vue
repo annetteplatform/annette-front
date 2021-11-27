@@ -1,23 +1,53 @@
 <template>
+  <div class="row q-mt-md">
+    <q-card flat class="full-width">
+      <q-tabs
+        v-model="tab"
+        dense
+        class="text-grey"
+        active-color="primary"
+        indicator-color="primary"
+        align="justify"
+        narrow-indicator
+      >
+        <q-tab name="content" label="Content"/>
+        <q-tab name="layout" label="Layout"/>
+      </q-tabs>
+      <q-separator/>
+      <q-tab-panels v-model="tab" animated>
+        <q-tab-panel name="content">
+          <div class="row q-mt-md">
+            <q-btn outline color="primary" label="Image" @click="insertImage"/>
+            <q-btn class="q-ml-md" outline color="primary" label="Doc" @click="insertDoc"/>
+            <ImageSelector ref="imageSelector" :files="media" @select="selectImage"/>
+            <DocSelector ref="docSelector" :files="docs" @select="selectDoc"/>
+          </div>
+          <div class="row q-mt-md">
+            <div class="col-md-12 col-sm-12 col-xs-12 ">
+              <v-ace-editor
+                ref="editor"
+                :value="modelValue.data.markdown"
+                @update:value="update"
+                lang="markdown"
+                theme="chrome"
+                :options="options"
+                style="height: 75vh"/>
+            </div>
+          </div>
+        </q-tab-panel>
+
+        <q-tab-panel name="layout">
+          <div class="full-width">
+            <LayoutEditForm
+              :model-value="modelValue.data.layout"
+              @update:model-value="updateLayout"/>
+          </div>
+        </q-tab-panel>
+      </q-tab-panels>
+    </q-card>
+  </div>
   <div>
-    <div class="row q-mt-md">
-      <q-btn outline color="primary" label="Image" @click="insertImage"/>
-      <q-btn class="q-ml-md" outline color="primary" label="Doc" @click="insertDoc"/>
-      <ImageSelector ref="imageSelector" :files="media" @select="selectImage"/>
-      <DocSelector ref="docSelector" :files="docs" @select="selectDoc"/>
-    </div>
-    <div class="row q-mt-md">
-      <div class="col-md-12 col-sm-12 col-xs-12 ">
-        <v-ace-editor
-          ref="editor"
-          :value="modelValue.data"
-          @update:value="update"
-          lang="markdown"
-          theme="chrome"
-          :options="options"
-          style="height: 75vh"/>
-      </div>
-    </div>
+
   </div>
 </template>
 
@@ -30,13 +60,15 @@ import { VAceEditor } from 'vue3-ace-editor';
 
 import 'ace-builds/src-noconflict/mode-markdown';
 import 'ace-builds/src-noconflict/theme-chrome';
+import {MarkdownData, WidgetLayout} from 'src/shared/components/content/widget-model';
+import LayoutEditForm from 'src/shared/components/content/widgets/LayoutEditForm.vue';
 
 export default defineComponent({
   name: 'MarkdownWidgetEditor',
-  components: {DocSelector, ImageSelector, VAceEditor},
+  components: {LayoutEditForm, DocSelector, ImageSelector, VAceEditor},
   props: {
     modelValue: {
-      type: Object as PropType<Widget>,
+      type: Object as PropType<Widget<MarkdownData>>,
       required: true
     },
     media: {
@@ -54,6 +86,7 @@ export default defineComponent({
   },
   emits: ['update:modelValue'],
   setup(props, {emit}) {
+    const tab = ref('content')
     const editor = ref()
     const imageSelector = ref()
     const docSelector = ref()
@@ -64,13 +97,22 @@ export default defineComponent({
 
     const modelValue = toRef(props, 'modelValue')
     const update = (content: string) => {
-      const data = {
+      const widget = {
         ...modelValue.value,
-        data: content,
         indexData: content,
       }
-      emit('update:modelValue', data)
+      widget.data.markdown = content
+      emit('update:modelValue', widget)
     }
+
+    const updateLayout = (layout: WidgetLayout) => {
+      const widget: Widget<MarkdownData> = {
+        ...modelValue.value,
+      }
+      widget.data.layout = layout
+      emit('update:modelValue', widget)
+    }
+
 
     const insertImage = () => {
       // eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-member-access
@@ -99,6 +141,7 @@ export default defineComponent({
     }
 
     return {
+      tab,
       editor,
       imageSelector,
       docSelector,
@@ -107,7 +150,8 @@ export default defineComponent({
       selectImage,
       insertDoc,
       selectDoc,
-      update
+      update,
+      updateLayout
     }
   }
 })

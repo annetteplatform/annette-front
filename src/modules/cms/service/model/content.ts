@@ -1,6 +1,6 @@
 import {ContentSettings} from './content-settings';
 
-export type WidgetMap = { [key: string]: Widget }
+export type WidgetMap = { [key: string]: Widget<any> }
 
 export interface Content{
   settings: ContentSettings,
@@ -8,10 +8,10 @@ export interface Content{
   widgets: WidgetMap
 }
 
-export interface Widget {
+export interface Widget<T> {
   id: string,
   widgetType: string,
-  data: any,
+  data: T,
   indexData?: string
 }
 
@@ -25,7 +25,7 @@ export interface UpdateContentSettingsPayloadDto {
 export interface UpdateWidgetPayloadDto {
   id: string,
   contentType?: string,
-  widget: Widget,
+  widget: Widget<any>,
   order?: number
 }
 

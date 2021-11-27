@@ -151,7 +151,7 @@ export default defineComponent({
     const selectedWidgetId = ref('')
     const selectedWidgetIndex: Ref<number | null> = ref(null)
     const selectedWidgetOrder: Ref<number | null> = ref(null)
-    const originalWidget: Ref<Widget | null> = ref(null)
+    const originalWidget: Ref<Widget<any> | null> = ref(null)
     const showWidgetEditor = ref(false)
     const showWidgetTemplateSelector = ref(false)
 
@@ -175,7 +175,7 @@ export default defineComponent({
       selectedWidgetOrder.value = order
     }
 
-    const setEditMode = (widget: Widget) => {
+    const setEditMode = (widget: Widget<any>) => {
       showWidgetTemplateSelector.value = false
       if (mode.value === TEMPLATE_SELECTION_MODE) {
         originalWidget.value = null
@@ -185,7 +185,7 @@ export default defineComponent({
         selectedWidgetIndex.value = selectedWidgetOrder.value
         selectedWidgetId.value = widget.id
       } else {
-        let original: Widget = {data: undefined, id: '', widgetType: ''}
+        let original: Widget<any> = {data: undefined, id: '', widgetType: ''}
         extend(true, original, widget)
         originalWidget.value = original
       }
@@ -248,7 +248,7 @@ export default defineComponent({
       mode.value = MAIN_MODE
     }
 
-    const changeOrder = (widget: Widget, order: number) => {
+    const changeOrder = (widget: Widget<any>, order: number) => {
       const data = {
         widgetId: widget.id,
         order: order
@@ -256,7 +256,7 @@ export default defineComponent({
       emit('changeOrder', data)
     }
 
-    const duplicate = (widget: Widget, order: number) => {
+    const duplicate = (widget: Widget<any>, order: number) => {
       const data = {
         widget: {...widget},
         order: order
@@ -265,7 +265,7 @@ export default defineComponent({
       emit('update', data)
     }
 
-    const deleteWidget = (widget: Widget) => {
+    const deleteWidget = (widget: Widget<any>) => {
       emit('delete', widget.id)
     }
 

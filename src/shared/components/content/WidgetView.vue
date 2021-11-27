@@ -20,7 +20,7 @@ export default defineComponent({
   components: {YouTubeWidgetViewer, VideoWidgetViewer, ParallaxWidgetViewer, MarkdownWidgetViewer, HtmlWidgetViewer},
   props: {
     widget: {
-      type: Object as PropType<Widget>,
+      type: Object as PropType<Widget<any>>,
       required: true
     },
   },

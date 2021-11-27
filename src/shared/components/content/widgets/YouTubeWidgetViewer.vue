@@ -17,7 +17,7 @@ export default defineComponent({
   components: {},
   props: {
     widget: {
-      type: Object as PropType<Widget>,
+      type: Object as PropType<Widget<any>>,
       required: true
     },
   },

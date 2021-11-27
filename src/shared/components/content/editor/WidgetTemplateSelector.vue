@@ -53,7 +53,8 @@ export default defineComponent({
         return templates
       } else {
         return templates
-          .filter((t: WidgetTemplate) => t.name.toLowerCase().includes(templateFilter.value.toLowerCase()))
+          // eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-member-access
+          .filter((t: WidgetTemplate<any>) => t.name.toLowerCase().includes(templateFilter.value.toLowerCase()))
       }
     })
 
@@ -61,8 +62,9 @@ export default defineComponent({
       emit('cancel')
     }
 
-    const select = (template: WidgetTemplate) => {
+    const select = (template: WidgetTemplate<any>) => {
       let data = {}
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
       extend(true, data, template.widget)
       // @ts-ignore
       data.id = uid()

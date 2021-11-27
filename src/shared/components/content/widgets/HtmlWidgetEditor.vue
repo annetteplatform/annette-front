@@ -1,14 +1,29 @@
 <template>
   <div class="row q-mt-md">
-    <div class="col-md-12 col-sm-12 col-xs-12">
-      <q-editor
-        ref="qEditor"
-        :model-value="modelValue.data"
-        @update:model-value="update"
-        debounce="1000"
-        min-height="10rem"
-        height="80vh"
-        :toolbar="[
+    <q-card flat class="full-width">
+      <q-tabs
+        v-model="tab"
+        dense
+        class="text-grey"
+        active-color="primary"
+        indicator-color="primary"
+        align="justify"
+        narrow-indicator
+      >
+        <q-tab name="content" label="Content"/>
+        <q-tab name="layout" label="Layout"/>
+      </q-tabs>
+      <q-separator/>
+      <q-tab-panels v-model="tab" animated>
+        <q-tab-panel name="content">
+          <q-editor
+            ref="qEditor"
+            :model-value="modelValue.data.html"
+            @update:model-value="updateHtml"
+            debounce="1000"
+            min-height="10rem"
+            height="80vh"
+            :toolbar="[
                   [
                     {
                       label: $q.lang.editor.align,
@@ -76,7 +91,7 @@
                   ['undo', 'redo'],
                   [ 'viewsource']
                 ]"
-        :fonts="{
+            :fonts="{
                   arial: 'Arial',
                   arial_black: 'Arial Black',
                   comic_sans: 'Comic Sans MS',
@@ -86,7 +101,7 @@
                   times_new_roman: 'Times New Roman',
                   verdana: 'Verdana'
                 }"
-        :definitions="{
+            :definitions="{
                   image: {
                     tip: 'Insert image',
                     icon: 'image',
@@ -99,8 +114,19 @@
                    },
         }
 "
-      />
-    </div>
+          />
+        </q-tab-panel>
+
+        <q-tab-panel name="layout">
+          <div class="full-width">
+            <LayoutEditForm
+              :model-value="modelValue.data.layout"
+              @update:model-value="updateLayout"/>
+          </div>
+        </q-tab-panel>
+      </q-tab-panels>
+    </q-card>
+
     <ImageSelector ref="imageSelector" :files="media" @select="selectImage"/>
     <DocSelector ref="docSelector" :files="docs" @select="selectDoc"/>
   </div>
@@ -110,15 +136,17 @@
 <script lang="ts">
 import {defineComponent, PropType, ref, toRef} from 'vue';
 import {FileDescriptor, Widget} from 'src/modules/cms';
+import {HtmlData, WidgetLayout} from '../widget-model';
 import ImageSelector from 'src/shared/components/content/file-selector/ImageSelector.vue';
 import DocSelector from 'src/shared/components/content/file-selector/DocSelector.vue';
+import LayoutEditForm from 'src/shared/components/content/widgets/LayoutEditForm.vue';
 
 export default defineComponent({
   name: 'HtmlWidgetEditor',
-  components: {DocSelector, ImageSelector},
+  components: {LayoutEditForm, DocSelector, ImageSelector},
   props: {
     modelValue: {
-      type: Object as PropType<Widget>,
+      type: Object as PropType<Widget<HtmlData>>,
       required: true
     },
     media: {
@@ -137,17 +165,26 @@ export default defineComponent({
   emits: ['update:modelValue'],
   setup(props, {emit}) {
 
+    const tab = ref('content')
     const qEditor = ref()
     const imageSelector = ref()
     const docSelector = ref()
     const modelValue = toRef(props, 'modelValue')
-    const update = (content: string) => {
-      const data = {
+    const updateHtml = (content: string) => {
+      const widget: Widget<HtmlData> = {
         ...modelValue.value,
-        data: content,
         indexData: content.replace(/<[^>]*>?/gm, ' '),
       }
-      emit('update:modelValue', data)
+      widget.data.html = content
+      emit('update:modelValue', widget)
+    }
+
+    const updateLayout = (layout: WidgetLayout) => {
+      const widget: Widget<HtmlData> = {
+        ...modelValue.value,
+      }
+      widget.data.layout = layout
+      emit('update:modelValue', widget)
     }
 
     const insertImage = () => {
@@ -175,10 +212,12 @@ export default defineComponent({
 
 
     return {
+      tab,
       qEditor,
       imageSelector,
       docSelector,
-      update,
+      updateHtml,
+      updateLayout,
       insertImage,
       selectImage,
       insertDoc,

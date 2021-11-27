@@ -39,7 +39,7 @@ export default defineComponent({
   components: {ImageSelector},
   props: {
     modelValue: {
-      type: Object as PropType<Widget>,
+      type: Object as PropType<Widget<any>>,
       required: true
     },
     media: {
