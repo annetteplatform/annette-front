@@ -26,12 +26,20 @@
                      label="Height">
             </q-input>
           </div>
-          <div class="row">
-            <q-input class="full-width"
-                     :model-value="modelValue.data.speed"
-                     @update:model-value="updateSpeed"
-                     label="Speed">
-            </q-input>
+          <div class="row full-width">
+            <q-field class="full-width" label="Speed" stack-label borderless>
+              <template v-slot:control>
+                <q-slider class="full-width"
+                          :model-value="modelValue.data.speed"
+                          @update:model-value="updateSpeed"
+                          :min="0"
+                          :max="1"
+                          :step="0.05"
+                          label
+                          label-always
+                          markers/>
+              </template>
+            </q-field>
           </div>
 
           <div class="row q-mt-md">
@@ -98,7 +106,7 @@ import {defineComponent, PropType, ref, toRef} from 'vue';
 import {FileDescriptor, Widget} from 'src/modules/cms';
 import {MediaData, ParallaxData, WidgetLayout} from 'src/shared/components/content';
 import MediaForm from 'src/shared/components/content/widgets/components/MediaForm.vue';
-import LayoutEditForm from "src/shared/components/content/widgets/components/LayoutEditForm.vue";
+import LayoutEditForm from 'src/shared/components/content/widgets/components/LayoutEditForm.vue';
 
 export default defineComponent({
   name: 'ParallaxWidgetEditor',
