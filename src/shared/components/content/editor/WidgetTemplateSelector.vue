@@ -36,8 +36,8 @@
 
 <script lang="ts">
 import {computed, defineComponent, ref} from 'vue';
-import {WidgetTemplate, widgetTemplates} from 'src/modules/cms';
 import {extend, uid} from 'quasar';
+import {WidgetTemplate, widgetTemplates} from 'src/shared/components/content';
 
 
 export default defineComponent({

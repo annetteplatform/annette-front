@@ -97,7 +97,7 @@
 
 <script lang="ts">
 import {computed, defineComponent, PropType, ref, toRef} from 'vue';
-import {WidgetLayout} from '../widget-model';
+import {WidgetLayout} from '../../widget-model';
 
 export default defineComponent({
   name: 'LayoutEditForm',

@@ -13,7 +13,6 @@ export * from './file'
 export * from './content'
 export * from './content-settings'
 export * from './content-settings-defaults'
-export * from '../../../../shared/components/content/widget-model/widget-templates'
 
 
 export interface Updated {

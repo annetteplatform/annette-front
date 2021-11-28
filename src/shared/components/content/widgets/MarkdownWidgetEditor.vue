@@ -60,8 +60,8 @@ import { VAceEditor } from 'vue3-ace-editor';
 
 import 'ace-builds/src-noconflict/mode-markdown';
 import 'ace-builds/src-noconflict/theme-chrome';
-import {MarkdownData, WidgetLayout} from 'src/shared/components/content/widget-model';
-import LayoutEditForm from 'src/shared/components/content/widgets/LayoutEditForm.vue';
+import {MarkdownData, markdownToIndex, WidgetLayout} from 'src/shared/components/content/widget-model';
+import LayoutEditForm from 'src/shared/components/content/widgets/components/LayoutEditForm.vue';
 
 export default defineComponent({
   name: 'MarkdownWidgetEditor',
@@ -99,7 +99,7 @@ export default defineComponent({
     const update = (content: string) => {
       const widget = {
         ...modelValue.value,
-        indexData: content,
+        indexData: markdownToIndex(content),
       }
       widget.data.markdown = content
       emit('update:modelValue', widget)

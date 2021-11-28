@@ -1,45 +1,111 @@
 <template>
-  <div>
+  <div class="row q-mt-md">
+    <q-card flat class="full-width">
+      <q-tabs
+        v-model="tab"
+        dense
+        class="text-grey"
+        active-color="primary"
+        indicator-color="primary"
+        align="justify"
+        narrow-indicator
+      >
+        <q-tab name="content" label="Content"/>
+        <q-tab name="layout" label="Layout"/>
+      </q-tabs>
+      <q-separator/>
+      <q-tab-panels v-model="tab" animated>
+        <q-tab-panel name="content">
+          <MediaForm :model-value="modelValue.data.media"
+                     @update:model-value="updateMedia"
+                     :media="media"/>
+          <div class="row">
+            <q-input class="full-width"
+                     :model-value="modelValue.data.height"
+                     @update:model-value="updateHeight"
+                     label="Height">
+            </q-input>
+          </div>
+          <div class="row">
+            <q-input class="full-width"
+                     :model-value="modelValue.data.speed"
+                     @update:model-value="updateSpeed"
+                     label="Speed">
+            </q-input>
+          </div>
 
-    <div class="row q-mt-md">
-      <q-input class="full-width" bottom-slots
-               :model-value="modelValue.data.src"
-               @update:model-value="updateSource"
-               label="Source">
-        <template v-slot:append>
-          <q-btn round dense flat icon="add" @click="insertImage"/>
-        </template>
-      </q-input>
-      <ImageSelector ref="imageSelector" :files="media" @select="selectImage"/>
-    </div>
-    <div class="row">
-      <q-input class="full-width" bottom-slots
-               :model-value="modelValue.data.height"
-               @update:model-value="updateHeight"
-               label="Height">
-      </q-input>
-    </div>
-    <div class="row">
-      <q-input class="full-width" bottom-slots
-               :model-value="modelValue.data.speed"
-               @update:model-value="updateSpeed"
-               label="Speed">
-      </q-input>
-    </div>
+          <div class="row q-mt-md">
+            <q-checkbox left-label
+                        :model-value="!!modelValue.data.title"
+                        @update:model-value="enableTitle"
+                        label="Enable title"/>
+          </div>
+          <div v-if="!!modelValue.data.title">
+            <div class="row">
+              <q-input class="full-width"
+                       :model-value="modelValue.data.title.text"
+                       @update:model-value="updateTitleText"
+                       label="Text">
+              </q-input>
+            </div>
+            <div class="row">
+              <q-select class="full-width"
+                        :model-value="modelValue.data.title.textStyle"
+                        @update:model-value="updateTitleTextStyle"
+                        :options="styleOptions"
+                        label="Style"/>
+            </div>
+            <div class="row">
+              <q-select class="full-width"
+                        :model-value="modelValue.data.title.textWeight"
+                        @update:model-value="updateTitleTextWeight"
+                        :options="weightOptions"
+                        label="Text Weight"/>
+            </div>
+            <div class="row ">
+              <q-input class="full-width"
+                       :model-value="modelValue.data.title.color"
+                       @update:model-value="updateTitleColor"
+                       label="Color">
+                <template v-slot:append>
+                  <q-icon name="colorize" class="cursor-pointer">
+                    <q-popup-proxy cover transition-show="scale" transition-hide="scale">
+                      <q-color :model-value="modelValue.data.title.color"
+                               @update:model-value="updateTitleColor"/>
+                    </q-popup-proxy>
+                  </q-icon>
+                </template>
+              </q-input>
+            </div>
+          </div>
+
+        </q-tab-panel>
+
+        <q-tab-panel name="layout">
+          <div class="full-width">
+            <LayoutEditForm
+              :model-value="modelValue.data.layout"
+              @update:model-value="updateLayout"/>
+          </div>
+        </q-tab-panel>
+      </q-tab-panels>
+    </q-card>
   </div>
 </template>
 
 <script lang="ts">
 import {defineComponent, PropType, ref, toRef} from 'vue';
 import {FileDescriptor, Widget} from 'src/modules/cms';
-import ImageSelector from 'src/shared/components/content/file-selector/ImageSelector.vue';
+import {MediaData, ParallaxData, WidgetLayout} from 'src/shared/components/content';
+import MediaForm from 'src/shared/components/content/widgets/components/MediaForm.vue';
+import LayoutEditForm from "src/shared/components/content/widgets/components/LayoutEditForm.vue";
 
 export default defineComponent({
   name: 'ParallaxWidgetEditor',
-  components: {ImageSelector},
+  components: {LayoutEditForm, MediaForm},
   props: {
     modelValue: {
-      type: Object as PropType<Widget<any>>,
+      type: Object as PropType<Widget<ParallaxData>>,
       required: true
     },
     media: {
@@ -51,62 +117,113 @@ export default defineComponent({
   },
   emits: ['update:modelValue'],
   setup(props, {emit}) {
-    const qInput = ref()
-    const imageSelector = ref()
-
+    const tab = ref('content')
     const modelValue = toRef(props, 'modelValue')
-    const update = (content: string) => {
-      const data = {
+    const styleOptions = ref(['h1', 'h2', 'h3', 'h4', 'h5', 'h6',])
+    const weightOptions = ref(['thin', 'light', 'regular', 'medium', 'bold', 'bolder',])
+
+    const updateMedia = (media: MediaData) => {
+      const widget: Widget<ParallaxData> = {
         ...modelValue.value,
-        data: content,
-        indexData: content,
       }
-      emit('update:modelValue', data)
+      widget.data.media = media
+      emit('update:modelValue', widget)
     }
-    const updateSource = (src: string) => {
-      const updated = {
+    const updateHeight = (height: string) => {
+      const widget: Widget<ParallaxData> = {
         ...modelValue.value,
       }
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-      updated.data.src = src
-      emit('update:modelValue', updated)
-    }
-    const updateHeight = (src: string) => {
-      const updated = {
-        ...modelValue.value,
-      }
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-      updated.data.height = src
-      emit('update:modelValue', updated)
+      widget.data.height = height
+      emit('update:modelValue', widget)
     }
 
-    const updateSpeed = (src: string) => {
-      const updated = {
+    const updateSpeed = (speed: string) => {
+      const widget: Widget<ParallaxData> = {
         ...modelValue.value,
       }
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-      updated.data.speed = src
-      emit('update:modelValue', updated)
+      widget.data.speed = speed
+      emit('update:modelValue', widget)
     }
 
-    const insertImage = () => {
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-member-access
-      imageSelector.value.showDialog()
+    const enableTitle = (enable: boolean) => {
+      const widget: Widget<ParallaxData> = {
+        ...modelValue.value,
+      }
+      if (enable) {
+        widget.data.title = {
+          text: 'Lorem ipsum',
+          color: '#ffffff',
+          textStyle: 'h1',
+          textWeight: 'regular'
+        }
+      } else {
+        delete widget.data.title
+      }
+      emit('update:modelValue', widget)
     }
 
-    const selectImage = (file: FileDescriptor) => {
-      updateSource(`/api/annette/v1/cms/file/${file.objectId}/media/${file.fileId}`)
+    const updateTitleText = (text: string) => {
+      const widget: Widget<ParallaxData> = {
+        ...modelValue.value,
+      }
+      if (widget.data.title) {
+        widget.data.title.text = text
+        emit('update:modelValue', widget)
+      }
     }
+
+    const updateTitleTextStyle = (style: string) => {
+      const widget: Widget<ParallaxData> = {
+        ...modelValue.value,
+      }
+      if (widget.data.title) {
+        widget.data.title.textStyle = style
+        emit('update:modelValue', widget)
+      }
+    }
+
+    const updateTitleTextWeight = (weight: string) => {
+      const widget: Widget<ParallaxData> = {
+        ...modelValue.value,
+      }
+      if (widget.data.title) {
+        widget.data.title.textWeight = weight
+        emit('update:modelValue', widget)
+      }
+    }
+
+    const updateTitleColor = (color: string) => {
+      const widget: Widget<ParallaxData> = {
+        ...modelValue.value,
+      }
+      if (widget.data.title) {
+        widget.data.title.color = color
+        emit('update:modelValue', widget)
+      }
+    }
+
+    const updateLayout = (layout: WidgetLayout) => {
+      const widget: Widget<ParallaxData> = {
+        ...modelValue.value,
+      }
+      widget.data.layout = layout
+      emit('update:modelValue', widget)
+    }
+
 
     return {
-      qInput,
-      imageSelector,
-      insertImage,
-      selectImage,
-      update,
-      updateSource,
+      tab,
+      updateMedia,
       updateHeight,
-      updateSpeed
+      updateSpeed,
+      enableTitle,
+      styleOptions,
+      weightOptions,
+      updateTitleText,
+      updateTitleTextStyle,
+      updateTitleTextWeight,
+      updateTitleColor,
+      updateLayout,
     }
   }
 })

@@ -136,10 +136,10 @@
 <script lang="ts">
 import {defineComponent, PropType, ref, toRef} from 'vue';
 import {FileDescriptor, Widget} from 'src/modules/cms';
-import {HtmlData, WidgetLayout} from '../widget-model';
+import {HtmlData, htmlToIndex, WidgetLayout} from '../widget-model';
 import ImageSelector from 'src/shared/components/content/file-selector/ImageSelector.vue';
 import DocSelector from 'src/shared/components/content/file-selector/DocSelector.vue';
-import LayoutEditForm from 'src/shared/components/content/widgets/LayoutEditForm.vue';
+import LayoutEditForm from 'src/shared/components/content/widgets/components/LayoutEditForm.vue';
 
 export default defineComponent({
   name: 'HtmlWidgetEditor',
@@ -173,7 +173,7 @@ export default defineComponent({
     const updateHtml = (content: string) => {
       const widget: Widget<HtmlData> = {
         ...modelValue.value,
-        indexData: content.replace(/<[^>]*>?/gm, ' '),
+        indexData: htmlToIndex(content)
       }
       widget.data.html = content
       emit('update:modelValue', widget)
