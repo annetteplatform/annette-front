@@ -29,6 +29,9 @@
                            :model-value="modelValue"
                            @update:model-value="update"
                            :media="media"/>
+      <HeaderWidgetEditor v-else-if="modelValue && modelValue.widgetType === 'header'"
+                            :model-value="modelValue"
+                            @update:model-value="update"/>
     </q-card-section>
   </q-card>
 
@@ -42,11 +45,14 @@ import HtmlWidgetEditor from 'src/shared/components/content/widgets/HtmlWidgetEd
 import ParallaxWidgetEditor from 'src/shared/components/content/widgets/ParallaxWidgetEditor.vue';
 import VideoWidgetEditor from 'src/shared/components/content/widgets/VideoWidgetEditor.vue';
 import YouTubeWidgetEditor from 'src/shared/components/content/widgets/YouTubeWidgetEditor.vue';
+import HeaderWidgetEditor from 'src/shared/components/content/widgets/HeaderWidgetEditor.vue';
 
 
 export default defineComponent({
   name: 'WidgetContentEditor',
-  components: {YouTubeWidgetEditor, VideoWidgetEditor, ParallaxWidgetEditor, HtmlWidgetEditor, MarkdownWidgetEditor},
+  components: {
+    HeaderWidgetEditor,
+    YouTubeWidgetEditor, VideoWidgetEditor, ParallaxWidgetEditor, HtmlWidgetEditor, MarkdownWidgetEditor},
   props: {
     modelValue: {
       type: Object as PropType<Widget<any>>,

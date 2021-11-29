@@ -23,7 +23,16 @@ export default route<StateInterface>(function (/* { store, ssrContext } */) {
     : (process.env.VUE_ROUTER_MODE === 'history' ? createWebHistory : createWebHashHistory);
 
   const Router = createRouter({
-    scrollBehavior: () => ({ left: 0, top: 0 }),
+    scrollBehavior: (to) => {
+      if (to.hash) {
+        return {
+          el: to.hash,
+          behavior: 'smooth',
+        }
+      } else {
+        return {x: 0, y: 0}
+      }
+    },
     routes,
 
     // Leave this as is and make changes in quasar.conf.js instead!

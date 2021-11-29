@@ -9,7 +9,7 @@
 <script lang="ts">
 import { defineComponent, PropType} from 'vue';
 import {Widget} from 'src/modules/cms';
-import WidgetLayoutView from "src/shared/components/content/widgets/components/WidgetLayoutView.vue";
+import WidgetLayoutView from 'src/shared/components/content/widgets/components/WidgetLayoutView.vue';
 
 
 export default defineComponent({

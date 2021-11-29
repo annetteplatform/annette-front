@@ -4,6 +4,7 @@
   <ParallaxWidgetViewer v-else-if="widget.widgetType === 'parallax'" :widget="widget"  />
   <VideoWidgetViewer v-else-if="widget.widgetType === 'video'" :widget="widget" />
   <YouTubeWidgetViewer v-else-if="widget.widgetType === 'youtube'" :widget="widget"  />
+  <HeaderWidgetViewer v-else-if="widget.widgetType === 'header'" :widget="widget"  />
 </template>
 
 <script lang="ts">
@@ -14,10 +15,13 @@ import MarkdownWidgetViewer from 'src/shared/components/content/widgets/Markdown
 import ParallaxWidgetViewer from 'src/shared/components/content/widgets/ParallaxWidgetViewer.vue';
 import VideoWidgetViewer from 'src/shared/components/content/widgets/VideoWidgetViewer.vue';
 import YouTubeWidgetViewer from 'src/shared/components/content/widgets/YouTubeWidgetViewer.vue';
+import HeaderWidgetViewer from 'src/shared/components/content/widgets/HeaderWidgetViewer.vue';
 
 export default defineComponent({
   name: 'WidgetView',
-  components: {YouTubeWidgetViewer, VideoWidgetViewer, ParallaxWidgetViewer, MarkdownWidgetViewer, HtmlWidgetViewer},
+  components: {
+    HeaderWidgetViewer,
+    YouTubeWidgetViewer, VideoWidgetViewer, ParallaxWidgetViewer, MarkdownWidgetViewer, HtmlWidgetViewer},
   props: {
     widget: {
       type: Object as PropType<Widget<any>>,

@@ -1,3 +1,4 @@
+export * from './header'
 export * from './html'
 export * from './markdown'
 export * from './media-data'

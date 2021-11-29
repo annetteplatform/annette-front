@@ -19,9 +19,9 @@ const actions: ActionTree<MainState, StateInterface> = {
     // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access,@typescript-eslint/no-explicit-any
     const router: Router = (this as any).$router as Router
     // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment,@typescript-eslint/no-explicit-any
-    const currentRoute = router.currentRoute as any
+    const currentRoute = router.currentRoute.value
     // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-    if (currentRoute.meta && currentRoute.meta.requiresAuth) {
+    if (currentRoute && currentRoute.meta && currentRoute.meta.requiresAuth) {
       void keycloak.logout({ redirectUri: window.location.origin + '/' })
     } else {
       void keycloak.logout()

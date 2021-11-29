@@ -112,7 +112,7 @@
 <script lang="ts">
 import {defineComponent, PropType, ref, toRef} from 'vue';
 import {FileDescriptor, Widget} from 'src/modules/cms';
-import {MarkdownData, MediaData, ParallaxData, WidgetLayout} from 'src/shared/components/content';
+import {MediaData, ParallaxData, WidgetLayout} from 'src/shared/components/content';
 import MediaForm from 'src/shared/components/content/widgets/components/MediaForm.vue';
 import LayoutEditForm from 'src/shared/components/content/widgets/components/LayoutEditForm.vue';
 

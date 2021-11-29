@@ -62,8 +62,8 @@
 <script lang="ts">
 import {defineComponent, PropType, ref, toRef} from 'vue';
 import {FileDescriptor, Widget} from 'src/modules/cms';
-import {WidgetLayout, YoutubeVideoData} from "src/shared/components/content";
-import LayoutEditForm from "src/shared/components/content/widgets/components/LayoutEditForm.vue";
+import {WidgetLayout, YoutubeVideoData} from 'src/shared/components/content';
+import LayoutEditForm from 'src/shared/components/content/widgets/components/LayoutEditForm.vue';
 
 export default defineComponent({
   name: 'YouTubeWidgetEditor',

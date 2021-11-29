@@ -1,11 +1,15 @@
 
-export * from './markdown'
+export * from './header'
 export * from './html'
+export * from './markdown'
 export * from './parallax'
 export * from './template'
+export * from './video'
+export * from './youtube-video'
 
 import {WidgetTemplate} from './template';
 import {markdownWidgets} from './markdown';
+import {headerWidgets} from 'src/shared/components/content';
 import {htmlWidgets} from './html';
 import {parallaxWidgets} from './parallax';
 import {videoWidgets} from './video';
@@ -17,6 +21,7 @@ export function widgetTemplates(): WidgetTemplate<any>[] {
     ...markdownWidgets(),
     ...htmlWidgets(),
     ...parallaxWidgets(),
+    ...headerWidgets(),
     ...videoWidgets(),
     ...youtubeVideoWidgets()
   ]
