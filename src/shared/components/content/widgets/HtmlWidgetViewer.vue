@@ -1,5 +1,5 @@
 <template>
-  <WidgetLayoutView :layout="widget.data.layout">
+  <WidgetLayoutView :layout="widget.data.layout" :anchor="widget.data.anchor">
     <div v-html="widget.data.html"></div>
   </WidgetLayoutView>
 </template>

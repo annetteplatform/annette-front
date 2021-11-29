@@ -2,6 +2,7 @@ import {WidgetLayout} from './widget-layout';
 
 
 export interface MarkdownData {
+  anchor: string
   markdown: string
   layout: WidgetLayout
 }

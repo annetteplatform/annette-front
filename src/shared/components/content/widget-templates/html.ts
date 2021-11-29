@@ -15,6 +15,7 @@ export function htmlWidgets(): WidgetTemplate<HtmlData>[] {
         id: '',
         widgetType: 'html',
         data: {
+          anchor: '',
           html: '',
           layout: defaultLayout()
         },
@@ -28,6 +29,7 @@ export function htmlWidgets(): WidgetTemplate<HtmlData>[] {
         id: '',
         widgetType: 'html',
         data: {
+          anchor: '',
           html: htmlLoremIpsum,
           layout: defaultLayout()
         },

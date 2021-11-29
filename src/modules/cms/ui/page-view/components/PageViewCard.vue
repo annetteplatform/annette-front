@@ -1,5 +1,5 @@
 <template>
-  <WidgetView v-for="widget in contentWidgets" :widget="widget" :settings="page.content.settings" :key="widget.id" />
+  <WidgetView v-for="widget in contentWidgets" :widget="widget" :key="widget.id" />
 </template>
 
 <script lang="ts">

@@ -1,5 +1,5 @@
 <template>
-  <WidgetLayoutView :layout="widget.data.layout">
+  <WidgetLayoutView :layout="widget.data.layout" :anchor="widget.data.anchor">
     <QMarkdown class="markdown"
                :src="widget.data.markdown"/>
   </WidgetLayoutView>

@@ -16,14 +16,23 @@
       <q-separator/>
       <q-tab-panels v-model="tab" animated>
         <q-tab-panel name="content">
-          <q-editor
-            ref="qEditor"
-            :model-value="modelValue.data.html"
-            @update:model-value="updateHtml"
-            debounce="1000"
-            min-height="10rem"
-            height="80vh"
-            :toolbar="[
+
+          <div class="row">
+            <q-input class="full-width"
+                     :model-value="modelValue.data.anchor"
+                     @update:model-value="updateAnchor"
+                     label="Anchor">
+            </q-input>
+          </div>
+          <div class="row q-mt-md">
+            <q-editor
+              ref="qEditor"
+              :model-value="modelValue.data.html"
+              @update:model-value="updateHtml"
+              debounce="1000"
+              min-height="10rem"
+              height="80vh"
+              :toolbar="[
                   [
                     {
                       label: $q.lang.editor.align,
@@ -91,7 +100,7 @@
                   ['undo', 'redo'],
                   [ 'viewsource']
                 ]"
-            :fonts="{
+              :fonts="{
                   arial: 'Arial',
                   arial_black: 'Arial Black',
                   comic_sans: 'Comic Sans MS',
@@ -101,7 +110,7 @@
                   times_new_roman: 'Times New Roman',
                   verdana: 'Verdana'
                 }"
-            :definitions="{
+              :definitions="{
                   image: {
                     tip: 'Insert image',
                     icon: 'image',
@@ -114,7 +123,8 @@
                    },
         }
 "
-          />
+            />
+          </div>
         </q-tab-panel>
 
         <q-tab-panel name="layout">
@@ -179,6 +189,14 @@ export default defineComponent({
       emit('update:modelValue', widget)
     }
 
+    const updateAnchor = (anchor: string) => {
+      const widget: Widget<HtmlData> = {
+        ...modelValue.value,
+      }
+      widget.data.anchor = anchor
+      emit('update:modelValue', widget)
+    }
+
     const updateLayout = (layout: WidgetLayout) => {
       const widget: Widget<HtmlData> = {
         ...modelValue.value,
@@ -216,6 +234,7 @@ export default defineComponent({
       qEditor,
       imageSelector,
       docSelector,
+      updateAnchor,
       updateHtml,
       updateLayout,
       insertImage,

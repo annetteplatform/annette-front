@@ -16,6 +16,13 @@
       <q-separator/>
       <q-tab-panels v-model="tab" animated>
         <q-tab-panel name="content">
+          <div class="row">
+            <q-input class="full-width"
+                     :model-value="modelValue.data.anchor"
+                     @update:model-value="updateAnchor"
+                     label="Anchor">
+            </q-input>
+          </div>
           <div class="row q-mt-md">
             <q-btn outline color="primary" label="Image" @click="insertImage"/>
             <q-btn class="q-ml-md" outline color="primary" label="Doc" @click="insertDoc"/>
@@ -96,6 +103,13 @@ export default defineComponent({
     }
 
     const modelValue = toRef(props, 'modelValue')
+
+    const updateAnchor = (anchor: string) => {
+      const widget: Widget<MarkdownData> = {...modelValue.value}
+      widget.data.anchor = anchor
+      emit('update:modelValue', widget)
+    }
+
     const update = (content: string) => {
       const widget = {
         ...modelValue.value,
@@ -106,13 +120,10 @@ export default defineComponent({
     }
 
     const updateLayout = (layout: WidgetLayout) => {
-      const widget: Widget<MarkdownData> = {
-        ...modelValue.value,
-      }
+      const widget: Widget<MarkdownData> = {...modelValue.value}
       widget.data.layout = layout
       emit('update:modelValue', widget)
     }
-
 
     const insertImage = () => {
       // eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-member-access
@@ -150,6 +161,7 @@ export default defineComponent({
       selectImage,
       insertDoc,
       selectDoc,
+      updateAnchor,
       update,
       updateLayout
     }

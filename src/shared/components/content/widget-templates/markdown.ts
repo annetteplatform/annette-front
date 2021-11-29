@@ -15,6 +15,7 @@ export function markdownWidgets(): WidgetTemplate<MarkdownData>[] {
         id: '',
         widgetType: 'markdown',
         data: {
+          anchor: '',
           markdown: '',
           layout: defaultLayout()
         },
@@ -29,6 +30,7 @@ export function markdownWidgets(): WidgetTemplate<MarkdownData>[] {
         id: '',
         widgetType: 'markdown',
         data: {
+          anchor: '',
           markdown: markdownLoremIpsum,
           layout: defaultLayout()
         },

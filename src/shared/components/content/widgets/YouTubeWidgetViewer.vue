@@ -1,20 +1,20 @@
 <template>
-  <div class="q-my-md">
-    <q-video :style="{ height: widget.data.height+'px' }"
+  <WidgetLayoutView :layout="widget.data.layout" :anchor="widget.data.anchor">
+    <q-video :style="{ height: widget.data.height }"
              :ratio="+widget.data.rate"
-             :src="widget.data.src"
-    />
-  </div>
+             :src="widget.data.src"/>
+  </WidgetLayoutView>
 </template>
 
 <script lang="ts">
 import { defineComponent, PropType} from 'vue';
 import {Widget} from 'src/modules/cms';
+import WidgetLayoutView from "src/shared/components/content/widgets/components/WidgetLayoutView.vue";
 
 
 export default defineComponent({
   name: 'YouTubeWidgetViewer',
-  components: {},
+  components: {WidgetLayoutView},
   props: {
     widget: {
       type: Object as PropType<Widget<any>>,

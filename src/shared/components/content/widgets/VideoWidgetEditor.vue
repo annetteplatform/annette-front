@@ -1,37 +1,66 @@
 <template>
-  <div>
-    <div class="row q-mt-md">
-      <q-input class="full-width" bottom-slots
-               :model-value="modelValue.data.src"
-               @update:model-value="updateSource"
-               label="Source">
-        <template v-slot:append>
-          <q-btn round dense flat icon="add" @click="insertImage"/>
-        </template>
-      </q-input>
-      <ImageSelector ref="imageSelector" :files="media" @select="selectImage"/>
-    </div>
+  <div class="row q-mt-md">
+    <q-card flat class="full-width">
+      <q-tabs
+        v-model="tab"
+        dense
+        class="text-grey"
+        active-color="primary"
+        indicator-color="primary"
+        align="justify"
+        narrow-indicator
+      >
+        <q-tab name="content" label="Content"/>
+        <q-tab name="layout" label="Layout"/>
+      </q-tabs>
+      <q-separator/>
+      <q-tab-panels v-model="tab" animated>
+        <q-tab-panel name="content">
+          <div class="row">
+            <q-input class="full-width"
+                     :model-value="modelValue.data.anchor"
+                     @update:model-value="updateAnchor"
+                     label="Anchor">
+            </q-input>
+          </div>
 
-    <div class="row">
-      <q-input class="full-width" bottom-slots
-               :model-value="modelValue.data.type"
-               @update:model-value="updateType"
-               label="Type">
-      </q-input>
-    </div>
+          <MediaForm :model-value="modelValue.data.media"
+                     @update:model-value="updateMedia"
+                     :media="media"/>
+
+          <div class="row">
+            <q-input class="full-width" bottom-slots
+                     :model-value="modelValue.data.type"
+                     @update:model-value="updateType"
+                     label="Type">
+            </q-input>
+          </div>
 
 
+        </q-tab-panel>
+
+        <q-tab-panel name="layout">
+          <div class="full-width">
+            <LayoutEditForm
+              :model-value="modelValue.data.layout"
+              @update:model-value="updateLayout"/>
+          </div>
+        </q-tab-panel>
+      </q-tab-panels>
+    </q-card>
   </div>
 </template>
 
 <script lang="ts">
 import {defineComponent, PropType, ref, toRef} from 'vue';
 import {FileDescriptor, Widget} from 'src/modules/cms';
-import ImageSelector from 'src/shared/components/content/file-selector/ImageSelector.vue';
+import {MediaData, ParallaxData, VideoData, WidgetLayout} from 'src/shared/components/content';
+import LayoutEditForm from 'src/shared/components/content/widgets/components/LayoutEditForm.vue';
+import MediaForm from 'src/shared/components/content/widgets/components/MediaForm.vue';
 
 export default defineComponent({
   name: 'VideoWidgetEditor',
-  components: {ImageSelector},
+  components: {MediaForm, LayoutEditForm},
   props: {
     modelValue: {
       type: Object as PropType<Widget<any>>,
@@ -46,60 +75,47 @@ export default defineComponent({
   },
   emits: ['update:modelValue'],
   setup(props, {emit}) {
-    const qInput = ref()
-    const imageSelector = ref()
+    const tab = ref('content')
 
     const modelValue = toRef(props, 'modelValue')
-    const update = (content: string) => {
-      const data = {
-        ...modelValue.value,
-        data: content,
-        indexData: content,
-      }
-      emit('update:modelValue', data)
+
+    const updateAnchor = (anchor: string) => {
+      const widget: Widget<VideoData> = {...modelValue.value}
+      widget.data.anchor = anchor
+      emit('update:modelValue', widget)
     }
-    const updateSource = (src: string) => {
-      const updated = {
+
+    const updateMedia = (media: MediaData) => {
+      const widget: Widget<VideoData> = {
         ...modelValue.value,
       }
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-      updated.data.src = src
-      emit('update:modelValue', updated)
+      widget.data.media = media
+      emit('update:modelValue', widget)
     }
 
     const updateType = (type: string) => {
-      const updated = {
+      const updated: Widget<VideoData> = {
         ...modelValue.value,
       }
       // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
       updated.data.type = type
       emit('update:modelValue', updated)
     }
-
-    const insertImage = () => {
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-member-access
-      imageSelector.value.showDialog()
-    }
-
-    const selectImage = (file: FileDescriptor) => {
-      const updated = {
+    const updateLayout = (layout: WidgetLayout) => {
+      const widget: Widget<ParallaxData> = {
         ...modelValue.value,
-        data: {
-          src: `/api/annette/v1/cms/file/${file.objectId}/media/${file.fileId}`,
-          type: file.contentType
-        }
       }
-      emit('update:modelValue', updated)
+      widget.data.layout = layout
+      emit('update:modelValue', widget)
     }
+
 
     return {
-      qInput,
-      imageSelector,
-      insertImage,
-      selectImage,
-      update,
-      updateSource,
+      tab,
+      updateAnchor,
+      updateMedia,
       updateType,
+      updateLayout,
     }
   }
 })

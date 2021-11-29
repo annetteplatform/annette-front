@@ -16,6 +16,14 @@
       <q-separator/>
       <q-tab-panels v-model="tab" animated>
         <q-tab-panel name="content">
+          <div class="row">
+            <q-input class="full-width"
+                     :model-value="modelValue.data.anchor"
+                     @update:model-value="updateAnchor"
+                     label="Anchor">
+            </q-input>
+          </div>
+
           <MediaForm :model-value="modelValue.data.media"
                      @update:model-value="updateMedia"
                      :media="media"/>
@@ -104,7 +112,7 @@
 <script lang="ts">
 import {defineComponent, PropType, ref, toRef} from 'vue';
 import {FileDescriptor, Widget} from 'src/modules/cms';
-import {MediaData, ParallaxData, WidgetLayout} from 'src/shared/components/content';
+import {MarkdownData, MediaData, ParallaxData, WidgetLayout} from 'src/shared/components/content';
 import MediaForm from 'src/shared/components/content/widgets/components/MediaForm.vue';
 import LayoutEditForm from 'src/shared/components/content/widgets/components/LayoutEditForm.vue';
 
@@ -129,6 +137,12 @@ export default defineComponent({
     const modelValue = toRef(props, 'modelValue')
     const styleOptions = ref(['h1', 'h2', 'h3', 'h4', 'h5', 'h6',])
     const weightOptions = ref(['thin', 'light', 'regular', 'medium', 'bold', 'bolder',])
+
+    const updateAnchor = (anchor: string) => {
+      const widget: Widget<ParallaxData> = {...modelValue.value}
+      widget.data.anchor = anchor
+      emit('update:modelValue', widget)
+    }
 
     const updateMedia = (media: MediaData) => {
       const widget: Widget<ParallaxData> = {
@@ -221,6 +235,7 @@ export default defineComponent({
 
     return {
       tab,
+      updateAnchor,
       updateMedia,
       updateHeight,
       updateSpeed,

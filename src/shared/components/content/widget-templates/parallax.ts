@@ -11,6 +11,7 @@ export function parallaxWidgets(): WidgetTemplate<ParallaxData>[] {
         id: '',
         widgetType: 'parallax',
         data: {
+          anchor: '',
           media: {
             type: 'source',
             // @ts-ignore
@@ -30,6 +31,7 @@ export function parallaxWidgets(): WidgetTemplate<ParallaxData>[] {
         id: '',
         widgetType: 'parallax',
         data: {
+          anchor: '',
           media: {
             type: 'source',
             // @ts-ignore

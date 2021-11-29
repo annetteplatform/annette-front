@@ -1,5 +1,5 @@
 <template>
-  <WidgetLayoutView :layout="widget.data.layout">
+  <WidgetLayoutView :layout="widget.data.layout" :anchor="widget.data.anchor">
     <q-parallax :src="src"
       :height="+widget.data.height"
       :speed="+widget.data.speed">
