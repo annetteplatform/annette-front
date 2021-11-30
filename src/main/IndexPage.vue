@@ -1,26 +1,24 @@
 <template>
-  <MainPage v-if="!isAuthenticated"></MainPage>
-  <div class="narrow-layout" v-if="isAuthenticated">
-
-    <h5 class="text-center" >Welcome, {{ profile?.firstname }} {{ profile?.lastname}}</h5>
-
+  <HomePage v-if="!isAuthenticated" id="0b805606-c3e4-44e8-b185-2eed5102a4f5"></HomePage>
+  <HomePage v-else id="78504ded-cde0-402b-93dd-af692a41f1ed"></HomePage>
+<!--  <div class="narrow-layout" v-if="isAuthenticated">-->
+<!--    <h5 class="text-center" >Welcome, {{ profile?.firstname }} {{ profile?.lastname}}</h5>-->
 <!--    <h5 class="text-center" v-if="!isAuthenticated">Annette Platform</h5>-->
 <!--    <not-authenticated v-if="!isAuthenticated"></not-authenticated>-->
-
-  </div>
+<!--  </div>-->
 </template>
 
 <script lang="ts">
 import {defineComponent, computed} from 'vue';
-import NotAuthenticated from './components/NotAuthenticated.vue'
+// import NotAuthenticated from './components/NotAuthenticated.vue'
 import {useStore} from 'src/store';
-import MainPage from "src/main/components/MainPage.vue";
+import HomePage from './components/HomePage.vue';
 
 export default defineComponent({
   name: 'PageIndex',
   components: {
-    MainPage,
-    NotAuthenticated
+    HomePage,
+    // NotAuthenticated
   },
   setup() {
     const store = useStore()

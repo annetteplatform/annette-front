@@ -3,28 +3,32 @@
 </template>
 
 <script lang="ts">
-import {computed, defineComponent} from 'vue';
+import {computed, defineComponent, toRef, watch} from 'vue';
 import {useStore} from 'src/store';
 import PageViewCard from 'src/modules/cms/ui/page-view/components/PageViewCard.vue';
+import {Ref} from '@vue/reactivity';
 
 export default defineComponent({
-  name: 'MainPage',
+  name: 'HomePage',
   components: {PageViewCard},
-  setup() {
+  props: {
+    id: String,
+  },
+  setup(props) {
     const store = useStore()
     const login = () => store.dispatch('main/Login')
 
-    const id = '0b805606-c3e4-44e8-b185-2eed5102a4f5'
+    const id = toRef(props, 'id') as Ref<string>
 
     // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access,@typescript-eslint/no-unsafe-return
-    const page = computed(() => store.getters['cmsPageView/entities'][id])
+    const page = computed(() => store.getters['cmsPageView/entities'][id.value])
     const loadPageView = async () => {
-      await store.dispatch('cmsPageView/getPageView', id)
-      await store.dispatch('cmsPageView/viewPage', id)
+      await store.dispatch('cmsPageView/getPageView', id.value)
+      await store.dispatch('cmsPageView/viewPage', id.value)
     }
 
     void loadPageView()
-
+    watch(id, loadPageView)
     return {
       login,
       page
