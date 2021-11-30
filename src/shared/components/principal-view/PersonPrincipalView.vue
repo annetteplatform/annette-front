@@ -38,11 +38,25 @@ export default defineComponent({
     const person: Ref<Person | null> = ref(null)
 
     const loadPrincipal = async () => {
-      const persons: Person[] = await store.dispatch('personPerson/loadEntitiesIfNotExist', [principal.value.principalId])
-      if (persons && persons[0]) {
-        person.value = persons[0]
+      if (principal.value.principalId !== 'ANONYMOUS') {
+        const persons: Person[] = await store.dispatch('personPerson/loadEntitiesIfNotExist', [principal.value.principalId])
+        if (persons && persons[0]) {
+          person.value = persons[0]
+        } else {
+          person.value = {
+            id: principal.value.principalId,
+            lastname: 'Unknown person',
+            firstname: `[${principal.value.principalId}]`,
+            categoryId:''
+          }
+        }
       } else {
-        person.value = null
+        person.value = {
+          id: principal.value.principalId,
+          lastname: 'ANONYMOUS',
+          firstname: '',
+          categoryId:''
+        }
       }
 
     }
