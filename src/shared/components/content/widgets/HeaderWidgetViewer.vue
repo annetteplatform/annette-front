@@ -57,9 +57,13 @@ export default defineComponent({
           const urlAction = action as UrlHeaderAction
           if (urlAction.newWindow) {
             window.open(urlAction.url, '_blank')
-          } else {
+          } else if (urlAction.url.startsWith('/')) {
             void router.push(urlAction.url)
+          } else {
+            console.log('open')
+            window.open(urlAction.url, '_self')
           }
+          break
         }
       }
     }

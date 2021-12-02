@@ -22,7 +22,9 @@ export default defineComponent({
   },
   setup(props) {
     // Replace any with your type
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const widget: Ref<Widget<any>> = toRef(props, 'widget')
+
 
     return {}
   }

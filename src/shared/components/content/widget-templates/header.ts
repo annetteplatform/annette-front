@@ -15,7 +15,7 @@ export function headerWidgets(): WidgetTemplate<HeaderData>[] {
           anchor: '',
           title: 'Title',
           textColor: '#ffffff',
-          backgroundColor: '#0000ff',
+          backgroundColor: '#1976D2',
           actions: [
             {
               caption: 'Action 1',

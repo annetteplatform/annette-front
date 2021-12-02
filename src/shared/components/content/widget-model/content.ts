@@ -34,12 +34,12 @@ export function contentJustifyToClass(justify: string): string {
   } else return ''
 }
 
-export const CONTENT_ALIGNMENT = [
+export const CONTENT_ALIGNMENTS = [
   'start', 'end', 'center', 'stretch', 'baseline'
 ]
 
 export function contentAlignToClass(align: string): string {
-  if (align && CONTENT_ALIGNMENT.includes(align) ) {
+  if (align && CONTENT_ALIGNMENTS.includes(align) ) {
     return `items-${align}`
   } else return ''
 }

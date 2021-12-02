@@ -73,7 +73,10 @@
               </q-item>
               <q-item v-for="(action, index) in modelValue.data.actions" :key="index">
                 <q-card class="full-width" flat>
-                  <q-card-section horizontal>
+                  <q-card-section class="q-px-none q-pt-none q-pb-xs">
+                    <q-item-label class="text-subtitle2 " >Item #{{index}}</q-item-label>
+                  </q-card-section>
+                  <q-card-section class="q-mb-md" horizontal>
                     <div class="full-width">
                       <q-input class="full-width" dense
                                :model-value="action.caption"
@@ -97,7 +100,7 @@
                       </div>
                     </div>
                     <q-card-actions vertical class="justify-around q-ml-md">
-                      <q-btn size="sm" flat round color="red" icon="delete"/>
+                      <q-btn size="sm" flat round color="red" icon="delete" @click="deleteAction(index)"/>
                       <q-btn size="sm" flat round color="primary" icon="arrow_upward"
                              :disable="index === 0"
                       @click="swapActions(index - 1, index)"/>
@@ -190,7 +193,14 @@ export default defineComponent({
         newWindow: false
       }
       widget.data.actions = [...widget.data.actions, action]
-      console.log(widget.data.actions)
+      emit('update:modelValue', widget)
+    }
+
+    const deleteAction = (index: number) => {
+      const widget: Widget<HeaderData> = {
+        ...modelValue.value,
+      }
+      widget.data.actions.splice(index,1)
       emit('update:modelValue', widget)
     }
 
@@ -278,6 +288,7 @@ export default defineComponent({
       updateTextColor,
       updateBackgroundColor,
       addAction,
+      deleteAction,
       swapActions,
       updateActionCaption,
       updateActionType,

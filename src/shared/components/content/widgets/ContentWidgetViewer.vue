@@ -4,8 +4,7 @@
       <q-card v-for="(item, index) in widget.data.items" :key="index"
         :style="{width: '100%', maxWidth: item.maxWidth}" flat square>
         <img v-if="item.media" :src="mediaSource(item.media)"/>
-        <q-card-section v-if="item.header || item.subheader"
-                        class="q-pt-none">
+        <q-card-section v-if="item.header || item.subheader">
           <div  v-if="item.header" :class="textClasses(item.header)">
             {{item.header.text}}
           </div>
@@ -13,15 +12,14 @@
             {{item.subheader.text}}
           </div>
         </q-card-section>
-        <q-card-section v-if="item.text "
-                        class="q-pt-none" >
+        <q-card-section v-if="item.text ">
           <div :class="textClasses(item.text)"
                 v-html="item.text.text">
           </div>
         </q-card-section>
         <q-card-section v-if="item.action "
-                        :class="'q-pt-none row ' + actionClasses(item.action) " >
-          <q-btn color="primary"
+                        :class="'row ' + actionClasses(item.action) " >
+          <q-btn color="primary" no-caps
                  :flat="item.action.type === 'flat'"
                  :outline="item.action.type === 'outline'"
                  :label="item.action.caption"
@@ -48,10 +46,10 @@ import {
   contentTextWeightToClass,
   contentWrapToClass,
   MediaData,
-  mediaToSource, UrlHeaderAction
-} from "src/shared/components/content";
-import {useStore} from "src/store";
-import {useRouter} from "vue-router";
+  mediaToSource
+} from 'src/shared/components/content';
+import {useStore} from 'src/store';
+import {useRouter} from 'vue-router';
 
 export default defineComponent({
   name: 'ContentWidgetViewer',

@@ -11,13 +11,13 @@
 <script lang="ts">
 import {defineComponent, PropType} from 'vue';
 import {Widget} from 'src/modules/cms';
-import HtmlWidgetViewer from 'src/shared/components/content/widgets/HtmlWidgetViewer.vue';
-import MarkdownWidgetViewer from 'src/shared/components/content/widgets/MarkdownWidgetViewer.vue';
-import ParallaxWidgetViewer from 'src/shared/components/content/widgets/ParallaxWidgetViewer.vue';
-import VideoWidgetViewer from 'src/shared/components/content/widgets/VideoWidgetViewer.vue';
-import YouTubeWidgetViewer from 'src/shared/components/content/widgets/YouTubeWidgetViewer.vue';
-import HeaderWidgetViewer from 'src/shared/components/content/widgets/HeaderWidgetViewer.vue';
-import ContentWidgetViewer from "src/shared/components/content/widgets/ContentWidgetViewer.vue";
+import HtmlWidgetViewer from './widgets/HtmlWidgetViewer.vue';
+import MarkdownWidgetViewer from './widgets/MarkdownWidgetViewer.vue';
+import ParallaxWidgetViewer from './widgets/ParallaxWidgetViewer.vue';
+import VideoWidgetViewer from './widgets/VideoWidgetViewer.vue';
+import YouTubeWidgetViewer from './widgets/YouTubeWidgetViewer.vue';
+import HeaderWidgetViewer from './widgets/HeaderWidgetViewer.vue';
+import ContentWidgetViewer from './widgets/ContentWidgetViewer.vue';
 
 export default defineComponent({
   name: 'WidgetView',

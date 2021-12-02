@@ -18,7 +18,7 @@
 
     <q-drawer v-model="showWidgetEditor"
               side="right" bordered
-              :width="750">
+              :width="$q.screen.lt.md ? $q.screen.width : 750 ">
       <WidgetContentEditor v-if="selectedWidgetId !== null && entityContent.widgets[selectedWidgetId]"
                            v-model="entityContent.widgets[selectedWidgetId]"
                            :media="media"
@@ -192,7 +192,6 @@ export default defineComponent({
       mode.value = EDIT_MODE
       showWidgetEditor.value = true
     }
-
 
 
     watch(content, () => {

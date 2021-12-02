@@ -30,11 +30,12 @@
                            @update:model-value="update"
                            :media="media"/>
       <HeaderWidgetEditor v-else-if="modelValue && modelValue.widgetType === 'header'"
-                            :model-value="modelValue"
-                            @update:model-value="update"/>
-      <ContentWidgetEditor v-else-if="modelValue && modelValue.widgetType === 'content'"
                           :model-value="modelValue"
                           @update:model-value="update"/>
+      <ContentWidgetEditor v-else-if="modelValue && modelValue.widgetType === 'content'"
+                           :model-value="modelValue"
+                           @update:model-value="update"
+                           :media="media"/>
     </q-card-section>
   </q-card>
 
@@ -43,13 +44,13 @@
 <script lang="ts">
 import {defineComponent, PropType} from 'vue';
 import {FileDescriptor, Widget} from 'src/modules/cms';
-import MarkdownWidgetEditor from 'src/shared/components/content/widgets/MarkdownWidgetEditor.vue';
-import HtmlWidgetEditor from 'src/shared/components/content/widgets/HtmlWidgetEditor.vue';
-import ParallaxWidgetEditor from 'src/shared/components/content/widgets/ParallaxWidgetEditor.vue';
-import VideoWidgetEditor from 'src/shared/components/content/widgets/VideoWidgetEditor.vue';
-import YouTubeWidgetEditor from 'src/shared/components/content/widgets/YouTubeWidgetEditor.vue';
-import HeaderWidgetEditor from 'src/shared/components/content/widgets/HeaderWidgetEditor.vue';
-import ContentWidgetEditor from "src/shared/components/content/widgets/ContentWidgetEditor.vue";
+import MarkdownWidgetEditor from '../widgets/MarkdownWidgetEditor.vue';
+import HtmlWidgetEditor from '../widgets/HtmlWidgetEditor.vue';
+import ParallaxWidgetEditor from '../widgets/ParallaxWidgetEditor.vue';
+import VideoWidgetEditor from '../widgets/VideoWidgetEditor.vue';
+import YouTubeWidgetEditor from '../widgets/YouTubeWidgetEditor.vue';
+import HeaderWidgetEditor from '../widgets/HeaderWidgetEditor.vue';
+import ContentWidgetEditor from '../widgets/ContentWidgetEditor.vue';
 
 
 export default defineComponent({
@@ -57,7 +58,8 @@ export default defineComponent({
   components: {
     ContentWidgetEditor,
     HeaderWidgetEditor,
-    YouTubeWidgetEditor, VideoWidgetEditor, ParallaxWidgetEditor, HtmlWidgetEditor, MarkdownWidgetEditor},
+    YouTubeWidgetEditor, VideoWidgetEditor, ParallaxWidgetEditor, HtmlWidgetEditor, MarkdownWidgetEditor
+  },
   props: {
     modelValue: {
       type: Object as PropType<Widget<any>>,
