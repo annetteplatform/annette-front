@@ -119,7 +119,7 @@ export const cmsRoutes: RouteRecordRaw[] = [
     name: 'cms.pageView',
     component: () => import('src/modules/cms/ui/page-view/PageViewPage.vue'),
     props: (route) => ({id: String(route.params.id)}),
-    meta: {requiresAuth: true}
+    meta: {requiresAuth: false}
   },
 
 ]
