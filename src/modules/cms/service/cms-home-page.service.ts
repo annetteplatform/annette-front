@@ -1,6 +1,6 @@
 import axios from 'axios'
 import {FindResult} from 'src/shared'
-import {AssignHomePagePayloadDto, HomePage, HomePageFilter, Page, UnassignHomePagePayloadDto,} from './model';
+import {AssignHomePagePayloadDto, HomePage, HomePageFilter, PageView, UnassignHomePagePayloadDto,} from './model';
 
 export const cmsHomePageService = {
 
@@ -40,7 +40,7 @@ export const cmsHomePageService = {
 
   async getMyHomePage(applicationId: string) {
     // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-    return await axios.post<Page>(`/api/annette/v1/cms/getMyHomePage/${applicationId}`)
+    return await axios.get<PageView>(`/api/annette/v1/cms/getMyHomePage/${applicationId}`)
       .then(result => result.data)
   },
 }

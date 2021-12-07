@@ -32,11 +32,11 @@
 
 <script lang="ts">
 import {defineComponent} from 'vue';
+import {useRouter} from 'vue-router';
 import {useEntityList} from 'src/shared';
 import EntityList from 'src/shared/components/EntityList.vue';
 import {HomePage, HomePageFilter} from 'src/modules/cms';
 import PrincipalViewItem from 'src/shared/components/principal-view/PrincipalViewItem.vue';
-import {useRouter} from "vue-router";
 
 const COLUMNS = [
   {

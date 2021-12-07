@@ -1,4 +1,5 @@
 <template>
+  <h5 class="text-center">Annette Platform</h5>
   <div class="row">
     <div class="col-md-8 col-sm-12 q-pa-sm">
       <q-card flat class="my-card">
@@ -16,7 +17,6 @@
           </ul>
         </q-card-section>
         <q-card-actions vertical>
-
         </q-card-actions>
       </q-card>
     </div>
