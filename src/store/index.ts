@@ -23,6 +23,7 @@ import {
   cmsPageViewStore,
   cmsSpaceStore,
   cmsSpaceViewStore,
+  cmsHomePageStore,
 } from 'src/modules/cms';
 
 /*
@@ -77,6 +78,7 @@ export default store(function (/* { ssrContext } */) {
       cmsPage: cmsPageStore,
       cmsSpaceView: cmsSpaceViewStore,
       cmsPageView: cmsPageViewStore,
+      cmsHomePage: cmsHomePageStore
     },
 
     // enable strict mode (adds overhead!)

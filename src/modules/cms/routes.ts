@@ -122,6 +122,13 @@ export const cmsRoutes: RouteRecordRaw[] = [
     meta: {requiresAuth: false}
   },
 
+  {
+    path: 'cms/home-pages',
+    name: 'cms.homePages',
+    component: () => import('src/modules/cms/ui/home-page/HomePageListPage.vue'),
+    meta: {requiresAuth: true}
+  },
+
 ]
 
 export const cmsExtRoutes: RouteRecordRaw[] = [

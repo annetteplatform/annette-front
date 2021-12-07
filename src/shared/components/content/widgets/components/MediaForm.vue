@@ -2,7 +2,7 @@
   <div class="row  q-mt-md">
     <q-btn-group spread>
       <q-btn color="primary" label="Source" :disabled="modelValue.type === 'source'" @click="setSource"/>
-      <q-btn color="primary" label="Media"  @click="setImage"/>
+      <q-btn color="primary" label="Media" @click="setImage"/>
     </q-btn-group>
   </div>
 
@@ -12,8 +12,8 @@
              @update:model-value="updateSource"
              label="Source">
     </q-input>
-    <ImageSelector ref="imageSelector" :files="media" @select="selectImage"/>
   </div>
+  <ImageSelector ref="imageSelector" :files="media" @select="selectImage"/>
 
 </template>
 

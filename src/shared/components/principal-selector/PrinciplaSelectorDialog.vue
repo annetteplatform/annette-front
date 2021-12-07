@@ -16,12 +16,54 @@
           align="justify"
           narrow-indicator
         >
-          <q-tab name="custom" label="Custom"/>
           <q-tab name="person" label="Person"/>
           <q-tab name="org-structure" label="Org. structure"/>
+          <q-tab name="special" label="Special principals"/>
+          <q-tab name="custom" label="Custom"/>
         </q-tabs>
 
         <q-tab-panels v-model="tab" animated>
+
+
+          <q-tab-panel name="person">
+            <PersonSelector label="Person"
+                            v-model="personId"/>
+            <q-card-actions align="right">
+              <q-btn flat label="Cancel" color="primary" @click="cancel"/>
+              <q-btn label="Select" color="primary" @click="selectPerson"/>
+            </q-card-actions>
+          </q-tab-panel>
+
+          <q-tab-panel name="org-structure">
+            Not implemented
+          </q-tab-panel>
+
+          <q-tab-panel name="special">
+            <q-list>
+              <q-item>
+                <q-item-section>
+                  <q-item-label>Authenticated user</q-item-label>
+                </q-item-section>
+                <q-item-section side top>
+                  <q-btn label="Select" color="primary" size="sm" @click="selectAuthenticated"/>
+                </q-item-section>
+              </q-item>
+              <q-separator spaced inset/>
+              <q-item>
+                <q-item-section>
+                  <q-item-label>Anonymous user</q-item-label>
+                </q-item-section>
+                <q-item-section side top>
+                  <q-btn label="Select" color="primary" size="sm" @click="selectAnonymous"/>
+                </q-item-section>
+              </q-item>
+            </q-list>
+            <q-card-actions align="right">
+              <q-btn flat label="Cancel" color="primary" @click="cancel"/>
+            </q-card-actions>
+          </q-tab-panel>
+
+
           <q-tab-panel name="custom">
             <custom-principal-selector v-model="customPrincipal"/>
             <div class="row q-mt-md">
@@ -31,23 +73,13 @@
                 </q-item>
               </q-list>
             </div>
-          </q-tab-panel>
-
-          <q-tab-panel name="person">
-            Not implemented
-          </q-tab-panel>
-
-          <q-tab-panel name="org-structure">
-            Not implemented
+            <q-card-actions align="right">
+              <q-btn flat label="Cancel" color="primary" @click="cancel"/>
+              <q-btn label="Select" color="primary" @click="selectCustom"/>
+            </q-card-actions>
           </q-tab-panel>
         </q-tab-panels>
-
       </q-card-section>
-
-      <q-card-actions align="right">
-        <q-btn flat label="Cancel" color="primary" @click="cancel"/>
-        <q-btn label="Select" color="primary" @click="select"/>
-      </q-card-actions>
     </q-card>
   </q-dialog>
 </template>
@@ -58,6 +90,7 @@ import {Ref} from '@vue/reactivity';
 import {AnnettePrincipal} from 'src/shared';
 import CustomPrincipalSelector from './CustomPrincipalSelector.vue';
 import PrincipalViewItem from '../principal-view/PrincipalViewItem.vue';
+import PersonSelector from 'src/modules/person/person/components/PersonSelector.vue';
 
 function emptyPrincipal(): AnnettePrincipal {
   return {
@@ -68,11 +101,11 @@ function emptyPrincipal(): AnnettePrincipal {
 
 export default defineComponent({
   name: 'PrincipalSelectorDialog',
-  components: {PrincipalViewItem, CustomPrincipalSelector},
+  components: {PersonSelector, PrincipalViewItem, CustomPrincipalSelector},
   setup() {
 
     const show = ref(false)
-    const tab = ref('custom')
+    const tab = ref('person')
 
     const resolve: Ref<((value: AnnettePrincipal) => void) | null> = ref(null)
     const reject: Ref<(() => void) | null> = ref(null)
@@ -90,11 +123,44 @@ export default defineComponent({
       return promise
     }
 
-    const select = () => {
+    const selectCustom = () => {
       if (tab.value === 'custom' && resolve.value) {
         show.value = false
         resolve.value({...customPrincipal.value})
         customPrincipal.value = emptyPrincipal()
+      }
+    }
+
+    const selectPerson = () => {
+      if (tab.value === 'person' && resolve.value) {
+        show.value = false
+        const person = {
+          principalType: 'person',
+          principalId: personId.value
+        }
+        resolve.value(person)
+      }
+    }
+
+    const selectAuthenticated = () => {
+      if (tab.value === 'special' && resolve.value) {
+        show.value = false
+        const person = {
+          principalType: 'authenticated',
+          principalId: 'user'
+        }
+        resolve.value(person)
+      }
+    }
+
+    const selectAnonymous = () => {
+      if (tab.value === 'special' && resolve.value) {
+        show.value = false
+        const person = {
+          principalType: 'person',
+          principalId: 'ANONYMOUS'
+        }
+        resolve.value(person)
       }
     }
 
@@ -109,10 +175,13 @@ export default defineComponent({
       show,
       tab,
       showDialog,
-      select,
+      selectCustom,
       cancel,
       customPrincipal,
-      personId
+      personId,
+      selectPerson,
+      selectAuthenticated,
+      selectAnonymous,
     }
   }
 })

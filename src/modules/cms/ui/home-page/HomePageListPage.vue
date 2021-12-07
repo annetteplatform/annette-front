@@ -1,0 +1,49 @@
+<template>
+  <EntityListPage narrow caption="Home Pages" :namespace="namespace" :instance-key="instanceKey" >
+    <template v-slot:toolbar>
+      <q-btn class="q-mr-md" outline color="primary"
+             label="Refresh"
+             @click="refreshList"/>
+      <q-btn color="primary"
+             label="Create"
+             />
+    </template>
+    <template v-slot:filter>
+      <SimpleFilterForm class="q-mb-md"
+                          :filter="instance.filter"
+                          @filterChanged="onFilterChanged"/>
+    </template>
+    <template v-slot:default>
+      <HomePageList class="q-mb-md"
+                   :instance-key="instanceKey"/>
+    </template>
+  </EntityListPage>
+</template>
+
+<script lang="ts">
+import {defineComponent} from 'vue';
+import {useEntityListPage} from 'src/shared';
+import HomePageList from './components/HomePageList.vue';
+import SimpleFilterForm from 'src/shared/components/SimpleFilterForm.vue';
+import EntityListPage from 'src/shared/components/EntityListPage.vue';
+import {HomePageFilter} from 'src/modules/cms';
+
+const NAMESPACE = 'cmsHomePage';
+const INSTANCE_KEY = 'homePages'
+
+export default defineComponent({
+  name: 'HomePageListPage',
+  components: {EntityListPage, HomePageList, SimpleFilterForm},
+  setup() {
+
+    const entityListPage = useEntityListPage<HomePageFilter>({
+      namespace: NAMESPACE,
+      instanceKey: INSTANCE_KEY,
+    })
+
+    return {
+      ...entityListPage
+    };
+  }
+});
+</script>

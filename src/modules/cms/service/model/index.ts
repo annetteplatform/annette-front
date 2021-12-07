@@ -3,6 +3,7 @@ import {AnnettePrincipal} from 'src/shared';
 export * from './action'
 export * from './blog'
 export * from './blog-view'
+export * from './home-page'
 export * from './post'
 export * from './post-view'
 export * from './page'

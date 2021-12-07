@@ -1,6 +1,6 @@
 <template>
-  <HomePage v-if="!isAuthenticated" id="0b805606-c3e4-44e8-b185-2eed5102a4f5"></HomePage>
-  <HomePage v-else id="78504ded-cde0-402b-93dd-af692a41f1ed"></HomePage>
+  <HomePage v-if="isAuthenticated" id="78504ded-cde0-402b-93dd-af692a41f1ed"></HomePage>
+  <HomePage v-else id="0b805606-c3e4-44e8-b185-2eed5102a4f5"></HomePage>
 <!--  <div class="narrow-layout" v-if="isAuthenticated">-->
 <!--    <h5 class="text-center" >Welcome, {{ profile?.firstname }} {{ profile?.lastname}}</h5>-->
 <!--    <h5 class="text-center" v-if="!isAuthenticated">Annette Platform</h5>-->

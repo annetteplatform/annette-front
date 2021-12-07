@@ -249,7 +249,7 @@ import {
   WidgetLayout
 } from 'src/shared/components/content';
 import LayoutEditForm from 'src/shared/components/content/widgets/components/LayoutEditForm.vue';
-import MediaForm from "src/shared/components/content/widgets/components/MediaForm.vue";
+import MediaForm from 'src/shared/components/content/widgets/components/MediaForm.vue';
 
 export default defineComponent({
   name: 'ContentWidgetEditor',

@@ -1,7 +1,12 @@
 <template>
-  <person-principal-view v-if="principal.principalType === 'person'" :principal="principal"/>
-  <org-role-principal-view v-else-if="principal.principalType === 'org-role'" :principal="principal"/>
-  <org-item-principal-view v-else-if="isOrgItemPrincipal" :principal="principal"/>
+  <AnonymousPrincipalView v-if="principal.principalType === 'person' && principal.principalId === 'ANONYMOUS'"
+                          :principal="principal"/>
+  <PersonPrincipalView v-else-if="principal.principalType === 'person'" :principal="principal"/>
+  <OrgRolePrincipalView v-else-if="principal.principalType === 'org-role'" :principal="principal"/>
+  <OrgItemPrincipalView v-else-if="isOrgItemPrincipal" :principal="principal"/>
+  <AuthenticatedPrincipalView
+    v-else-if="principal.principalType === 'authenticated' && principal.principalId === 'user'"
+    :principal="principal"/>
   <q-item-section v-else>
     <q-item-label caption lines="1">
       {{ principal.principalType }}
@@ -19,11 +24,16 @@ import {Ref} from '@vue/reactivity';
 import PersonPrincipalView from './PersonPrincipalView.vue';
 import OrgItemPrincipalView from './OrgItemPrincipalView.vue';
 import OrgRolePrincipalView from './OrgRolePrincipalView.vue';
+import AnonymousPrincipalView from './AnonymousPrincipalView.vue';
+import AuthenticatedPrincipalView from './AuthenticatedPrincipalView.vue';
 
 
 export default defineComponent({
   name: 'PrincipalViewItem',
-  components: {OrgRolePrincipalView, OrgItemPrincipalView, PersonPrincipalView},
+  components: {
+    AuthenticatedPrincipalView,
+    AnonymousPrincipalView, OrgRolePrincipalView, OrgItemPrincipalView, PersonPrincipalView
+  },
   props: {
     principal: {
       type: Object as PropType<AnnettePrincipal>,

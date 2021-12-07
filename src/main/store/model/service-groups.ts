@@ -222,7 +222,7 @@ export function serviceGroups(): ServiceGroup[] {
     },
 
     {
-      id: 'SPACE',
+      id: 'PAGES',
       order: 60,
       icon: 'inventory',
       title: 'Pages Administration ',
@@ -254,7 +254,17 @@ export function serviceGroups(): ServiceGroup[] {
           subtitle: 'View list of pages',
           action: {name: 'cms.pages'},
           actionName: 'View'
+        },
+        {
+          id: 'HOME-PAGES',
+          order: 40,
+          icon: 'feed',
+          title: 'Home Page Assignments',
+          subtitle: 'Assign home pages to principals',
+          action: {name: 'cms.homePages'},
+          actionName: 'View'
         }
+
       ]
     },
     {
