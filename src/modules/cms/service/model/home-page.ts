@@ -27,6 +27,5 @@ export interface AssignHomePagePayloadDto {
 }
 
 export interface UnassignHomePagePayloadDto {
-  applicationId: string,
-  principal: AnnettePrincipal,
+  id: string,
 }

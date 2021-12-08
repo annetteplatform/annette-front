@@ -9,7 +9,8 @@ export const cmsHomePageService = {
       .then(result => convertHomePage(result.data))
   },
 
-  async unassignHomePage(payload: UnassignHomePagePayloadDto) {
+  async unassignHomePage(id: string) {
+    const payload: UnassignHomePagePayloadDto = { id }
     // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return await axios.post('/api/annette/v1/cms/unassignHomePage', payload)
       // eslint-disable-next-line @typescript-eslint/no-unsafe-return

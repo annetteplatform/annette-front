@@ -6,6 +6,7 @@
              @click="refreshList"/>
       <q-btn color="primary"
              label="Create"
+             @click="createEntity"
              />
     </template>
     <template v-slot:filter>
@@ -14,26 +15,29 @@
                           @filterChanged="onFilterChanged"/>
     </template>
     <template v-slot:default>
-      <HomePageList class="q-mb-md"
+
+      <HomePageList
                    :instance-key="instanceKey"/>
     </template>
   </EntityListPage>
+  <HomePageFormDialog :show="showDialog" action="create" @close="close"/>
 </template>
 
 <script lang="ts">
-import {defineComponent} from 'vue';
+import {defineComponent, ref} from 'vue';
 import {useEntityListPage} from 'src/shared';
 import HomePageList from './components/HomePageList.vue';
 import SimpleFilterForm from 'src/shared/components/SimpleFilterForm.vue';
 import EntityListPage from 'src/shared/components/EntityListPage.vue';
 import {HomePageFilter} from 'src/modules/cms';
+import HomePageFormDialog from "src/modules/cms/ui/home-page/components/HomePageFormDialog.vue";
 
 const NAMESPACE = 'cmsHomePage';
 const INSTANCE_KEY = 'homePages'
 
 export default defineComponent({
   name: 'HomePageListPage',
-  components: {EntityListPage, HomePageList, SimpleFilterForm},
+  components: {HomePageFormDialog, EntityListPage, HomePageList, SimpleFilterForm},
   setup() {
 
     const entityListPage = useEntityListPage<HomePageFilter>({
@@ -41,8 +45,21 @@ export default defineComponent({
       instanceKey: INSTANCE_KEY,
     })
 
+    const showDialog = ref(false)
+
+    const createEntity = () => {
+      showDialog.value = true
+    }
+
+    const close = () => {
+      showDialog.value = false
+    }
+
     return {
-      ...entityListPage
+      ...entityListPage,
+      showDialog,
+      createEntity,
+      close,
     };
   }
 });

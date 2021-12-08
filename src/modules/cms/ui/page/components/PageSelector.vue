@@ -59,7 +59,7 @@ export default defineComponent({
     const valueRef = toRef(props, 'modelValue')
 
     const entitySelector = useEntitySelector<Page, PageFilter>(
-      'page',
+      'cmsPage',
       'PageSelector',
       valueRef,
       emit)
