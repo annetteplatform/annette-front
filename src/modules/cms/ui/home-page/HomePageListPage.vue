@@ -30,7 +30,7 @@ import HomePageList from './components/HomePageList.vue';
 import SimpleFilterForm from 'src/shared/components/SimpleFilterForm.vue';
 import EntityListPage from 'src/shared/components/EntityListPage.vue';
 import {HomePageFilter} from 'src/modules/cms';
-import HomePageFormDialog from "src/modules/cms/ui/home-page/components/HomePageFormDialog.vue";
+import HomePageFormDialog from 'src/modules/cms/ui/home-page/components/HomePageFormDialog.vue';
 
 const NAMESPACE = 'cmsHomePage';
 const INSTANCE_KEY = 'homePages'

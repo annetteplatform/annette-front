@@ -48,13 +48,13 @@
 
 <script lang="ts">
 import {computed, defineComponent, ref, toRefs, watch} from 'vue';
+import {extend} from 'quasar';
 import {AssignHomePagePayloadDto} from 'src/modules/cms';
 import {Ref} from '@vue/reactivity';
 import {useStore} from 'src/store';
 import PrincipalViewItem from 'src/shared/components/principal-view/PrincipalViewItem.vue';
 import PageSelector from 'src/modules/cms/ui/page/components/PageSelector.vue';
-import PrincipalSelectorDialog from "src/shared/components/principal-selector/PrinciplaSelectorDialog.vue";
-import {extend} from "quasar";
+import PrincipalSelectorDialog from 'src/shared/components/principal-selector/PrinciplaSelectorDialog.vue';
 
 export default defineComponent({
   name: 'HomePageFormDialog',
