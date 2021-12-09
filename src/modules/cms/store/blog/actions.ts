@@ -2,11 +2,11 @@ import {ActionTree} from 'vuex';
 import {StateInterface} from 'src/store';
 import {
   ActivateBlogPayloadDto,
-  AssignBlogTargetPrincipalPayloadDto,
+  AssignBlogPrincipalPayloadDto,
   CreateBlogPayloadDto, DeactivateBlogPayloadDto,
   Blog,
   BlogFilter,
-  BlogState, UnassignBlogTargetPrincipalPayloadDto, UpdateBlogCategoryPayloadDto,
+  BlogState, UnassignBlogPrincipalPayloadDto, UpdateBlogCategoryPayloadDto,
   UpdateBlogDescriptionPayloadDto,
   UpdateBlogNamePayloadDto
 } from 'src/modules/cms';
@@ -47,13 +47,25 @@ export const actions: ActionTree<BlogState, StateInterface> = {
     return newEntity
   },
 
-  async assignEntityTargetPrincipal ({ commit }, payload: AssignBlogTargetPrincipalPayloadDto) {
+  async assignEntityAuthorPrincipal ({ commit }, payload: AssignBlogPrincipalPayloadDto) {
+    const newEntity = await cmsBlogService.assignBlogAuthorPrincipal(payload)
+    commit('storeEntity', newEntity)
+    return newEntity
+  },
+
+  async unassignEntityAuthorPrincipal ({ commit }, payload: UnassignBlogPrincipalPayloadDto) {
+    const newEntity = await cmsBlogService.unassignBlogAuthorPrincipal(payload)
+    commit('storeEntity', newEntity)
+    return newEntity
+  },
+
+  async assignEntityTargetPrincipal ({ commit }, payload: AssignBlogPrincipalPayloadDto) {
     const newEntity = await cmsBlogService.assignBlogTargetPrincipal(payload)
     commit('storeEntity', newEntity)
     return newEntity
   },
 
-  async unassignEntityTargetPrincipal ({ commit }, payload: UnassignBlogTargetPrincipalPayloadDto) {
+  async unassignEntityTargetPrincipal ({ commit }, payload: UnassignBlogPrincipalPayloadDto) {
     const newEntity = await cmsBlogService.unassignBlogTargetPrincipal(payload)
     commit('storeEntity', newEntity)
     return newEntity

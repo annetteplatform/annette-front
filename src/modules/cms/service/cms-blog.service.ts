@@ -2,10 +2,10 @@ import axios from 'axios'
 import { FindResult} from 'src/shared'
 import {
   ActivateBlogPayloadDto,
-  AssignBlogTargetPrincipalPayloadDto,
+  AssignBlogPrincipalPayloadDto,
   CreateBlogPayloadDto, DeactivateBlogPayloadDto,
   Blog,
-  BlogFilter, UnassignBlogTargetPrincipalPayloadDto, UpdateBlogCategoryPayloadDto,
+  BlogFilter, UnassignBlogPrincipalPayloadDto, UpdateBlogCategoryPayloadDto,
   UpdateBlogDescriptionPayloadDto,
   UpdateBlogNamePayloadDto
 } from './model';
@@ -32,12 +32,22 @@ export const cmsBlogService = {
       .then(result => convertBlog(result.data))
   },
 
-  async assignBlogTargetPrincipal(payload: AssignBlogTargetPrincipalPayloadDto) {
+  async assignBlogAuthorPrincipal(payload: AssignBlogPrincipalPayloadDto) {
+    return await axios.post<Blog>('/api/annette/v1/cms/assignBlogAuthorPrincipal', payload)
+      .then(result => convertBlog(result.data))
+  },
+
+  async unassignBlogAuthorPrincipal(payload: UnassignBlogPrincipalPayloadDto) {
+    return await axios.post<Blog>('/api/annette/v1/cms/unassignBlogAuthorPrincipal', payload)
+      .then(result => convertBlog(result.data))
+  },
+
+  async assignBlogTargetPrincipal(payload: AssignBlogPrincipalPayloadDto) {
     return await axios.post<Blog>('/api/annette/v1/cms/assignBlogTargetPrincipal', payload)
       .then(result => convertBlog(result.data))
   },
 
-  async unassignBlogTargetPrincipal(payload: UnassignBlogTargetPrincipalPayloadDto) {
+  async unassignBlogTargetPrincipal(payload: UnassignBlogPrincipalPayloadDto) {
     return await axios.post<Blog>('/api/annette/v1/cms/unassignBlogTargetPrincipal', payload)
       .then(result => convertBlog(result.data))
   },

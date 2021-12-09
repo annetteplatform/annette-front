@@ -2,11 +2,11 @@ import {ActionTree} from 'vuex';
 import {StateInterface} from 'src/store';
 import {
   ActivateSpacePayloadDto,
-  AssignSpaceTargetPrincipalPayloadDto,
+  AssignSpacePrincipalPayloadDto,
   CreateSpacePayloadDto, DeactivateSpacePayloadDto,
   Space,
   SpaceFilter,
-  SpaceState, UnassignSpaceTargetPrincipalPayloadDto, UpdateSpaceCategoryPayloadDto,
+  SpaceState, UnassignSpacePrincipalPayloadDto, UpdateSpaceCategoryPayloadDto,
   UpdateSpaceDescriptionPayloadDto,
   UpdateSpaceNamePayloadDto
 } from 'src/modules/cms';
@@ -47,13 +47,25 @@ export const actions: ActionTree<SpaceState, StateInterface> = {
     return newEntity
   },
 
-  async assignEntityTargetPrincipal ({ commit }, payload: AssignSpaceTargetPrincipalPayloadDto) {
+  async assignEntityAuthorPrincipal ({ commit }, payload: AssignSpacePrincipalPayloadDto) {
+    const newEntity = await cmsSpaceService.assignSpaceAuthorPrincipal(payload)
+    commit('storeEntity', newEntity)
+    return newEntity
+  },
+
+  async unassignEntityAuthorPrincipal ({ commit }, payload: UnassignSpacePrincipalPayloadDto) {
+    const newEntity = await cmsSpaceService.unassignSpaceAuthorPrincipal(payload)
+    commit('storeEntity', newEntity)
+    return newEntity
+  },
+
+  async assignEntityTargetPrincipal ({ commit }, payload: AssignSpacePrincipalPayloadDto) {
     const newEntity = await cmsSpaceService.assignSpaceTargetPrincipal(payload)
     commit('storeEntity', newEntity)
     return newEntity
   },
 
-  async unassignEntityTargetPrincipal ({ commit }, payload: UnassignSpaceTargetPrincipalPayloadDto) {
+  async unassignEntityTargetPrincipal ({ commit }, payload: UnassignSpacePrincipalPayloadDto) {
     const newEntity = await cmsSpaceService.unassignSpaceTargetPrincipal(payload)
     commit('storeEntity', newEntity)
     return newEntity

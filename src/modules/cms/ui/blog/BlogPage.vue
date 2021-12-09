@@ -60,19 +60,53 @@
         />
       </div>
 
+      <PrincipalSelectorDialog ref="principalSelectorDialog"/>
+
       <div class="row q-mt-md">
         <q-list bordered class="full-width" separator>
           <q-item>
             <q-item-section>
-              Principals
+              Authors
             </q-item-section>
             <q-item-section avatar>
               <q-btn class="float-left" round dense flat color="primary"
                      icon="add"
                      v-if="action !=='view'"
-                     @click="addPrincipal"
+                     @click="addAuthorPrincipal"
               />
-              <principal-selector-dialog ref="principalSelectorDialog"/>
+            </q-item-section>
+          </q-item>
+          <q-item v-if="entityModel.authors.length === 0">
+            <q-item-section>
+              <q-item-label caption>
+                Principals not assigned
+              </q-item-label>
+            </q-item-section>
+          </q-item>
+          <q-item
+            v-for="principal in entityModel.authors"
+            :key="principal">
+            <principal-view-item :principal="principal"/>
+            <q-item-section side v-if="action !=='view'">
+              <q-btn flat round color="red" size="sm" icon="fas fa-trash"
+                     @click="deleteAuthorPrincipal(principal)"/>
+            </q-item-section>
+          </q-item>
+        </q-list>
+      </div>
+
+      <div class="row q-mt-md">
+        <q-list bordered class="full-width" separator>
+          <q-item>
+            <q-item-section>
+              Target Principals
+            </q-item-section>
+            <q-item-section avatar>
+              <q-btn class="float-left" round dense flat color="primary"
+                     icon="add"
+                     v-if="action !=='view'"
+                     @click="addTargetPrincipal"
+              />
             </q-item-section>
           </q-item>
           <q-item v-if="entityModel.targets.length === 0">
@@ -88,7 +122,7 @@
             <principal-view-item :principal="principal"/>
             <q-item-section side v-if="action !=='view'">
               <q-btn flat round color="red" size="sm" icon="fas fa-trash"
-                     @click="deletePrincipal(principal)"/>
+                     @click="deleteTargetPrincipal(principal)"/>
             </q-item-section>
           </q-item>
         </q-list>
@@ -121,6 +155,7 @@ function emptyEntity(): Blog {
     description: '',
     active: true,
     categoryId: '',
+    authors: [],
     targets: [],
   }
 }
@@ -196,7 +231,51 @@ export default defineComponent({
     }
 
 
-    const addPrincipal = async () => {
+    const addAuthorPrincipal = async () => {
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-member-access
+      const principal = await principalSelectorDialog.value.showDialog()
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+      if (entityPage.action.value === 'edit') {
+        void entityPage.update(() => {
+          return store.dispatch('cmsBlog/assignEntityAuthorPrincipal', {
+            id: entityPage.id.value,
+            principal
+          }) as Promise<Blog>
+        })
+      } else if (entityPage.action.value === 'create' && entityPage.entityModel.value) {
+        entityPage.entityModel.value.authors = [...entityPage.entityModel.value.authors, principal]
+      }
+    }
+
+
+    const deleteAuthorPrincipal = (principal: AnnettePrincipal) => {
+      quasar.notify({
+        type: 'negative',
+        message: 'Please confirm delete author principal',
+        actions: [
+          {label: 'Cancel', color: 'white'},
+          {
+            label: 'Delete',
+            color: 'white',
+            handler: async () => {
+              if (entityPage.action.value === 'edit') {
+                await entityPage.update(() => {
+                  // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+                  return store.dispatch('cmsBlog/unassignEntityAuthorPrincipal', {
+                    id: entityPage.id.value,
+                    principal
+                  }) as Promise<Blog>
+                })
+              } else if (entityPage.action.value === 'create' && entityPage.entityModel.value) {
+                entityPage.entityModel.value.authors = entityPage.entityModel.value.authors.filter(p => p !== principal)
+              }
+            }
+          }
+        ]
+      })
+    }
+
+    const addTargetPrincipal = async () => {
       // eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-member-access
       const principal = await principalSelectorDialog.value.showDialog()
       // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
@@ -213,10 +292,10 @@ export default defineComponent({
     }
 
 
-    const deletePrincipal = (principal: AnnettePrincipal) => {
+    const deleteTargetPrincipal = (principal: AnnettePrincipal) => {
       quasar.notify({
         type: 'negative',
-        message: 'Please confirm delete principal',
+        message: 'Please confirm delete target principal',
         actions: [
           {label: 'Cancel', color: 'white'},
           {
@@ -248,8 +327,10 @@ export default defineComponent({
       updateDescription,
       updateCategoryId,
       principalSelectorDialog,
-      addPrincipal,
-      deletePrincipal
+      addAuthorPrincipal,
+      deleteAuthorPrincipal ,
+      addTargetPrincipal,
+      deleteTargetPrincipal
 
     };
   }

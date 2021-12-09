@@ -6,6 +6,7 @@ export interface Blog extends BaseEntity {
   description: string,
   categoryId: string,
   active: boolean,
+  authors: AnnettePrincipal[],
   targets: AnnettePrincipal[],
   updatedAt?: Date,
   updatedBy?: AnnettePrincipal
@@ -24,6 +25,7 @@ export interface CreateBlogPayloadDto {
   description: string,
   blogType: string,
   categoryId: string,
+  authors: AnnettePrincipal[],
   targets: AnnettePrincipal[]
 }
 
@@ -42,12 +44,12 @@ export interface UpdateBlogCategoryPayloadDto {
   categoryId: string
 }
 
-export interface AssignBlogTargetPrincipalPayloadDto{
+export interface AssignBlogPrincipalPayloadDto {
   id: string,
   principal: AnnettePrincipal
 }
 
-export interface UnassignBlogTargetPrincipalPayloadDto{
+export interface UnassignBlogPrincipalPayloadDto {
   id: string,
   principal: AnnettePrincipal
 }

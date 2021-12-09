@@ -7,6 +7,7 @@ export interface SpaceView extends BaseEntity {
   categoryId: string,
   active: boolean,
   subscriptions: AnnettePrincipal[],
+  authors: AnnettePrincipal[],
   updatedAt: Date,
   updatedBy: AnnettePrincipal
 }

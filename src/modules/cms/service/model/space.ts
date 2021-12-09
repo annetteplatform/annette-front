@@ -6,6 +6,7 @@ export interface Space extends BaseEntity {
   description: string,
   categoryId: string,
   active: boolean,
+  authors: AnnettePrincipal[],
   targets: AnnettePrincipal[],
   updatedAt?: Date,
   updatedBy?: AnnettePrincipal
@@ -23,6 +24,7 @@ export interface CreateSpacePayloadDto {
   name: string,
   description: string,
   categoryId: string,
+  authors: AnnettePrincipal[],
   targets: AnnettePrincipal[]
 }
 
@@ -41,12 +43,12 @@ export interface UpdateSpaceCategoryPayloadDto {
   categoryId: string
 }
 
-export interface AssignSpaceTargetPrincipalPayloadDto{
+export interface AssignSpacePrincipalPayloadDto {
   id: string,
   principal: AnnettePrincipal
 }
 
-export interface UnassignSpaceTargetPrincipalPayloadDto{
+export interface UnassignSpacePrincipalPayloadDto {
   id: string,
   principal: AnnettePrincipal
 }

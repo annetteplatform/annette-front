@@ -2,10 +2,10 @@ import axios from 'axios'
 import { FindResult} from 'src/shared'
 import {
   ActivateSpacePayloadDto,
-  AssignSpaceTargetPrincipalPayloadDto,
+  AssignSpacePrincipalPayloadDto,
   CreateSpacePayloadDto, DeactivateSpacePayloadDto,
   Space,
-  SpaceFilter, UnassignSpaceTargetPrincipalPayloadDto, UpdateSpaceCategoryPayloadDto,
+  SpaceFilter, UnassignSpacePrincipalPayloadDto, UpdateSpaceCategoryPayloadDto,
   UpdateSpaceDescriptionPayloadDto,
   UpdateSpaceNamePayloadDto
 } from './model';
@@ -32,12 +32,22 @@ export const cmsSpaceService = {
       .then(result => convertSpace(result.data))
   },
 
-  async assignSpaceTargetPrincipal(payload: AssignSpaceTargetPrincipalPayloadDto) {
+  async assignSpaceAuthorPrincipal(payload: AssignSpacePrincipalPayloadDto) {
+    return await axios.post<Space>('/api/annette/v1/cms/assignSpaceAuthorPrincipal', payload)
+      .then(result => convertSpace(result.data))
+  },
+
+  async unassignSpaceAuthorPrincipal(payload: UnassignSpacePrincipalPayloadDto) {
+    return await axios.post<Space>('/api/annette/v1/cms/unassignSpaceAuthorPrincipal', payload)
+      .then(result => convertSpace(result.data))
+  },
+
+  async assignSpaceTargetPrincipal(payload: AssignSpacePrincipalPayloadDto) {
     return await axios.post<Space>('/api/annette/v1/cms/assignSpaceTargetPrincipal', payload)
       .then(result => convertSpace(result.data))
   },
 
-  async unassignSpaceTargetPrincipal(payload: UnassignSpaceTargetPrincipalPayloadDto) {
+  async unassignSpaceTargetPrincipal(payload: UnassignSpacePrincipalPayloadDto) {
     return await axios.post<Space>('/api/annette/v1/cms/unassignSpaceTargetPrincipal', payload)
       .then(result => convertSpace(result.data))
   },
