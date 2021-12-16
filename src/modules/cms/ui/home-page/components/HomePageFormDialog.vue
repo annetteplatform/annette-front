@@ -8,10 +8,7 @@
 
       <q-card-section class="q-pt-none">
         <div class="row q-pb-md">
-          <q-input class="col-md-12 col-sm-12 col-xs-12 "
-                   v-model="homePage.applicationId"
-                   label="Application Id"
-                   :readonly="action === 'edit'"/>
+          <ApplicationSelector v-model="homePage.applicationId" :readonly="action === 'edit'" />
         </div>
         <div class="row q-pb-md">
           <q-field borderless label="Principal" stack-label class="full-width">
@@ -55,10 +52,11 @@ import {useStore} from 'src/store';
 import PrincipalViewItem from 'src/shared/components/principal-view/PrincipalViewItem.vue';
 import PageSelector from 'src/modules/cms/ui/page/components/PageSelector.vue';
 import PrincipalSelectorDialog from 'src/shared/components/principal-selector/PrinciplaSelectorDialog.vue';
+import ApplicationSelector from 'src/modules/application/application/components/ApplicationSelector.vue';
 
 export default defineComponent({
   name: 'HomePageFormDialog',
-  components: {PrincipalSelectorDialog, PageSelector, PrincipalViewItem},
+  components: {ApplicationSelector, PrincipalSelectorDialog, PageSelector, PrincipalViewItem},
   props: {
     show: {
       type: Boolean,

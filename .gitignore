@@ -1,4 +1,6 @@
 run-local.sh
+run-cloud.sh
+build-local.sh
 .DS_Store
 .thumbs.db
 node_modules

@@ -9,8 +9,7 @@
       @request="onRequest">
       <template v-slot:row="props">
         <q-td>
-          <q-badge class="cursor-pointer" outline color="primary" :label="props.row.applicationId"
-                   @click="openApplication(props.row.applicationId)"/>
+          <ApplicationNameView :application-id="props.row.applicationId" />
         </q-td>
         <q-td>
           <PrincipalViewItem :principal="props.row.principal"/>
@@ -19,8 +18,7 @@
           {{ props.row.priority }}
         </q-td>
         <q-td>
-          <q-badge class="cursor-pointer" outline color="primary" :label="props.row.pageId"
-                   @click="openPage(props.row.pageId)"/>
+          <PageTitleView :page-id="props.row.pageId" />
         </q-td>
         <q-td auto-width>
           <q-btn flat round color="blue" size="sm" icon="far fa-edit"
@@ -35,12 +33,13 @@
 
 <script lang="ts">
 import {defineComponent, ref} from 'vue';
-import {useRouter} from 'vue-router';
 import {useEntityList} from 'src/shared';
 import EntityList from 'src/shared/components/EntityList.vue';
 import {HomePage, HomePageFilter} from 'src/modules/cms';
 import PrincipalViewItem from 'src/shared/components/principal-view/PrincipalViewItem.vue';
 import HomePageFormDialog from 'src/modules/cms/ui/home-page/components/HomePageFormDialog.vue';
+import ApplicationNameView from 'src/modules/application/application/components/ApplicationNameView.vue';
+import PageTitleView from 'src/modules/cms/ui/page-view/components/PageTitleView.vue';
 
 const COLUMNS = [
   {
@@ -73,7 +72,7 @@ const COLUMNS = [
     label: 'Page Id',
     field: 'pageId',
     sortable: false,
-    classes: 'text-truncate'
+    classes: 'text-truncate',
   }
 ]
 
@@ -81,7 +80,7 @@ const NAMESPACE = 'cmsHomePage';
 
 export default defineComponent({
   name: 'HomePageList',
-  components: {HomePageFormDialog, PrincipalViewItem, EntityList},
+  components: {PageTitleView, ApplicationNameView, HomePageFormDialog, PrincipalViewItem, EntityList},
   props: {
     instanceKey: {
       type: String,
@@ -89,22 +88,12 @@ export default defineComponent({
     }
   },
   setup(props) {
-    const router = useRouter()
 
     const entityList = useEntityList<HomePage, HomePageFilter>(
       NAMESPACE,
       props.instanceKey,
       'Please confirm unassign home page.'
     )
-
-    const openApplication = (applicationId: string) => {
-      void router.push({name: 'application.application', params: {id: applicationId, action: 'view'}})
-    }
-
-    const openPage = (pageId: string) => {
-      void router.push({name: 'cms.pageView', params: {id: pageId}})
-    }
-
 
     const showDialog = ref(false)
     const action = ref('edit')
@@ -124,8 +113,6 @@ export default defineComponent({
     return {
       columns: COLUMNS,
       ...entityList,
-      openApplication,
-      openPage,
       showDialog,
       action,
       id,

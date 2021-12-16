@@ -228,6 +228,7 @@ export function buildActions<E extends BaseEntity, F, R>(
     } catch (ex) {
       const loadFailurePayload: LoadFailurePayload = {
         key: payload.key,
+      // @ts-ignore
         message: ex,
         idInLoading: [],
       }
@@ -257,6 +258,7 @@ export function buildActions<E extends BaseEntity, F, R>(
         console.log(ex)
         const loadFailurePayload: LoadFailurePayload = {
           key: payload.key,
+        // @ts-ignore
           message: ex,
           idInLoading: idsToLoad,
         }
