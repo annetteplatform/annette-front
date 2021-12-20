@@ -67,6 +67,7 @@ export function useSyncEntityPage<T>(
         }
         updateEntity(entity)
       } catch (ex) {
+        // @ts-ignore
         error.value = ex
       }
     }
@@ -96,7 +97,9 @@ export function useSyncEntityPage<T>(
           params: {...route.params, action: 'edit', id: entity.id},
           query: route.query
         })
+        void store.dispatch(`${opt.namespace}/refreshAll`)
       } catch (ex) {
+        // @ts-ignore
         error.value = ex
       }
     }
@@ -109,6 +112,7 @@ export function useSyncEntityPage<T>(
         const entity = await updateFn()
         updateEntity(entity)
       } catch (ex) {
+        // @ts-ignore
         error.value = ex
       }
     }

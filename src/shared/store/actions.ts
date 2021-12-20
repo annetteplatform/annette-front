@@ -115,6 +115,17 @@ export function buildActionsWithCustomLoad<E extends BaseEntity, F, R>(
       }
     },
 
+    refreshAll({dispatch, state}) {
+      Object.keys(state.instances).map ( async (key: string) => {
+        const resetInstancePayload: ResetInstancePayload<F> = {
+          key,
+          clear: true
+        }
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+        return await dispatch('resetInstance', resetInstancePayload)
+      })
+    },
+
     async refresh({dispatch, state}, payload: RefreshPayload) {
       // console.log('refresh', payload)
       const instance = state.instances[payload.key]

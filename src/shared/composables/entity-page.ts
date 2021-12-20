@@ -91,6 +91,7 @@ export function useEntityPage<T>(
          }
         updateEntity(entity)
       } catch (ex) {
+        // @ts-ignore
         error.value = ex
       }
     }
@@ -120,6 +121,7 @@ export function useEntityPage<T>(
         updateEntity(entity)
         saved.value = true
       } catch (ex) {
+        // @ts-ignore
         error.value = ex
       }
       // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
@@ -137,7 +139,9 @@ export function useEntityPage<T>(
         // @ts-ignore
         // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
         void router.push({ name: route.name, params: {...route.params, action: 'edit', id: entity.id}, query: route.query})
+        void store.dispatch(`${opt.namespace}/refreshAll`)
       } catch (ex) {
+        // @ts-ignore
         error.value = ex
       }
     }

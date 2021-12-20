@@ -354,7 +354,6 @@ export default defineComponent({
       } else if (action.value === 'create') {
         try {
           const entity = await store.dispatch('cmsPage/createEditorPage')
-
           void router.push({
             // @ts-ignore
             name: route.name,
@@ -362,7 +361,9 @@ export default defineComponent({
             params: {...route.params, action: 'edit', id: entity.id},
             query: route.query
           })
+          void store.dispatch(`cmsPage/refreshAll`)
         } catch (ex) {
+          // @ts-ignore
           error.value = ex
         }
       }
