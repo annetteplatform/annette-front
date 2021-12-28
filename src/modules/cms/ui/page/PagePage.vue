@@ -361,7 +361,7 @@ export default defineComponent({
             params: {...route.params, action: 'edit', id: entity.id},
             query: route.query
           })
-          void store.dispatch(`cmsPage/refreshAll`)
+          void store.dispatch('cmsPage/refreshAll')
         } catch (ex) {
           // @ts-ignore
           error.value = ex
