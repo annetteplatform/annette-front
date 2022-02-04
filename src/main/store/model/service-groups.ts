@@ -223,7 +223,7 @@ export function serviceGroups(): ServiceGroup[] {
 
     {
       id: 'PAGES',
-      order: 60,
+      order: 80,
       icon: 'inventory',
       title: 'Pages Administration ',
       subtitle: '',
@@ -269,7 +269,7 @@ export function serviceGroups(): ServiceGroup[] {
     },
     {
       id: 'SPACE-VIEW',
-      order: 70,
+      order: 90,
       icon: 'feed',
       title: 'Page View ',
       subtitle: '',
@@ -292,6 +292,24 @@ export function serviceGroups(): ServiceGroup[] {
           action: {name: 'cms.spaceViews'},
           actionName: 'View'
         }
+      ]
+    },
+    {
+      id: 'BPM',
+      order: 100,
+      icon: 'schema',
+      title: 'BPM Administration ',
+      subtitle: '',
+      services: [
+        {
+          id: 'BPM-MODELS',
+          order: 20,
+          icon: 'schema',
+          title: 'BPM Models',
+          subtitle: 'View list of BPM models',
+          action: {name: 'bpm.bpmModels'},
+          actionName: 'View'
+        },
       ]
     },
   ]

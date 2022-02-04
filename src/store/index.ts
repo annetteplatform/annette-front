@@ -11,7 +11,7 @@ import {personCategoryStore, personPersonStore} from 'src/modules/person';
 import {orgRoleStore, orgCategoryStore, orgItemStore} from 'src/modules/org-structure';
 import {authRoleStore} from 'src/modules/authorization';
 import {principalGroupCategoryStore, principalGroupStore} from 'src/modules/principal-group';
-import {authAssignmentStore} from 'src/modules/authorization/store/assignment';
+import {authAssignmentStore} from 'src/modules/authorization';
 import {
   cmsBlogCategoryStore,
   cmsPostStore,
@@ -25,6 +25,7 @@ import {
   cmsSpaceViewStore,
   cmsHomePageStore,
 } from 'src/modules/cms';
+import {bpmBpmModelStore} from 'src/modules/bpm';
 
 /*
  * If not building with SSR mode, you can
@@ -78,7 +79,8 @@ export default store(function (/* { ssrContext } */) {
       cmsPage: cmsPageStore,
       cmsSpaceView: cmsSpaceViewStore,
       cmsPageView: cmsPageViewStore,
-      cmsHomePage: cmsHomePageStore
+      cmsHomePage: cmsHomePageStore,
+      bpmBpmModel: bpmBpmModelStore
     },
 
     // enable strict mode (adds overhead!)

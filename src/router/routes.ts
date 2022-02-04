@@ -5,6 +5,7 @@ import {orgStructureRoutes} from 'src/modules/org-structure';
 import {authorizationRoutes} from 'src/modules/authorization';
 import {principalGroupRoutes} from 'src/modules/principal-group';
 import {cmsExtRoutes, cmsRoutes} from 'src/modules/cms';
+import {bpmRoutes} from 'src/modules/bpm';
 
 const routes: RouteRecordRaw[] = [
   {
@@ -21,7 +22,8 @@ const routes: RouteRecordRaw[] = [
       ...orgStructureRoutes,
       ...authorizationRoutes,
       ...principalGroupRoutes,
-        ...cmsRoutes
+      ...cmsRoutes,
+      ...bpmRoutes
     ],
   },
   ...cmsExtRoutes,

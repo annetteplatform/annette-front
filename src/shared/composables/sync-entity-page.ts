@@ -12,7 +12,7 @@ function deepCopy<T>(object: T): T {
 
 export interface UseSyncEntityPageOpt<T> {
   namespace: string,
-  emptyEntity?: () => T,
+  emptyEntity?: (id?: string) => T,
   formHasError?: (entity?: T | null) => boolean,
   props: any,
   onBeforeLoad?: (action: string, id: string) => void
@@ -51,7 +51,7 @@ export function useSyncEntityPage<T>(
     }
     // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
     if (action.value === 'create' && opt.emptyEntity) {
-      const entity = opt.emptyEntity()
+      const entity = opt.emptyEntity(id.value)
       updateEntity(entity)
     } else {
       try {

@@ -34,7 +34,7 @@ export default defineComponent({
   setup(props) {
     const store = useStore()
 
-    const post = toRef(props, 'post') as Ref<PostView>
+    const post = toRef(props, 'post')
 
     const publicationDate = computed(() => {
       if (post.value.publicationTimestamp) {

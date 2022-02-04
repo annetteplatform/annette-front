@@ -1,6 +1,6 @@
-import process from 'process';
+// import process from 'process';
 
-export const APPLICATION_ID = process.env.APPLICATION_ID || 'annette-console'
+export const APPLICATION_ID = /*process.env.APPLICATION_ID ||*/ 'annette-console'
 
 export interface PersonProfile {
   id: string,
