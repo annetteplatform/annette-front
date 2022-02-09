@@ -42,7 +42,7 @@ export default defineComponent({
     label: {
       type: String,
       required: false,
-      default: 'BusinessProcesses'
+      default: 'Business Processes'
     },
     modelValue: {
       type: Array,

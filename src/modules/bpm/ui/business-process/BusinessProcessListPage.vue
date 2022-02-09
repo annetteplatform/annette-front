@@ -1,5 +1,5 @@
 <template>
-  <entity-list-page narrow caption="Data Schemas" :namespace="namespace" :instance-key="instanceKey">
+  <entity-list-page narrow caption="Business processes" :namespace="namespace" :instance-key="instanceKey">
     <template v-slot:toolbar>
       <q-btn class="q-mr-md" outline color="primary"
              label="Refresh"

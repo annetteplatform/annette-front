@@ -65,7 +65,7 @@ export default defineComponent({
       required: true
     },
     variable: {
-      type: Object as PropType<FullDataSchemaVariable>,
+      type: Object as PropType<FullDataSchemaVariable | null>,
       required: true
     }
   },
@@ -87,7 +87,7 @@ export default defineComponent({
         dataSchemaId: '',
         ...variableModel.value,
         oldVariableName
-      }
+      } as StoreDataSchemaVariablePayloadDto
       emit('update', payload)
     }
 
@@ -96,12 +96,14 @@ export default defineComponent({
     }
 
     watch(show, (newShow) => {
-      if (newShow) originalVariableName.value = variable.value.variableName
+      if (newShow && variable.value) originalVariableName.value = variable.value.variableName
       else originalVariableName.value = ''
     })
 
     watch(variable, () => {
-      variableModel.value = variable.value
+      if (variable.value) {
+        variableModel.value = variable.value
+      }
     })
 
     return {

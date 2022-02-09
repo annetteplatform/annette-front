@@ -1,6 +1,6 @@
 <template>
   <entity-page narrow
-               caption="Data Schema"
+               caption="Business process"
                :show-form="!!entityModel"
                :error="error"
                @clearError="clearError">

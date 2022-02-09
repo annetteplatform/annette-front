@@ -322,7 +322,7 @@ export function serviceGroups(): ServiceGroup[] {
         {
           id: 'BUSINESS-PROCESSES',
           order: 30,
-          icon: 'account_tree',
+          icon: 'video_library',
           title: 'Business processes',
           subtitle: 'View list of business processes',
           action: {name: 'bpm.businessProcesses'},

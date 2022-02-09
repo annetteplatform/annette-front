@@ -41,7 +41,7 @@ export default defineComponent({
     label: {
       type: String,
       required: false,
-      default: 'BusinessProcess'
+      default: 'Business Process'
     },
     modelValue: {
       type: String,

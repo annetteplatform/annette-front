@@ -144,7 +144,6 @@ export default defineComponent({
     })
 
     const createVariable = () => {
-      console.log('createVariable')
       dialogVariable.value = {
         variableName: '',
         name: '',
