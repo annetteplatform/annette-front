@@ -24,41 +24,63 @@
     <template v-slot:status>
     </template>
     <template v-slot:default>
-      <div class="row">
-        <q-input class="col-md-4 col-sm-12 col-xs-12 "
-                 v-model="entityModel.id"
-                 :rules="[val => !!val || 'Field is required']"
-                 :readonly="action!=='create'"
-                 ref="idRef"
-                 label="Id"/>
-      </div>
-      <div class="row">
-        <q-input class="col-md-12 col-sm-12 col-xs-12 "
-                 v-model="entityModel.name"
-                 @update:model-value="updateName"
-                 debounce="700"
-                 :rules="[val => !!val || 'Field is required']"
-                 :readonly="action ==='view'"
-                 ref="nameRef"
-                 label="Name"/>
-      </div>
-      <div class="row">
-        <q-input
-          class="col-md-12 col-sm-12 col-xs-12"
-          v-model="entityModel.description"
-          @update:model-value="updateDescription"
-          debounce="700"
-          label="Description"
-          type="textarea"
-          :readonly="action === 'view'"
-        />
-      </div>
-      <div class="row q-mt-md" v-if="action !== 'create'">
-        <DataSchemaVariableList :variables="entityModel.variables"
-                                :readonly="action === 'view'"
-                                @store="storeVariable"
-                                @delete="deleteVariable"/>
-      </div>
+      <q-tabs
+        v-model="tab"
+        dense
+        class="text-grey"
+        active-color="primary"
+        indicator-color="primary"
+        align="justify"
+        narrow-indicator
+      >
+        <q-tab name="general" label="General"/>
+        <q-tab :disable="action ==='create'" name="vars" label="Variables"/>
+      </q-tabs>
+
+      <q-separator/>
+
+      <q-tab-panels v-model="tab" animated>
+        <q-tab-panel name="general">
+
+          <div class="row">
+            <q-input class="col-md-4 col-sm-12 col-xs-12 "
+                     v-model="entityModel.id"
+                     :rules="[val => !!val || 'Field is required']"
+                     :readonly="action!=='create'"
+                     ref="idRef"
+                     label="Id"/>
+          </div>
+          <div class="row">
+            <q-input class="col-md-12 col-sm-12 col-xs-12 "
+                     v-model="entityModel.name"
+                     @update:model-value="updateName"
+                     debounce="700"
+                     :rules="[val => !!val || 'Field is required']"
+                     :readonly="action ==='view'"
+                     ref="nameRef"
+                     label="Name"/>
+          </div>
+          <div class="row">
+            <q-input
+              class="col-md-12 col-sm-12 col-xs-12"
+              v-model="entityModel.description"
+              @update:model-value="updateDescription"
+              debounce="700"
+              label="Description"
+              type="textarea"
+              :readonly="action === 'view'"
+            />
+          </div>
+        </q-tab-panel>
+        <q-tab-panel name="vars">
+          <div class="row q-mt-md" v-if="action !== 'create'">
+            <DataSchemaVariableList :variables="entityModel.variables"
+                                    :readonly="action === 'view'"
+                                    @store="storeVariable"
+                                    @delete="deleteVariable"/>
+          </div>
+        </q-tab-panel>
+      </q-tab-panels>
     </template>
   </entity-page>
 </template>

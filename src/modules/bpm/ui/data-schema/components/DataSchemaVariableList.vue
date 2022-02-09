@@ -6,7 +6,6 @@
              :columns="columns"
              row-key="variableName">
       <template v-slot:top>
-        <h6 class="q-ma-none">Variables</h6>
         <q-space/>
         <q-btn flat round color="primary" v-if="!readonly" icon="add" @click="createVariable"/>
       </template>
