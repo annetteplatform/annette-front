@@ -25,7 +25,7 @@ import {
   cmsSpaceViewStore,
   cmsHomePageStore,
 } from 'src/modules/cms';
-import {bpmBpmModelStore} from 'src/modules/bpm';
+import {bpmBpmModelStore, bpmDataSchemaStore} from 'src/modules/bpm';
 
 /*
  * If not building with SSR mode, you can
@@ -80,7 +80,8 @@ export default store(function (/* { ssrContext } */) {
       cmsSpaceView: cmsSpaceViewStore,
       cmsPageView: cmsPageViewStore,
       cmsHomePage: cmsHomePageStore,
-      bpmBpmModel: bpmBpmModelStore
+      bpmBpmModel: bpmBpmModelStore,
+      bpmDataSchema: bpmDataSchemaStore
     },
 
     // enable strict mode (adds overhead!)

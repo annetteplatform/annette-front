@@ -11,18 +11,20 @@
 import {defineComponent, onMounted, Ref, ref, toRef, watch} from 'vue'
 
 import 'bpmn-js/dist/assets/diagram-js.css'
-import 'bpmn-js/dist/assets/bpmn-font/css/bpmn-embedded.css'
+import 'bpmn-js/dist/assets/bpmn-font/css/bpmn.css'
 import 'bpmn-js-properties-panel/dist/assets/bpmn-js-properties-panel.css'
+import 'bpmn-js-color-picker/colors/color-picker.css'
 // @ts-ignore
 import Modeler from 'bpmn-js/lib/Modeler'
-import {
-  BpmnPropertiesPanelModule,
-  BpmnPropertiesProviderModule,
-  CamundaPlatformPropertiesProviderModule
 // @ts-ignore
-} from 'bpmn-js-properties-panel';
-import CamundaBpmnModdle from 'camunda-bpmn-moddle/resources/camunda.json'
+import * as CamundaExtensionModule from 'camunda-bpmn-moddle/lib'
+import * as CamundaModdle from 'camunda-bpmn-moddle/resources/camunda.json'
 // @ts-ignore
+import * as PropertiesPanelModule from 'bpmn-js-properties-panel'
+// @ts-ignore
+import * as PropertiesProviderModule from 'bpmn-js-properties-panel/lib/provider/camunda'
+// @ts-ignore
+import BpmnColorPickerModule from 'bpmn-js-color-picker';
 import _ from 'lodash'
 
 
@@ -43,24 +45,23 @@ export default defineComponent({
 
     const lastExportedXml: Ref<string | null> = ref(null);
 
-    const importXml = (xml: string) => {
+    const importXml = async (xml: string) => {
       if (modeler.value) {
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-member-access
-        modeler.value.importXML(xml).catch((err: any) => {
-          if (err) {
-            console.error('BPMN import error');
-          } else {
-            console.log('bpmn import ok');
-          }
-        })
+        try {
+          // eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-member-access
+          await modeler.value.importXML(xml)
+          console.log('bpmn import ok');
+        } catch (err) {
+          console.error('BPMN import error');
+        }
       }
     }
 
-    const debouncedExportXml = async () =>{
+    const exportXml = async () => {
       try {
         // eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-member-access
         const result = await modeler.value.saveXML();
-        const { xml } = result;
+        const {xml} = result;
         lastExportedXml.value = xml;
         emit('update:modelValue', xml)
       } catch (err) {
@@ -69,42 +70,46 @@ export default defineComponent({
       }
     }
 
-    const exportXml = _.debounce(debouncedExportXml, 500);
+    const debounceExportXml = _.debounce(exportXml, 500);
 
-    onMounted(() => {
-      console.log('mounted')
-      const selector = document.querySelector('#canvas');
-      const properties = document.querySelector('#properties');
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-call
-      modeler.value = new Modeler({
-        container: selector,
-        width: '100%',
-        height: 'calc(100vh - 50px - 32px - 64px - 70px - 36px)',
-        keyboard: {
-          bindTo: selector,
-        },
-        propertiesPanel: {
-          parent: properties,
-        },
-        additionalModules: [
-          BpmnPropertiesPanelModule,
-          BpmnPropertiesProviderModule,
-          CamundaPlatformPropertiesProviderModule
-        ],
-        moddleExtensions: {
-          camunda: CamundaBpmnModdle
+    onMounted(async () => {
+        console.log('mounted')
+        const selector = document.querySelector('#canvas');
+        const properties = document.querySelector('#properties');
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-call
+        modeler.value = new Modeler({
+          container: selector,
+          width: '100%',
+          height: 'calc(100vh - 50px - 32px - 64px - 70px - 36px)',
+          keyboard: {
+            bindTo: selector,
+          },
+          propertiesPanel: {
+            parent: properties,
+          },
+          additionalModules: [
+            CamundaExtensionModule,
+            PropertiesPanelModule,
+            PropertiesProviderModule,
+            BpmnColorPickerModule
+          ],
+          moddleExtensions: {
+            camunda: CamundaModdle,
+          },
+        });
+        if (xml.value && xml.value !== '') {
+          await importXml(xml.value);
         }
-      });
-      if (xml.value && xml.value !== '') {
-        importXml(xml.value);
-      }
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-member-access
-      modeler.value.on('commandStack.changed', exportXml);
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-member-access
+        modeler.value.on('commandStack.changed', debounceExportXml);
       }
     )
 
-    watch(xml, (newXml) => {
-      importXml(newXml);
+    watch(xml, async (newXml) => {
+      if (lastExportedXml.value !== newXml) {
+        console.log('value changed, import xml');
+        await importXml(newXml);
+      }
     })
 
 

@@ -259,7 +259,7 @@ export default defineComponent({
                     parentNode.children = parentNode.children.filter(item => item.id !== selected.value)
                     parentNode.childrenId = parentNode.childrenId.filter(item => item !== selected.value)
                   }
-                } catch (ex) {
+                } catch (ex: any) {
                   console.error(ex)
                   // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
                   showErrorNotification(ex.code)

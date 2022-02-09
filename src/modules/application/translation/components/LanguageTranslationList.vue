@@ -142,7 +142,7 @@ export default defineComponent({
         // @ts-ignore
         translationJsonText.value = JSON.stringify(translationJson.value.json, null, 2)
         showDialog.value = true
-      } catch (ex) {
+      } catch (ex: any) {
         // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
         if (ex.code === 'annette.applicationService.translation.translationNotFound') {
           translationJson.value = {
@@ -187,7 +187,7 @@ export default defineComponent({
                 void await applicationService.deleteTranslationJson(translationId.value, lang)
                 // @ts-ignore
                 languages.value = languages.value.filter(v => v !== lang)
-              } catch (ex) {
+              } catch (ex: any) {
                 // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
                 showErrorNotification(ex.code)
               }
@@ -215,7 +215,7 @@ export default defineComponent({
       try {
         // @ts-ignore
         void await applicationService.updateTranslationJson(translationJson.value)
-      } catch (ex) {
+      } catch (ex: any) {
         // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
         showErrorNotification(ex.code)
         return

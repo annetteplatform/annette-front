@@ -160,7 +160,7 @@ export default defineComponent({
     const tab = ref('general')
     const editor = ref()
     const options = {
-      /*wrap: 140*/
+      wrap: 140
     }
 
     const idRef = ref()

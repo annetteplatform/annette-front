@@ -19,7 +19,6 @@
 import {computed, defineComponent, PropType, toRef} from 'vue';
 import {PostView} from 'src/modules/cms';
 import {useStore} from 'src/store';
-import {Ref} from '@vue/reactivity';
 import {date} from 'quasar';
 
 export default defineComponent({

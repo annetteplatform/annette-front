@@ -310,6 +310,15 @@ export function serviceGroups(): ServiceGroup[] {
           action: {name: 'bpm.bpmModels'},
           actionName: 'View'
         },
+        {
+          id: 'DATA-SCHEMAS',
+          order: 30,
+          icon: 'account_tree',
+          title: 'Data Schemas',
+          subtitle: 'View list of data schemas',
+          action: {name: 'bpm.dataSchemas'},
+          actionName: 'View'
+        },
       ]
     },
   ]

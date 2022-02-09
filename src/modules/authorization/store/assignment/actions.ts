@@ -4,7 +4,7 @@ import {buildActionsWithCustomLoad} from 'src/shared/store/actions';
 import {AssignmentFindResult, AuthAssignmentFilter, PermissionAssignment} from 'src/modules/authorization';
 import {authorizationService} from 'src/modules/authorization/store/authorization.service';
 import {AuthAssignmentState} from 'src/modules/authorization/store/assignment/state';
-import {EntityState, LoadFailurePayload, LoadPayload, LoadSuccessPayload} from 'src/shared';
+import {EntityState, LoadFailurePayload, LoadPayload, LoadSuccessPayload, Message} from 'src/shared';
 
 
 async function load({commit, state}: Store<EntityState<PermissionAssignment, AuthAssignmentFilter>>, payload: LoadPayload<AuthAssignmentFilter>) {
@@ -40,11 +40,11 @@ async function load({commit, state}: Store<EntityState<PermissionAssignment, Aut
 
     commit('loadSuccess', loadCompletedData)
     return 'done'
-  } catch (ex) {
+  } catch (ex: any) {
     console.log(ex)
     const loadFailurePayload: LoadFailurePayload = {
       key: payload.key,
-      message: ex,
+      message: ex as Message,
       idInLoading: [],
     }
     commit('loadFailure', loadFailurePayload)

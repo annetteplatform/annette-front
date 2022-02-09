@@ -14,6 +14,19 @@ export const bpmRoutes: RouteRecordRaw[] = [
     props: (route) => ({id: String(route.params.id), action: String(route.params.action),}),
     meta: {requiresAuth: true}
   },
+  {
+    path: 'bpm/dataSchemas',
+    name: 'bpm.dataSchemas',
+    component: () => import('src/modules/bpm/ui/data-schema/DataSchemaListPage.vue'),
+    meta: {requiresAuth: true}
+  },
+  {
+    path: 'bpm/dataSchema/:action/:id',
+    name: 'bpm.dataSchema',
+    component: () => import('src/modules/bpm/ui/data-schema/DataSchemaPage.vue'),
+    props: (route) => ({id: String(route.params.id), action: String(route.params.action),}),
+    meta: {requiresAuth: true}
+  },
 ]
 
 
