@@ -27,6 +27,19 @@ export const bpmRoutes: RouteRecordRaw[] = [
     props: (route) => ({id: String(route.params.id), action: String(route.params.action),}),
     meta: {requiresAuth: true}
   },
+  {
+    path: 'bpm/businessProcesses',
+    name: 'bpm.businessProcesses',
+    component: () => import('src/modules/bpm/ui/business-process/BusinessProcessListPage.vue'),
+    meta: {requiresAuth: true}
+  },
+  {
+    path: 'bpm/businessProcess/:action/:id',
+    name: 'bpm.businessProcess',
+    component: () => import('src/modules/bpm/ui/business-process/BusinessProcessPage.vue'),
+    props: (route) => ({id: String(route.params.id), action: String(route.params.action),}),
+    meta: {requiresAuth: true}
+  },
 ]
 
 

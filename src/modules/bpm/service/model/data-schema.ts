@@ -1,4 +1,5 @@
 import {AnnettePrincipal, BaseEntity, SortBy} from 'src/shared';
+import {Datatype} from './datatype';
 
 export type DataSchemaVariables = { [variableName: string]: DataSchemaVariable}
 
@@ -26,21 +27,6 @@ export interface FullDataSchemaVariable
   caption: string,
   datatype: Datatype,
   defaultValue: string
-}
-
-
-export enum Datatype {
-  Boolean = 'Boolean',
-  Bytes   = 'Bytes',
-  Short   = 'Short',
-  Integer = 'Integer',
-  Long    = 'Long',
-  Double  = 'Double',
-  Date    = 'Date',
-  String  = 'String',
-  Object  = 'Object',
-  Json    = 'Json',
-  Xml     = 'Xml'
 }
 
 export interface DataSchemaFilter {

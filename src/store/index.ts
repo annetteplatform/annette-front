@@ -1,31 +1,26 @@
-import { store } from 'quasar/wrappers'
-import { InjectionKey } from 'vue'
-import {
-  createStore,
-  Store as VuexStore,
-  useStore as vuexUseStore,
-} from 'vuex'
+import {store} from 'quasar/wrappers'
+import {InjectionKey} from 'vue'
+import {createStore, Store as VuexStore, useStore as vuexUseStore,} from 'vuex'
 import mainStore from 'src/main/store/main'
 import {appApplicationStore, appLanguageStore, appTranslationStore} from 'src/modules/application';
 import {personCategoryStore, personPersonStore} from 'src/modules/person';
-import {orgRoleStore, orgCategoryStore, orgItemStore} from 'src/modules/org-structure';
-import {authRoleStore} from 'src/modules/authorization';
+import {orgCategoryStore, orgItemStore, orgRoleStore} from 'src/modules/org-structure';
+import {authAssignmentStore, authRoleStore} from 'src/modules/authorization';
 import {principalGroupCategoryStore, principalGroupStore} from 'src/modules/principal-group';
-import {authAssignmentStore} from 'src/modules/authorization';
 import {
   cmsBlogCategoryStore,
-  cmsPostStore,
-  cmsPostViewStore,
   cmsBlogStore,
   cmsBlogViewStore,
-  cmsSpaceCategoryStore,
+  cmsHomePageStore,
   cmsPageStore,
   cmsPageViewStore,
+  cmsPostStore,
+  cmsPostViewStore,
+  cmsSpaceCategoryStore,
   cmsSpaceStore,
   cmsSpaceViewStore,
-  cmsHomePageStore,
 } from 'src/modules/cms';
-import {bpmBpmModelStore, bpmDataSchemaStore} from 'src/modules/bpm';
+import {bpmBpmModelStore, bpmBusinessProcessStore, bpmDataSchemaStore} from 'src/modules/bpm';
 
 /*
  * If not building with SSR mode, you can
@@ -81,7 +76,8 @@ export default store(function (/* { ssrContext } */) {
       cmsPageView: cmsPageViewStore,
       cmsHomePage: cmsHomePageStore,
       bpmBpmModel: bpmBpmModelStore,
-      bpmDataSchema: bpmDataSchemaStore
+      bpmDataSchema: bpmDataSchemaStore,
+      bpmBusinessProcess: bpmBusinessProcessStore
     },
 
     // enable strict mode (adds overhead!)

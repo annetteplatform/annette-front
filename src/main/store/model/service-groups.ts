@@ -319,6 +319,15 @@ export function serviceGroups(): ServiceGroup[] {
           action: {name: 'bpm.dataSchemas'},
           actionName: 'View'
         },
+        {
+          id: 'BUSINESS-PROCESSES',
+          order: 30,
+          icon: 'account_tree',
+          title: 'Business processes',
+          subtitle: 'View list of business processes',
+          action: {name: 'bpm.businessProcesses'},
+          actionName: 'View'
+        },
       ]
     },
   ]
