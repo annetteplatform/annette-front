@@ -123,8 +123,8 @@ import {
 } from 'src/modules/bpm';
 import BusinessProcessVariableList
   from 'src/modules/bpm/ui/business-process/components/BusinessProcessVariableList.vue';
-import BpmModelSelector from "src/modules/bpm/ui/bpm-model/components/BpmModelSelector.vue";
-import DataSchemaSelector from "src/modules/bpm/ui/data-schema/components/DataSchemaSelector.vue";
+import BpmModelSelector from 'src/modules/bpm/ui/bpm-model/components/BpmModelSelector.vue';
+import DataSchemaSelector from 'src/modules/bpm/ui/data-schema/components/DataSchemaSelector.vue';
 
 
 function emptyEntity(): BusinessProcess {
