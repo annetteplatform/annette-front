@@ -61,6 +61,27 @@
                      label="Name"/>
           </div>
           <div class="row">
+            <q-input class="col-md-12 col-sm-12 col-xs-12 "
+                     v-model="entityModel.processDefinitionId"
+                     @update:model-value="updateProcessDefinitionId"
+                     debounce="700"
+                     :rules="[val => !!val || 'Field is required']"
+                     :readonly="action ==='view'"
+                     ref="processDefinitionIdRef"
+                     label="Process Definition Id"/>
+          </div>
+          <div class="row">
+            <bpm-model-selector v-model="entityModel.bpmModelId"
+                                @update:model-value="updateBpmModelId"
+                                :readonly="action ==='view'"/>
+          </div>
+          <div class="row">
+            <data-schema-selector v-model="entityModel.dataSchemaId"
+                                  @update:model-value="updateDataSchemaId"
+                                  :readonly="action ==='view'"/>
+          </div>
+
+          <div class="row">
             <q-input
               class="col-md-12 col-sm-12 col-xs-12"
               v-model="entityModel.description"
@@ -75,9 +96,9 @@
         <q-tab-panel name="vars">
           <div class="row q-mt-md" v-if="action !== 'create'">
             <BusinessProcessVariableList :variables="entityModel.variables"
-                                    :readonly="action === 'view'"
-                                    @store="storeVariable"
-                                    @delete="deleteVariable"/>
+                                         :readonly="action === 'view'"
+                                         @store="storeVariable"
+                                         @delete="deleteVariable"/>
           </div>
         </q-tab-panel>
       </q-tab-panels>
@@ -94,10 +115,16 @@ import {
   BusinessProcess,
   DeleteBusinessProcessVariablePayloadDto,
   StoreBusinessProcessVariablePayloadDto,
+  UpdateBusinessProcessBpmModelPayloadDto,
+  UpdateBusinessProcessDataSchemaPayloadDto,
   UpdateBusinessProcessDescriptionPayloadDto,
   UpdateBusinessProcessNamePayloadDto,
+  UpdateBusinessProcessProcessDefinitionPayloadDto,
 } from 'src/modules/bpm';
-import BusinessProcessVariableList from 'src/modules/bpm/ui/business-process/components/BusinessProcessVariableList.vue';
+import BusinessProcessVariableList
+  from 'src/modules/bpm/ui/business-process/components/BusinessProcessVariableList.vue';
+import BpmModelSelector from "src/modules/bpm/ui/bpm-model/components/BpmModelSelector.vue";
+import DataSchemaSelector from "src/modules/bpm/ui/data-schema/components/DataSchemaSelector.vue";
 
 
 function emptyEntity(): BusinessProcess {
@@ -105,6 +132,7 @@ function emptyEntity(): BusinessProcess {
     id: '',
     name: '',
     description: '',
+    processDefinitionId: '',
     variables: {},
   }
 }
@@ -113,7 +141,7 @@ const NAMESPACE = 'bpmBusinessProcess';
 
 export default defineComponent({
   name: 'BusinessProcessPage',
-  components: {BusinessProcessVariableList, EntityPage},
+  components: {DataSchemaSelector, BpmModelSelector, BusinessProcessVariableList, EntityPage},
   props: {
     id: String,
     action: String
@@ -158,6 +186,39 @@ export default defineComponent({
       })
     }
 
+    const updateProcessDefinitionId = (data: string) => {
+      const payload: UpdateBusinessProcessProcessDefinitionPayloadDto = {
+        // @ts-ignore
+        id: entityPage.entityModel.value?.id,
+        processDefinitionId: data
+      }
+      void entityPage.update(() => {
+        return store.dispatch('bpmBusinessProcess/updateEntityProcessDefinition', payload) as Promise<BusinessProcess>
+      })
+    }
+
+    const updateBpmModelId = (data: string) => {
+      const payload: UpdateBusinessProcessBpmModelPayloadDto = {
+        // @ts-ignore
+        id: entityPage.entityModel.value?.id,
+        bpmModelId: data
+      }
+      void entityPage.update(() => {
+        return store.dispatch('bpmBusinessProcess/updateEntityBpmModel', payload) as Promise<BusinessProcess>
+      })
+    }
+
+    const updateDataSchemaId = (data: string) => {
+      const payload: UpdateBusinessProcessDataSchemaPayloadDto = {
+        // @ts-ignore
+        id: entityPage.entityModel.value?.id,
+        dataSchemaId: data
+      }
+      void entityPage.update(() => {
+        return store.dispatch('bpmBusinessProcess/updateEntityDataSchema', payload) as Promise<BusinessProcess>
+      })
+    }
+
     const updateDescription = (data: string) => {
       const payload: UpdateBusinessProcessDescriptionPayloadDto = {
         // @ts-ignore
@@ -191,6 +252,9 @@ export default defineComponent({
       options,
       ...entityPage,
       updateName,
+      updateProcessDefinitionId,
+      updateBpmModelId,
+      updateDataSchemaId,
       updateDescription,
       storeVariable,
       deleteVariable

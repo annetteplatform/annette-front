@@ -4,12 +4,17 @@ import {StateInterface} from 'src/store';
 import {buildActions} from 'src/shared';
 import {bpmBusinessProcessService} from 'src/modules/bpm/service/business-process.service';
 import {
-  CreateBusinessProcessPayloadDto,
   BusinessProcess,
-  BusinessProcessFilter, DeleteBusinessProcessVariablePayloadDto, StoreBusinessProcessVariablePayloadDto,
+  BusinessProcessFilter,
+  CreateBusinessProcessPayloadDto,
+  DeleteBusinessProcessVariablePayloadDto,
+  StoreBusinessProcessVariablePayloadDto,
+  UpdateBusinessProcessBpmModelPayloadDto,
+  UpdateBusinessProcessDataSchemaPayloadDto,
   UpdateBusinessProcessDescriptionPayloadDto,
   UpdateBusinessProcessNamePayloadDto,
   UpdateBusinessProcessPayloadDto,
+  UpdateBusinessProcessProcessDefinitionPayloadDto,
 } from 'src/modules/bpm';
 import {BusinessProcessState} from './state'
 
@@ -43,6 +48,24 @@ export const actions: ActionTree<BusinessProcessState, StateInterface> = {
 
   async updateEntityDescription({commit}, payload: UpdateBusinessProcessDescriptionPayloadDto) {
     const newEntity = await bpmBusinessProcessService.updateBusinessProcessDescription(payload)
+    commit('storeEntity', newEntity)
+    return newEntity
+  },
+
+  async updateEntityProcessDefinition({commit}, payload: UpdateBusinessProcessProcessDefinitionPayloadDto) {
+    const newEntity = await bpmBusinessProcessService.updateBusinessProcessProcessDefinition(payload)
+    commit('storeEntity', newEntity)
+    return newEntity
+  },
+
+  async updateEntityBpmModel({commit}, payload: UpdateBusinessProcessBpmModelPayloadDto) {
+    const newEntity = await bpmBusinessProcessService.updateBusinessProcessBpmModel(payload)
+    commit('storeEntity', newEntity)
+    return newEntity
+  },
+
+  async updateEntityDataSchema({commit}, payload: UpdateBusinessProcessDataSchemaPayloadDto) {
+    const newEntity = await bpmBusinessProcessService.updateBusinessProcessDataSchema(payload)
     commit('storeEntity', newEntity)
     return newEntity
   },
