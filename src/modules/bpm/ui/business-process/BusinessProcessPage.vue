@@ -61,9 +61,23 @@
                      label="Name"/>
           </div>
           <div class="row">
-            <q-input class="col-md-12 col-sm-12 col-xs-12 "
-                     v-model="entityModel.processDefinitionId"
-                     @update:model-value="updateProcessDefinitionId"
+            <q-field class="col-md-3 col-sm-12 col-xs-12" borderless
+                     label="Process Definition Type" stack-label
+                     :readonly="action ==='view'">
+              <template v-slot:control>
+                <q-radio v-model="entityModel.processDefinitionType"
+                         @update:model-value="updateProcessDefinitionType"
+                         :disable="action ==='view'"
+                         val="key" label="Key"/>
+                <q-radio v-model="entityModel.processDefinitionType"
+                         @update:model-value="updateProcessDefinitionType"
+                         :disable="action ==='view'"
+                         val="id" label="Id"/>
+              </template>
+            </q-field>
+            <q-input class="col-md-9 col-sm-12 col-xs-12 "
+                     v-model="entityModel.processDefinition"
+                     @update:model-value="updateProcessDefinition"
                      debounce="700"
                      :rules="[val => !!val || 'Field is required']"
                      :readonly="action ==='view'"
@@ -132,7 +146,8 @@ function emptyEntity(): BusinessProcess {
     id: '',
     name: '',
     description: '',
-    processDefinitionId: '',
+    processDefinitionType: 'key',
+    processDefinition: '',
     variables: {},
   }
 }
@@ -186,11 +201,26 @@ export default defineComponent({
       })
     }
 
-    const updateProcessDefinitionId = (data: string) => {
+    const updateProcessDefinitionType = (data: string) => {
       const payload: UpdateBusinessProcessProcessDefinitionPayloadDto = {
         // @ts-ignore
         id: entityPage.entityModel.value?.id,
-        processDefinitionId: data
+        processDefinitionType: data,
+        // @ts-ignore
+        processDefinition: entityPage.entityModel.value?.processDefinition
+      }
+      void entityPage.update(() => {
+        return store.dispatch('bpmBusinessProcess/updateEntityProcessDefinition', payload) as Promise<BusinessProcess>
+      })
+    }
+
+    const updateProcessDefinition = (data: string) => {
+      const payload: UpdateBusinessProcessProcessDefinitionPayloadDto = {
+        // @ts-ignore
+        id: entityPage.entityModel.value?.id,
+        // @ts-ignore
+        processDefinitionType: entityPage.entityModel.value?.processDefinitionType,
+        processDefinition: data
       }
       void entityPage.update(() => {
         return store.dispatch('bpmBusinessProcess/updateEntityProcessDefinition', payload) as Promise<BusinessProcess>
@@ -252,7 +282,8 @@ export default defineComponent({
       options,
       ...entityPage,
       updateName,
-      updateProcessDefinitionId,
+      updateProcessDefinitionType,
+      updateProcessDefinition,
       updateBpmModelId,
       updateDataSchemaId,
       updateDescription,

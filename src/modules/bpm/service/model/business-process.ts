@@ -3,11 +3,17 @@ import {Datatype} from './datatype';
 
 export type BusinessProcessVariables = { [variableName: string]: BusinessProcessVariable}
 
+export enum ProcessDefinitionType {
+  KEY = 'key',
+  ID = 'id',
+}
+
 export interface BusinessProcess extends BaseEntity {
   id: string,
   name: string,
   description: string,
-  processDefinitionId: string,
+  processDefinitionType: string,
+  processDefinition: string,
   bpmModelId?: string,
   dataSchemaId?: string,
   variables: BusinessProcessVariables,
@@ -41,7 +47,8 @@ export interface CreateBusinessProcessPayloadDto {
   id: string,
   name: string,
   description: string,
-  processDefinitionId: string,
+  processDefinitionType: string,
+  processDefinition: string,
   bpmModelId?: string,
   dataSchemaId?: string,
   variables: BusinessProcessVariables,
@@ -51,7 +58,8 @@ export interface UpdateBusinessProcessPayloadDto {
   id: string,
   name: string,
   description: string,
-  processDefinitionId: string,
+  processDefinitionType: string,
+  processDefinition: string,
   bpmModelId?: string,
   dataSchemaId?: string,
   variables: BusinessProcessVariables,
@@ -69,7 +77,8 @@ export interface UpdateBusinessProcessBpmModelPayloadDto {
 
 export interface UpdateBusinessProcessProcessDefinitionPayloadDto {
   id: string,
-  processDefinitionId: string,
+  processDefinitionType: string,
+  processDefinition: string,
 }
 
 export interface UpdateBusinessProcessDataSchemaPayloadDto {
