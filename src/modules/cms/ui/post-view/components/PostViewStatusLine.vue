@@ -19,7 +19,6 @@
 import {computed, defineComponent, PropType, toRef} from 'vue';
 import {PostView} from 'src/modules/cms';
 import {useStore} from 'src/store';
-import {Ref} from '@vue/reactivity';
 import {date} from 'quasar';
 
 export default defineComponent({
@@ -34,7 +33,7 @@ export default defineComponent({
   setup(props) {
     const store = useStore()
 
-    const post = toRef(props, 'post') as Ref<PostView>
+    const post = toRef(props, 'post')
 
     const publicationDate = computed(() => {
       if (post.value.publicationTimestamp) {

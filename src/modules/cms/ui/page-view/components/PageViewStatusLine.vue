@@ -19,7 +19,6 @@
 import {computed, defineComponent, PropType, toRef} from 'vue';
 import {PageView} from 'src/modules/cms';
 import {useStore} from 'src/store';
-import {Ref} from '@vue/reactivity';
 import {date} from 'quasar';
 
 export default defineComponent({
@@ -34,7 +33,7 @@ export default defineComponent({
   setup(props) {
     const store = useStore()
 
-    const page = toRef(props, 'page') as Ref<PageView>
+    const page = toRef(props, 'page')
 
     const publicationDate = computed(() => {
       if (page.value.publicationTimestamp) {

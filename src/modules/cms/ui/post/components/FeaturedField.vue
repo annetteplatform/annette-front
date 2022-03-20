@@ -5,7 +5,6 @@
 
 <script lang="ts">
 import {computed, defineComponent, toRef} from 'vue';
-import {Ref} from '@vue/reactivity';
 import {useStore} from 'src/store';
 import {UpdatePostFeaturedPayloadDto} from 'src/modules/cms';
 
@@ -22,7 +21,7 @@ export default defineComponent({
 
     const store = useStore()
 
-    const postId = toRef(props, 'postId') as Ref<string>
+    const postId = toRef(props, 'postId')
 
     // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access,@typescript-eslint/no-unsafe-return
     const entities = computed( () => store.getters['cmsPost/entities'])

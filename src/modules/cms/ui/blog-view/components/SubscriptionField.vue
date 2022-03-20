@@ -5,8 +5,6 @@
 
 <script lang="ts">
 import {computed, defineComponent, toRef} from 'vue';
-import {AnnettePrincipal} from 'src/shared';
-import {Ref} from '@vue/reactivity';
 import {useStore} from 'src/store';
 
 export default defineComponent({
@@ -26,10 +24,12 @@ export default defineComponent({
 
     const store = useStore()
 
-    const blogId = toRef(props, 'blogId') as Ref<string>
-    const subscriptions = toRef(props, 'subscriptions') as Ref<AnnettePrincipal[]>
+    const blogId = toRef(props, 'blogId')
+    const subscriptions = toRef(props, 'subscriptions')
 
+    // @ts-ignore
     const subscribed = computed ( () => subscriptions.value.length > 0 )
+    // @ts-ignore
     const hasPersonPrincipal = computed( () => !!subscriptions.value.find(p => p.principalType === 'person') )
     const color = computed( () => hasPersonPrincipal.value ? 'primary' : 'grey' )
 

@@ -1,4 +1,5 @@
 run-local.sh
+run-cm.sh
 run-cloud.sh
 build-local.sh
 .DS_Store

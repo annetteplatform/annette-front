@@ -163,7 +163,7 @@ export default defineComponent({
           const createdEntity = await store.dispatch('orgItem/createOrganization', entity)
           emit('created', createdEntity)
           show.value = false
-        } catch (ex) {
+        } catch (ex: any) {
           console.error(ex)
           // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
           showErrorNotification(ex.code)
@@ -181,7 +181,7 @@ export default defineComponent({
         let entities: OrgItem[]
         try {
           entities = await store.dispatch('orgItem/createUnit', entity)
-        } catch (ex) {
+        } catch (ex: any) {
           console.error(ex)
           // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
           showErrorNotification(ex.code)
@@ -210,7 +210,7 @@ export default defineComponent({
         let entities: OrgItem[]
         try {
           entities = await store.dispatch('orgItem/createPosition', entity)
-        } catch (ex) {
+        } catch (ex: any) {
           console.error(ex)
           // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
           showErrorNotification(ex.code)

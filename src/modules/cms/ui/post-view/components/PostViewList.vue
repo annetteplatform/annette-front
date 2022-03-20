@@ -18,7 +18,6 @@ import {PostView} from 'src/modules/cms';
 import {useStore} from 'src/store';
 import PostViewCard from 'src/modules/cms/ui/post-view/components/PostViewCard.vue';
 import {SetPagePayload} from 'src/shared';
-import {Ref} from '@vue/reactivity';
 
 export default defineComponent({
   name: 'PostViewList',
@@ -33,7 +32,7 @@ export default defineComponent({
     const store = useStore()
 
     // eslint-disable-next-line @typescript-eslint/no-unsafe-call
-    const instanceKey = toRef(props, 'instanceKey') as Ref<string>
+    const instanceKey = toRef(props, 'instanceKey')
 
     const items: ComputedRef<PostView[]> =
       // eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-return,@typescript-eslint/no-unsafe-member-access

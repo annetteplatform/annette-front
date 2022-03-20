@@ -6,7 +6,6 @@
 import {computed, defineComponent, PropType, toRef, watch} from 'vue';
 import {PageView} from 'src/modules/cms';
 import {useStore} from 'src/store';
-import {Ref} from '@vue/reactivity';
 import WidgetView from 'src/shared/components/content/WidgetView.vue';
 
 export default defineComponent({
@@ -21,7 +20,7 @@ export default defineComponent({
   setup(props) {
     const store = useStore()
 
-    const page = toRef(props, 'page') as Ref<PageView>
+    const page = toRef(props, 'page')
 
     const contentWidgets = computed(() => {
       if (page.value.content) {

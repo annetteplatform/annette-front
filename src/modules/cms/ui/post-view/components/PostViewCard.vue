@@ -39,7 +39,6 @@
 import {computed, defineComponent, PropType, toRef, watch} from 'vue';
 import {PostView} from 'src/modules/cms';
 import {useStore} from 'src/store';
-import {Ref} from '@vue/reactivity';
 import PrincipalViewItem from 'src/shared/components/principal-view/PrincipalViewItem.vue';
 import PostViewStatusLine from 'src/modules/cms/ui/post-view/components/PostViewStatusLine.vue';
 import WidgetView from 'src/shared/components/content/WidgetView.vue';
@@ -60,7 +59,7 @@ export default defineComponent({
   setup(props) {
     const store = useStore()
 
-    const post = toRef(props, 'post') as Ref<PostView>
+    const post = toRef(props, 'post')
 
     const introContentWidgets = computed(() => {
       if (post.value.introContent) {
