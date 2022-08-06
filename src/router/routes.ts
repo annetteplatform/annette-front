@@ -1,38 +1,21 @@
-import {RouteRecordRaw} from 'vue-router';
-import {applicationRoutes} from 'src/modules/application';
-import {personRoutes} from 'src/modules/person';
-import {orgStructureRoutes} from 'src/modules/org-structure';
-import {authorizationRoutes} from 'src/modules/authorization';
-import {principalGroupRoutes} from 'src/modules/principal-group';
-import {cmsExtRoutes, cmsRoutes} from 'src/modules/cms';
-import {bpmRoutes} from 'src/modules/bpm';
+import { RouteRecordRaw } from 'vue-router';
 
 const routes: RouteRecordRaw[] = [
   {
     path: '/',
-    component: () => import('src/main/MainLayout.vue'),
-    children: [
-      {
-        path: '',
-        component: () => import('src/main/IndexPage.vue'),
-        meta: {requiresAuth: false}
-      },
-      ...applicationRoutes,
-      ...personRoutes,
-      ...orgStructureRoutes,
-      ...authorizationRoutes,
-      ...principalGroupRoutes,
-      ...cmsRoutes,
-      ...bpmRoutes
-    ],
+    component: () => import('src/main/ui/MainLayout.vue'),
+    children: [{
+      path: '',
+      component: () => import('pages/IndexPage.vue'),
+      meta: {requiresAuth: false}
+    }],
   },
-  ...cmsExtRoutes,
 
   // Always leave this as last one,
   // but you can also remove it
   {
     path: '/:catchAll(.*)*',
-    component: () => import('src/main/Error404.vue'),
+    component: () => import('pages/ErrorNotFound.vue'),
   },
 ];
 
