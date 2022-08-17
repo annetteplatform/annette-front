@@ -11,6 +11,20 @@ const routes: RouteRecordRaw[] = [
     }],
   },
 
+  {
+    path: '/navigate',
+    redirect: '',
+    beforeEnter(to, from) {
+      const url = to.query['url'] as string
+      const openInNew = to.query['openInNew'] === 'true'
+      if (openInNew) {
+        window.open(url, '_blank')
+        return false
+      }
+      location.href = url
+    }
+  },
+
   // Always leave this as last one,
   // but you can also remove it
   {

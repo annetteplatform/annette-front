@@ -5,7 +5,7 @@
       v-if="authStore.isAuthenticated"
       v-model="mainStore.leftDrawerOpen"
       side="left"
-      elevated
+      overlay bordered
     >
       <main-menu/>
     </q-drawer>
@@ -20,6 +20,7 @@
 import {useAuthStore} from 'src/main';
 import {useMainStore} from 'src/main/data';
 import MainToolbar from './components/MainToolbar.vue';
+import MainMenu from './components/MainMenu.vue';
 
 
 const authStore = useAuthStore()
