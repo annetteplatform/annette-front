@@ -18,7 +18,7 @@ const routes: RouteRecordRaw[] = [
   {
     path: '/navigate',
     redirect: '',
-    beforeEnter(to, from) {
+    beforeEnter(to) {
       const url = to.query['url'] as string
       const openInNew = to.query['openInNew'] === 'true'
       if (openInNew) {

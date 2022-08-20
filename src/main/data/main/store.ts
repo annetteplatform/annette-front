@@ -1,7 +1,7 @@
 import {defineStore} from 'pinia';
 import {Ref, ref, watch} from 'vue';
 import {mainService, ScopeServices, useAuthStore} from 'src/main';
-import {useI18n} from 'vue-i18n';
+// import {useI18n} from 'vue-i18n';
 
 const authStore = useAuthStore()
 // const i18n = useI18n()

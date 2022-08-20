@@ -3,7 +3,7 @@
 </template>
 
 <script setup lang="ts">
-import {computed, defineComponent} from 'vue';
+import {computed} from 'vue';
 import {useMainStore} from 'src/main';
 import MenuList from 'src/main/ui/components/MenuList.vue';
 
