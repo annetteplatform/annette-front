@@ -7,20 +7,25 @@ const authStore = useAuthStore()
 // const i18n = useI18n()
 
 export const useMainStore = defineStore('main', () => {
-  const leftDrawerOpen = ref(false)
   const language = ref('en')
-  const sidebarServices: Ref<ScopeServices | null> = ref(null)
+  const leftDrawerOpen = ref(false)
+  const applicationServices: Ref<ScopeServices | null> = ref(null)
   const sidebarOpenGroups: Ref<{[id: string]: boolean}> = ref({})
+  const mainOpenGroups: Ref<{[id: string]: boolean}> = ref({})
 
   const toggleLeftDrawer = () => {
     leftDrawerOpen.value = !leftDrawerOpen.value
   }
   const loadServices = async () => {
-     sidebarServices.value = await mainService.loadServices('ANNETTE-CONSOLE', language.value)
+     applicationServices.value = await mainService.loadServices('ANNETTE-CONSOLE', language.value)
   }
 
   const toggleSidebarOpenGroup = (id: string) => {
     sidebarOpenGroups.value[id] = !sidebarOpenGroups.value[id]
+  }
+
+  const toggleMainOpenGroup = (id: string) => {
+    mainOpenGroups.value[id] = !mainOpenGroups.value[id]
   }
 
   watch(authStore, async (newVal, oldVal) => {
@@ -30,12 +35,14 @@ export const useMainStore = defineStore('main', () => {
 
 
   return {
-    leftDrawerOpen,
     language,
-    sidebarServices,
+    leftDrawerOpen,
     toggleLeftDrawer,
+    applicationServices,
     sidebarOpenGroups,
-    toggleSidebarOpenGroup
+    toggleSidebarOpenGroup,
+    mainOpenGroups,
+    toggleMainOpenGroup
   }
 
 })

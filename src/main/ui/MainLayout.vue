@@ -7,7 +7,7 @@
       side="left"
       overlay bordered
     >
-      <main-menu/>
+     <sidebar-menu/>
     </q-drawer>
 
     <q-page-container>
@@ -20,7 +20,7 @@
 import {useAuthStore} from 'src/main';
 import {useMainStore} from 'src/main/data';
 import MainToolbar from './components/MainToolbar.vue';
-import MainMenu from './components/MainMenu.vue';
+import SidebarMenu from './components/SidebarMenu.vue';
 
 
 const authStore = useAuthStore()
