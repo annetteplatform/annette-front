@@ -2,9 +2,9 @@
   <div>
     <div class="row" v-for="(row, index) in rows" :key="index">
       <template v-if="row.length > 0 && row[0].type === 'service' ">
-        <div class="col-md-4 col-sm-6 col-xs-12 q-pa-sm"
+        <div class="col-md-3 col-sm-6 col-xs-12 q-pa-sm"
              v-for="service in row" :key="service.id">
-          <q-card>
+          <q-card @click="openService(service)">
             <q-item class="service-card">
               <q-item-section avatar>
                 <q-avatar v-if="service.icon.type === 'file'">
@@ -17,13 +17,6 @@
                 <q-item-label caption v-if="service.labelDescription">{{ service.labelDescription }}</q-item-label>
               </q-item-section>
             </q-item>
-            <q-separator/>
-            <q-card-actions align="right">
-              <q-btn flat color="primary"
-                     :to="menuList.getRoute(service)">
-                {{ $t('annetteConsole.mainMenu.action') }}
-              </q-btn>
-            </q-card-actions>
           </q-card>
         </div>
       </template>
@@ -36,7 +29,7 @@
                         :model-value="!!mainStore.mainOpenGroups[group.id]"
                         @update:model-value="mainStore.toggleMainOpenGroup(group.id)"
       >
-        <main-menu-list :item-ids="group.children" application-id="ANNETTE-CONSOLE"/>
+        <main-menu-list class="q-mb-sm" :item-ids="group.children" application-id="ANNETTE-CONSOLE"/>
         <q-separator/>
       </q-expansion-item>
     </div>
@@ -46,8 +39,9 @@
 
 <script setup lang="ts">
 import {useMenuList} from 'src/main/ui/composables/menu-list';
-import {useMainStore, UserServiceItem} from 'src/main';
+import {useMainStore, UserService, UserServiceItem} from 'src/main';
 import {computed} from 'vue';
+import {useRouter} from 'vue-router';
 
 const props: Readonly<{ itemIds: string[]; applicationId: string }> = defineProps<{
   itemIds: string[]
@@ -56,6 +50,7 @@ const props: Readonly<{ itemIds: string[]; applicationId: string }> = defineProp
 
 const mainStore = useMainStore()
 const menuList = useMenuList(props)
+const router = useRouter()
 
 const rows = computed(() => {
   const rows: UserServiceItem[][] = []
@@ -78,12 +73,18 @@ const rows = computed(() => {
   }
   return rows
 })
+
+const openService = (service: UserService) => {
+  const route = menuList.getRoute(service)
+  router.push(route)
+}
 </script>
 
 <style scoped>
 
 .service-card {
-  height: 100px;
+  height: 130px;
+  cursor: pointer;
 }
 
 .service {

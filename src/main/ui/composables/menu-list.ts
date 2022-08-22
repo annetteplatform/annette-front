@@ -1,11 +1,12 @@
 import {InternalLink, useMainStore, UserService, UserServiceItem} from 'src/main';
 import {computed} from 'vue';
+import {RouteLocationRaw} from 'vue-router';
 
 const mainStore = useMainStore()
 
 export const useMenuList = (props: Readonly<{ itemIds: string[]; applicationId: string }>) => {
 
-  const getRoute = (item: UserServiceItem) => {
+  const getRoute = (item: UserServiceItem): RouteLocationRaw => {
     const service = (item as UserService)
     const url = service.link.url
     const openInNew = service.link.openInNew
@@ -13,7 +14,7 @@ export const useMenuList = (props: Readonly<{ itemIds: string[]; applicationId: 
       path: '/navigate',
       query: {
         url: url,
-        openInNew: openInNew
+        openInNew: openInNew ? 'true' : 'false'
       }
     }
     if (service.link.type == 'internal') {

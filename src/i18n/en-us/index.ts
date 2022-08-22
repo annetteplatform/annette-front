@@ -16,6 +16,17 @@ export default {
         signOut: 'Sign Out'
 
       }
+    },
+    mainMenu: {
+      action: 'Open'
+    },
+    notAuthenticatedHome: {
+      title: 'Annette Console',
+      descriptionHtml: 'In Annette Console you can manage the following entities:\n<ul>\n<li>Languages, translations and applications</li>\n<li>Person catalog</li>\n<li>Organizational structures and roles</li>\n<li>Authorization roles and assign permissions</li>\n<li>Content management system (CMS)</li>\n<li>Business process management system (BPMS)</li>\n</ul>',
+      signInDescription: 'Please sign in to get access to Annette Console',
+      signIn: 'Sign In'
+
+
     }
   }
 };

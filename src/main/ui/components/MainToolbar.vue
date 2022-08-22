@@ -6,10 +6,10 @@
              dense flat round
              icon="menu"
              @click="mainStore.toggleLeftDrawer"/>
-      <q-avatar square class="q-ml-md">
+      <q-avatar square class="q-ml-md" size="sm">
         <img src="/annette_logo.svg">
       </q-avatar>
-      <q-toolbar-title class="text-weight-medium">
+      <q-toolbar-title >
               {{ $t("annetteConsole.toolbar.title") }}
       </q-toolbar-title>
 
