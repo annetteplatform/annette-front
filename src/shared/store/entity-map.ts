@@ -1,4 +1,4 @@
-import {BaseEntity} from 'src/shared/store/model';
+import {BaseEntity} from './model';
 
 export type EntityMap<E extends  BaseEntity> = { [key: string]: E }
 

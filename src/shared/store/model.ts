@@ -1,4 +1,4 @@
-import {Message} from 'src/shared/model';
+import {Message} from '../model';
 
 export interface BaseEntity {
   id: string,

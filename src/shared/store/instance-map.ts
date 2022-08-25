@@ -1,5 +1,5 @@
-import {PagingMode} from 'src/shared/store/model';
-import {Message} from 'src/shared/model';
+import {PagingMode} from './model';
+import {Message} from '../model';
 
 export type InstanceMap<F> = { [key: string]: InstanceState<F> }
 
@@ -21,7 +21,7 @@ export interface Page {
   ids: string[]
 }
 
-export function totalPages<F> (instance: InstanceState<F>): number {
+export function calcTotalPages<F> (instance: InstanceState<F>): number {
   return Math.ceil(instance.total / instance.pageSize)
 }
 

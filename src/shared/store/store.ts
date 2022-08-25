@@ -1,4 +1,4 @@
-import {Ref, ref,} from 'vue';
+import {computed, ComputedRef, Ref, ref,} from 'vue';
 import {
   BaseEntity, ClearMessagePayload,
   InitInstancePayload,
@@ -6,7 +6,7 @@ import {
   LoadSuccessPayload,
   PagingMode, RefreshPayload, ResetInstancePayload, SetFilterPayload, SetPagePayload, SetPageSizePayload
 } from './model';
-import {FindResult, Message} from 'src/shared/model';
+import {FindResult, Message} from '../model';
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import hash from 'object-hash'
@@ -15,7 +15,7 @@ import {
   InstanceMap,
   InstanceState,
   pageLoaded,
-  totalPages
+  calcTotalPages
 } from './instance-map';
 import {EntityMap, isEntityUpdated} from './entity-map';
 import {isEntityLoading} from './state';
@@ -23,10 +23,34 @@ import {isEntityLoading} from './state';
 export const UNCHANGED = 'unchanged'
 export const CHANGED = 'changed'
 
+export type EntityStore<E extends BaseEntity, F> = {
+  instance: ComputedRef<(key: string) => InstanceMap<F>[string]>;
+  instances: Ref<InstanceMap<F>>;
+  storeEntities: (newEntities: E[]) => void;
+  clearMessage: (payload: ClearMessagePayload) => void;
+  getEntityForEdit: (id: string) => Promise<E>;
+  loadEntitiesIfNotExist: (ids: string[]) => Promise<EntityMap<E>[string][]>;
+  refresh: (payload: RefreshPayload) => Promise<string>;
+  storeEntity: (entity: E) => void;
+  removeEntity: (id: string) => void;
+  setFilter: (payload: SetFilterPayload<F>) => Promise<string>;
+  initInstance: (payload: InitInstancePayload<F>) => Promise<string>;
+  load: (payload: LoadPayload<F>) => Promise<string>;
+  entities: Ref<EntityMap<E>>;
+  refreshAll: () => Promise<void>;
+  idInLoading: Ref<string[]>;
+  totalPages: ComputedRef<(key: string) => (number | undefined)>;
+  getEntitiesForEdit: (ids: string[]) => Promise<Ref<EntityMap<E>>>;
+  resetInstance: (payload: ResetInstancePayload<F>) => Promise<string>;
+  items: ComputedRef<(key: string) => (E[])>;
+  setPageSize: (payload: SetPageSizePayload) => Promise<string>;
+  setPage: (payload: SetPagePayload) => Promise<string>
+}
+
 export interface EntityStoreOptions<E extends BaseEntity, F> {
   defaultPageSize: number,
   defaultFilter: () => F,
-  load?: (payload: LoadPayload<F>) =>Promise<string>
+  load?: (payload: LoadPayload<F>) => Promise<string>
   find: (query: F, offset: number, size: number) => Promise<FindResult>,
   getEntityById: (id: string, readSide: boolean) => Promise<E>,
   getEntitiesById: (ids: string[], readSide: boolean) => Promise<E[]>
@@ -34,10 +58,49 @@ export interface EntityStoreOptions<E extends BaseEntity, F> {
 
 export function useEntityStore<E extends BaseEntity, F>(
   options: EntityStoreOptions<E, F>
-) {
+): EntityStore<E, F> {
   const instances: Ref<InstanceMap<F>> = ref({})
   const entities: Ref<EntityMap<E>> = ref({})
   const idInLoading: Ref<string[]> = ref([])
+
+  // ******************* Getters *******************
+
+  const instance = computed(() => (key: string) => {
+    const instance = instances.value[key]
+    return instance
+  })
+
+  const totalPages = computed(() => (key: string) => {
+    const instance = instances.value[key]
+    if (instance) {
+      return calcTotalPages<F>(instance)
+    } else {
+      return undefined
+    }
+  })
+
+  const items = computed(() => (key: string) => {
+    const instance = instances.value[key]
+    if (!instance) {
+      return []
+    }
+    let ids: string[] = []
+    if (instance.mode === PagingMode.Standard && instance.pages[instance.page]) {
+      ids = instance.pages[instance.page].ids
+    } else if (instance.mode === PagingMode.Range && instance.pages[instance.page]) {
+      for (let index = 0; index <= instance.page; index++) {
+        if (instance.pages[index]) {
+          ids = [...ids, ...instance.pages[index].ids]
+        }
+      }
+    } else {
+      ids = []
+    }
+    return ids
+      .map(id => entities.value[id])
+      .filter(v => !!v)
+  })
+
 
   // ******************* Mutations *******************
 
@@ -218,7 +281,7 @@ export function useEntityStore<E extends BaseEntity, F>(
       if (payload.page === instance.page) {
         // console.log('setPage 1')
         return UNCHANGED
-      } else if (payload.page >= totalPages(instance)) {
+      } else if (payload.page >= calcTotalPages(instance)) {
         // console.log('setPage 2')
         return UNCHANGED
       } else if (pageLoaded<F>(instance, payload.page)) {
@@ -355,6 +418,9 @@ export function useEntityStore<E extends BaseEntity, F>(
     instances,
     entities,
     idInLoading,
+    instance,
+    totalPages,
+    items,
     initInstance,
     setPage,
     setPageSize,
