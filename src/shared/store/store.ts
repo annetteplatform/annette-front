@@ -1,6 +1,6 @@
 import {computed, ComputedRef, Ref, ref,} from 'vue';
 import {
-  BaseEntity, ClearMessagePayload,
+  BaseEntity, BaseFilter,
   InitInstancePayload,
   LoadPayload,
   LoadSuccessPayload,
@@ -20,32 +20,44 @@ import {
 import {EntityMap, isEntityUpdated} from './entity-map';
 import {isEntityLoading} from './state';
 
+function deepCopy<T>(object: T): T {
+  return JSON.parse(JSON.stringify(object))
+}
+
 export const UNCHANGED = 'unchanged'
 export const CHANGED = 'changed'
 
-export type EntityStore<E extends BaseEntity, F> = {
-  instance: ComputedRef<(key: string) => InstanceMap<F>[string]>;
-  instances: Ref<InstanceMap<F>>;
-  storeEntities: (newEntities: E[]) => void;
-  clearMessage: (payload: ClearMessagePayload) => void;
-  getEntityForEdit: (id: string) => Promise<E>;
-  loadEntitiesIfNotExist: (ids: string[]) => Promise<EntityMap<E>[string][]>;
-  refresh: (payload: RefreshPayload) => Promise<string>;
-  storeEntity: (entity: E) => void;
-  removeEntity: (id: string) => void;
-  setFilter: (payload: SetFilterPayload<F>) => Promise<string>;
-  initInstance: (payload: InitInstancePayload<F>) => Promise<string>;
-  load: (payload: LoadPayload<F>) => Promise<string>;
-  entities: Ref<EntityMap<E>>;
-  refreshAll: () => Promise<void>;
-  idInLoading: Ref<string[]>;
-  totalPages: ComputedRef<(key: string) => (number | undefined)>;
-  getEntitiesForEdit: (ids: string[]) => Promise<Ref<EntityMap<E>>>;
-  resetInstance: (payload: ResetInstancePayload<F>) => Promise<string>;
-  items: ComputedRef<(key: string) => (E[])>;
-  setPageSize: (payload: SetPageSizePayload) => Promise<string>;
-  setPage: (payload: SetPagePayload) => Promise<string>
-}
+export type EntityStore<E extends BaseEntity, F extends BaseFilter> =
+  {
+    instances: InstanceMap<F>;
+    entities: EntityMap<E>;
+    idInLoading: string[];
+
+    instance: ComputedRef<(key: string) => InstanceMap<F>[string]>;
+    totalPages: ComputedRef<(key: string) => (number | undefined)>;
+    items: ComputedRef<(key: string) => E[]>;
+
+    storeEntities: (newEntities: E[]) => void;
+    clearMessage: (key: string,) => void;
+
+    getEntityForEdit: (id: string) => Promise<E>;
+    loadEntitiesIfNotExist: (ids: string[]) => Promise<EntityMap<E>[string][]>;
+    refresh: (payload: RefreshPayload) => Promise<string>;
+    storeEntity: (entity: E) => void;
+    removeEntity: (id: string) => void;
+    createEntity: (entity: E) => Promise<E>;
+    setFilter: (payload: SetFilterPayload<F>) => Promise<string>;
+    initInstance: (payload: InitInstancePayload<F>) => Promise<string>;
+    updateEntity: (entity: E) => Promise<E>;
+    load: (payload: LoadPayload<F>) => Promise<string>;
+    deleteEntity: (id: string) => Promise<void>;
+    refreshAll: () => Promise<void>;
+    getEntitiesForEdit: (ids: string[]) => Promise<Ref<EntityMap<E>>>;
+    resetInstance: (payload: ResetInstancePayload<F>) => Promise<string>;
+    setPageSize: (payload: SetPageSizePayload) => Promise<string>;
+    setPage: (payload: SetPagePayload) => Promise<string>
+  }
+
 
 export interface EntityStoreOptions<E extends BaseEntity, F> {
   defaultPageSize: number,
@@ -58,7 +70,7 @@ export interface EntityStoreOptions<E extends BaseEntity, F> {
 
 export function useEntityStore<E extends BaseEntity, F>(
   options: EntityStoreOptions<E, F>
-): EntityStore<E, F> {
+) {
   const instances: Ref<InstanceMap<F>> = ref({})
   const entities: Ref<EntityMap<E>> = ref({})
   const idInLoading: Ref<string[]> = ref([])
@@ -80,6 +92,7 @@ export function useEntityStore<E extends BaseEntity, F>(
   })
 
   const items = computed(() => (key: string) => {
+    // console.log('store.items', key)
     const instance = instances.value[key]
     if (!instance) {
       return []
@@ -105,7 +118,7 @@ export function useEntityStore<E extends BaseEntity, F>(
   // ******************* Mutations *******************
 
   const loadSuccess = (payload: LoadSuccessPayload<E, F>) => {
-    // console.log('loadSuccess', payload)
+    console.log('loadSuccess', payload)
     const instance = instances.value[payload.key]
     if (instance) {
       if (payload.clear) instance.pages = {}
@@ -120,9 +133,9 @@ export function useEntityStore<E extends BaseEntity, F>(
         const ids = payload.ids.slice(start, start + payload.pageSize)
         instance.pages[index] = {ids}
       }
-      const entities: EntityMap<E> = {}
-      payload.entities.forEach(entity => entities[entity.id] = entity)
-      entities.value = {...entities.value, ...entities}
+      const newEntities: EntityMap<E> = {}
+      payload.entities.forEach(entity => newEntities[entity.id] = entity)
+      entities.value = {...entities.value, ...newEntities}
       instance.message = undefined
       // console.log('loadSuccess: instance', instance)
       // console.log('loadSuccess: state.entities', state.entities)
@@ -151,9 +164,9 @@ export function useEntityStore<E extends BaseEntity, F>(
     delete entities.value[id]
   }
 
-  const clearMessage = (payload: ClearMessagePayload) => {
+  const clearMessage = (key: string,) => {
     // console.log('loadFailure', payload)
-    const instance = instances.value[payload.key]
+    const instance = instances.value[key]
     if (instance) {
       instance.message = undefined
     }
@@ -194,8 +207,8 @@ export function useEntityStore<E extends BaseEntity, F>(
     // load entities if id list is not empty
     if (idsToLoad.length !== 0) {
       // commit('addIdInLoading', {ids: idsToLoad})
-      const ids = idsToLoad.filter(id => !idInLoading.value.includes(id))
-      idInLoading.value = [...idInLoading.value, ...ids]
+      const addIdInLoading = idsToLoad.filter(id => !idInLoading.value.includes(id))
+      idInLoading.value = [...idInLoading.value, ...addIdInLoading]
       try {
         const newEntities: E[] = await options.getEntitiesById(idsToLoad, true)
         const loadSuccessPayload: LoadSuccessPayload<E, F> = {
@@ -326,11 +339,12 @@ export function useEntityStore<E extends BaseEntity, F>(
   const setFilter = async (payload: SetFilterPayload<F>) => {
     const instance = instances.value[payload.key]
     if (instance) {
-      // console.log('setFilter: payload.filter', payload.filter)
-      // console.log('setFilter: instance.filter', instance.filter)
+      payload.filter = deepCopy(payload.filter)
+      console.log('setFilter: payload.filter', payload.filter)
+      console.log('setFilter: instance.filter', instance.filter)
       // eslint-disable-next-line @typescript-eslint/no-unsafe-call
       if (hash(payload.filter) === hash(instance.filter)) {
-        // console.log('setFilter: UNCHANGED')
+        console.log('setFilter: UNCHANGED')
         return UNCHANGED
       } else {
         const resetInstancePayload: ResetInstancePayload<F> = {

@@ -6,16 +6,12 @@
              dense flat round
              icon="menu"
              @click="mainStore.toggleLeftDrawer"/>
-      <q-avatar square class="q-ml-md" size="sm">
-        <img src="/annette_logo.svg">
-      </q-avatar>
-      <q-toolbar-title >
-              {{ $t("annetteConsole.toolbar.title") }}
-      </q-toolbar-title>
-
-<!--      <q-btn stretch flat to='/'>-->
-<!--        {{ $t("annetteConsole.toolbar.title") }}-->
-<!--      </q-btn>-->
+      <q-btn stretch flat to='/'>
+        <q-avatar square>
+          <img src="/annette_logo.svg">
+        </q-avatar>&nbsp;
+        {{ $t("annetteConsole.toolbar.title") }}
+      </q-btn>
       <q-space/>
       <q-btn flat round dense class="q-mr-xs"
              v-if='authStore.isAuthenticated'

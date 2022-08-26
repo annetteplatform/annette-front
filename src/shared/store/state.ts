@@ -1,8 +1,8 @@
-import {BaseEntity} from './model';
+import {BaseEntity, BaseFilter} from './model';
 import {InstanceMap} from './instance-map';
 import {EntityMap} from './entity-map';
 
-export interface EntityState<E extends BaseEntity, F> {
+export interface EntityState<E extends BaseEntity, F extends BaseFilter> {
   instances: InstanceMap<F>
   entities: EntityMap<E>
   idInLoading: string[]

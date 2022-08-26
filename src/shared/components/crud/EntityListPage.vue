@@ -18,38 +18,41 @@
   </div>
 </template>
 
-<script setup lang="ts">
-import {computed} from 'vue';
+<script lang="ts">
+import {PropType} from 'vue';
 import MessageBox from './MessageBox.vue';
+import {AnnetteError} from 'src/shared/model';
 
+import {defineComponent} from 'vue';
 
-const props = defineProps({
-  caption: {
-    type: String,
-    required: true
+export default defineComponent({
+  name: 'EntityListPage',
+  components: {MessageBox},
+  props: {
+    caption: {
+      type: String,
+      required: true
+    },
+    message: {
+      type: Object as PropType<AnnetteError | null>,
+      required: false
+    },
+    narrow: {
+      type: Boolean,
+      default: false
+    }
   },
-  namespace: {
-    type: String,
-    required: true
-  },
-  instanceKey: {
-    type: String,
-    required: true
-  },
-  narrow: {
-    type: Boolean,
-    default: false
+  emits: ['closeMessage'],
+  setup(props, {emit}) {
+
+    const closeMessage = () => {
+      void emit('closeMessage')
+    }
+
+    return {
+      closeMessage
+    }
   }
 })
-
-
-
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-return,@typescript-eslint/no-unsafe-member-access
-    // const message = computed(() => store.getters[`${namespace.value}/instance`](instanceKey.value).message)
-    //
-    // const closeMessage = () => {
-    //   void store.commit(`${namespace.value}/clearMessage`, {key: instanceKey.value})
-    // }
-
 
 </script>

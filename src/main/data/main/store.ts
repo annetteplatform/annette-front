@@ -29,7 +29,7 @@ export const useMainStore = defineStore('main', () => {
   }
 
   watch(authStore, async (newVal, oldVal) => {
-    console.log('isAuthenticated', newVal.isAuthenticated, oldVal?.isAuthenticated)
+    // console.log('isAuthenticated', newVal.isAuthenticated, oldVal?.isAuthenticated)
     if (newVal.isAuthenticated != oldVal?.isAuthenticated && newVal.isAuthenticated) await loadServices()
   }, {immediate: true})
 

@@ -11,7 +11,7 @@
                 v-if="message.messageType === 'I'"/>
       </q-item-section>
       <q-item-section>
-        <q-item-label>{{ message.code }}</q-item-label>
+        <q-item-label>{{ $t(message.code, message.params) }}</q-item-label>
       </q-item-section>
 
       <q-item-section side top v-if="canClose">
@@ -25,6 +25,7 @@
 import { PropType} from 'vue'
 import {AnnetteError} from 'src/shared/model';
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const props = defineProps({
   message: {
     type: Object as PropType<AnnetteError>,
@@ -34,7 +35,6 @@ const props = defineProps({
     type: Boolean,
     default: true
   }
-
 })
 
 const emit = defineEmits(['closeMessage'])

@@ -11,6 +11,7 @@ export interface Translation extends BaseEntity {
 export interface TranslationJson {
   translationId: string,
   languageId: string,
+  // eslint-disable-next-line  @typescript-eslint/no-explicit-any
   json: any,
   updatedAt?: Date
   updatedBy?: AnnettePrincipal

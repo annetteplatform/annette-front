@@ -1,8 +1,12 @@
-import {Message} from '../model';
+import {Message, SortBy} from '../model';
 
 export interface BaseEntity {
   id: string,
   updatedAt?: Date
+}
+
+export interface BaseFilter {
+  sortBy?: SortBy[]
 }
 
 export enum PagingMode {
@@ -87,9 +91,6 @@ export interface LoadFailurePayload {
   idInLoading: string[],
 }
 
-export interface ClearMessagePayload {
-  key: string,
-}
 
 
 

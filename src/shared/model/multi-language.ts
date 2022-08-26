@@ -8,3 +8,5 @@ export interface TextCaption extends Caption {
 export interface TranslationCaption extends Caption {
   translationId: string
 }
+
+export type MultiLanguageText = { [id: string]: string }

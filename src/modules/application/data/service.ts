@@ -46,7 +46,7 @@ export const applicationService = {
       .then(result => result.data)
   },
 
-  async getApplicationTranslations(id: string,languageId: string) {
+  async getApplicationTranslations(id: string, languageId: string) {
     // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return await axios.get(`/api/annette/v1/application/getApplicationTranslations/${id}/${languageId}`)
       // eslint-disable-next-line @typescript-eslint/no-unsafe-return
@@ -167,6 +167,11 @@ function convertApplication(rawApplication: Application): Application {
   if (rawApplication.updatedAt) {
     application.updatedAt = new Date(rawApplication.updatedAt)
   }
+  // throw  {
+  //   code: 'debug.error',
+  //   messageType: MessageType.Info,
+  //   params: {param1: 'qqq'}
+  // }
   return application
 }
 
