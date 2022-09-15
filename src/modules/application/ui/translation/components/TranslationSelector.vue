@@ -6,9 +6,10 @@
     use-input
     fill-input
     hide-selected
+    stack-label
     input-debounce="500"
     :readonly="readonly"
-    :label="label"
+    :label="label || $t('annette.application.translation.title')"
     :options="items"
     option-value="id"
     option-label="name"
@@ -21,7 +22,7 @@
     <template v-slot:no-option>
       <q-item>
         <q-item-section class="text-grey">
-          No results
+          {{ $t('annette.shared.crud.noResults') }}
         </q-item-section>
       </q-item>
     </template>
@@ -39,8 +40,7 @@ export default defineComponent({
   props: {
     label: {
       type: String,
-      required: false,
-      default: 'Translation'
+      required: false
     },
     modelValue: {
       type: String,

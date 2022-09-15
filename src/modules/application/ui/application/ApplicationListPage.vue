@@ -1,25 +1,32 @@
 <template>
 
   <entity-list-page narrow
-                    caption="Applications"
+                    :caption="$t('annette.application.application.titlePl')"
                     :message="instance.message"
                     @closeMessage="closeMessage">
     <template v-slot:toolbar>
-      <q-btn class="q-mr-md" outline color="primary"
-             label="Refresh"
-             @click="refreshList"/>
-      <q-btn color="primary"
-             label="Create"
-             :to="{name: 'application.application', params: {action: 'create', id: 'new'}}"/>
+      <q-btn class="q-mr-md" flat round color="primary" icon="refresh"
+             @click="refreshList">
+        <q-tooltip>
+          {{ $t('annette.shared.crud.refresh') }}
+        </q-tooltip>
+      </q-btn>
     </template>
     <template v-slot:filter>
-      <simple-filter-form class="q-mb-md"
-                          :filter="instance.filter"
-                          @filterChanged="onFilterChanged"/>
+      <simple-filter-form
+        :filter="instance.filter"
+        @filterChanged="onFilterChanged"/>
     </template>
     <template v-slot:default>
-      <application-list class="q-mb-md"
-                        :instance-key="instanceKey"/>
+      <application-list
+        :instance-key="instanceKey">
+        <template v-slot:toolbar>
+          <q-space/>
+          <q-btn color="primary" outline flat
+                 label="Create"
+                 :to="{name: 'application.application', params: {action: 'create', id: 'new'}}"/>
+        </template>
+      </application-list>
     </template>
   </entity-list-page>
 </template>

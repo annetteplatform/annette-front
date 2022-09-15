@@ -1,82 +1,58 @@
 <template>
   <entity-page narrow
-               caption="Application"
+               :caption="$t('annette.application.application.title')"
                :show-form="!!entityModel"
                :error="error"
                @clearError="clearError">
     <template v-slot:toolbar>
       <q-btn class="q-mr-md" outline color="primary"
-             label="Applications"
+             :label="$t('annette.application.application.titlePl')"
              :to="{name: 'application.applications'}"/>
       <q-btn v-if="action === 'edit'"
              class="q-mr-md" outline color="primary"
-             label="View"
+             :label="$t('annette.shared.crud.view')"
              :to="{ name: 'application.application', params: { action: 'view', id } }"/>
       <q-btn v-if="action === 'view'"
              class="q-mr-md" outline color="primary"
-             label="Edit"
+             :label="$t('annette.shared.crud.edit')"
              :to="{ name: 'application.application', params: { action: 'edit', id } }"/>
       <q-btn v-if="action !== 'view'"
              color="primary"
-             label="Save"
+             :label="$t('annette.shared.crud.save')"
              @click="save"/>
     </template>
     <template v-slot:status>
-      <q-chip outline square color="red" text-color="white" label="Changed"
+      <q-chip outline square color="red" text-color="white"
+              :label="$t('annette.shared.crud.changed')"
               v-if="changed()"/>
-      <q-chip outline square color="green" text-color="white" label="Saved"
+      <q-chip outline square color="green" text-color="white"
+              :label="$t('annette.shared.crud.saved')"
               v-if="saved && ! changed()"/>
     </template>
     <template v-slot:default>
       <div class="row q-pb-md">
         <q-input class="col-md-4 col-sm-12 col-xs-12 "
                  v-model="entityModel.id"
-                 :rules="[val => !!val || 'Field is required']"
+                 :rules="[val => !!val || $t('annette.shared.crud.fieldRequired')]"
                  :readonly="action!=='create'"
                  ref="idRef"
-                 label="Application Id"/>
+                 :label="$t('annette.application.application.field.id')"/>
       </div>
       <div class="row q-pb-md">
         <q-input class="col-md-12 col-sm-12 col-xs-12 "
                  v-model="entityModel.name"
-                 :rules="[val => !!val || 'Field is required']"
+                 :rules="[val => !!val || $t('annette.shared.crud.fieldRequired')]"
                  :readonly="action ==='view'"
                  ref="nameRef"
-                 label="Name"/>
+                 :label="$t('annette.application.application.field.name')"/>
       </div>
-<!--      <div>-->
-<!--        <div>-->
-<!--          Caption type-->
-<!--        </div>-->
-<!--        <q-option-group-->
-<!--          :model-value="entityModel.caption.type"-->
-<!--          @update:model-value="changeCaptionType"-->
-<!--          :options="captionTypes"-->
-<!--          :disable="action ==='view'"-->
-<!--          color="primary"-->
-<!--          inline-->
-<!--        />-->
-<!--      </div>-->
-<!--      <div class="row q-pb-md"-->
-<!--           v-if="entityModel.caption.type === 'text'">-->
-<!--        <q-input class="col-md-12 col-sm-12 col-xs-12 "-->
-<!--                 v-model="entityModel.caption.text"-->
-<!--                 :readonly="action ==='view'"-->
-<!--                 label="Text caption"/>-->
-<!--      </div>-->
-<!--      <div class="row q-pb-md"-->
-<!--           v-else>-->
-<!--        <q-input class="col-md-12 col-sm-12 col-xs-12 "-->
-<!--                 v-model="entityModel.caption.translationId"-->
-<!--                 :readonly="action ==='view'"-->
-<!--                 label="Translation caption"/>-->
-<!--      </div>-->
 
       <div class="row full-width q-pb-md">
         <q-list bordered class="full-width" separator>
           <q-item v-if="action !=='view'">
             <q-item-section>
-              <translation-selector v-model="newTranslation" label="Translation"/>
+              <translation-selector v-model="newTranslation"
+                                    :label="$t('annette.application.translation.title')"/>
             </q-item-section>
             <q-item-section avatar>
               <q-btn class="float-left" round dense flat color="primary" icon="add"
@@ -88,7 +64,7 @@
           <q-item v-if="entityModel.translations && entityModel.translations.length === 0">
             <q-item-section>
               <q-item-label caption>
-                Translations not assigned
+                {{ $t('annette.application.application.translationNotAssigned') }}
               </q-item-label>
             </q-item-section>
           </q-item>
@@ -116,13 +92,13 @@
         <q-input class="col-md-12 col-sm-12 col-xs-12 "
                  v-model="entityModel.backendUrl"
                  :readonly="action ==='view'"
-                 label="Backend URL"/>
+                 :label="$t('annette.application.application.field.backendUrl')"/>
       </div>
       <div class="row q-pb-md">
         <q-input class="col-md-12 col-sm-12 col-xs-12 "
                  v-model="entityModel.frontendUrl"
                  :readonly="action ==='view'"
-                 label="Frontend URL"/>
+                 :label="$t('annette.application.application.field.frontendUrl')"/>
       </div>
 
     </template>

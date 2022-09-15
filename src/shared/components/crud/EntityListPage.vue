@@ -1,16 +1,24 @@
 <template>
   <div :class="narrow ? 'narrow-layout': 'q-ma-md'">
-    <div class="row">
-      <div class="col-md-12 q-pa-md">
-        <q-item class="q-mr-none">
-          <h5 class="q-ma-none">{{ caption }}</h5>
-          <q-space/>
-          <slot name="toolbar"></slot>
-        </q-item>
-      </div>
+    <q-toolbar>
+      <h5 class="q-ma-none">{{ $t(caption) }}</h5>
+      <q-space/>
+      <slot name="toolbar"></slot>
+    </q-toolbar>
+    <div class="q-mb-sm">
+      <q-list bordered class="rounded-borders full-width" >
+        <q-expansion-item
+          bordered
+          dense
+          icon="filter_alt"
+          :label="$t('annette.shared.crud.filter')"
+          v-model="expanded"
+        >
+          <slot name="filter"></slot>
+        </q-expansion-item>
+      </q-list>
     </div>
-    <slot name="filter"></slot>
-    <message-box class="q-mb-md"
+    <message-box class="q-mb-sm"
                  v-if="message"
                  :message="message"
                  @closeMessage="closeMessage"/>
@@ -19,7 +27,7 @@
 </template>
 
 <script lang="ts">
-import {PropType} from 'vue';
+import {PropType, ref} from 'vue';
 import MessageBox from './MessageBox.vue';
 import {AnnetteError} from 'src/shared/model';
 
@@ -44,13 +52,15 @@ export default defineComponent({
   },
   emits: ['closeMessage'],
   setup(props, {emit}) {
+    const expanded = ref(true)
 
     const closeMessage = () => {
       void emit('closeMessage')
     }
 
     return {
-      closeMessage
+      closeMessage,
+      expanded
     }
   }
 })

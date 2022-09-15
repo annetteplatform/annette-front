@@ -8,7 +8,7 @@
     hide-selected
     input-debounce="500"
     :readonly="readonly"
-    :label="label"
+    :label="label || $t('annette.application.application.title')"
     :options="items"
     option-value="id"
     option-label="name"
@@ -21,7 +21,7 @@
     <template v-slot:no-option>
       <q-item>
         <q-item-section class="text-grey">
-          No results
+          {{ $t('annette.shared.crud.noResults') }}
         </q-item-section>
       </q-item>
     </template>
@@ -32,6 +32,9 @@
 import {defineComponent, toRef} from 'vue';
 import {Application, ApplicationFilter, useApplicationStore} from 'src/modules/application';
 import {useEntitySelector} from 'src/shared/composables';
+import {useI18n} from 'vue-i18n';
+
+const i18n = useI18n()
 
 export default defineComponent({
   name: 'ApplicationSelector',
@@ -40,7 +43,7 @@ export default defineComponent({
     label: {
       type: String,
       required: false,
-      default: 'Application'
+      default: i18n.t('annette.application.application.title')
     },
     modelValue: {
       type: String,

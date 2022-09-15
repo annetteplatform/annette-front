@@ -8,6 +8,7 @@ import {AnnetteError, AttributeMetadata, AttributeValues, EntityAttributesMetada
 import hash from 'object-hash';
 import {useQuasar} from 'quasar';
 import {useRoute, useRouter} from 'vue-router';
+import {BaseEntity} from 'src/shared/store';
 
 function deepCopy<T>(object: T): T {
   return JSON.parse(JSON.stringify(object))
@@ -25,7 +26,7 @@ export interface UseEntityPageOpt<T> {
   getMetadata?: () => Promise<EntityAttributesMetadata>
 }
 
-export function useEntityPage<T>(
+export function useEntityPage<T extends BaseEntity>(
   opt: UseEntityPageOpt<T>
 ) {
 
@@ -63,7 +64,7 @@ export function useEntityPage<T>(
       opt.onBeforeLoad(action.value, id.value)
     }
     // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-    if (action.value === 'create' && opt.emptyEntity) {
+    if (action.value === 'create' && id.value == 'new' && opt.emptyEntity) {
       const entity = opt.emptyEntity()
       updateEntity(entity)
       if (opt.enableAttributes && opt.getMetadata && opt.getAttributes ){
@@ -89,6 +90,13 @@ export function useEntityPage<T>(
              void opt.getAttributes(id.value, false, 'all').then(data => attributes.value = data)
            }
            entity = await store.getEntityForEdit(id.value)
+
+           if (action.value == 'create') {
+             entity = {
+               ...entity,
+               id: ''
+             }
+           }
          }
         updateEntity(entity)
       } catch (ex) {

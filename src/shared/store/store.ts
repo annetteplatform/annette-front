@@ -154,9 +154,9 @@ export function useEntityStore<E extends BaseEntity, F>(
 
   const removeEntity = (id: string) => {
     Object.keys(instances.value).forEach(key => {
+      const instance = instances.value[key]
       Object.keys(instances.value[key].pages).forEach(pageKey => {
         const page = +pageKey
-        const instance = instances.value[key]
         const newIds: string[] = instance.pages[page].ids.filter(pid => pid !== id)
         instance.pages[page].ids = newIds
       })
@@ -442,7 +442,7 @@ export function useEntityStore<E extends BaseEntity, F>(
     refresh,
     refreshAll,
     resetInstance,
-    load,
+    load: options.load || load,
     getEntityForEdit,
     getEntitiesForEdit,
     loadEntitiesIfNotExist,

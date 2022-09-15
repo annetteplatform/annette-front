@@ -1,28 +1,22 @@
 <template>
-  <q-list bordered class="rounded-borders full-width">
-    <q-expansion-item
-      bordered
-      icon="search"
-      label="Filter"
-      v-model="expanded"
-    >
-      <q-card class="my-card">
-        <q-card-section horizontal>
-          <q-form
-            @submit="setFilter"
-            @reset="clearFilter"
-            class="full-width q-pa-md q-gutter-md">
-            <q-input v-model="filterModel.filter"
-                     label="Filter"/>
-          </q-form>
-          <q-card-actions vertical class=" q-ml-lg q-mr-lg q-mb-md">
-            <q-btn flat color="primary" label="Apply" @click="setFilter"/>
-            <q-btn flat color="negative" label="Clear" @click="clearFilter"/>
-          </q-card-actions>
-        </q-card-section>
-      </q-card>
-    </q-expansion-item>
-  </q-list>
+  <q-card>
+    <q-card-section horizontal>
+      <q-form
+        @submit="setFilter"
+        @reset="clearFilter"
+        class="full-width q-pa-md q-gutter-md">
+        <q-input dense
+                 stack-label
+                 v-model="filterModel.filter"
+                 :label="$t('annette.shared.filter.filter')"/>
+      </q-form>
+      <q-card-actions vertical class=" q-ml-lg q-mr-lg q-mb-md">
+        <q-btn flat dense color="primary" :label="$t('annette.shared.filter.apply')" @click="setFilter"/>
+        <q-btn flat dense color="negative" :label="$t('annette.shared.filter.clear')" @click="clearFilter"/>
+      </q-card-actions>
+    </q-card-section>
+  </q-card>
+
 </template>
 
 <script setup lang="ts">
@@ -44,8 +38,6 @@ const props = defineProps({
 })
 
 const emit = defineEmits(['filterChanged'])
-
-const expanded = ref(true)
 
 const filterModel: any = ref({...props.filter})
 

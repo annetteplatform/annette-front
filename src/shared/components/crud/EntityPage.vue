@@ -1,14 +1,10 @@
 <template>
   <div :class="{ 'narrow-layout': narrow }">
-    <div class="row">
-      <div class="col-md-12 q-pa-md q-gutter-md">
-        <q-item class="q-mr-none">
-          <h5 class="q-ma-none">{{ caption }}</h5>
-          <q-space/>
-          <slot name="toolbar"></slot>
-        </q-item>
-      </div>
-    </div>
+    <q-toolbar>
+      <h5 class="q-ma-none">{{ $t(caption) }}</h5>
+      <q-space/>
+      <slot name="toolbar"></slot>
+    </q-toolbar>
 
     <div class="row q-pb-md" v-if="error">
       <message-box :message="error" @closeMessage="clearError"/>

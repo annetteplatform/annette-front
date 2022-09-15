@@ -11,6 +11,9 @@
     :loading="loading"
     :rows-per-page-options="[5, 10, 20, 25, 50, 100]"
   >
+    <template v-slot:top>
+      <slot name="toolbar"></slot>
+    </template>
     <template v-slot:header="props">
       <q-tr :props="props">
         <q-th
