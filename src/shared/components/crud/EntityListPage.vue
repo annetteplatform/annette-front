@@ -1,7 +1,7 @@
 <template>
   <div :class="narrow ? 'narrow-layout': 'q-ma-md'">
     <q-toolbar>
-      <h5 class="q-ma-none">{{ $t(caption) }}</h5>
+      <h5 class="q-mt-md q-mb-md">{{ $t(caption) }}</h5>
       <q-space/>
       <slot name="toolbar"></slot>
     </q-toolbar>
@@ -9,7 +9,6 @@
       <q-list bordered class="rounded-borders full-width" >
         <q-expansion-item
           bordered
-          dense
           icon="filter_alt"
           :label="$t('annette.shared.crud.filter')"
           v-model="expanded"

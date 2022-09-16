@@ -1,16 +1,10 @@
 <template>
-
   <entity-list-page narrow
                     :caption="$t('annette.application.application.titlePl')"
                     :message="instance.message"
                     @closeMessage="closeMessage">
     <template v-slot:toolbar>
-      <q-btn class="q-mr-md" flat round color="primary" icon="refresh"
-             @click="refreshList">
-        <q-tooltip>
-          {{ $t('annette.shared.crud.refresh') }}
-        </q-tooltip>
-      </q-btn>
+      <default-list-page-toolbar @refresh="refreshList"/>
     </template>
     <template v-slot:filter>
       <simple-filter-form
@@ -21,10 +15,7 @@
       <application-list
         :instance-key="instanceKey">
         <template v-slot:toolbar>
-          <q-space/>
-          <q-btn color="primary" outline flat
-                 label="Create"
-                 :to="{name: 'application.application', params: {action: 'create', id: 'new'}}"/>
+         <default-list-toolbar create create-route-name="application.application"/>
         </template>
       </application-list>
     </template>
@@ -40,10 +31,14 @@ import EntityListPage from 'src/shared/components/crud/EntityListPage.vue';
 import SimpleFilterForm from 'src/shared/components/crud/SimpleFilterForm.vue';
 import ApplicationList from './components/ApplicationList.vue';
 import {defineComponent} from 'vue';
+import DefaultListToolbar from 'src/shared/components/crud/DefaultListToolbar.vue';
+import DefaultListPageToolbar from 'src/shared/components/crud/DefaultListPageToolbar.vue';
 
 export default defineComponent({
   name: 'ApplicationListPage',
-  components: {ApplicationList, SimpleFilterForm, EntityListPage},
+  components: {
+    DefaultListPageToolbar,
+    DefaultListToolbar, ApplicationList, SimpleFilterForm, EntityListPage},
   setup() {
 
     const instanceKey = 'applications'

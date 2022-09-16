@@ -3,23 +3,14 @@
                :caption="$t('annette.application.application.title')"
                :show-form="!!entityModel"
                :error="error"
+               :action="action"
                @clearError="clearError">
     <template v-slot:toolbar>
-      <q-btn class="q-mr-md" outline color="primary"
-             :label="$t('annette.application.application.titlePl')"
-             :to="{name: 'application.applications'}"/>
-      <q-btn v-if="action === 'edit'"
-             class="q-mr-md" outline color="primary"
-             :label="$t('annette.shared.crud.view')"
-             :to="{ name: 'application.application', params: { action: 'view', id } }"/>
-      <q-btn v-if="action === 'view'"
-             class="q-mr-md" outline color="primary"
-             :label="$t('annette.shared.crud.edit')"
-             :to="{ name: 'application.application', params: { action: 'edit', id } }"/>
-      <q-btn v-if="action !== 'view'"
-             color="primary"
-             :label="$t('annette.shared.crud.save')"
-             @click="save"/>
+      <default-entity-page-toolbar :action="action" :id="id"
+                                   route-name="application.application"
+                                   :back-label="$t('annette.application.application.titlePl')"
+                                   back-route-name="application.applications"
+                                   @save="save"/>
     </template>
     <template v-slot:status>
       <q-chip outline square color="red" text-color="white"
@@ -28,6 +19,19 @@
       <q-chip outline square color="green" text-color="white"
               :label="$t('annette.shared.crud.saved')"
               v-if="saved && ! changed()"/>
+    </template>
+    <template v-slot:save-toolbar >
+      <div class="row">
+        <q-btn v-if="action == 'edit'" outline dense
+               class="q-mr-md"
+               color="primary"
+               :label="$t('annette.shared.crud.cancel')"
+               :to="{ name: 'application.application', params: { action: 'view', id } }"/>
+        <q-btn dense
+               color="primary"
+               :label="$t('annette.shared.crud.save')"
+               @click="save"/>
+      </div>
     </template>
     <template v-slot:default>
       <div class="row q-pb-md">
@@ -115,21 +119,23 @@ import {useEntityPage} from 'src/shared/composables';
 import {TextCaption, TranslationCaption} from 'src/shared/model';
 import EntityPage from 'src/shared/components/crud/EntityPage.vue';
 import TranslationSelector from '../translation/components/TranslationSelector.vue';
+import DefaultEntityPageToolbar from 'src/shared/components/crud/DefaultEntityPageToolbar.vue';
 
-function emptyEntity() {
+function emptyEntity(): Application {
   return {
     id: '',
     name: '',
     label: {},
     labelDescription: {},
     translations: [],
-    serverUrl: '',
+    backendUrl: '',
+    frontendUrl: '',
   }
 }
 
 export default defineComponent({
   name: 'ApplicationPage',
-  components: {TranslationSelector, EntityPage},
+  components: {DefaultEntityPageToolbar, TranslationSelector, EntityPage},
   props: {
     id: String,
     action: String

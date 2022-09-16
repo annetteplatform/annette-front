@@ -1,7 +1,8 @@
 <template>
-  <div :class="{ 'narrow-layout': narrow }">
+  <div :class="{ 'narrow-layout': narrow, }"
+       class="q-px-md">
     <q-toolbar>
-      <h5 class="q-ma-none">{{ $t(caption) }}</h5>
+      <h5 class="q-mt-md q-mb-md">{{ $t(caption) }}</h5>
       <q-space/>
       <slot name="toolbar"></slot>
     </q-toolbar>
@@ -11,10 +12,24 @@
     </div>
 
     <div v-if="showForm">
-      <div class="row q-pb-md">
-        <slot name="status"></slot>
-      </div>
       <slot></slot>
+    </div>
+
+    <div v-if="action !== 'view'">
+      <div class="q-mb-md" style="height: 64px"></div>
+      <q-card bordered flat
+              :class="{ 'narrow-layout': narrow }"
+              class="fixed-bottom q-mb-md q-px-md">
+        <q-card-section horizontal>
+          <div class="q-my-sm">
+            <slot name="status"></slot>
+          </div>
+          <q-space/>
+          <q-card-actions vertical class="justify-around">
+            <slot name="save-toolbar"></slot>
+          </q-card-actions>
+        </q-card-section>
+      </q-card>
     </div>
   </div>
 </template>
@@ -29,6 +44,10 @@ export default defineComponent({
   name: 'EntityPage',
   components: {MessageBox},
   props: {
+    action: {
+      type: String,
+      required: true
+    },
     caption: {
       type: String,
       required: true
@@ -49,7 +68,9 @@ export default defineComponent({
   emits: ['clearError'],
   setup(props, {emit}) {
 
-    const clearError = () => { emit('clearError') }
+    const clearError = () => {
+      emit('clearError')
+    }
 
     return {
       clearError

@@ -10,7 +10,6 @@ import {useI18n} from 'vue-i18n';
 export function useEntityList<E extends BaseEntity, F extends BaseFilter>(
   store: any,
   instanceKey: string,
-  deleteQuestion?: string
 ) {
 
   const quasar = useQuasar()
@@ -90,29 +89,11 @@ export function useEntityList<E extends BaseEntity, F extends BaseFilter>(
     })
   }
 
-  const deleteEntity = (id: string) => {
-    quasar.notify({
-      type: 'negative',
-      message: deleteQuestion,
-      actions: [
-        {label: 'Cancel', color: 'white'},
-        {
-          label: 'Delete',
-          color: 'white',
-          handler: () => {
-            store.deleteEntity(id).catch((ex: any) => showErrorNotification(ex as AnnetteError))
-          }
-        }
-      ]
-    })
-  }
-
   return {
     instance,
     items,
     pagination,
     onRequest,
-    deleteEntity,
     showErrorNotification
   };
 
