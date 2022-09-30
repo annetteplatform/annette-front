@@ -51,8 +51,30 @@
                  :label="$t('annette.application.application.field.name')"/>
       </div>
 
+      <div class="row q-pb-md">
+        <multi-language-text
+          :label="$t('annette.application.application.field.label')"
+          v-model="entityModel.label"
+          :readonly="action ==='view'"/>
+      </div>
+
+      <div class="row q-pb-md">
+        <multi-language-text
+          multiline
+          :label="$t('annette.application.application.field.labelDescription')"
+          v-model="entityModel.labelDescription"
+          :readonly="action ==='view'"/>
+      </div>
+
       <div class="row full-width q-pb-md">
         <q-list bordered class="full-width" separator>
+          <q-item>
+            <q-item-section>
+              <q-item-label >
+                {{ $t('annette.application.application.field.translations')  }}
+              </q-item-label>
+            </q-item-section>
+          </q-item>
           <q-item v-if="action !=='view'">
             <q-item-section>
               <translation-selector v-model="newTranslation"
@@ -120,6 +142,8 @@ import {TextCaption, TranslationCaption} from 'src/shared/model';
 import EntityPage from 'src/shared/components/crud/EntityPage.vue';
 import TranslationSelector from '../translation/components/TranslationSelector.vue';
 import DefaultEntityPageToolbar from 'src/shared/components/crud/DefaultEntityPageToolbar.vue';
+import MultiLanguageText from 'src/shared/components/crud/MultiLanguageText.vue';
+import {useI18n} from 'vue-i18n';
 
 function emptyEntity(): Application {
   return {
@@ -135,7 +159,7 @@ function emptyEntity(): Application {
 
 export default defineComponent({
   name: 'ApplicationPage',
-  components: {DefaultEntityPageToolbar, TranslationSelector, EntityPage},
+  components: {MultiLanguageText, DefaultEntityPageToolbar, TranslationSelector, EntityPage},
   props: {
     id: String,
     action: String
@@ -154,6 +178,9 @@ export default defineComponent({
     }
 
     const store = useApplicationStore()
+    const translationStore = useTranslationStore()
+    const quasar = useQuasar()
+    const i18n = useI18n()
 
     const entityPage = useEntityPage<Application>({
         store,
@@ -163,38 +190,6 @@ export default defineComponent({
       }
     )
 
-    const captionTypes = [
-      {
-        label: 'Text Caption',
-        value: 'text'
-      },
-      {
-        label: 'Translation Caption',
-        value: 'translation'
-      },
-    ]
-
-    const changeCaptionType = (captionType: string) => {
-      if (captionType === 'text') {
-        const caption: TextCaption = {
-          type: 'text',
-          text: ''
-        }
-        // @ts-ignore
-        entityPage.entityModel.value.caption = caption
-      } else {
-        const caption: TranslationCaption = {
-          type: 'translation',
-          translationId: ''
-        }
-        // @ts-ignore
-        entityPage.entityModel.value.caption = caption
-      }
-    }
-
-
-    const translationStore = useTranslationStore()
-    const quasar = useQuasar()
     const newTranslation = ref('')
     // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access,@typescript-eslint/no-unsafe-return
     const translationEntities = computed(() => translationStore.entities)
@@ -212,11 +207,11 @@ export default defineComponent({
       console.log(translation)
       quasar.notify({
         type: 'negative',
-        message: 'Please confirm delete translation.',
+        message: i18n.t('annette.application.application.deleteQuestion'),
         actions: [
-          {label: 'Cancel', color: 'white'},
+          {label: i18n.t('annette.shared.crud.cancel'), color: 'white'},
           {
-            label: 'Delete',
+            label: i18n.t('annette.shared.crud.del'),
             color: 'white',
             handler: () => {
               if (entityPage.entityModel.value &&
@@ -235,8 +230,6 @@ export default defineComponent({
       idRef,
       nameRef,
       ...entityPage,
-      captionTypes,
-      changeCaptionType,
       newTranslation,
       translationEntities,
       addTranslation,

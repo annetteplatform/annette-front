@@ -32,9 +32,7 @@
 import {defineComponent, toRef} from 'vue';
 import {Language, LanguageFilter, useLanguageStore} from 'src/modules/application';
 import {useEntitySelector} from 'src/shared/composables';
-import {useI18n} from 'vue-i18n';
 
-const i18n = useI18n()
 
 export default defineComponent({
   name: 'LanguageSelector',
@@ -43,7 +41,6 @@ export default defineComponent({
     label: {
       type: String,
       required: false,
-      default: i18n.t('annette.application.language.title')
     },
     modelValue: {
       type: String,

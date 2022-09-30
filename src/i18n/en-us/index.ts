@@ -1,9 +1,6 @@
 // This is just an example,
 // so you can safely delete all default props below
 
-import {Icon} from 'src/main';
-import {AnnettePrincipal, MultiLanguageText} from 'src/shared/model';
-
 export default {
   annetteConsole: {
     toolbar: {
@@ -49,7 +46,7 @@ export default {
         changed: 'Changed',
         saved: 'Saved',
         fieldRequired: 'Field is required',
-        noResults:'No results',
+        noResults: 'No results',
         updatedAt: 'Updated At',
         updatedBy: 'Updated By'
       },
@@ -69,7 +66,7 @@ export default {
           icon: 'Icon',
           label: 'Label',
           labelDescription: 'Label Description',
-          translations: 'translations',
+          translations: 'Translations',
           backendUrl: 'Backend URL',
           frontendUrl: 'Frontend URL',
         },
@@ -79,7 +76,26 @@ export default {
       translation: {
         title: 'Translation',
         titlePl: 'Translations',
-      }
+        field: {
+          id: 'Id',
+          name: 'Name',
+          translations: 'Translations',
+        },
+        translationLanguages: {
+          title: 'Translation JSON for {language}',
+          deleteQuestion: 'Please confirm delete language.',
+        },
+        deleteQuestion: 'Please confirm delete translation.',
+      },
+      language: {
+        title: 'Language',
+        titlePl: 'Languages',
+        field: {
+          id: 'Id',
+          name: 'Name',
+        },
+        deleteQuestion: 'Please confirm delete language.',
+      },
     }
   }
 };
