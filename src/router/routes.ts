@@ -1,5 +1,7 @@
 import { RouteRecordRaw } from 'vue-router';
 import {applicationRoutes} from 'src/modules/application';
+import {personRoutes} from 'src/modules/person';
+import {orgStructureRoutes} from 'src/modules/org-structure';
 
 const routes: RouteRecordRaw[] = [
   {
@@ -11,7 +13,9 @@ const routes: RouteRecordRaw[] = [
       component: () => import('src/main/ui/IndexPage.vue'),
       meta: {requiresAuth: false}
     },
-      ...applicationRoutes
+      ...applicationRoutes,
+      ...personRoutes,
+      ...orgStructureRoutes
     ],
   },
 

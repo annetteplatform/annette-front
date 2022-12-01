@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="q-mx-md">
     <div class="row" v-for="(row, index) in rows" :key="index">
       <template v-if="row.length > 0 && row[0].type === 'service' ">
         <div class="col-md-3 col-sm-6 col-xs-12 q-pa-sm"
@@ -29,7 +29,7 @@
                         :model-value="!!mainStore.mainOpenGroups[group.id]"
                         @update:model-value="mainStore.toggleMainOpenGroup(group.id)"
       >
-        <main-menu-list class="q-mb-sm" :item-ids="group.children" application-id="ANNETTE-CONSOLE"/>
+        <main-menu-list class="q-mb-sm" :item-ids="group.children" :application-id="applicationId"/>
         <q-separator/>
       </q-expansion-item>
     </div>
@@ -47,6 +47,7 @@ const props: Readonly<{ itemIds: string[]; applicationId: string }> = defineProp
   itemIds: string[]
   applicationId: string
 }>()
+
 
 const mainStore = useMainStore()
 const menuList = useMenuList(props)

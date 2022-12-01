@@ -6,10 +6,9 @@
     use-input
     fill-input
     hide-selected
-    stack-label
     input-debounce="500"
     :readonly="readonly"
-    :label="label || $t('annette.application.translation.title')"
+    :label="label || $t('annette.orgStructure.orgRole.title')"
     :options="items"
     option-value="id"
     option-label="name"
@@ -31,16 +30,17 @@
 
 <script lang="ts">
 import {defineComponent, toRef} from 'vue';
-import {Translation, TranslationFilter, useTranslationStore} from 'src/modules/application';
+import {OrgRole, OrgRoleFilter, useOrgRoleStore} from 'src/modules/org-structure';
 import {useEntitySelector} from 'src/shared/composables';
 
+
 export default defineComponent({
-  name: 'TranslationSelector',
+  name: 'OrgRoleSelector',
   components: {},
   props: {
     label: {
       type: String,
-      required: false
+      required: false,
     },
     modelValue: {
       type: String,
@@ -55,13 +55,13 @@ export default defineComponent({
   emits: ['update:modelValue'],
   setup(props, {emit}) {
 
-    const store = useTranslationStore()
+    const store = useOrgRoleStore()
 
     const valueRef = toRef(props, 'modelValue')
 
-    const entitySelector = useEntitySelector<Translation, TranslationFilter>(
+    const entitySelector = useEntitySelector<OrgRole, OrgRoleFilter>(
       store,
-      'TranslationSelector',
+      'OrgRoleSelector',
       valueRef,
       emit
     )

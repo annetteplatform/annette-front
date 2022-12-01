@@ -35,7 +35,7 @@
     </template>
     <template v-slot:default>
       <div class="row q-pb-md">
-        <q-input class="col-md-4 col-sm-12 col-xs-12 "
+        <q-input class="col-md-4 col-sm-12 col-xs-12 "  stack-label dense
                  v-model="entityModel.id"
                  :rules="[val => !!val || $t('annette.shared.crud.fieldRequired')]"
                  :readonly="action!=='create'"
@@ -43,7 +43,7 @@
                  :label="$t('annette.application.application.field.id')"/>
       </div>
       <div class="row q-pb-md">
-        <q-input class="col-md-12 col-sm-12 col-xs-12 "
+        <q-input class="col-md-12 col-sm-12 col-xs-12 "  stack-label dense
                  v-model="entityModel.name"
                  :rules="[val => !!val || $t('annette.shared.crud.fieldRequired')]"
                  :readonly="action ==='view'"
@@ -115,13 +115,13 @@
       </div>
 
       <div class="row q-pb-md">
-        <q-input class="col-md-12 col-sm-12 col-xs-12 "
+        <q-input class="col-md-12 col-sm-12 col-xs-12 "  stack-label dense
                  v-model="entityModel.backendUrl"
                  :readonly="action ==='view'"
                  :label="$t('annette.application.application.field.backendUrl')"/>
       </div>
       <div class="row q-pb-md">
-        <q-input class="col-md-12 col-sm-12 col-xs-12 "
+        <q-input class="col-md-12 col-sm-12 col-xs-12 " stack-label dense
                  v-model="entityModel.frontendUrl"
                  :readonly="action ==='view'"
                  :label="$t('annette.application.application.field.frontendUrl')"/>

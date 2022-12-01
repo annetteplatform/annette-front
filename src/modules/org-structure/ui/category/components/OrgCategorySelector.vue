@@ -6,10 +6,9 @@
     use-input
     fill-input
     hide-selected
-    stack-label
     input-debounce="500"
     :readonly="readonly"
-    :label="label || $t('annette.application.translation.title')"
+    :label="label || $t('annette.orgStructure.category.title')"
     :options="items"
     option-value="id"
     option-label="name"
@@ -31,20 +30,25 @@
 
 <script lang="ts">
 import {defineComponent, toRef} from 'vue';
-import {Translation, TranslationFilter, useTranslationStore} from 'src/modules/application';
 import {useEntitySelector} from 'src/shared/composables';
+import {OrgCategory, OrgCategoryFilter, useOrgCategoryStore} from 'src/modules/org-structure';
+
 
 export default defineComponent({
-  name: 'TranslationSelector',
+  name: 'OrgCategorySelector',
   components: {},
   props: {
     label: {
       type: String,
-      required: false
+      required: false,
     },
     modelValue: {
       type: String,
       required: true
+    },
+    type: {
+      type: String,
+      default: 'any'
     },
     readonly: {
       type: Boolean,
@@ -55,15 +59,28 @@ export default defineComponent({
   emits: ['update:modelValue'],
   setup(props, {emit}) {
 
-    const store = useTranslationStore()
+    const store = useOrgCategoryStore()
 
     const valueRef = toRef(props, 'modelValue')
 
-    const entitySelector = useEntitySelector<Translation, TranslationFilter>(
+    const type = toRef(props, 'type')
+
+    const fixedFilter = () => {
+      const filter = {
+        filter: '',
+        forOrganization: type.value === 'org' || type.value === 'any',
+        forUnit: type.value === 'unit' || type.value === 'any',
+        forPosition: type.value === 'position' || type.value === 'any'
+      }
+      return filter
+    }
+
+    const entitySelector = useEntitySelector<OrgCategory, OrgCategoryFilter>(
       store,
-      'TranslationSelector',
+      'CategorySelector',
       valueRef,
-      emit
+      emit,
+      fixedFilter
     )
 
     return {

@@ -5,8 +5,7 @@
         @submit="setFilter"
         @reset="clearFilter"
         class="full-width q-pa-md q-gutter-md">
-        <q-input dense
-                 stack-label
+        <q-input stack-label dense
                  v-model="filterModel.filter"
                  :label="$t('annette.shared.filter.filter')"/>
       </q-form>

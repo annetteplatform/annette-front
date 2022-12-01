@@ -6,10 +6,9 @@
     use-input
     fill-input
     hide-selected
-    stack-label
     input-debounce="500"
     :readonly="readonly"
-    :label="label || $t('annette.application.translation.title')"
+    :label="label || $t('annette.person.category.title')"
     :options="items"
     option-value="id"
     option-label="name"
@@ -31,16 +30,18 @@
 
 <script lang="ts">
 import {defineComponent, toRef} from 'vue';
-import {Translation, TranslationFilter, useTranslationStore} from 'src/modules/application';
 import {useEntitySelector} from 'src/shared/composables';
+import {useCategoryStore} from 'src/modules/person/data/category.store';
+import {Category, CategoryFilter} from 'src/shared/model';
+
 
 export default defineComponent({
-  name: 'TranslationSelector',
+  name: 'PersonCategorySelector',
   components: {},
   props: {
     label: {
       type: String,
-      required: false
+      required: false,
     },
     modelValue: {
       type: String,
@@ -55,13 +56,13 @@ export default defineComponent({
   emits: ['update:modelValue'],
   setup(props, {emit}) {
 
-    const store = useTranslationStore()
+    const store = useCategoryStore()
 
     const valueRef = toRef(props, 'modelValue')
 
-    const entitySelector = useEntitySelector<Translation, TranslationFilter>(
+    const entitySelector = useEntitySelector<Category, CategoryFilter>(
       store,
-      'TranslationSelector',
+      'CategorySelector',
       valueRef,
       emit
     )

@@ -37,7 +37,8 @@
           </q-item-section>
 
           <q-item-section>
-              <q-input :type="multiline? 'textarea' : 'text'"
+              <q-input  stack-label dense
+                        :type="multiline? 'textarea' : 'text'"
                 v-model="model[language]"
                 :readonly="readonly"/>
           </q-item-section>

@@ -15,3 +15,7 @@ export interface CategoryFilter {
   sortBy?: SortBy[]
 }
 
+export function emptyCategoryFilter() {
+  return { filter: ''}
+}
+

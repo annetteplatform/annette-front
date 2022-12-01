@@ -54,6 +54,9 @@ export default {
         filter: 'Filter',
         apply: 'Apply',
         clear: 'Clear'
+      },
+      attribute: {
+        titlePl: 'Attributes'
       }
     },
     application: {
@@ -95,6 +98,62 @@ export default {
           name: 'Name',
         },
         deleteQuestion: 'Please confirm delete language.',
+      },
+    },
+    person: {
+      person: {
+        title: 'Person',
+        titlePl: 'Persons',
+        field: {
+          id: 'Id',
+          lastname: 'Last name',
+          firstname: 'First name',
+          middlename: 'Middle name',
+          categoryId: 'Category',
+          phone: 'Phone',
+          email: 'Email',
+          source: 'Source',
+          externalId: 'External Id'
+        },
+        deleteQuestion: 'Please confirm delete person.',
+      },
+      category: {
+        title: 'Category',
+        titlePl: 'Categories',
+        field: {
+          id: 'Id',
+          name: 'Name',
+        },
+        deleteQuestion: 'Please confirm delete category.',
+      },
+    },
+
+    orgStructure: {
+      category: {
+        title: 'Category',
+        titlePl: 'Categories',
+        field: {
+          id: 'Id',
+          name: 'Name',
+          forOrganization: 'For organization',
+          forUnit: 'For unit',
+          forPosition: 'For position'
+        },
+        allowedOrgItems: 'Allowed organizational items',
+        deleteQuestion: 'Please confirm delete category.',
+        organization: 'Organization',
+        unit: 'Unit',
+        position: 'Position'
+      },
+      orgRole: {
+        title: 'Org. Role',
+        titlePl: 'Org. Roles',
+        field: {
+          id: 'Id',
+          name: 'Name',
+          description: 'Description',
+        },
+        deleteQuestion: 'Please confirm delete organization role.',
       },
     }
   }

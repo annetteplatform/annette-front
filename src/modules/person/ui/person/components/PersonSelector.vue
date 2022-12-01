@@ -6,13 +6,12 @@
     use-input
     fill-input
     hide-selected
-    stack-label
     input-debounce="500"
     :readonly="readonly"
-    :label="label || $t('annette.application.translation.title')"
+    :label="label"
     :options="items"
     option-value="id"
-    option-label="name"
+    option-label="fullname"
     emit-value
     map-options
     clearable
@@ -22,7 +21,7 @@
     <template v-slot:no-option>
       <q-item>
         <q-item-section class="text-grey">
-          {{ $t('annette.shared.crud.noResults') }}
+          No results
         </q-item-section>
       </q-item>
     </template>
@@ -31,16 +30,18 @@
 
 <script lang="ts">
 import {defineComponent, toRef} from 'vue';
-import {Translation, TranslationFilter, useTranslationStore} from 'src/modules/application';
 import {useEntitySelector} from 'src/shared/composables';
+import {Person, PersonFilter} from 'src/modules/person';
+
 
 export default defineComponent({
-  name: 'TranslationSelector',
+  name: 'PersonSelector',
   components: {},
   props: {
     label: {
       type: String,
-      required: false
+      required: false,
+      default: 'Person'
     },
     modelValue: {
       type: String,
@@ -55,16 +56,14 @@ export default defineComponent({
   emits: ['update:modelValue'],
   setup(props, {emit}) {
 
-    const store = useTranslationStore()
-
     const valueRef = toRef(props, 'modelValue')
 
-    const entitySelector = useEntitySelector<Translation, TranslationFilter>(
-      store,
-      'TranslationSelector',
+    const entitySelector = useEntitySelector<Person, PersonFilter>(
+      'personPerson',
+      'PersonSelector',
       valueRef,
-      emit
-    )
+      emit)
+
 
     return {
       ...entitySelector,
