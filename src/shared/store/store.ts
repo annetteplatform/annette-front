@@ -416,7 +416,7 @@ export function useEntityStore<E extends BaseEntity, F>(
   const getEntitiesForEdit = async (ids: string[]) => {
     const newEntities = await options.getEntitiesById(ids, false)
     storeEntities(newEntities)
-    return entities
+    return newEntities
   }
 
   const loadEntitiesIfNotExist = async (ids: string[]) => {

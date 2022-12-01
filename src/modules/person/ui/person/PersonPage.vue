@@ -9,8 +9,7 @@
       <default-entity-page-toolbar :action="action" :id="id"
                                    route-name="person.person"
                                    :back-label="$t('annette.person.person.titlePl')"
-                                   back-route-name="person.persons"
-                                   @save="save"/>
+                                   back-route-name="person.persons"/>
     </template>
     <template v-slot:status>
       <q-chip outline square color="red" text-color="white"

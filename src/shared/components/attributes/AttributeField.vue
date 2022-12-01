@@ -61,7 +61,6 @@ export default defineComponent({
   props: {
     modelValue: {
       type: String,
-      required: true
     },
     meta: {
       type:Object as PropType<AttributeMetadata>,

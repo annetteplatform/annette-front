@@ -14,7 +14,7 @@ export function useEntitySelector<E, F>(
 ) {
 
   // eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-member-access
-  if (!store.instance(instanceKey)) {
+  if (!store.instances[instanceKey]) {
     const initInstancePayload: InitInstancePayload<F> = {
       key: instanceKey,
       mode: PagingMode.Range,

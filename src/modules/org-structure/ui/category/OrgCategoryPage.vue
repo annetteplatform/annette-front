@@ -9,8 +9,7 @@
       <default-entity-page-toolbar :action="action" :id="id"
                                    route-name="org-structure.category"
                                    :back-label="$t('annette.orgStructure.category.titlePl')"
-                                   back-route-name="org-structure.categories"
-                                   @save="save"/>
+                                   back-route-name="org-structure.categories"/>
     </template>
     <template v-slot:status>
       <q-chip outline square color="red" text-color="white"

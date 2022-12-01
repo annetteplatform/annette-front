@@ -138,3 +138,14 @@ export function extractOrg(itemId: string)  {
   const splited = itemId.split(':', 2)
   return splited[0]
 }
+
+export function emptyOrgItemFilter() {
+  return { filter: '' }
+}
+
+export function emptyOrganizationFilter() {
+  return {
+    filter: '',
+    parents: ['ROOT']
+  } as OrgItemFilter
+}

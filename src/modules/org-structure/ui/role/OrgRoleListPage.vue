@@ -12,12 +12,12 @@
         @filterChanged="onFilterChanged"/>
     </template>
     <template v-slot:default>
-      <orgRole-list
+      <org-role-list
         :instance-key="instanceKey">
         <template v-slot:toolbar>
          <default-list-toolbar create create-route-name="orgStructure.role"/>
         </template>
-      </orgRole-list>
+      </org-role-list>
     </template>
   </entity-list-page>
 </template>

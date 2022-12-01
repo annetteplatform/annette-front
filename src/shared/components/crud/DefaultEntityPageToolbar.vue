@@ -38,13 +38,4 @@ defineProps({
 
 })
 
-const emit = defineEmits(['save'])
-const save = (id: string) => {
-  emit('save', id)
-}
-
-defineExpose({
-  save
-})
-
 </script>

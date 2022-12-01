@@ -8,10 +8,10 @@
     hide-selected
     input-debounce="500"
     :readonly="readonly"
-    :label="label"
+    :label="label || $t('annette.orgStructure.orgItem.title')"
     :options="items"
     option-value="id"
-    option-label="fullname"
+    option-label="name"
     emit-value
     map-options
     clearable
@@ -21,7 +21,7 @@
     <template v-slot:no-option>
       <q-item>
         <q-item-section class="text-grey">
-          No results
+          {{ $t('annette.shared.crud.noResults') }}
         </q-item-section>
       </q-item>
     </template>
@@ -30,18 +30,17 @@
 
 <script lang="ts">
 import {defineComponent, toRef} from 'vue';
+import {emptyOrganizationFilter, OrgItem, OrgItemFilter, useOrgItemStore} from 'src/modules/org-structure';
 import {useEntitySelector} from 'src/shared/composables';
-import {Person, PersonFilter, usePersonStore} from 'src/modules/person';
 
 
 export default defineComponent({
-  name: 'PersonSelector',
+  name: 'OrganizationSelector',
   components: {},
   props: {
     label: {
       type: String,
       required: false,
-      default: 'Person'
     },
     modelValue: {
       type: String,
@@ -56,15 +55,17 @@ export default defineComponent({
   emits: ['update:modelValue'],
   setup(props, {emit}) {
 
+    const store = useOrgItemStore()
+
     const valueRef = toRef(props, 'modelValue')
 
-    const store = usePersonStore()
-    const entitySelector = useEntitySelector<Person, PersonFilter>(
+    const entitySelector = useEntitySelector<OrgItem, OrgItemFilter>(
       store,
-      'PersonSelector',
+      'OrganizationSelector',
       valueRef,
-      emit)
-
+      emit,
+      emptyOrganizationFilter
+    )
 
     return {
       ...entitySelector,

@@ -1,6 +1,8 @@
 // This is just an example,
 // so you can safely delete all default props below
 
+import {AnnettePrincipal} from 'src/shared/model';
+
 export default {
   annetteConsole: {
     toolbar: {
@@ -144,6 +146,29 @@ export default {
         organization: 'Organization',
         unit: 'Unit',
         position: 'Position'
+      },
+
+      orgItem: {
+        field: {
+          id: 'Id',
+          name: 'Name',
+          orgId: 'Organization Id',
+          parentId: 'Parent Id',
+          rootPath: 'Root path',
+          level: 'Level',
+          itemType: 'Item type',
+          categoryId: 'Category',
+          source: 'Source',
+          externalId: 'External Id',
+        },
+      },
+      organization: {
+        editTitle: 'Edit organization',
+        viewTitle: 'View organization',
+        title: 'Organization',
+        titlePl: 'Organizations',
+        deleteQuestion: 'Please confirm delete organization.',
+        deleteOrgItemQuestion: 'Please confirm delete org. item.',
       },
       orgRole: {
         title: 'Org. Role',

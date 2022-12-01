@@ -2,7 +2,7 @@
   <div :class="{ 'narrow-layout': narrow, }"
        class="q-px-md">
     <q-toolbar>
-      <h5 class="q-mt-md q-mb-md">{{ $t(caption) }}</h5>
+      <h5 class="q-mt-md q-mb-md">{{ caption }}</h5>
       <q-space/>
       <slot name="toolbar"></slot>
     </q-toolbar>
@@ -15,7 +15,7 @@
       <slot></slot>
     </div>
 
-    <div v-if="action !== 'view'">
+    <div v-if="action !== 'view' && !hideStatusBar">
       <div class="q-mb-md" style="height: 64px"></div>
       <q-card bordered flat
               :class="{ 'narrow-layout': narrow }"
@@ -59,6 +59,10 @@ export default defineComponent({
     showForm: {
       type: Boolean,
       required: true
+    },
+    hideStatusBar: {
+      type: Boolean,
+      required: false
     },
     narrow: {
       type: Boolean,

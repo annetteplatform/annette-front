@@ -26,7 +26,7 @@ import {
   UpdateExternalIdPayloadDto,
   UpdateNamePayloadDto,
   UpdateSourcePayloadDto
-} from './hierarchy.model';
+} from './org-item.model';
 import {
   OrgCategory,
 } from './category.model'
@@ -250,7 +250,6 @@ function convertOrgCategory(rawCategory: OrgCategory): OrgCategory {
   }
   return category
 }
-
 
 function convertOrgRole(rawRole: OrgRole): OrgRole {
   const role: OrgRole = {...rawRole}
