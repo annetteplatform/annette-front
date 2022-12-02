@@ -1,5 +1,5 @@
 export * from './model'
-export * from './state'
+export * from './custom-store'
 export * from './store'
 export * from './entity-map'
 export * from './instance-map'

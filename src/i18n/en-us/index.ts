@@ -45,6 +45,7 @@ export default {
         filter: 'Filter',
         save: 'Save',
         cancel: 'Cancel',
+        ok: 'Ok',
         changed: 'Changed',
         saved: 'Saved',
         fieldRequired: 'Field is required',
@@ -180,6 +181,50 @@ export default {
         },
         deleteQuestion: 'Please confirm delete organization role.',
       },
-    }
+    },
+
+    authorization: {
+      authRole: {
+        title: 'Authorization Role',
+        titlePl: 'Authorization Roles',
+        field: {
+          id: 'Id',
+          name: 'Name',
+          description: 'Description',
+        },
+        deleteQuestion: 'Please confirm delete authorization role.',
+        permission: 'Permission',
+        permissionId: 'Permission Id',
+        permissions: 'Permissions',
+        addPermission: 'Add Permission',
+        arg1: 'Arg 1',
+        arg2: 'Arg 2',
+        arg3: 'Arg 3',
+        deletePermissionQuestion: 'Please confirm delete permission.',
+      },
+    },
+
+    principalGroup: {
+      category: {
+        title: 'Category',
+        titlePl: 'Categories',
+        field: {
+          id: 'Id',
+          name: 'Name',
+        },
+        deleteQuestion: 'Please confirm delete category.',
+      },
+      group: {
+        title: 'Principal group',
+        titlePl: 'Principal groups',
+        field: {
+          id: 'Id',
+          name: 'Name',
+          description: 'Description',
+          categoryId: 'Category',
+        },
+        deleteQuestion: 'Please confirm delete principal group.',
+      },
+    },
   }
 };

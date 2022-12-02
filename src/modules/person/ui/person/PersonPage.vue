@@ -112,7 +112,7 @@ import EntityPage from 'src/shared/components/crud/EntityPage.vue';
 import DefaultEntityPageToolbar from 'src/shared/components/crud/DefaultEntityPageToolbar.vue';
 import {useI18n} from 'vue-i18n';
 import AttributesForm from 'src/shared/components/attributes/AttributesForm.vue';
-import PersonCategorySelector from 'src/modules/person/ui/category/components/PersponCategorySelector.vue';
+import PersonCategorySelector from 'src/modules/person/ui/category/components/PersonCategorySelector.vue';
 
 function emptyEntity(): Person {
   return {

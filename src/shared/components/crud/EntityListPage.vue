@@ -1,7 +1,7 @@
 <template>
   <div :class="narrow ? 'narrow-layout': 'q-ma-md'">
     <q-toolbar>
-      <h5 class="q-mt-md q-mb-md">{{ $t(caption) }}</h5>
+      <h5 class="q-mt-md q-mb-md">{{ caption }}</h5>
       <q-space/>
       <slot name="toolbar"></slot>
     </q-toolbar>

@@ -1,5 +1,8 @@
 import {Message, SortBy} from '../model';
 
+export const UNCHANGED = 'unchanged'
+export const CHANGED = 'changed'
+
 export interface BaseEntity {
   id: string,
   updatedAt?: Date

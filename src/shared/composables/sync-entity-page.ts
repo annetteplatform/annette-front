@@ -49,7 +49,7 @@ export function useSyncEntityPage<T>(
     if (opt.onBeforeLoad) {
       opt.onBeforeLoad(action.value, id.value)
     }
-    if (action.value === 'create' && opt.emptyEntity) {
+    if (action.value === 'create' && id.value == 'new' && opt.emptyEntity) {
       const entity = opt.emptyEntity(id.value)
       updateEntity(entity)
     } else {
@@ -61,6 +61,12 @@ export function useSyncEntityPage<T>(
         } else {
           // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
           entity = await store.getEntityForEdit(id.value)
+          if (action.value == 'create') {
+            entity = {
+              ...entity,
+              id: ''
+            }
+          }
         }
         updateEntity(entity)
       } catch (ex) {

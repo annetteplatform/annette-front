@@ -17,24 +17,36 @@ import {
   pageLoaded,
   calcTotalPages
 } from './instance-map';
-import {EntityMap, isEntityUpdated} from './entity-map';
+import {EntityMap} from './entity-map';
 
 function deepCopy<T>(object: T): T {
   return JSON.parse(JSON.stringify(object))
 }
 
+export type EntityState<E extends BaseEntity, F extends BaseFilter> =
+  {
+    instances: Ref<InstanceMap<F>>
+    entities: Ref<EntityMap<E>>
+    idInLoading: Ref<string[]>
+
+    loadSuccess: (payload: LoadSuccessPayload<E, F>) => void
+    storeEntity: (entity: E) => void
+    storeEntities: (newEntities: E[]) => void;
+    removeEntity: (id: string) => void
+    clearMessage: (key: string,) => void;
+  }
 
 
-export interface EntityStoreOptions<E extends BaseEntity, F> {
+export interface CustomEntityStoreOptions<E extends BaseEntity, F> {
   defaultPageSize: number,
   defaultFilter: () => F,
-  find: (query: F, offset: number, size: number) => Promise<FindResult>,
-  getEntityById: (id: string, readSide: boolean) => Promise<E>,
-  getEntitiesById: (ids: string[], readSide: boolean) => Promise<E[]>
+  load: (state: EntityState<E, F>, payload: LoadPayload<F>) => Promise<string>
+  getEntityById?: (id: string, readSide: boolean) => Promise<E>,
+  getEntitiesById?: (ids: string[], readSide: boolean) => Promise<E[]>
 }
 
-export function useEntityStore<E extends BaseEntity, F>(
-  options: EntityStoreOptions<E, F>
+export function useCustomEntityStore<E extends BaseEntity, F>(
+  options: CustomEntityStoreOptions<E, F>
 ) {
   const instances: Ref<InstanceMap<F>> = ref({})
   const entities: Ref<EntityMap<E>> = ref({})
@@ -140,72 +152,17 @@ export function useEntityStore<E extends BaseEntity, F>(
   // ******************* Actions *******************
 
   const load = async (payload: LoadPayload<F>): Promise<string> => {
-    const instance = instances.value[payload.key]
-    if (!instance) {
-      throw new Error(`Instance ${payload.key} isn't initialised`)
+    const state: EntityState<E, F> = {
+      instances: instances,
+      entities: entities,
+      idInLoading: idInLoading,
+      loadSuccess: loadSuccess,
+      storeEntity: storeEntity,
+      storeEntities: storeEntities,
+      removeEntity: removeEntity,
+      clearMessage: clearMessage
     }
-
-    // commit('loadStarted', {key: payload.key})
-    instance.loading = true
-    instance.message = undefined
-
-    // search by filter and pages specified
-    let findResults: FindResult
-    const offset = payload.fromPage * payload.pageSize
-    const size = (payload.toPage + 1) * payload.pageSize
-    try {
-      findResults = await options.find(payload.filter, offset, size)
-    } catch (ex) {
-      // commit('loadFailure', loadFailurePayload)
-      instance.loading = false
-      instance.message = ex as Message
-      throw ex
-    }
-
-    // calculate ids to load
-    const ids = findResults.hits.map(hit => hit.id)
-    const idsToLoad = findResults.hits.filter(hit => {
-      return isEntityUpdated(hit.id, hit.updatedAt, entities.value) &&
-        !isEntityLoading(hit.id, idInLoading.value)
-    }).map(hit => hit.id)
-
-    // load entities if id list is not empty
-    if (idsToLoad.length !== 0) {
-      // commit('addIdInLoading', {ids: idsToLoad})
-      const addIdInLoading = idsToLoad.filter(id => !idInLoading.value.includes(id))
-      idInLoading.value = [...idInLoading.value, ...addIdInLoading]
-      try {
-        const newEntities: E[] = await options.getEntitiesById(idsToLoad, true)
-        const loadSuccessPayload: LoadSuccessPayload<E, F> = {
-          ...payload,
-          idInLoading: idsToLoad,
-          total: findResults.total,
-          ids,
-          entities: newEntities
-        }
-        loadSuccess(loadSuccessPayload)
-        return CHANGED
-      } catch (ex) {
-        console.log(ex)
-        // commit('loadFailure', loadFailurePayload)
-        instance.loading = false
-        instance.message = ex as Message
-        idInLoading.value = idInLoading.value.filter(id => !idsToLoad.includes(id))
-        throw ex
-      }
-
-    } else {
-      const loadSuccessPayload: LoadSuccessPayload<E, F> = {
-        ...payload,
-        idInLoading: [],
-        entities: [],
-        ids,
-        total: findResults.total
-      }
-      // commit('loadSuccess', loadSuccessPayload)
-      loadSuccess(loadSuccessPayload)
-      return UNCHANGED
-    }
+    return options.load(state, payload)
   }
 
   const resetInstance = async (payload: ResetInstancePayload<F>) => {
@@ -373,24 +330,33 @@ export function useEntityStore<E extends BaseEntity, F>(
   }
 
   const getEntityForEdit = async (id: string) => {
-    const entity = await options.getEntityById(id, false)
-    entities.value[entity.id] = entity
-    return entity
+    if (options.getEntityById) {
+      const entity = await options.getEntityById(id, false)
+      entities.value[entity.id] = entity
+      return entity
+    }
+    return null
   }
 
   const getEntitiesForEdit = async (ids: string[]) => {
-    const newEntities = await options.getEntitiesById(ids, false)
-    storeEntities(newEntities)
-    return newEntities
+    if (options.getEntitiesById) {
+      const newEntities = await options.getEntitiesById(ids, false)
+      storeEntities(newEntities)
+      return newEntities
+    }
+    return null
   }
 
   const loadEntitiesIfNotExist = async (ids: string[]) => {
-    const entitiesToLoad: string[] = ids.filter(id => !entities.value[id])
-    if (entitiesToLoad.length > 0) {
-      const newEntities = await options.getEntitiesById(entitiesToLoad, true)
-      storeEntities(newEntities)
+    if (options.getEntitiesById) {
+      const entitiesToLoad: string[] = ids.filter(id => !entities.value[id])
+      if (entitiesToLoad.length > 0) {
+        const newEntities = await options.getEntitiesById(entitiesToLoad, true)
+        storeEntities(newEntities)
+      }
+      return ids.filter(id => entities.value[id]).map(id => entities.value[id])
     }
-    return ids.filter(id => entities.value[id]).map(id => entities.value[id])
+    return []
   }
 
   return {
@@ -417,14 +383,6 @@ export function useEntityStore<E extends BaseEntity, F>(
     clearMessage,
   }
 
-}
-
-function isEntityLoading(id: string, idInLoading: string[]) {
-  if (idInLoading.find(v => v === id)) {
-    return true
-  } else {
-    return false
-  }
 }
 
 
