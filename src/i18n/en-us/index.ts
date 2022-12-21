@@ -40,6 +40,8 @@ export default {
         copy: 'Copy',
         edit: 'Edit',
         view: 'View',
+        activate: 'Activate',
+        deactivate: 'Deactivate',
         del: 'Delete',
         refresh: 'Refresh',
         filter: 'Filter',
@@ -224,6 +226,33 @@ export default {
           categoryId: 'Category',
         },
         deleteQuestion: 'Please confirm delete principal group.',
+      },
+    },
+
+    serviceCatalog: {
+      category: {
+        title: 'Category',
+        titlePl: 'Categories',
+        field: {
+          id: 'Id',
+          name: 'Name',
+        },
+        deleteQuestion: 'Please confirm delete category.',
+      },
+      scope: {
+        title: 'Scope',
+        titlePl: 'Scopes',
+        field: {
+          id: 'Id',
+          name: 'Name',
+          description: 'Description',
+          categoryId: 'Category',
+          children: 'Service Items',
+          active: 'Active',
+        },
+        deleteQuestion: 'Please confirm delete scope.',
+        activateQuestion: 'Please confirm activate scope.',
+        deactivateQuestion: 'Please confirm deactivate scope.',
       },
     },
   }

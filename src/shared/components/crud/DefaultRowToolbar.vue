@@ -21,6 +21,19 @@
     </q-tooltip>
   </q-btn>
 
+  <q-btn v-if="activate"
+         flat round color="green" size="sm" icon="fa-regular fa-circle-check" @click="activateEntity(id)">
+    <q-tooltip>
+      {{ $t('annette.shared.crud.activate') }}
+    </q-tooltip>
+  </q-btn>
+  <q-btn v-if="deactivate"
+         flat round color="grey" size="sm" icon="fa-regular fa-circle-xmark" @click="deactivateEntity(id)">
+    <q-tooltip>
+      {{ $t('annette.shared.crud.deactivate') }}
+    </q-tooltip>
+  </q-btn>
+
   <q-btn v-if="del"
          flat round color="red" size="sm" icon="fas fa-trash" @click="deleteEntity(id)">
     <q-tooltip>
@@ -54,16 +67,32 @@ defineProps({
   del: {
     type: Boolean,
     default: false
+  },
+  activate: {
+    type: Boolean,
+    default: false
+  },
+  deactivate: {
+    type: Boolean,
+    default: false
   }
 })
 
-const emit = defineEmits(['delete'])
+const emit = defineEmits(['delete', 'activate', 'deactivate'])
 const deleteEntity = (id: string) => {
   emit('delete', id)
 }
+const activateEntity = (id: string) => {
+  emit('activate', id)
+}
+const deactivateEntity = (id: string) => {
+  emit('deactivate', id)
+}
 
 defineExpose({
-  deleteEntity
+  deleteEntity,
+  activateEntity,
+  deactivateEntity
 })
 
 </script>

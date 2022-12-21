@@ -1,12 +1,9 @@
 <template>
-
   <q-card class="my-card">
     <q-card-section>
-
       <div class="q-gutter-md full-width">
         <div class="row">
           <div class="col-md-4 col-sm-12 col-xs-12 q-pr-md">
-
             <principal-type-selector
               v-model="filterModel.principal.principalType"
               clearable

@@ -20,7 +20,8 @@
               <q-input stack-label
                        class="col-md-6 col-sm-12 col-xs-12 "
                        v-model="entityModel.id"
-                       label="Item Id"/>
+                       label="Item Id"
+                       :rules="[val => !!val || $t('annette.shared.crud.fieldRequired')]"/>
             </div>
             <div class="row" v-else>
               <q-input stack-label
@@ -150,79 +151,81 @@ export default defineComponent({
 
     const onOkClick = async () => {
       console.log('onOkClick')
-      if (type.value === 'org') {
-        const entity: CreateOrganizationPayloadDto = {
-          orgId: entityModel.value.id,
-          name: entityModel.value.name,
-          categoryId: entityModel.value.categoryId,
-          source: entityModel.value.source || undefined,
-          externalId: entityModel.value.externalId || undefined
-        }
-        try {
-          const createdEntity = await store.createOrganization(entity)
-          emit('created', createdEntity)
+      if (entityModel.value.id.trim() != '' &&  entityModel.value.categoryId != '') {
+        if (type.value === 'org') {
+          const entity: CreateOrganizationPayloadDto = {
+            orgId: entityModel.value.id,
+            name: entityModel.value.name,
+            categoryId: entityModel.value.categoryId,
+            source: entityModel.value.source || undefined,
+            externalId: entityModel.value.externalId || undefined
+          }
+          try {
+            const createdEntity = await store.createOrganization(entity)
+            emit('created', createdEntity)
+            show.value = false
+          } catch (ex: any) {
+            console.error(ex)
+            // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+            showErrorNotification(ex.code)
+          }
+        } else if (type.value === 'unit') {
+          const orgId = extractOrg(parentId.value)
+          const entity: CreateUnitPayloadDto = {
+            parentId: parentId.value,
+            unitId: `${orgId}:${entityModel.value.id}`,
+            name: entityModel.value.name,
+            categoryId: entityModel.value.categoryId,
+            source: entityModel.value.source || undefined,
+            externalId: entityModel.value.externalId || undefined
+          }
+          let entities: OrgItem[]
+          try {
+            entities = await store.createUnit(entity)
+          } catch (ex: any) {
+            console.error(ex)
+            // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+            showErrorNotification(ex.code)
+            return
+          }
+          const event: OnCreatedEvent = {
+            // @ts-ignore
+            parent: {...entities.find(e => e.id === entity.parentId)},
+            // @ts-ignore
+            child: {...entities.find(e => e.id === entity.unitId)}
+          }
+          emit('created', event)
           show.value = false
-        } catch (ex: any) {
-          console.error(ex)
-          // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-          showErrorNotification(ex.code)
+        } else {
+          const orgId = extractOrg(parentId.value)
+          const entity: CreatePositionPayloadDto = {
+            parentId: parentId.value,
+            positionId: `${orgId}:${entityModel.value.id}`,
+            name: entityModel.value.name,
+            // @ts-ignore
+            limit: parseInt(entityModel.value.limit),
+            categoryId: entityModel.value.categoryId,
+            source: entityModel.value.source || undefined,
+            externalId: entityModel.value.externalId || undefined
+          }
+          let entities: OrgItem[]
+          try {
+            entities = await store.createPosition(entity)
+          } catch (ex: any) {
+            console.error(ex)
+            // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+            showErrorNotification(ex.code)
+            return
+          }
+          const event: OnCreatedEvent = {
+            // @ts-ignore
+            parent: {...entities.find(e => e.id === entity.parentId)},
+            // @ts-ignore
+            child: {...entities.find(e => e.id === entity.positionId)}
+          }
+          emit('created', event)
+          show.value = false
         }
-      } else if (type.value === 'unit') {
-        const orgId = extractOrg(parentId.value)
-        const entity: CreateUnitPayloadDto = {
-          parentId: parentId.value,
-          unitId: `${orgId}:${entityModel.value.id}`,
-          name: entityModel.value.name,
-          categoryId: entityModel.value.categoryId,
-          source: entityModel.value.source || undefined,
-          externalId: entityModel.value.externalId || undefined
-        }
-        let entities: OrgItem[]
-        try {
-          entities = await store.createUnit(entity)
-        } catch (ex: any) {
-          console.error(ex)
-          // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-          showErrorNotification(ex.code)
-          return
-        }
-        const event: OnCreatedEvent = {
-          // @ts-ignore
-          parent: { ...entities.find(e => e.id === entity.parentId) },
-          // @ts-ignore
-          child: { ...entities.find(e => e.id === entity.unitId) }
-        }
-        emit('created', event)
-        show.value = false
-      } else {
-        const orgId = extractOrg(parentId.value)
-        const entity: CreatePositionPayloadDto = {
-          parentId: parentId.value,
-          positionId: `${orgId}:${entityModel.value.id}`,
-          name: entityModel.value.name,
-          // @ts-ignore
-          limit: parseInt(entityModel.value.limit),
-          categoryId: entityModel.value.categoryId,
-          source: entityModel.value.source || undefined,
-          externalId: entityModel.value.externalId || undefined
-        }
-        let entities: OrgItem[]
-        try {
-          entities = await store.createPosition(entity)
-        } catch (ex: any) {
-          console.error(ex)
-          // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-          showErrorNotification(ex.code)
-          return
-        }
-        const event: OnCreatedEvent = {
-          // @ts-ignore
-          parent: { ...entities.find(e => e.id === entity.parentId) },
-          // @ts-ignore
-          child:{ ...entities.find(e => e.id === entity.positionId) }
-        }
-        emit('created', event)
-        show.value = false
       }
     }
 

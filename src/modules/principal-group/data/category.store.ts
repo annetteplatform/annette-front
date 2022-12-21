@@ -5,7 +5,7 @@ import {principalGroupService} from 'src/modules/principal-group';
 
 const DEFAULT_PAGE_SIZE = 10
 
-export const useCategoryStore = defineStore('category', () => {
+export const useCategoryStore = defineStore('principalGroupCategory', () => {
 
   const entityStore = useEntityStore<Category, CategoryFilter>({
     defaultPageSize: DEFAULT_PAGE_SIZE,
