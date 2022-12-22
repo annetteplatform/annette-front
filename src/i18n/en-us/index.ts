@@ -1,7 +1,8 @@
 // This is just an example,
 // so you can safely delete all default props below
 
-import {AnnettePrincipal} from 'src/shared/model';
+import {AnnettePrincipal, MultiLanguageText} from 'src/shared/model';
+import {Icon} from 'src/main';
 
 export default {
   annetteConsole: {
@@ -253,6 +254,31 @@ export default {
         deleteQuestion: 'Please confirm delete scope.',
         activateQuestion: 'Please confirm activate scope.',
         deactivateQuestion: 'Please confirm deactivate scope.',
+      },
+      serviceItem: {
+        title: 'Service Item',
+        titlePl: 'Service Items',
+        groupTitle: 'Service Group',
+        groupTitlePl: 'Service Groups',
+        serviceTitle: 'Service',
+        serviceTitlePl: 'Services',
+        createGroup: 'Create Group',
+        createService: 'Create Service',
+        field: {
+          id: 'Id',
+          name: 'Name',
+          description: 'Description',
+          icon: 'Icon',
+          label: 'Label',
+          labelDescription: 'Label description',
+          type: 'Type',
+          link: 'Link',
+          children: 'Service Items',
+          active: 'Active',
+        },
+        deleteQuestion: 'Please confirm delete service item.',
+        activateQuestion: 'Please confirm activate service item.',
+        deactivateQuestion: 'Please confirm deactivate service item.',
       },
     },
   }

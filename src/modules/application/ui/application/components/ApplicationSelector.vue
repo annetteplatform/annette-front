@@ -34,7 +34,7 @@ import {Application, ApplicationFilter, useApplicationStore} from 'src/modules/a
 import {useEntitySelector} from 'src/shared/composables';
 import {useI18n} from 'vue-i18n';
 
-const i18n = useI18n()
+
 
 export default defineComponent({
   name: 'ApplicationSelector',
@@ -43,7 +43,6 @@ export default defineComponent({
     label: {
       type: String,
       required: false,
-      default: i18n.t('annette.application.application.title')
     },
     modelValue: {
       type: String,
@@ -59,6 +58,7 @@ export default defineComponent({
   setup(props, {emit}) {
 
     const store = useApplicationStore()
+    const i18n = useI18n()
 
     const valueRef = toRef(props, 'modelValue')
 

@@ -6,6 +6,7 @@ import {
   FindResult,
 } from 'src/shared/model'
 import {Scope, ScopeFilter} from './scope.model';
+import {Group, Service, ServiceItem, ServiceItemFilter} from 'src/modules/service-catalog';
 
 export const serviceCatalogService = {
 
@@ -131,6 +132,97 @@ export const serviceCatalogService = {
   },
 
 
+  // ************************** Service Item API **************************
+  async createGroup(entity: Group) {
+    return await axios.post<Group>('/api/annette/v1/serviceCatalog/createGroup', entity)
+      .then(result => convertGroup(result.data))
+  },
+
+  async updateGroup(entity: Group) {
+    return await axios.post<Group>('/api/annette/v1/serviceCatalog/updateGroup', entity)
+      .then(result => convertGroup(result.data))
+  },
+
+  async createService(entity: Service) {
+    return await axios.post<Service>('/api/annette/v1/serviceCatalog/createService', entity)
+      .then(result => convertService(result.data))
+  },
+
+  async updateService(entity: Service) {
+    return await axios.post<Service>('/api/annette/v1/serviceCatalog/updateService', entity)
+      .then(result => convertService(result.data))
+  },
+
+
+  async deactivateServiceItem(id: string) {
+    return await axios.post<ServiceItem>('/api/annette/v1/serviceCatalog/deactivateServiceItem', {id})
+      .then(result => result.data)
+  },
+
+  async activateServiceItem(id: string) {
+    return await axios.post<ServiceItem>('/api/annette/v1/serviceCatalog/activateServiceItem', {id})
+      .then(result => result.data)
+  },
+
+  async deleteServiceItem(id: string) {
+    return await axios.post<string>('/api/annette/v1/serviceCatalog/deleteServiceItem', {id})
+      .then(result => '')
+  },
+
+  async getServiceItemById(id: string, readSide = true) {
+    // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
+    return await axios.get<ServiceItem>(`/api/annette/v1/serviceCatalog/getServiceItemById/${id}/${readSide}`)
+      .then(result => convertServiceItem(result.data))
+  },
+
+  async getServiceItemsById(ids: string[], readSide = true) {
+    // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
+    return await axios.post<ServiceItem[]>(`/api/annette/v1/serviceCatalog/getServiceItemsById/${readSide}`, ids)
+      .then(result => result.data.map(convertServiceItem))
+  },
+
+  async findServiceItems(filter: ServiceItemFilter, offset: number, size: number) {
+    const query = {
+      offset,
+      size,
+      ...filter
+    }
+    return await axios.post<FindResult>('/api/annette/v1/serviceCatalog/findServiceItems', query)
+      .then(result => result.data)
+  },
+
+  async getServicePrincipals(serviceId: string): Promise<AnnettePrincipal[]> {
+    const query = {
+      offset: 0,
+      size: 500,
+      services: [serviceId],
+      sortBy: [{field: 'principal'}]
+    }
+    return await axios.post<FindResult>('/api/annette/v1/serviceCatalog/findServicePrincipals', query)
+      .then(
+        result => result.data.hits.map(
+          hit => {
+            let principalCode = hit.id.split('/')[1]
+            let sp = principalCode.split('~')
+            return {
+              principalType: sp[0],
+              principalId: sp[1]
+            }
+          }
+        )
+      )
+  },
+
+  async assignServicePrincipal(serviceId: string, principal: AnnettePrincipal) {
+    return await axios.post('/api/annette/v1/serviceCatalog/assignServicePrincipal', { serviceId, principal })
+      .then(() => true)
+  },
+
+  async unassignServicePrincipal(serviceId: string, principal: AnnettePrincipal) {
+    return await axios.post('/api/annette/v1/serviceCatalog/unassignServicePrincipal', { serviceId, principal })
+      .then(() => true)
+  },
+
 
 }
 
@@ -148,6 +240,30 @@ function convertScope(rawScope: Scope): Scope {
     scope.updatedAt = new Date(rawScope.updatedAt)
   }
   return scope
+}
+
+function convertServiceItem(rawServiceItem: ServiceItem): ServiceItem {
+  const serviceItem: ServiceItem = {...rawServiceItem}
+  if (rawServiceItem.updatedAt) {
+    serviceItem.updatedAt = new Date(rawServiceItem.updatedAt)
+  }
+  return serviceItem
+}
+
+function convertService(rawService: Service): Service {
+  const service: Service = {...rawService}
+  if (rawService.updatedAt) {
+    service.updatedAt = new Date(rawService.updatedAt)
+  }
+  return service
+}
+
+function convertGroup(rawGroup: Group): Group {
+  const group: Group = {...rawGroup}
+  if (rawGroup.updatedAt) {
+    group.updatedAt = new Date(rawGroup.updatedAt)
+  }
+  return group
 }
 
 

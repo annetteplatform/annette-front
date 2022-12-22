@@ -57,26 +57,30 @@
                  ref="nameRef"
                  :label="$t('annette.serviceCatalog.scope.field.name')"/>
       </div>
-      <div class="row">
+      <div class="row q-pb-md">
         <q-input
           class="col-md-12 col-sm-12 col-xs-12 "
           v-model="entityModel.description"
           type="textarea"
           :label="$t('annette.serviceCatalog.scope.field.description')"/>
       </div>
-      <div class="row">
+      <div class="row q-pb-md">
+        <scope-category-selector  v-model="entityModel.categoryId"
+                                  :readonly="action ==='view'"/>
+      </div>
+      <div class="row q-pb-md">
         <q-checkbox
           class="col-md-12 col-sm-12 col-xs-12 q-pr-md"
           v-model="entityModel.active"
           disable
           :label="$t('annette.serviceCatalog.scope.field.active')"/>
       </div>
-<!--      <div class="row">-->
-<!--        <language-scope-list v-if="action !== 'create'"-->
-<!--                                   :label="$t('annette.serviceCatalog.scope.field.scopes')"-->
-<!--                                   :scope-id="id"-->
-<!--                                   :readonly="action ==='view'"/>-->
-<!--      </div>-->
+      <div class="row q-pb-md">
+        <service-item-list-form v-model="entityModel.children"
+                                :label="$t('annette.serviceCatalog.serviceItem.titlePl')"
+                                :readonly="action ==='view'"/>
+      </div>
+
     </template>
   </entity-page>
 </template>
@@ -89,6 +93,8 @@ import {Scope, useScopeStore} from 'src/modules/service-catalog';
 import {useEntityPage} from 'src/shared/composables';
 import EntityPage from 'src/shared/components/crud/EntityPage.vue';
 import DefaultEntityPageToolbar from 'src/shared/components/crud/DefaultEntityPageToolbar.vue';
+import ScopeCategorySelector from 'src/modules/service-catalog/ui/category/components/ScopeCategorySelector.vue';
+import ServiceItemListForm from 'src/modules/service-catalog/ui/scope/components/ServiceItemListForm.vue';
 
 function emptyEntity(): Scope {
   return {
@@ -103,7 +109,7 @@ function emptyEntity(): Scope {
 
 export default defineComponent({
   name: 'ScopePage',
-  components: {DefaultEntityPageToolbar,  EntityPage},
+  components: {ServiceItemListForm, ScopeCategorySelector, DefaultEntityPageToolbar,  EntityPage},
   props: {
     id: String,
     action: String

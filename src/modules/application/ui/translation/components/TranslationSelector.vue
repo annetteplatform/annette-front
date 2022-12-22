@@ -6,7 +6,6 @@
     use-input
     fill-input
     hide-selected
-    stack-label
     input-debounce="500"
     :readonly="readonly"
     :label="label || $t('annette.application.translation.title')"

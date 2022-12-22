@@ -37,7 +37,7 @@
           </q-item-section>
 
           <q-item-section>
-              <q-input  stack-label dense
+              <q-input  stack-label dense :autogrow="multiline? true : false"
                         :type="multiline? 'textarea' : 'text'"
                 v-model="model[language]"
                 :readonly="readonly"/>
@@ -163,10 +163,3 @@ defineExpose({
 })
 
 </script>
-
-
-<style>
-.translation-json .q-field__control {
-  height: 100% !important;
-}
-</style>

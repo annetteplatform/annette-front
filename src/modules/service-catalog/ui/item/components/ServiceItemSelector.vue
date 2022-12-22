@@ -8,10 +8,10 @@
     hide-selected
     input-debounce="500"
     :readonly="readonly"
-    :label="label || $t('annette.serviceCatalog.scope.title')"
+    :label="label || $t('annette.serviceCatalog.serviceItem.title')"
     :options="items"
     option-value="id"
-    option-label="name"
+    :option-label="opt => opt ? opt.name + ' (' + opt.type + ')' : '' "
     emit-value
     map-options
     clearable
@@ -30,11 +30,11 @@
 
 <script lang="ts">
 import {defineComponent, toRef} from 'vue';
-import {Scope, ScopeFilter, useScopeStore} from 'src/modules/service-catalog';
 import {useEntitySelector} from 'src/shared/composables';
+import {ServiceItem, ServiceItemFilter, useServiceItemStore} from 'src/modules/service-catalog';
 
 export default defineComponent({
-  name: 'ScopeSelector',
+  name: 'ServiceItemSelector',
   components: {},
   props: {
     label: {
@@ -54,13 +54,13 @@ export default defineComponent({
   emits: ['update:modelValue'],
   setup(props, {emit}) {
 
-    const store = useScopeStore()
+    const store = useServiceItemStore()
 
     const valueRef = toRef(props, 'modelValue')
 
-    const entitySelector = useEntitySelector<Scope, ScopeFilter>(
+    const entitySelector = useEntitySelector<ServiceItem, ServiceItemFilter>(
       store,
-      'ScopeSelector',
+      'ServiceItemSelector',
       valueRef,
       emit
     )
