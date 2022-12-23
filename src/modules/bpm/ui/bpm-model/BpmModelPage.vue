@@ -1,6 +1,5 @@
 <template>
-  <entity-page narrow
-               :caption="$t('annette.bpm.bpmModel.title')"
+  <entity-page :caption="$t('annette.bpm.bpmModel.title')"
                :show-form="!!entityModel"
                :error="error"
                :action="action"
@@ -44,7 +43,7 @@
                :label="$t('annette.bpm.bpmModel.page.xmlTab')"/>
       </q-tabs>
 
-      <q-separator />
+      <q-separator/>
 
       <q-tab-panels v-model="tab" animated>
         <q-tab-panel name="general">
@@ -80,25 +79,40 @@
           </div>
           <div class="row">
             <q-input readonly
-              class="col-md-6 col-sm-12 col-xs-12 q-pr-md"
-              :model-value="entityModel.code"
-              :label="$t('annette.bpm.bpmModel.field.code')"/>
+                     class="col-md-6 col-sm-12 col-xs-12 q-pr-md"
+                     :model-value="entityModel.code"
+                     :label="$t('annette.bpm.bpmModel.field.code')"/>
             <q-input readonly
-              class="col-md-6 col-sm-12 col-xs-12"
-              :model-value="entityModel.notation.toUpperCase()"
-              :label="$t('annette.bpm.bpmModel.field.notation')"/>
+                     class="col-md-6 col-sm-12 col-xs-12"
+                     :model-value="entityModel.notation.toUpperCase()"
+                     :label="$t('annette.bpm.bpmModel.field.notation')"/>
           </div>
         </q-tab-panel>
 
         <q-tab-panel name="model">
           <div class="row q-py-md">
-            <bpm-model-view  v-if="action === 'view'"
-                             :notation="entityModel.notation"
-                             :xml="entityModel.xml"/>
+            <bpm-model-view v-if="action === 'view'"
+                            :notation="entityModel.notation"
+                            :xml="entityModel.xml"/>
             <bpm-model-edit v-else
-                          :notation="entityModel.notation"
-                          :model-value="entityModel.xml"
-                          @update:model-value="updateXml"/>
+                            :notation="entityModel.notation"
+                            :model-value="entityModel.xml"
+                            @update:model-value="updateXml"/>
+          </div>
+        </q-tab-panel>
+
+        <q-tab-panel name="xml">
+          <div class="row q-mt-md">
+            <div class="col-md-12 col-sm-12 col-xs-12 ">
+              <v-ace-editor ref="editor"
+                            :value="entityModel.xml"
+                            @update:value="updateXml"
+                            lang="xml"
+                            theme="chrome"
+                            :options="options"
+                            style="height: 70vh"
+                            :readonly="action === 'view'"/>
+            </div>
           </div>
         </q-tab-panel>
 
@@ -109,7 +123,7 @@
 
 <script lang="ts">
 /* eslint-disable @typescript-eslint/ban-ts-comment */
-import {defineComponent,  ref} from 'vue';
+import {defineComponent, ref} from 'vue';
 
 import {useQuasar} from 'quasar';
 import EntityPage from 'src/shared/components/crud/EntityPage.vue';
@@ -126,9 +140,13 @@ import {
 } from 'src/modules/bpm';
 import BpmModelView from 'src/modules/bpm/ui/bpm-model/components/BpmModelView.vue';
 import BpmModelEdit from 'src/modules/bpm/ui/bpm-model/components/BpmModelEdit.vue';
+import {VAceEditor} from 'vue3-ace-editor';
+import 'ace-builds/src-noconflict/mode-xml';
+import 'ace-builds/src-noconflict/theme-chrome';
 
-function emptyEntity(id?: string): BpmModel {
-  switch (id) {
+function emptyEntity(id?: string, type?: string): BpmModel {
+  console.log('type', type)
+  switch (type) {
     case 'dmn':
       return newDmnModel()
     case 'cmmn':
@@ -143,11 +161,13 @@ export default defineComponent({
   components: {
     BpmModelEdit,
     BpmModelView,
-   DefaultEntityPageToolbar, EntityPage
+    VAceEditor,
+    DefaultEntityPageToolbar, EntityPage
   },
   props: {
     id: String,
-    action: String
+    action: String,
+    options: String
   },
   setup(props) {
     const tab = ref('general')

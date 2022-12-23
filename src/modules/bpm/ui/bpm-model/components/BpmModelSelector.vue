@@ -11,7 +11,7 @@
     :label="label"
     :options="items"
     option-value="id"
-    option-label="fullname"
+    option-label="name"
     emit-value
     map-options
     clearable
@@ -31,7 +31,7 @@
 <script lang="ts">
 import {defineComponent, toRef} from 'vue';
 import {useEntitySelector} from 'src/shared/composables';
-import {BpmModel, BpmModelFilter, useBpmModelStore} from 'src/modules/bpmModel';
+import {BpmModel, BpmModelFilter, useBpmModelStore} from 'src/modules/bpm';
 
 
 export default defineComponent({

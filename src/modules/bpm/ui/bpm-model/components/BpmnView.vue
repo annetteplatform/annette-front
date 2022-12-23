@@ -10,8 +10,6 @@ import {defineComponent, onMounted, Ref, ref, toRef, watch} from 'vue';
 
 import 'bpmn-js/dist/assets/diagram-js.css'
 import 'bpmn-js/dist/assets/bpmn-font/css/bpmn-embedded.css'
-// import 'bpmn-js-properties-panel/dist/assets/bpmn-js-properties-panel.css'
-import 'bpmn-js-properties-panel/dist/assets/properties-panel.css'
 // @ts-ignore
 import BpmnJS from 'bpmn-js/lib/Viewer'
 
@@ -71,7 +69,7 @@ export default defineComponent({
 .bpmn-content {
   position: relative;
   width: 100%;
-  height: calc(100vh - 50px - 32px - 64px - 70px - 36px);
+  height: calc(100vh - 50px - 32px - 64px );
 }
 
 #canvas {

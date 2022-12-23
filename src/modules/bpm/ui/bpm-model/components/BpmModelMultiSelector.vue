@@ -3,9 +3,9 @@
     class="full-width" stack-label dense
     :model-value="model"
     @update:model-value="select"
+    multiple
     use-input
-    fill-input
-    hide-selected
+    use-chips
     input-debounce="500"
     :readonly="readonly"
     :label="label"
@@ -29,22 +29,22 @@
 </template>
 
 <script lang="ts">
-import {defineComponent, toRef} from 'vue';
-import {useEntitySelector} from 'src/shared/composables';
-import {PrincipalGroup, PrincipalGroupFilter, usePrincipalGroupStore} from 'src/modules/principalGroup';
+import {defineComponent, Ref, toRef} from 'vue';
+import {useEntityMultiSelector} from 'src/shared/composables';
+import {BpmModel, BpmModelFilter, useBpmModelStore} from 'src/modules/bpm';
 
 
 export default defineComponent({
-  name: 'PrincipalGroupSelector',
+  name: 'BpmModelMultiSelector',
   components: {},
   props: {
     label: {
       type: String,
       required: false,
-      default: 'PrincipalGroup'
+      default: 'BpmModel'
     },
     modelValue: {
-      type: String,
+      type: Array,
       required: true
     },
     readonly: {
@@ -56,12 +56,12 @@ export default defineComponent({
   emits: ['update:modelValue'],
   setup(props, {emit}) {
 
-    const valueRef = toRef(props, 'modelValue')
+    const valueRef = toRef(props, 'modelValue') as Ref<string[]>
 
-    const store = usePrincipalGroupStore()
-    const entitySelector = useEntitySelector<PrincipalGroup, PrincipalGroupFilter>(
+    const store = useBpmModelStore()
+    const entitySelector = useEntityMultiSelector<BpmModel, BpmModelFilter>(
       store,
-      'PrincipalGroupSelector',
+      'BpmModelMultiSelector',
       valueRef,
       emit)
 

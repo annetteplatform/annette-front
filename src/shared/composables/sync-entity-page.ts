@@ -13,7 +13,7 @@ function deepCopy<T>(object: T): T {
 
 export interface UseSyncEntityPageOpt<T> {
   store: any,
-  emptyEntity?: (id?: string) => T,
+  emptyEntity?: (id?: string, options?: string) => T,
   formHasError?: (entity?: T | null) => boolean,
   props: any,
   onBeforeLoad?: (action: string, id: string) => void
@@ -31,6 +31,7 @@ export function useSyncEntityPage<T>(
 
   const id: Ref<string> = toRef(opt.props, 'id')
   const action: Ref<string> = toRef(opt.props, 'action')
+  const options: Ref<string> = toRef(opt.props, 'options')
   const prevProps = ref('')
 
   const entityModel: Ref<T | null> = ref(null)
@@ -50,7 +51,7 @@ export function useSyncEntityPage<T>(
       opt.onBeforeLoad(action.value, id.value)
     }
     if (action.value === 'create' && id.value == 'new' && opt.emptyEntity) {
-      const entity = opt.emptyEntity(id.value)
+      const entity = opt.emptyEntity(id.value, options.value)
       updateEntity(entity)
     } else {
       try {

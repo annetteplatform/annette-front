@@ -11,7 +11,11 @@ export const bpmRoutes: RouteRecordRaw[] = [
     path: 'bpm/bpmModel/:action/:id',
     name: 'bpm.bpmModel',
     component: () => import('src/modules/bpm/ui/bpm-model/BpmModelPage.vue'),
-    props: (route) => ({id: String(route.params.id), action: String(route.params.action),}),
+    props: (route) => ({
+      id: String(route.params.id),
+      action: String(route.params.action),
+      options: String(route.query.options || '')
+    }),
     meta: {requiresAuth: true}
   },
   {
