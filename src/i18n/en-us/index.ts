@@ -3,7 +3,7 @@
 
 import {AnnettePrincipal, MultiLanguageText} from 'src/shared/model';
 import {Icon} from 'src/main';
-import {Notation} from 'src/modules/bpm';
+import {DataSchemaVariables, Datatype, Notation} from 'src/modules/bpm';
 
 export default {
   annetteConsole: {
@@ -301,6 +301,56 @@ export default {
           xml: 'Schema',
         },
         deleteQuestion: 'Please confirm delete BPM model.',
+      },
+      dataSchema: {
+        title: 'Data Schema',
+        titlePl: 'Data Schemas',
+        page: {
+          generalTab: 'General',
+          variablesTab: 'Variables',
+        },
+        field: {
+          id: 'Id',
+          name: 'Name',
+          description: 'Description',
+          variables: 'Variables',
+          var: {
+            variableName: 'Variable Name',
+            name: 'Name',
+            caption: 'Caption',
+            datatype: 'Data Type',
+            default: 'Default Value'
+          }
+        },
+        deleteQuestion: 'Please confirm delete data schema.',
+      },
+      businessProcess: {
+        title: 'Business Process',
+        titlePl: 'Business Processes',
+        page: {
+          generalTab: 'General',
+          variablesTab: 'Variables',
+        },
+        field: {
+          id: 'Id',
+          name: 'Name',
+          description: 'Description',
+          processDefinitionType: 'Process Definition Type',
+          keyType: 'Key',
+          idType: 'Id',
+          processDefinition: 'Process Definition',
+          bpmModelId: 'BPM Model',
+          dataSchemaId: 'Data Schema',
+          variables: 'Variables',
+          var: {
+            variableName: 'Variable Name',
+            name: 'Name',
+            caption: 'Caption',
+            datatype: 'Data Type',
+            default: 'Default Value'
+          }
+        },
+        deleteQuestion: 'Please confirm delete data schema.',
       },
     },
   }

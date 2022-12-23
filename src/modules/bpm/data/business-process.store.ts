@@ -9,7 +9,7 @@ import {
   UpdateBusinessProcessBpmModelPayloadDto, UpdateBusinessProcessDataSchemaPayloadDto,
   UpdateBusinessProcessDescriptionPayloadDto,
   UpdateBusinessProcessNamePayloadDto,
-  UpdateBusinessProcessPayloadDto
+  UpdateBusinessProcessPayloadDto, UpdateBusinessProcessProcessDefinitionPayloadDto
 } from './business-process.model';
 
 const DEFAULT_PAGE_SIZE = 10
@@ -44,6 +44,12 @@ export const useBusinessProcessStore = defineStore('businessProcess', () => {
 
   const updateEntityDescription = async (entity: UpdateBusinessProcessDescriptionPayloadDto) => {
     const newEntity = await bpmBusinessProcessService.updateBusinessProcessDescription(entity)
+    entityStore.storeEntity(newEntity)
+    return newEntity
+  }
+
+  const updateEntityProcessDefinition = async (entity: UpdateBusinessProcessProcessDefinitionPayloadDto) => {
+    const newEntity = await bpmBusinessProcessService.updateBusinessProcessProcessDefinition(entity)
     entityStore.storeEntity(newEntity)
     return newEntity
   }
@@ -83,6 +89,7 @@ export const useBusinessProcessStore = defineStore('businessProcess', () => {
     updateEntity,
     updateEntityName,
     updateEntityDescription,
+    updateEntityProcessDefinition,
     updateEntityBpmModel,
     updateEntityDataSchema,
     storeBusinessProcessVariable,
