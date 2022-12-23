@@ -3,6 +3,7 @@
 
 import {AnnettePrincipal, MultiLanguageText} from 'src/shared/model';
 import {Icon} from 'src/main';
+import {Notation} from 'src/modules/bpm';
 
 export default {
   annetteConsole: {
@@ -279,6 +280,27 @@ export default {
         deleteQuestion: 'Please confirm delete service item.',
         activateQuestion: 'Please confirm activate service item.',
         deactivateQuestion: 'Please confirm deactivate service item.',
+      },
+    },
+
+    bpm: {
+      bpmModel: {
+        title: 'BPM Model',
+        titlePl: 'BPM Models',
+        page:{
+          generalTab: 'General',
+          modelTab: 'Model',
+          xmlTab: 'XML'
+        },
+        field: {
+          id: 'Id',
+          code: 'Code',
+          name: 'Name',
+          description: 'Description',
+          notation: 'Notation',
+          xml: 'Schema',
+        },
+        deleteQuestion: 'Please confirm delete BPM model.',
       },
     },
   }

@@ -38,6 +38,8 @@
       <div class="row q-pb-sm ">
         <q-input class="col-md-12 col-sm-12 col-xs-12 q-pr-md" stack-label dense
                  v-model="entityModel.name"
+                 @update:model-value="updateName"
+                 debounce="700"
                  :rules="[val => !!val || $t('annette.shared.crud.fieldRequired')]"
                  :readonly="action ==='view'"
                  ref="nameRef"
@@ -46,7 +48,8 @@
 
       <div class="row q-pb-sm">
         <principal-group-category-selector v-model="entityModel.categoryId"
-                                  :readonly="action ==='view'"/>
+                                           @update:model-value="updateCategory"
+                                           :readonly="action ==='view'"/>
       </div>
 
       <div class="row">
@@ -136,7 +139,8 @@ export default defineComponent({
   components: {
     PrincipalViewItem,
     PrincipalSelectorDialog,
-    PrincipalGroupCategorySelector, AttributesForm, DefaultEntityPageToolbar,  EntityPage},
+    PrincipalGroupCategorySelector, AttributesForm, DefaultEntityPageToolbar, EntityPage
+  },
   props: {
     id: String,
     action: String

@@ -8,20 +8,20 @@
     hide-selected
     input-debounce="500"
     :readonly="readonly"
-    :label="label || $t('annette.principalGroup.category.title')"
+    :label="label"
     :options="items"
     option-value="id"
-    option-label="name"
+    option-label="fullname"
     emit-value
     map-options
-    :clearable="clearable"
+    clearable
     :loading="instance.loading"
     @filter="setFilter"
   >
     <template v-slot:no-option>
       <q-item>
         <q-item-section class="text-grey">
-          {{ $t('annette.shared.crud.noResults') }}
+          No results
         </q-item-section>
       </q-item>
     </template>
@@ -31,17 +31,17 @@
 <script lang="ts">
 import {defineComponent, toRef} from 'vue';
 import {useEntitySelector} from 'src/shared/composables';
-import {useCategoryStore} from 'src/modules/principal-group/data/category.store';
-import {Category, CategoryFilter} from 'src/shared/model';
+import {BpmModel, BpmModelFilter, useBpmModelStore} from 'src/modules/bpmModel';
 
 
 export default defineComponent({
-  name: 'PrincipalGroupCategorySelector',
+  name: 'BpmModelSelector',
   components: {},
   props: {
     label: {
       type: String,
       required: false,
+      default: 'BpmModel'
     },
     modelValue: {
       type: String,
@@ -51,25 +51,20 @@ export default defineComponent({
       type: Boolean,
       default: false,
       required: false
-    },
-    clearable:{
-      type: Boolean,
-      default: false,
-    },
+    }
   },
   emits: ['update:modelValue'],
   setup(props, {emit}) {
 
-    const store = useCategoryStore()
-
     const valueRef = toRef(props, 'modelValue')
 
-    const entitySelector = useEntitySelector<Category, CategoryFilter>(
+    const store = useBpmModelStore()
+    const entitySelector = useEntitySelector<BpmModel, BpmModelFilter>(
       store,
-      'CategorySelector',
+      'BpmModelSelector',
       valueRef,
-      emit
-    )
+      emit)
+
 
     return {
       ...entitySelector,

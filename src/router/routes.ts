@@ -1,10 +1,11 @@
 import { RouteRecordRaw } from 'vue-router';
 import {applicationRoutes} from 'src/modules/application';
-import {personRoutes} from 'src/modules/person';
 import {orgStructureRoutes} from 'src/modules/org-structure';
 import {principalGroupRoutes} from 'src/modules/principal-group';
 import {authorizationRoutes} from 'src/modules/authorization';
 import {serviceCatalogRoutes} from 'src/modules/service-catalog';
+import {personRoutes} from 'src/modules/person';
+import {bpmRoutes} from 'src/modules/bpm';
 
 const routes: RouteRecordRaw[] = [
   {
@@ -21,7 +22,8 @@ const routes: RouteRecordRaw[] = [
       ...orgStructureRoutes,
       ...principalGroupRoutes,
       ...authorizationRoutes,
-      ...serviceCatalogRoutes
+      ...serviceCatalogRoutes,
+      ...bpmRoutes
     ],
   },
 
