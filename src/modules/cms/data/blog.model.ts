@@ -59,13 +59,5 @@ export interface UnassignBlogPrincipalPayloadDto {
   principal: AnnettePrincipal
 }
 
-export interface ActivateBlogPayloadDto {
-  id: string
-}
-
-export interface DeactivateBlogPayloadDto {
-  id: string
-}
-
 
 

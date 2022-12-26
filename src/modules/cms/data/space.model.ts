@@ -57,14 +57,3 @@ export interface UnassignSpacePrincipalPayloadDto {
   id: string,
   principal: AnnettePrincipal
 }
-
-export interface ActivateSpacePayloadDto {
-  id: string
-}
-
-export interface DeactivateSpacePayloadDto {
-  id: string
-}
-
-
-

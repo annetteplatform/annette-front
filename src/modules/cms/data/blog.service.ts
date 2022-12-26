@@ -1,9 +1,8 @@
 import axios from 'axios'
 import { FindResult} from 'src/shared/model'
 import {
-  ActivateBlogPayloadDto,
   AssignBlogPrincipalPayloadDto,
-  CreateBlogPayloadDto, DeactivateBlogPayloadDto,
+  CreateBlogPayloadDto,
   Blog,
   BlogFilter, UnassignBlogPrincipalPayloadDto, UpdateBlogCategoryPayloadDto,
   UpdateBlogDescriptionPayloadDto,
@@ -52,13 +51,13 @@ export const cmsBlogService = {
       .then(result => convertBlog(result.data))
   },
 
-  async activateBlog(payload: ActivateBlogPayloadDto) {
-    return await axios.post<Blog>('/api/annette/v1/cms/activateBlog', payload)
+  async activateBlog(id: string) {
+    return await axios.post<Blog>('/api/annette/v1/cms/activateBlog', {id})
       .then(result => convertBlog(result.data))
   },
 
-  async deactivateBlog(payload: DeactivateBlogPayloadDto) {
-    return await axios.post<Blog>('/api/annette/v1/cms/deactivateBlog', payload)
+  async deactivateBlog(id: string) {
+    return await axios.post<Blog>('/api/annette/v1/cms/deactivateBlog', {id})
       .then(result => convertBlog(result.data))
   },
 

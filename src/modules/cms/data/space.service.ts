@@ -9,6 +9,7 @@ import {
   UpdateSpaceDescriptionPayloadDto,
   UpdateSpaceNamePayloadDto
 } from './space.model';
+import {Blog} from 'src/modules/cms';
 
 export const cmsSpaceService = {
 
@@ -52,13 +53,13 @@ export const cmsSpaceService = {
       .then(result => convertSpace(result.data))
   },
 
-  async activateSpace(payload: ActivateSpacePayloadDto) {
-    return await axios.post<Space>('/api/annette/v1/cms/activateSpace', payload)
+  async activateSpace(id: string) {
+    return await axios.post<Space>('/api/annette/v1/cms/activateSpace', {id})
       .then(result => convertSpace(result.data))
   },
 
-  async deactivateSpace(payload: DeactivateSpacePayloadDto) {
-    return await axios.post<Space>('/api/annette/v1/cms/deactivateSpace', payload)
+  async deactivateSpace(id: string) {
+    return await axios.post<Space>('/api/annette/v1/cms/deactivateSpace', {id})
       .then(result => convertSpace(result.data))
   },
 

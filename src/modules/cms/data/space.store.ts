@@ -2,10 +2,10 @@ import {defineStore} from 'pinia';
 import {useEntityStore} from 'src/shared/store';
 import {cmsSpaceService} from './space.service';
 import {
-  ActivateSpacePayloadDto, AssignSpacePrincipalPayloadDto,
+  AssignSpacePrincipalPayloadDto,
   Space,
   SpaceFilter,
-  CreateSpacePayloadDto, DeactivateSpacePayloadDto,
+  CreateSpacePayloadDto,
   emptySpaceFilter, UnassignSpacePrincipalPayloadDto, UpdateSpaceCategoryPayloadDto,
   UpdateSpaceDescriptionPayloadDto,
   UpdateSpaceNamePayloadDto
@@ -70,13 +70,15 @@ export const useSpaceStore = defineStore('cmsSpace', () => {
     entityStore.storeEntity(newEntity)
     return newEntity
   }
-  const activateEntity = async (entity: ActivateSpacePayloadDto) => {
-    const newEntity = await cmsSpaceService.activateSpace(entity)
+
+  const activateEntity = async (id: string) => {
+    const newEntity = await cmsSpaceService.activateSpace(id)
     entityStore.storeEntity(newEntity)
     return newEntity
   }
-  const deactivateEntity = async (entity: DeactivateSpacePayloadDto) => {
-    const newEntity = await cmsSpaceService.deactivateSpace(entity)
+
+  const deactivateEntity = async (id: string) => {
+    const newEntity = await cmsSpaceService.deactivateSpace(id)
     entityStore.storeEntity(newEntity)
     return newEntity
   }

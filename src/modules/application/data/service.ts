@@ -45,7 +45,7 @@ export const applicationService = {
       ...filter
     }
     return await axios.post<FindResult>('/api/annette/v1/application/findApplications', query)
-      .then(result => result.data, processError)
+      .then(result => result.data, processError<FindResult>)
   },
 
   async getApplicationTranslations(id: string, languageId: string) {
@@ -130,7 +130,7 @@ export const applicationService = {
       ...filter
     }
     return await axios.post<FindResult>('/api/annette/v1/application/findTranslations', query)
-      .then(result => result.data, processError)
+      .then(result => result.data, processError<Translation>)
   },
 
   async getTranslationLanguages(id: string) {
@@ -164,7 +164,7 @@ export const applicationService = {
 
 }
 
-function processError(reason: any) {
+function processError<T>(reason: any): T {
   if (reason && reason.response && reason.response.data && reason.response.data.code) {
     const error: AnnetteError = {
       ...reason.response.data,

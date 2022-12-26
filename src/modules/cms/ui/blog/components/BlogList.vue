@@ -17,6 +17,9 @@
         {{ props.row.name }}
       </q-td>
       <q-td>
+        <q-badge outline color="primary" :label="props.row.categoryId" />
+      </q-td>
+      <q-td>
         <q-btn v-if="props.row.active"
                flat round color="green" size="sm" icon="fa-regular fa-circle-check" @click="deactivateEntity(props.row.id)">
           <q-tooltip>
@@ -32,32 +35,25 @@
       </q-td>
       <q-td auto-width>
         <default-row-toolbar :id="props.row.id"
-                             route-name="serviceCatalog.scope"
-                             view copy edit del
-                             @delete="deleteEntity"/>
-        <q-btn class="q-ml-md" flat round color="green" size="sm" icon="fas fa-user"
-               :to="{ name: 'serviceCatalog.scopePrincipals', params: { action: 'view', id: props.row.id } }"/>
-        <q-btn flat round color="blue" size="sm" icon="fas fa-user-edit"
-               :to="{ name: 'serviceCatalog.scopePrincipals', params: { action: 'edit', id: props.row.id } }"/>
+                             route-name="cms.blog"
+                             view copy edit del @delete="deleteEntity"/>
       </q-td>
     </template>
   </entity-list>
 </template>
 
 <script lang="ts">
-import {defineComponent} from 'vue';
+import {defineComponent, ref, useSlots} from 'vue';
 import EntityList from 'src/shared/components/crud/EntityList.vue';
-import {useEntityList} from 'src/shared/composables';
+import {useActivateEntity, useDeactivateEntity, useEntityList} from 'src/shared/composables';
 import {useI18n} from 'vue-i18n';
 import DefaultRowToolbar from 'src/shared/components/crud/DefaultRowToolbar.vue';
 import {useDeleteEntity} from 'src/shared/composables/delete-entity';
-import {Scope, ScopeFilter, useScopeStore} from 'src/modules/service-catalog';
-import {useDeactivateEntity} from 'src/shared/composables/deactivate-entity';
-import {useActivateEntity} from 'src/shared/composables/activate-entity';
+import {Blog, BlogFilter, useBlogStore} from 'src/modules/cms';
 
 
 export default defineComponent({
-  name: 'ScopeList',
+  name: 'BlogList',
   components: {DefaultRowToolbar, EntityList},
   props: {
     instanceKey: {
@@ -72,7 +68,7 @@ export default defineComponent({
       {
         name: 'id',
         required: true,
-        label: i18n.t('annette.serviceCatalog.scope.field.id'),
+        label: i18n.t('annette.cms.blog.field.id'),
         align: 'left',
         field: 'id',
         sortable: true,
@@ -80,39 +76,47 @@ export default defineComponent({
       {
         name: 'name',
         required: true,
-        label: i18n.t('annette.serviceCatalog.scope.field.name'),
+        label: i18n.t('annette.cms.blog.field.name'),
         align: 'left',
         field: 'name',
         sortable: true,
       },
       {
+        name: 'categoryId',
+        required: true,
+        label: i18n.t('annette.cms.blog.field.categoryId'),
+        align: 'left',
+        field: 'categoryId',
+        sortable: true,
+      },
+      {
         name: 'active',
         required: true,
-        label: i18n.t('annette.serviceCatalog.scope.field.active'),
+        label: i18n.t('annette.cms.blog.field.active'),
         align: 'left',
         field: 'active',
         sortable: true,
       }
     ]
 
-    const store = useScopeStore()
+    const store = useBlogStore()
 
-    const entityList = useEntityList<Scope, ScopeFilter>(
+    const entityList = useEntityList<Blog, BlogFilter>(
       store,
       props.instanceKey,
     )
 
     const deleteEntity = useDeleteEntity(
       store,
-      i18n.t('annette.serviceCatalog.scope.deleteQuestion'),
+      i18n.t('annette.cms.blog.deleteQuestion'),
     )
     const activateEntity = useActivateEntity(
       store,
-      i18n.t('annette.serviceCatalog.scope.activateQuestion'),
+      i18n.t('annette.cms.blog.activateQuestion'),
     )
     const deactivateEntity = useDeactivateEntity(
       store,
-      i18n.t('annette.serviceCatalog.scope.deactivateQuestion'),
+      i18n.t('annette.cms.blog.deactivateQuestion'),
     )
 
     return {

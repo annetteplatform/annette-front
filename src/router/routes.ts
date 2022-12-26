@@ -6,6 +6,7 @@ import {authorizationRoutes} from 'src/modules/authorization';
 import {serviceCatalogRoutes} from 'src/modules/service-catalog';
 import {personRoutes} from 'src/modules/person';
 import {bpmRoutes} from 'src/modules/bpm';
+import {cmsExtRoutes, cmsRoutes} from 'src/modules/cms';
 
 const routes: RouteRecordRaw[] = [
   {
@@ -23,10 +24,11 @@ const routes: RouteRecordRaw[] = [
       ...principalGroupRoutes,
       ...authorizationRoutes,
       ...serviceCatalogRoutes,
-      ...bpmRoutes
+      ...bpmRoutes,
+      ...cmsRoutes
     ],
   },
-
+  ...cmsExtRoutes,
   {
     path: '/navigate',
     redirect: '',

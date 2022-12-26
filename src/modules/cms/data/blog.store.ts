@@ -2,10 +2,10 @@ import {defineStore} from 'pinia';
 import {useEntityStore} from 'src/shared/store';
 import {cmsBlogService} from './blog.service';
 import {
-  ActivateBlogPayloadDto, AssignBlogPrincipalPayloadDto,
+  AssignBlogPrincipalPayloadDto,
   Blog,
   BlogFilter,
-  CreateBlogPayloadDto, DeactivateBlogPayloadDto,
+  CreateBlogPayloadDto,
   emptyBlogFilter, UnassignBlogPrincipalPayloadDto, UpdateBlogCategoryPayloadDto,
   UpdateBlogDescriptionPayloadDto,
   UpdateBlogNamePayloadDto
@@ -70,13 +70,13 @@ export const useBlogStore = defineStore('cmsBlog', () => {
     entityStore.storeEntity(newEntity)
     return newEntity
   }
-  const activateEntity = async (entity: ActivateBlogPayloadDto) => {
-    const newEntity = await cmsBlogService.activateBlog(entity)
+  const activateEntity = async (id: string) => {
+    const newEntity = await cmsBlogService.activateBlog(id)
     entityStore.storeEntity(newEntity)
     return newEntity
   }
-  const deactivateEntity = async (entity: DeactivateBlogPayloadDto) => {
-    const newEntity = await cmsBlogService.deactivateBlog(entity)
+  const deactivateEntity = async (id: string) => {
+    const newEntity = await cmsBlogService.deactivateBlog(id)
     entityStore.storeEntity(newEntity)
     return newEntity
   }

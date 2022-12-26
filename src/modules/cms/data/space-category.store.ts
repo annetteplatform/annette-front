@@ -5,7 +5,7 @@ import {Category, CategoryFilter, emptyCategoryFilter} from 'src/shared/model';
 
 const DEFAULT_PAGE_SIZE = 10
 
-export const useCategoryStore = defineStore('cmsSpaceCategory', () => {
+export const useSpaceCategoryStore = defineStore('cmsSpaceCategory', () => {
 
   const entityStore = useEntityStore<Category, CategoryFilter>({
     defaultPageSize: DEFAULT_PAGE_SIZE,

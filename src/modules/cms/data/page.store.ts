@@ -23,7 +23,7 @@ import {
 import {Action} from './action.model';
 import {Space} from './space.model';
 import {Updated} from './update.model';
-import {RemoveFilePayload,} from './file.model';
+import {FileDescriptor, Files, RemoveFilePayload,} from './file.model';
 import {uid} from 'quasar';
 import {AnnettePrincipal} from 'src/shared/model';
 import {useSpaceStore} from 'src/modules/cms/data/space.store';
@@ -197,6 +197,13 @@ export const usePageStore = defineStore('cmsPage', () => {
     }
   }
 
+  const updateEditorId = ( data: string) => {
+    if (editor.value.page && editor.value.action === Action.Create) {
+      editor.value.page.id = data
+      editor.value.id = data
+    }
+  }
+
   const updateEditorTitle = async (data: string) => {
     if (editor.value.action === Action.Create) {
       // commit('updateEditorTitle', data)
@@ -289,7 +296,7 @@ export const usePageStore = defineStore('cmsPage', () => {
     }
   }
 
-  const updateEditorPublicationTimestamp = async (timestamp: Date) => {
+  const updateEditorPublicationTimestamp = async (timestamp: Date | undefined) => {
     if (editor.value.action === Action.Edit) {
       const payload: UpdatePagePublicationTimestampPayloadDto = {
         id: editor.value.id as string,
@@ -459,6 +466,20 @@ export const usePageStore = defineStore('cmsPage', () => {
 
   // File editor
 
+  const updateEditorFiles = (files: Files) => {
+    editor.value.files = files
+  }
+
+  const editorFileUploaded = (file: FileDescriptor) => {
+    if (file.fileType === 'doc') {
+      const files = [...editor.value.files.docs, file]
+      editor.value.files.docs = files.sort((a, b) => a.filename.toLowerCase() < b.filename.toLowerCase() ? -1 : 1)
+    } else {
+      const files = [...editor.value.files.media, file]
+      editor.value.files.media = files.sort((a, b) => a.filename.toLowerCase() < b.filename.toLowerCase() ? -1 : 1)
+    }
+  }
+
   const removePageFile = async (payload: RemoveFilePayload) => {
     await cmsPageService.removePageFile(payload.id, payload.file.fileType, payload.file.fileId)
     // commit('removePageFile', payload)
@@ -472,11 +493,13 @@ export const usePageStore = defineStore('cmsPage', () => {
 
   return {
     ...entityStore,
+    editor,
     publishPage,
     unpublishPage,
     deleteEntity,
     initPageEditor,
     createEditorPage,
+    updateEditorId,
     updateEditorTitle,
     updateEditorAuthor,
     updateEditorPublicationStatus,
@@ -488,6 +511,8 @@ export const usePageStore = defineStore('cmsPage', () => {
     updateEditorWidget,
     changeEditorWidgetOrder,
     deleteEditorWidget,
+    updateEditorFiles,
+    editorFileUploaded,
     removePageFile
   }
 

@@ -49,53 +49,29 @@
       <div class="row q-pb-sm">
         <principal-group-category-selector v-model="entityModel.categoryId"
                                            @update:model-value="updateCategory"
-                                           :readonly="action ==='view'"/>
+                                           :readonly="action ==='view'"
+                                           :label="$t('annette.principalGroup.group.field.categoryId')"/>
       </div>
 
       <div class="row">
-        <q-input
-          class="col-md-12 col-sm-12 col-xs-12"
-          v-model="entityModel.description"
-          @update:model-value="updateDescription"
-          debounce="700"
-          label="Description"
-          type="textarea"
-          :readonly="action === 'view'"
+        <q-input autogrow
+                 class="col-md-12 col-sm-12 col-xs-12"
+                 v-model="entityModel.description"
+                 @update:model-value="updateDescription"
+                 debounce="700"
+                 :label="$t('annette.principalGroup.group.field.description')"
+                 type="textarea"
+                 :readonly="action === 'view'"
         />
       </div>
 
       <div class="row q-mt-md" v-if="action !=='create'">
-        <q-list bordered class="full-width" separator>
-          <q-item>
-            <q-item-section>
-              Principals
-            </q-item-section>
-            <q-item-section avatar>
-              <q-btn class="float-left" round dense flat color="primary"
-                     icon="add"
-                     v-if="action ==='edit'"
-                     @click="addPrincipal"
-              />
-              <principal-selector-dialog ref="principalSelectorDialog"/>
-            </q-item-section>
-          </q-item>
-          <q-item v-if="principals.length === 0">
-            <q-item-section>
-              <q-item-label caption>
-                Principals not assigned
-              </q-item-label>
-            </q-item-section>
-          </q-item>
-          <q-item
-            v-for="principal in principals"
-            :key="principal">
-            <principal-view-item :principal="principal"/>
-            <q-item-section side v-if="action =='edit'">
-              <q-btn flat round color="red" size="sm" icon="fas fa-trash"
-                     @click="deletePrincipal(principal)"/>
-            </q-item-section>
-          </q-item>
-        </q-list>
+        <principal-list-input :principals="principals"
+                              @add-principal="addPrincipal"
+                              @delete-principal="deletePrincipal"
+                              :readonly="action === 'view'"
+                              :label="$t('annette.principalGroup.group.field.principals')"
+        />
       </div>
 
     </template>
@@ -104,13 +80,10 @@
 
 <script lang="ts">
 /* eslint-disable @typescript-eslint/ban-ts-comment */
-import {computed, defineComponent, Ref, ref} from 'vue';
+import {defineComponent, Ref, ref} from 'vue';
 
-import {useQuasar} from 'quasar';
 import EntityPage from 'src/shared/components/crud/EntityPage.vue';
 import DefaultEntityPageToolbar from 'src/shared/components/crud/DefaultEntityPageToolbar.vue';
-import {useI18n} from 'vue-i18n';
-import AttributesForm from 'src/shared/components/attributes/AttributesForm.vue';
 import {
   PrincipalGroup,
   principalGroupService,
@@ -122,8 +95,7 @@ import {AnnettePrincipal} from 'src/shared/model';
 import {useSyncEntityPage} from 'src/shared/composables/sync-entity-page';
 import PrincipalGroupCategorySelector
   from 'src/modules/principal-group/ui/category/components/PrincipalGroupCategorySelector.vue';
-import PrincipalSelectorDialog from 'src/shared/components/principal-selector/PrinciplaSelectorDialog.vue';
-import PrincipalViewItem from 'src/shared/components/principal-view/PrincipalViewItem.vue';
+import PrincipalListInput from 'src/shared/components/crud/PrincipalListInput.vue';
 
 function emptyEntity(): PrincipalGroup {
   return {
@@ -137,9 +109,8 @@ function emptyEntity(): PrincipalGroup {
 export default defineComponent({
   name: 'PrincipalGroupPage',
   components: {
-    PrincipalViewItem,
-    PrincipalSelectorDialog,
-    PrincipalGroupCategorySelector, AttributesForm, DefaultEntityPageToolbar, EntityPage
+    PrincipalListInput,
+    PrincipalGroupCategorySelector, DefaultEntityPageToolbar, EntityPage
   },
   props: {
     id: String,
@@ -161,11 +132,8 @@ export default defineComponent({
     }
 
     const store = usePrincipalGroupStore()
-    const quasar = useQuasar()
-    const i18n = useI18n()
 
     const principals: Ref<AnnettePrincipal[]> = ref([])
-    const principalSelectorDialog = ref()
 
     const loadAssignments = async (action: string, id: string) => {
       principals.value = await principalGroupService.getAssignments(id)
@@ -214,32 +182,15 @@ export default defineComponent({
     }
 
 
-    const addPrincipal = async () => {
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-member-access
-      const principal = await principalSelectorDialog.value.showDialog()
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+    const addPrincipal = async (principal: AnnettePrincipal) => {
       await principalGroupService.assignPrincipal({id: entityPage.id.value, principal})
       principals.value = [...principals.value, principal]
     }
 
 
-    const deletePrincipal = (principal: AnnettePrincipal) => {
-      quasar.notify({
-        type: 'negative',
-        message: 'Please confirm delete principal',
-        actions: [
-          {label: 'Cancel', color: 'white'},
-          {
-            label: 'Delete',
-            color: 'white',
-            handler: async () => {
-              // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-              await principalGroupService.unassignPrincipal({id: entityPage.id.value, principal})
-              principals.value = principals.value.filter(p => p !== principal)
-            }
-          }
-        ]
-      })
+    const deletePrincipal = async (principal: AnnettePrincipal) => {
+      await principalGroupService.unassignPrincipal({id: entityPage.id.value, principal})
+      principals.value = principals.value.filter(p => p !== principal)
     }
 
     return {
@@ -250,7 +201,6 @@ export default defineComponent({
       updateDescription,
       updateCategory,
       principals,
-      principalSelectorDialog,
       addPrincipal,
       deletePrincipal
     }
