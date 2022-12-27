@@ -23,7 +23,7 @@ import {
 import {Action} from './action.model';
 import {Blog} from './blog.model';
 import {Updated} from './update.model';
-import {RemoveFilePayload,} from './file.model';
+import {FileDescriptor, Files, RemoveFilePayload,} from './file.model';
 import {uid} from 'quasar';
 import {AnnettePrincipal} from 'src/shared/model';
 import {useBlogStore} from 'src/modules/cms/data/blog.store';
@@ -221,6 +221,13 @@ export const usePostStore = defineStore('cmsPost', () => {
     }
   }
 
+  const updateEditorId = ( data: string) => {
+    if (editor.value.post && editor.value.action === Action.Create) {
+      editor.value.post.id = data
+      editor.value.id = data
+    }
+  }
+
   const updateEditorTitle = async (data: string) => {
     if (editor.value.action === Action.Create) {
       // commit('updateEditorTitle', data)
@@ -336,7 +343,7 @@ export const usePostStore = defineStore('cmsPost', () => {
     }
   }
 
-  const updateEditorPublicationTimestamp = async (timestamp: Date) => {
+  const updateEditorPublicationTimestamp = async (timestamp: Date | undefined) => {
     if (editor.value.action === Action.Edit) {
       const payload: UpdatePostPublicationTimestampPayloadDto = {
         id: editor.value.id as string,
@@ -439,7 +446,11 @@ export const usePostStore = defineStore('cmsPost', () => {
       const updated = await cmsPostService.updatePostContentSettings(payload)
       // commit('updateEditorContentSettings', { payload, updated })
       if (editor.value.post && editor.value.post.content) {
-        editor.value.post.content.settings = payload.settings
+        if (payload.contentType === 'intro') {
+          editor.value.post.introContent.settings = payload.settings
+        } else {
+          editor.value.post.content.settings = payload.settings
+        }
         editor.value.post.updatedAt = updated.updatedAt
         editor.value.post.updatedBy = updated.updatedBy
       }
@@ -452,22 +463,35 @@ export const usePostStore = defineStore('cmsPost', () => {
       payload.id = editor.value.id as string
       const updated = await cmsPostService.updatePostWidget(payload)
       // commit('updateEditorWidget', { payload, updated })
-      if (editor.value.post && editor.value.post.content) {
-        const widgetOrderLength = editor.value.post.content.widgetOrder.length
-        const currentIndex = editor.value.post.content?.widgetOrder.findIndex(c => c === payload.widget.id)
+      if (editor.value.post) {
+        let widgetOrder: string[]
+        if (payload.contentType === 'intro') {
+          widgetOrder = editor.value.post.introContent.widgetOrder
+        } else {
+          // @ts-ignore
+          widgetOrder = editor.value.post.content.widgetOrder
+        }
+        const currentIndex = widgetOrder.findIndex(c => c === payload.widget.id)
         if (currentIndex === -1) {
           // new widget
-          const newIndex = payload.order === undefined ? widgetOrderLength : payload.order
+          const newIndex = payload.order === undefined ? widgetOrder.length : payload.order
           if (newIndex <= 0) {
-            editor.value.post.content.widgetOrder = [payload.widget.id, ...editor.value.post.content.widgetOrder]
-          } else if (newIndex >= widgetOrderLength) {
-            editor.value.post.content.widgetOrder = [...editor.value.post.content.widgetOrder, payload.widget.id]
+            widgetOrder = [payload.widget.id, ...widgetOrder]
+          } else if (newIndex >= widgetOrder.length) {
+            widgetOrder = [...widgetOrder, payload.widget.id]
           } else {
-            editor.value.post.content.widgetOrder.splice(newIndex, 0, payload.widget.id)
+            widgetOrder.splice(newIndex, 0, payload.widget.id)
           }
+        }
+        if (payload.contentType === 'intro') {
+          editor.value.post.introContent.widgetOrder = widgetOrder
+          editor.value.post.introContent.widgets[payload.widget.id] = payload.widget
+        } else {
+          // @ts-ignore
+          editor.value.post.content.widgetOrder = widgetOrder
+          // @ts-ignore
           editor.value.post.content.widgets[payload.widget.id] = payload.widget
         }
-        editor.value.post.content.widgets[payload.widget.id] = payload.widget
         editor.value.post.updatedAt = updated.updatedAt
         editor.value.post.updatedBy = updated.updatedBy
       }
@@ -480,16 +504,28 @@ export const usePostStore = defineStore('cmsPost', () => {
       payload.id = editor.value.id as string
       const updated = await cmsPostService.changePostWidgetOrder(payload)
       // commit('changeEditorWidgetOrder', { payload, updated })
-      if (editor.value.post && editor.value.post.content) {
-        const widgetOrderLength = editor.value.post.content.widgetOrder.length
-        let newIndex = payload.order === undefined ? widgetOrderLength : payload.order
-        if (newIndex < 0) newIndex = 0
-        else if (newIndex >= widgetOrderLength) newIndex = widgetOrderLength - 1
-        const currentIndex = editor.value.post.content.widgetOrder.findIndex(c => c === payload.widgetId)
+      if (editor.value.post) {
+        let widgetOrder: string[]
+        if (payload.contentType === 'intro') {
+          widgetOrder = editor.value.post.introContent.widgetOrder
+        } else {
+          // @ts-ignore
+          widgetOrder = editor.value.post.content.widgetOrder
+        }
+        let newIndex = payload.order === undefined ? widgetOrder.length : payload.order
+        if (newIndex < 0) { newIndex = 0 }
+        else if (newIndex >= widgetOrder.length) { newIndex = widgetOrder.length - 1 }
+        const currentIndex = widgetOrder.findIndex(c => c === payload.widgetId)
         if (currentIndex !== -1) {
-          const swap = editor.value.post.content.widgetOrder[currentIndex]
-          editor.value.post.content.widgetOrder[currentIndex] = editor.value.post.content.widgetOrder[newIndex]
-          editor.value.post.content.widgetOrder[newIndex] = swap
+          const swap = widgetOrder[currentIndex]
+          widgetOrder[currentIndex] = widgetOrder[newIndex]
+          widgetOrder[newIndex] = swap
+          if (payload.contentType === 'intro') {
+            editor.value.post.introContent.widgetOrder = widgetOrder
+          } else {
+            // @ts-ignore
+            editor.value.post.content.widgetOrder = widgetOrder
+          }
           editor.value.post.updatedAt = updated.updatedAt
           editor.value.post.updatedBy = updated.updatedBy
         }
@@ -503,9 +539,16 @@ export const usePostStore = defineStore('cmsPost', () => {
       payload.id = editor.value.id as string
       const updated = await cmsPostService.deletePostWidget(payload)
       // commit('deleteEditorWidget', { payload, updated })
-      if (editor.value.post && editor.value.post.content) {
-        editor.value.post.content.widgetOrder = editor.value.post.content.widgetOrder.filter(c => c !== payload.widgetId)
-        delete editor.value.post.content.widgets[payload.widgetId]
+      if (editor.value.post) {
+        if (payload.contentType === 'intro') {
+          editor.value.post.introContent.widgetOrder = editor.value.post.introContent.widgetOrder.filter(c => c !== payload.widgetId)
+          delete editor.value.post.introContent.widgets[payload.widgetId]
+        } else {
+          // @ts-ignore
+          editor.value.post.content.widgetOrder = editor.value.post.content.widgetOrder.filter(c => c !== payload.widgetId)
+          // @ts-ignore
+          delete editor.value.post.content.widgets[payload.widgetId]
+        }
         editor.value.post.updatedAt = updated.updatedAt
         editor.value.post.updatedBy = updated.updatedBy
       }
@@ -514,6 +557,20 @@ export const usePostStore = defineStore('cmsPost', () => {
   }
 
   // File editor
+
+  const updateEditorFiles = (files: Files) => {
+    editor.value.files = files
+  }
+
+  const editorFileUploaded = (file: FileDescriptor) => {
+    if (file.fileType === 'doc') {
+      const files = [...editor.value.files.docs, file]
+      editor.value.files.docs = files.sort((a, b) => a.filename.toLowerCase() < b.filename.toLowerCase() ? -1 : 1)
+    } else {
+      const files = [...editor.value.files.media, file]
+      editor.value.files.media = files.sort((a, b) => a.filename.toLowerCase() < b.filename.toLowerCase() ? -1 : 1)
+    }
+  }
 
   const removePostFile = async (payload: RemoveFilePayload) => {
     await cmsPostService.removePostFile(payload.id, payload.file.fileType, payload.file.fileId)
@@ -528,12 +585,14 @@ export const usePostStore = defineStore('cmsPost', () => {
 
   return {
     ...entityStore,
+    editor,
     updatePostFeatured,
     publishPost,
     unpublishPost,
     deleteEntity,
     initPostEditor,
     createEditorPost,
+    updateEditorId,
     updateEditorTitle,
     updateEditorAuthor,
     updateEditorFeatured,
@@ -546,6 +605,8 @@ export const usePostStore = defineStore('cmsPost', () => {
     updateEditorWidget,
     changeEditorWidgetOrder,
     deleteEditorWidget,
+    updateEditorFiles,
+    editorFileUploaded,
     removePostFile
   }
 

@@ -1,5 +1,5 @@
 <template>
-  <q-list padding>
+  <q-list padding dense>
     <template v-for="item in items" :key="item.id">
       <q-expansion-item
         v-if="item.type == 'group'"
