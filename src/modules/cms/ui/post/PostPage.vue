@@ -74,48 +74,43 @@
           <q-tab-panel name="general">
 
             <div class="row q-mt-md">
-              <q-checkbox
-                class="col-md-12 col-sm-12 col-xs-12 q-pr-md"
-                v-if="action !== 'create'"
-                :model-value="post.featured"
-                @update:model-value="updateFeatured"
-                :disable="action === 'view'"
-                label="Featured"/>
+              <q-checkbox class="col-md-12 col-sm-12 col-xs-12 q-pr-md"
+                          v-if="action !== 'create'"
+                          :model-value="post.featured"
+                          @update:model-value="updateFeatured"
+                          :disable="action === 'view'"
+                          label="Featured"/>
             </div>
 
             <div class="row q-mt-md" v-if="action !== 'create'">
-              <q-field
-                class="col-md-6 col-sm-6 col-xs-12 q-pr-md"
-                label="Publication Status"
-                stack-label
-                borderless>
+              <q-field class="col-md-6 col-sm-6 col-xs-12 q-pr-md"
+                       label="Publication Status"
+                       stack-label
+                       borderless>
 
-                <q-checkbox
-                  :model-value="post.publicationStatus === 'published'"
-                  @update:model-value="updatePublicationStatus"
-                  :disable="action === 'view'"
-                  label="Published"/>
+                <q-checkbox :model-value="post.publicationStatus === 'published'"
+                            @update:model-value="updatePublicationStatus"
+                            :disable="action === 'view'"
+                            label="Published"/>
               </q-field>
 
               <div class="col-md-6 col-sm-6 col-xs-12 q-pr-md"
                    style="max-width: 300px">
-                <q-input
-                  :model-value="formatDate(post.publicationTimestamp)"
-                  @update:model-value="updatePublicationTimestamp"
-                  :readonly="action === 'view'"
-                  debounce="1000"
-                  label="Publication date"
-                  stack-label
+                <q-input :model-value="formatDate(post.publicationTimestamp)"
+                         @update:model-value="updatePublicationTimestamp"
+                         :readonly="action === 'view'"
+                         debounce="1000"
+                         label="Publication date"
+                         stack-label
                 >
                   <template v-slot:prepend
                             v-if="action !== 'view'">
                     <q-icon name="event" class="cursor-pointer">
                       <q-popup-proxy transition-show="scale" transition-hide="scale">
-                        <q-date
-                          :model-value="formatDate(post.publicationTimestamp)"
-                          @update:model-value="updatePublicationTimestamp"
-                          debounce="1000"
-                          mask="YYYY-MM-DD HH:mm">
+                        <q-date :model-value="formatDate(post.publicationTimestamp)"
+                                @update:model-value="updatePublicationTimestamp"
+                                debounce="1000"
+                                mask="YYYY-MM-DD HH:mm">
                           <div class="row items-center justify-end">
                             <q-btn v-close-popup label="Close" color="primary" flat/>
                           </div>
@@ -128,11 +123,10 @@
                             v-if="action !== 'view'">
                     <q-icon name="access_time" class="cursor-pointer">
                       <q-popup-proxy transition-show="scale" transition-hide="scale">
-                        <q-time
-                          :model-value="formatDate(post.publicationTimestamp)"
-                          @update:model-value="updatePublicationTimestamp"
-                          debounce="1000"
-                          mask="YYYY-MM-DD HH:mm" format24h>
+                        <q-time :model-value="formatDate(post.publicationTimestamp)"
+                                @update:model-value="updatePublicationTimestamp"
+                                debounce="1000"
+                                mask="YYYY-MM-DD HH:mm" format24h>
                           <div class="row items-center justify-end">
                             <q-btn v-close-popup label="Close" color="primary" flat/>
                           </div>

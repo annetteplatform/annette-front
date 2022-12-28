@@ -35,8 +35,7 @@
                  :readonly="action!=='create'"
                  ref="idRef"
                  label="Id"/>
-        <q-input class="col-md-8 col-sm-12 col-xs-12 "
-                 v-if="state.spaceName"
+        <q-input class="col-md-4 col-sm-12 col-xs-12"
                  :model-value="state.spaceName"
                  readonly
                  label="Space"/>
@@ -274,11 +273,13 @@ import {useRoute, useRouter} from 'vue-router';
 import {useAuthStore} from 'src/main';
 import PrincipalSelectorDialog from 'src/shared/components/principal-selector/PrinciplaSelectorDialog.vue';
 import PrincipalViewItem from 'src/shared/components/principal-view/PrincipalViewItem.vue';
+import SpaceSelector from 'src/modules/cms/ui/space/components/SpaceSelector.vue';
 
 
 export default defineComponent({
   name: 'PagePage',
   components: {
+    SpaceSelector,
     PrincipalViewItem,
     PrincipalSelectorDialog,
     PrincipalListInput,

@@ -1,11 +1,11 @@
 <template>
   <q-select
-     stack-label
+    class="full-width" stack-label dense
     :model-value="model"
     @update:model-value="select"
+    multiple
     use-input
-    fill-input
-    hide-selected
+    use-chips
     input-debounce="500"
     :readonly="readonly"
     :label="label"
@@ -29,21 +29,22 @@
 </template>
 
 <script lang="ts">
-import {defineComponent, toRef} from 'vue';
-import {useEntitySelector} from 'src/shared/composables';
-import {Space, SpaceFilter, useSpaceStore} from 'src/modules/cms';
+import {defineComponent, Ref, toRef} from 'vue';
+import {useEntityMultiSelector} from 'src/shared/composables';
+import {PageView, PageViewFilter, usePageViewStore} from 'src/modules/cms';
 
 
 export default defineComponent({
-  name: 'SpaceSelector',
+  name: 'PageViewMultiSelector',
   components: {},
   props: {
     label: {
       type: String,
-      required: true,
+      required: false,
+      default: 'PageView'
     },
     modelValue: {
-      type: String,
+      type: Array,
       required: true
     },
     readonly: {
@@ -55,12 +56,12 @@ export default defineComponent({
   emits: ['update:modelValue'],
   setup(props, {emit}) {
 
-    const valueRef = toRef(props, 'modelValue')
+    const valueRef = toRef(props, 'modelValue') as Ref<string[]>
 
-    const store = useSpaceStore()
-    const entitySelector = useEntitySelector<Space, SpaceFilter>(
+    const store = usePageViewStore()
+    const entitySelector = useEntityMultiSelector<PageView, PageViewFilter>(
       store,
-      'SpaceSelector',
+      'PageViewMultiSelector',
       valueRef,
       emit)
 

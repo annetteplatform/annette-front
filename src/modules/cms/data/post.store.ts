@@ -202,12 +202,14 @@ export const usePostStore = defineStore('cmsPost', () => {
   const createEditorPost = async () => {
     if (editor.value.action === Action.Create) {
       // @ts-ignore
-      const post: Post = state.editor.post
+      const post: Post = editor.value.post
       const payload: CreatePostPayloadDto = {
         id: post.id,
+        featured: post.featured,
         blogId: post.blogId,
         authorId: post.authorId,
         title: post.title,
+        introContent: post.introContent,
         // @ts-ignore
         content: post.content,
       }

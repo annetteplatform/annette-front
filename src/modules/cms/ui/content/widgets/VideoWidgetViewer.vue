@@ -14,7 +14,6 @@ import {FileMediaData, SourceMediaData, VideoData} from 'src/modules/cms/ui/cont
 import {Ref} from '@vue/reactivity';
 import WidgetLayoutView from 'src/modules/cms/ui/content/widgets/components/WidgetLayoutView.vue';
 
-
 export default defineComponent({
   name: 'VideoWidgetViewer',
   components: {WidgetLayoutView},

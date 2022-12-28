@@ -1,6 +1,6 @@
 {
   "name": "annette-front",
-  "version": "0.0.1",
+  "version": "0.5.0",
   "description": "Annette Console",
   "productName": "Annette Console",
   "author": "Valery Lobachev <valery.lobachev@gmail.com>",
@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "@quasar/extras": "^1.0.0",
+    "@quasar/quasar-ui-qmediaplayer": "^2.0.0-beta.6",
     "axios": "^0.21.1",
     "bpmn-js": "^11.1.0",
     "bpmn-js-color-picker": "^0.5.0",
@@ -33,7 +34,6 @@
     "@intlify/vite-plugin-vue-i18n": "^3.3.1",
     "@quasar/app-vite": "^1.0.0",
     "@quasar/quasar-app-extension-qmarkdown": "^2.0.0-beta.7",
-    "@quasar/quasar-app-extension-qmediaplayer": "^2.0.0-beta.6",
     "@types/node": "^12.20.21",
     "@types/object-hash": "^2.2.1",
     "@typescript-eslint/eslint-plugin": "^5.10.0",

@@ -36,7 +36,7 @@
       <q-td auto-width>
         <default-row-toolbar :id="props.row.id"
                              route-name="cms.page"
-                             view copy edit del @delete="deleteEntity"/>
+                             view edit del @delete="deleteEntity"/>
       </q-td>
     </template>
   </entity-list>

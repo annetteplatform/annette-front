@@ -313,6 +313,39 @@
           "subscribed": "Subscribed"
         }
       },
+      "post": {
+        "deleteQuestion": "Please confirm delete post.",
+        "publishQuestion": "Are you sure to publish post?",
+        "unpublishQuestion": "Are you sure to unpublish post?",
+        "field": {
+          "id": "Id",
+          "blogId": "Blog",
+          "featured": "Featured",
+          "title": "Title",
+          "authorId": "Author",
+          "introContent": "Intro Content",
+          "content": "Content",
+          "publicationStatus": "Status",
+          "publicationTimestamp": "Date",
+          "targets": "Target Principals"
+        },
+        "title": "Post",
+        "titlePl": "Posts"
+      },
+      "postView": {
+        "field": {
+          "id": "Id",
+          "blogId": "Blog",
+          "featured": "Featured",
+          "title": "Title",
+          "authorId": "Author",
+          "introContent": "Intro Content",
+          "content": "Content",
+          "publicationTimestamp": "Date"
+        },
+        "title": "Post",
+        "titlePl": "Posts"
+      },
       "spaceCategory": {
         "deleteQuestion": "Please confirm delete space category.",
         "field": {
@@ -351,6 +384,18 @@
           "publicationStatus": "Status",
           "publicationTimestamp": "Date",
           "targets": "Target Principals"
+        },
+        "title": "Page",
+        "titlePl": "Pages"
+      },
+      "pageView": {
+        "field": {
+          "id": "Id",
+          "spaceId": "Space",
+          "title": "Title",
+          "authorId": "Author",
+          "content": "Content",
+          "publicationTimestamp": "Date"
         },
         "title": "Page",
         "titlePl": "Pages"

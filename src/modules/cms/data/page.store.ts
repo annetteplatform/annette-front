@@ -178,7 +178,7 @@ export const usePageStore = defineStore('cmsPage', () => {
   const createEditorPage = async () => {
     if (editor.value.action === Action.Create) {
       // @ts-ignore
-      const page: Page = state.editor.page
+      const page: Page = editor.value.page
       const payload: CreatePagePayloadDto = {
         id: page.id,
         spaceId: page.spaceId,

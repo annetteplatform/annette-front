@@ -17,6 +17,9 @@
         <q-badge outline color="primary" :label="props.row.blogId" />
       </q-td>
       <q-td>
+        <featured-field :post-id="props.row.id" />
+      </q-td>
+      <q-td>
         <q-badge outline color="grey-8"
                  v-if="props.row.publicationStatus === 'draft'"
                  class="cursor-pointer"
@@ -36,7 +39,7 @@
       <q-td auto-width>
         <default-row-toolbar :id="props.row.id"
                              route-name="cms.post"
-                             view copy edit del @delete="deleteEntity"/>
+                             view edit del @delete="deleteEntity"/>
       </q-td>
     </template>
   </entity-list>
@@ -51,11 +54,12 @@ import DefaultRowToolbar from 'src/shared/components/crud/DefaultRowToolbar.vue'
 import {useDeleteEntity} from 'src/shared/composables/delete-entity';
 import {Post, PostFilter, usePostStore} from 'src/modules/cms';
 import {date, useQuasar} from 'quasar';
+import FeaturedField from 'src/modules/cms/ui/post/components/FeaturedField.vue';
 
 
 export default defineComponent({
   name: 'PostList',
-  components: {DefaultRowToolbar, EntityList},
+  components: {FeaturedField, DefaultRowToolbar, EntityList},
   props: {
     instanceKey: {
       type: String,
@@ -83,12 +87,18 @@ export default defineComponent({
         classes: 'text-truncate'
       },
       {
+        name: 'featured',
+        align: 'left',
+        label: i18n.t('annette.cms.post.field.featured'),
+        field: 'featured',
+        sortable: true,
+      },
+      {
         name: 'publicationStatus',
         align: 'left',
         label: i18n.t('annette.cms.post.field.publicationStatus'),
         field: 'publicationStatus',
         sortable: true,
-        classes: 'text-truncate'
       },
       {
         name: 'publicationTimestamp',

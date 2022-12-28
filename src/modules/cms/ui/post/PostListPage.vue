@@ -1,10 +1,9 @@
 <template>
-  <entity-list-page narrow
-                    :caption="$t('annette.cms.post.titlePl')"
+  <entity-list-page :caption="$t('annette.cms.post.titlePl')"
                     :message="instance.message"
                     @closeMessage="closeMessage">
     <template v-slot:toolbar>
-      <default-list-post-toolbar @refresh="refreshList"/>
+      <default-list-page-toolbar @refresh="refreshList"/>
     </template>
     <template v-slot:filter>
       <post-filter-form :filter="instance.filter"
@@ -14,7 +13,12 @@
       <post-list
         :instance-key="instanceKey">
         <template v-slot:toolbar>
-          <default-list-toolbar create create-route-name="cms.post"/>
+          <q-space/>
+          <q-btn color="primary"
+                 label="Create"
+                 :disable="!(instance.filter.blogs && instance.filter.blogs.length === 1)"
+                 :to="{name: 'cms.post', params: {action: 'create', id: instance.filter.blogs && instance.filter.blogs[0] }}"/>
+
         </template>
       </post-list>
     </template>
@@ -25,10 +29,8 @@
 <script lang="ts">
 import {useEntityListPage} from 'src/shared/composables/entity-list-page';
 import EntityListPage from 'src/shared/components/crud/EntityListPage.vue';
-import SimpleFilterForm from 'src/shared/components/crud/SimpleFilterForm.vue';
 import PostList from './components/PostList.vue';
 import {defineComponent} from 'vue';
-import DefaultListToolbar from 'src/shared/components/crud/DefaultListToolbar.vue';
 import {PostFilter, usePostStore} from 'src/modules/cms';
 import PostFilterForm from 'src/modules/cms/ui/post/components/PostFilterForm.vue';
 import DefaultListPageToolbar from 'src/shared/components/crud/DefaultListPageToolbar.vue';
@@ -36,9 +38,7 @@ import DefaultListPageToolbar from 'src/shared/components/crud/DefaultListPageTo
 export default defineComponent({
   name: 'PostListPage',
   components: {
-    PostFilterForm,
-    DefaultListPageToolbar,
-    DefaultListToolbar, PostList, SimpleFilterForm, EntityListPage
+    PostFilterForm, DefaultListPageToolbar, PostList, EntityListPage
   },
   setup() {
 

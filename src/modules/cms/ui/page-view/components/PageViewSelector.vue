@@ -1,6 +1,6 @@
 <template>
   <q-select
-     stack-label
+    class="full-width" stack-label dense
     :model-value="model"
     @update:model-value="select"
     use-input
@@ -31,11 +31,11 @@
 <script lang="ts">
 import {defineComponent, toRef} from 'vue';
 import {useEntitySelector} from 'src/shared/composables';
-import {Space, SpaceFilter, useSpaceStore} from 'src/modules/cms';
+import {PageView, PageViewFilter, usePageViewStore} from 'src/modules/cms';
 
 
 export default defineComponent({
-  name: 'SpaceSelector',
+  name: 'PageViewSelector',
   components: {},
   props: {
     label: {
@@ -57,10 +57,10 @@ export default defineComponent({
 
     const valueRef = toRef(props, 'modelValue')
 
-    const store = useSpaceStore()
-    const entitySelector = useEntitySelector<Space, SpaceFilter>(
+    const store = usePageViewStore()
+    const entitySelector = useEntitySelector<PageView, PageViewFilter>(
       store,
-      'SpaceSelector',
+      'PageViewSelector',
       valueRef,
       emit)
 
