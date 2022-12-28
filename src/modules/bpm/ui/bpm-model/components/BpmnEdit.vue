@@ -10,11 +10,19 @@
 <script lang="ts">
 import {defineComponent, onMounted, Ref, ref, toRef, watch} from 'vue'
 
-// @ts-ignore
-import BpmnModeler from 'camunda-bpmn-js/lib/camunda-platform/Modeler';
-import 'camunda-bpmn-js/dist/assets/camunda-platform-modeler.css';
-
+import 'bpmn-js/dist/assets/diagram-js.css'
+import 'bpmn-js/dist/assets/bpmn-font/css/bpmn.css'
+import 'bpmn-js-properties-panel/dist/assets/bpmn-js-properties-panel.css'
 import 'bpmn-js-color-picker/colors/color-picker.css'
+// @ts-ignore
+import Modeler from 'bpmn-js/lib/Modeler'
+// @ts-ignore
+import * as CamundaExtensionModule from 'camunda-bpmn-moddle/lib'
+import * as CamundaModdle from 'camunda-bpmn-moddle/resources/camunda.json'
+// @ts-ignore
+import * as PropertiesPanelModule from 'bpmn-js-properties-panel'
+// @ts-ignore
+import * as PropertiesProviderModule from 'bpmn-js-properties-panel/lib/provider/camunda'
 // @ts-ignore
 import BpmnColorPickerModule from 'bpmn-js-color-picker';
 // @ts-ignore
@@ -34,9 +42,9 @@ export default defineComponent({
   setup(props, {emit}) {
 
     const xml = toRef(props, 'modelValue')
-    const modeler: Ref<BpmnModeler | null> = ref(null);
+    const modeler: Ref<Modeler | null> = ref(null)
 
-    const lastExportedXml: Ref<string | null> = ref(null);
+    const lastExportedXml: Ref<string | null> = ref(null)
 
     const importXml = async (xml: string) => {
       if (modeler.value) {
@@ -69,40 +77,27 @@ export default defineComponent({
         console.log('mounted')
         const selector = document.querySelector('#canvas');
         const properties = document.querySelector('#properties');
-        modeler.value = new BpmnModeler({
-          container: selector,
-          keyboard: {
-                bindTo: selector,
-              },
-          propertiesPanel: {
-            parent: properties
-          },
-          additionalModules: [BpmnColorPickerModule]
-        });
         // eslint-disable-next-line @typescript-eslint/no-unsafe-call
-        // modeler.value = new Modeler({
-        //   container: selector,
-        //   width: '100%',
-        //   height: 'calc(100vh - 50px - 32px - 64px - 70px - 36px)',
-        //   keyboard: {
-        //     bindTo: selector,
-        //   },
-        //   propertiesPanel: {
-        //     parent: properties,
-        //   },
-        //   additionalModules: [
-        //     // CamundaExtensionModule,
-        //     CamundaPlatformBehaviors,
-        //     // PropertiesPanelModule,
-        //     // PropertiesProviderModule,
-        //     BpmnPropertiesPanelModule,
-        //     BpmnPropertiesProviderModule,
-        //     BpmnColorPickerModule
-        //   ],
-        //   moddleExtensions: {
-        //     camunda: CamundaModdle,
-        //   },
-        // });
+        modeler.value = new Modeler({
+          container: selector,
+          width: '100%',
+          height: 'calc(100vh - 50px - 32px - 64px - 70px - 36px)',
+          keyboard: {
+            bindTo: selector,
+          },
+          propertiesPanel: {
+            parent: properties,
+          },
+          additionalModules: [
+            CamundaExtensionModule,
+            PropertiesPanelModule,
+            PropertiesProviderModule,
+            BpmnColorPickerModule
+          ],
+          moddleExtensions: {
+            camunda: CamundaModdle,
+          },
+        });
         if (xml.value && xml.value !== '') {
           await importXml(xml.value);
         }
