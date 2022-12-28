@@ -15,9 +15,8 @@
 <script lang="ts">
 import { defineComponent, PropType, ref, toRef, watch} from 'vue';
 import {Ref} from '@vue/reactivity';
-import {Person} from 'src/modules/person';
-import {useStore} from 'src/store';
-import {AnnettePrincipal} from 'src/shared';
+import {AnnettePrincipal} from 'src/shared/model';
+import {OrgRole, useOrgRoleStore} from 'src/modules/org-structure';
 
 
 export default defineComponent({
@@ -30,15 +29,15 @@ export default defineComponent({
     }
   },
   setup(props) {
-    const store = useStore()
+    const store = useOrgRoleStore()
 
     const principal = toRef(props, 'principal')
 
-    const role: Ref<Person | null> = ref(null)
+    const role: Ref<OrgRole | null> = ref(null)
 
     const loadPrincipal = async () => {
       console.log('principal.value', principal.value)
-      const roles: Person[] = await store.dispatch('orgRole/loadEntitiesIfNotExist', [principal.value.principalId])
+      const roles: OrgRole[] = await store.loadEntitiesIfNotExist([principal.value.principalId])
       if (roles && roles[0]) {
         role.value = roles[0]
       } else {

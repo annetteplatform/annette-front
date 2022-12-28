@@ -10,14 +10,14 @@
           <div class="row">
             <q-input class="col-md-12 col-sm-12 col-xs-12 "
                      v-model="variableModel.variableName"
-                     :rules="[val => !!val || 'Field is required']"
+                     :rules="[val => !!val || $t('annette.shared.crud.fieldRequired')]"
                      label="Variable Name"
             />
           </div>
           <div class="row ">
             <q-input class="col-md-12 col-sm-12 col-xs-12 "
                      v-model="variableModel.name"
-                     :rules="[val => !!val || 'Field is required']"
+                     :rules="[val => !!val || $t('annette.shared.crud.fieldRequired')]"
                      label="Name"
             />
           </div>

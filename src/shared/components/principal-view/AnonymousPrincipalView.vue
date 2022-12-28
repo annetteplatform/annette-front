@@ -11,7 +11,7 @@
 
 <script lang="ts">
 import { defineComponent, PropType} from 'vue';
-import {AnnettePrincipal} from 'src/shared';
+import {AnnettePrincipal} from 'src/shared/model';
 
 
 export default defineComponent({

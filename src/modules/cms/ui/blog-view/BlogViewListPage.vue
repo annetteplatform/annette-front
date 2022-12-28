@@ -1,43 +1,42 @@
 <template>
-  <entity-list-page narrow caption="Blogs" :namespace="namespace" :instance-key="instanceKey">
-    <template v-slot:toolbar>
-      <q-btn class="q-mr-md" outline color="primary"
-             label="Refresh"
-             @click="refreshList"/>
-    </template>
+  <entity-list-page narrow
+                    :caption="$t('annette.cms.blog.titlePl')"
+                    :message="instance.message"
+                    @closeMessage="closeMessage">
     <template v-slot:filter>
-      <simple-filter-form class="q-mb-md"
-                          :filter="instance.filter"
-                          @filterChanged="onFilterChanged"/>
+      <simple-filter-form
+        :filter="instance.filter"
+        @filterChanged="onFilterChanged"/>
     </template>
     <template v-slot:default>
-      <blog-view-list class="q-mb-md"
-                       :instance-key="instanceKey"/>
+      <blog-view-list
+        :instance-key="instanceKey">
+      </blog-view-list>
     </template>
   </entity-list-page>
 </template>
 
-<script lang="ts">
-import {defineComponent} from 'vue';
-import {useEntityListPage} from 'src/shared';
-import BlogViewList from './components/BlogViewList.vue';
-import SimpleFilterForm from 'src/shared/components/SimpleFilterForm.vue';
-import EntityListPage from 'src/shared/components/EntityListPage.vue';
-import {BlogViewFilter} from 'src/modules/cms';
 
-const NAMESPACE = 'cmsBlogView';
-const INSTANCE_KEY = 'blogViews'
+<script lang="ts">
+import {useEntityListPage} from 'src/shared/composables/entity-list-page';
+import EntityListPage from 'src/shared/components/crud/EntityListPage.vue';
+import SimpleFilterForm from 'src/shared/components/crud/SimpleFilterForm.vue';
+import BlogViewList from './components/BlogViewList.vue';
+import {defineComponent} from 'vue';
+import {BlogViewFilter, useBlogViewStore} from 'src/modules/cms';
 
 export default defineComponent({
   name: 'BlogViewListPage',
-  components: {EntityListPage, BlogViewList, SimpleFilterForm},
+  components: {
+   BlogViewList, SimpleFilterForm, EntityListPage},
   setup() {
 
+    const instanceKey = 'blogViews'
+    const store = useBlogViewStore()
     const entityListPage = useEntityListPage<BlogViewFilter>({
-      namespace: NAMESPACE,
-      instanceKey: INSTANCE_KEY,
+      store,
+      instanceKey
     })
-
     return {
       ...entityListPage
     };

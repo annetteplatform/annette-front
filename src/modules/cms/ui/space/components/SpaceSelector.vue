@@ -1,6 +1,6 @@
 <template>
   <q-select
-    class="full-width"
+     stack-label
     :model-value="model"
     @update:model-value="select"
     use-input
@@ -30,8 +30,8 @@
 
 <script lang="ts">
 import {defineComponent, toRef} from 'vue';
-import {useEntitySelector} from 'src/shared';
-import {Space, SpaceFilter} from 'src/modules/cms';
+import {useEntitySelector} from 'src/shared/composables';
+import {Space, SpaceFilter, useSpaceStore} from 'src/modules/cms';
 
 
 export default defineComponent({
@@ -40,8 +40,7 @@ export default defineComponent({
   props: {
     label: {
       type: String,
-      required: false,
-      default: 'Space'
+      required: true,
     },
     modelValue: {
       type: String,
@@ -58,11 +57,13 @@ export default defineComponent({
 
     const valueRef = toRef(props, 'modelValue')
 
+    const store = useSpaceStore()
     const entitySelector = useEntitySelector<Space, SpaceFilter>(
-      'cmsSpace',
+      store,
       'SpaceSelector',
       valueRef,
       emit)
+
 
     return {
       ...entitySelector,

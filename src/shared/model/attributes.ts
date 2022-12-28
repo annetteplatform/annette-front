@@ -1,4 +1,4 @@
-import {Caption} from './caption'
+import {Caption} from './multi-language'
 
 export interface AttributeMetadata {
   type:string

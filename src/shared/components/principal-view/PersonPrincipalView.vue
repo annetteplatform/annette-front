@@ -15,9 +15,8 @@
 import { defineComponent, PropType, ref, toRef, watch} from 'vue';
 import {useRouter} from 'vue-router'
 import {Ref} from '@vue/reactivity';
-import {Person} from 'src/modules/person';
-import {useStore} from 'src/store';
-import {AnnettePrincipal} from 'src/shared';
+import {Person, usePersonStore} from 'src/modules/person';
+import {AnnettePrincipal} from 'src/shared/model';
 
 
 export default defineComponent({
@@ -30,7 +29,7 @@ export default defineComponent({
     }
   },
   setup(props) {
-    const store = useStore()
+    const store = usePersonStore()
     const router = useRouter()
 
     const principal = toRef(props, 'principal')
@@ -39,7 +38,7 @@ export default defineComponent({
 
     const loadPrincipal = async () => {
       if (principal.value.principalId !== 'ANONYMOUS') {
-        const persons: Person[] = await store.dispatch('personPerson/loadEntitiesIfNotExist', [principal.value.principalId])
+        const persons: Person[] = await store.loadEntitiesIfNotExist( [principal.value.principalId])
         if (persons && persons[0]) {
           person.value = persons[0]
         } else {

@@ -1,6 +1,6 @@
 <template>
   <q-select
-    class="full-width"
+    class="full-width" stack-label dense
     :model-value="model"
     @update:model-value="select"
     use-input
@@ -30,8 +30,8 @@
 
 <script lang="ts">
 import {defineComponent, toRef} from 'vue';
-import {useEntitySelector} from 'src/shared';
-import {BusinessProcess, BusinessProcessFilter} from 'src/modules/bpm';
+import {useEntitySelector} from 'src/shared/composables';
+import {BusinessProcess, BusinessProcessFilter, useBusinessProcessStore} from 'src/modules/bpm';
 
 
 export default defineComponent({
@@ -41,7 +41,7 @@ export default defineComponent({
     label: {
       type: String,
       required: false,
-      default: 'Business Process'
+      default: 'BusinessProcess'
     },
     modelValue: {
       type: String,
@@ -58,11 +58,13 @@ export default defineComponent({
 
     const valueRef = toRef(props, 'modelValue')
 
+    const store = useBusinessProcessStore()
     const entitySelector = useEntitySelector<BusinessProcess, BusinessProcessFilter>(
-      'bpmBusinessProcess',
+      store,
       'BusinessProcessSelector',
       valueRef,
       emit)
+
 
     return {
       ...entitySelector,

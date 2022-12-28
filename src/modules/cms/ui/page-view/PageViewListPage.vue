@@ -1,40 +1,40 @@
 <template>
-  <entity-list-page narrow caption="Pages" :namespace="namespace" :instance-key="instanceKey">
+  <entity-list-page narrow
+                    :caption="$t('annette.cms.pageView.titlePl')"
+                    :message="instance.message"
+                    @closeMessage="closeMessage">
     <template v-slot:toolbar>
-      <q-btn class="q-mr-md" outline color="primary"
-             label="Refresh"
-             @click="refreshList"/>
+     <default-list-page-toolbar @refresh="refreshList"/>
     </template>
     <template v-slot:filter>
-      <page-view-filter-form class="q-mb-md"
-                             :filter="instance.filter"
+      <page-view-filter-form :filter="instance.filter"
                              @filterChanged="onFilterChanged"
                              :empty-filter="emptyFilter"/>
     </template>
     <template v-slot:default>
-      <pageView-list class="q-mb-md"
-                     :instance-key="instanceKey"/>
+      <page-view-list
+        :instance-key="instanceKey">
+      </page-view-list>
     </template>
   </entity-list-page>
 </template>
 
+
 <script lang="ts">
-import {defineComponent, toRef, watch} from 'vue';
-import {InstanceState, PagingMode, useEntityListPage} from 'src/shared';
+import {useEntityListPage} from 'src/shared/composables/entity-list-page';
+import EntityListPage from 'src/shared/components/crud/EntityListPage.vue';
 import PageViewList from './components/PageViewList.vue';
-import EntityListPage from 'src/shared/components/EntityListPage.vue';
+import {defineComponent, Ref, toRef, watch} from 'vue';
+import {PageViewFilter, usePageViewStore} from 'src/modules/cms';
 import PageViewFilterForm from './components/PageViewFilterForm.vue';
-import {PageViewFilter} from 'src/modules/cms';
-import {Ref} from '@vue/reactivity';
-import {useStore} from 'src/store';
-
-const NAMESPACE = 'cmsPageView';
-const INSTANCE_KEY = 'pageViews'
-
+import DefaultListPageToolbar from 'src/shared/components/crud/DefaultListPageToolbar.vue';
 
 export default defineComponent({
-  name: 'PageViewListPage',
-  components: {PageViewFilterForm, EntityListPage, PageViewList},
+  name: 'PageViewListPageView',
+  components: {
+    DefaultListPageToolbar,
+    PageViewFilterForm, PageViewList, EntityListPage
+  },
   props: {
     spaces: {
       type: String,
@@ -43,9 +43,10 @@ export default defineComponent({
   },
   setup(props) {
 
-    const store = useStore()
-
-    const spaces = toRef(props, 'spaces') as Ref<string>
+    const instanceKey = 'pageViews'
+    const store = usePageViewStore()
+    // @ts-ignore
+    const spaces = toRef(props, 'spaces')  as Ref<string>
 
     function emptyFilter(): PageViewFilter {
       console.log('emptyFilter', spaces.value)
@@ -59,7 +60,7 @@ export default defineComponent({
       }
     }
 
-    const updateSpaceFilter = (instance: InstanceState<PageViewFilter>) => {
+    const updateSpaceFilter = (instance: any) => {
       console.log('updateSpaceFilter', spaces.value)
       const newFilter = {
         ...instance.filter,
@@ -67,15 +68,13 @@ export default defineComponent({
       if (spaces.value && spaces.value !== 'undefined') {
         newFilter.spaces = spaces.value.split(',')
       }
-      void store.dispatch(`${NAMESPACE}/setFilter`, {key: INSTANCE_KEY, filter: newFilter})
+      void store.setFilter({key: instanceKey, filter: newFilter})
     }
 
-
     const entityListPage = useEntityListPage<PageViewFilter>({
-      namespace: NAMESPACE,
-      instanceKey: INSTANCE_KEY,
+      store,
+      instanceKey,
       filter: emptyFilter(),
-      pagingMode: PagingMode.Range,
       onInstanceUpdate: updateSpaceFilter
     })
 

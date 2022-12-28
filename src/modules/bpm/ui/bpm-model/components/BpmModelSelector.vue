@@ -1,6 +1,6 @@
 <template>
   <q-select
-    class="full-width"
+    class="full-width" stack-label dense
     :model-value="model"
     @update:model-value="select"
     use-input
@@ -30,8 +30,8 @@
 
 <script lang="ts">
 import {defineComponent, toRef} from 'vue';
-import {useEntitySelector} from 'src/shared';
-import {BpmModel, BpmModelFilter} from 'src/modules/bpm';
+import {useEntitySelector} from 'src/shared/composables';
+import {BpmModel, BpmModelFilter, useBpmModelStore} from 'src/modules/bpm';
 
 
 export default defineComponent({
@@ -58,11 +58,13 @@ export default defineComponent({
 
     const valueRef = toRef(props, 'modelValue')
 
+    const store = useBpmModelStore()
     const entitySelector = useEntitySelector<BpmModel, BpmModelFilter>(
-      'bpmBpmModel',
+      store,
       'BpmModelSelector',
       valueRef,
       emit)
+
 
     return {
       ...entitySelector,

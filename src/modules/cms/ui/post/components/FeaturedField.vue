@@ -5,8 +5,7 @@
 
 <script lang="ts">
 import {computed, defineComponent, toRef} from 'vue';
-import {useStore} from 'src/store';
-import {UpdatePostFeaturedPayloadDto} from 'src/modules/cms';
+import {UpdatePostFeaturedPayloadDto, usePostStore} from 'src/modules/cms';
 
 export default defineComponent({
   name: 'FeaturedField',
@@ -19,12 +18,12 @@ export default defineComponent({
   },
   setup(props) {
 
-    const store = useStore()
+    const store = usePostStore()
 
     const postId = toRef(props, 'postId')
 
     // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access,@typescript-eslint/no-unsafe-return
-    const entities = computed( () => store.getters['cmsPost/entities'])
+    const entities = computed( () => store.entities)
 
     const featured = computed(() => {
       // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
@@ -43,7 +42,7 @@ export default defineComponent({
         id: postId.value,
         featured: flag
       }
-      void store.dispatch('cmsPost/updatePostFeatured', payload)
+      void store.updatePostFeatured(payload)
     }
 
     return {

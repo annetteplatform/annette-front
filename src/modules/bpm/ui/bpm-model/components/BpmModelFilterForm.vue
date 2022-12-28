@@ -1,92 +1,69 @@
 <template>
-  <q-list bordered class="rounded-borders full-width">
-    <q-expansion-item
-      bordered
-      icon="search"
-      label="Filter"
-      v-model="expanded"
-    >
-      <q-card class="my-card">
-        <q-card-section horizontal>
-          <q-form
-            @submit="setFilter"
-            @reset="clearFilter"
-            class="full-width q-pa-md q-gutter-md">
-            <q-input
-              v-model="filterModel.filter"
-              label="Filter"/>
-            <div class="q-gutter-sm">
-              <q-checkbox v-model="filterModel.notations" val="bpmn" label="BPMN"/>
-              <q-checkbox v-model="filterModel.notations" val="cmmn" label="CMMN"/>
-              <q-checkbox v-model="filterModel.notations" val="dmn" label="DMN"/>
-            </div>
-          </q-form>
-          <q-card-actions vertical class=" q-ml-lg q-mr-lg q-mb-md">
-            <q-btn flat color="primary" label="Apply" @click="setFilter"/>
-            <q-btn flat color="negative" label="Clear" @click="clearFilter"/>
-          </q-card-actions>
-        </q-card-section>
-      </q-card>
-    </q-expansion-item>
-  </q-list>
+  <q-card>
+    <q-card-section horizontal>
+      <q-form
+        @submit="setFilter"
+        @reset="clearFilter"
+        class="full-width q-pa-md q-gutter-md">
+        <q-input stack-label dense
+                 v-model="filterModel.filter"
+                 :label="$t('annette.shared.filter.filter')"/>
+        <div class="q-gutter-sm">
+          <q-checkbox v-model="filterModel.notations" val="bpmn" label="BPMN"/>
+          <q-checkbox v-model="filterModel.notations" val="cmmn" label="CMMN"/>
+          <q-checkbox v-model="filterModel.notations" val="dmn" label="DMN"/>
+        </div>
+      </q-form>
+      <q-card-actions vertical class=" q-ml-lg q-mr-lg q-mb-md">
+        <q-btn flat dense color="primary" :label="$t('annette.shared.filter.apply')" @click="setFilter"/>
+        <q-btn flat dense color="negative" :label="$t('annette.shared.filter.clear')" @click="clearFilter"/>
+      </q-card-actions>
+    </q-card-section>
+  </q-card>
+
 </template>
 
-<script lang="ts">
-import {defineComponent, PropType, ref, toRefs, watch} from 'vue'
-import {SimpleFilter} from 'src/shared';
+<script setup lang="ts">
+/* eslint-disable  @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/ban-ts-comment */
 
-export default defineComponent({
-  name: 'BpmModelFilterForm',
-  components: {},
-  props: {
-    filter: {
-      type: Object as PropType<SimpleFilter>,
-      required: true
-    },
-    emptyFilter: {
-      type: Function
-    }
+import {PropType, ref, watch} from 'vue'
+import {SimpleFilter} from 'src/shared/model';
+import {BpmModelFilter} from 'src/modules/bpm';
+
+const props = defineProps({
+  filter: {
+    type: Object as PropType<BpmModelFilter>,
+    required: true
   },
-  emits: ['filterChanged'],
-  setup: function (props, {emit}) {
-    const {filter} = toRefs(props)
-    const expanded = ref(true)
-
-    const filterModel: any = ref({...props.filter})
-
-    const clearFilter = () => {
-      if (props.emptyFilter) {
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-        filterModel.value = props.emptyFilter()
-      } else {
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-        filterModel.value = {filter: ''}
-      }
-    }
-
-    const updateModel = (newFilter: any) => {
-      console.log('updateModel', newFilter)
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-      filterModel.value = {...newFilter}
-    }
-    watch(filter, updateModel)
-
-    const setFilter = () => {
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-      emit('filterChanged', filterModel.value)
-    }
-
-    return {
-      expanded,
-      filterModel,
-      setFilter,
-      clearFilter
-    };
+  emptyFilter: {
+    type: Function
   }
-});
 
+})
+
+const emit = defineEmits(['filterChanged'])
+
+const filterModel: any = ref({...props.filter})
+
+const clearFilter = () => {
+  if (props.emptyFilter) {
+    filterModel.value = props.emptyFilter()
+  } else {
+    filterModel.value = {filter: ''}
+  }
+}
+
+const updateModel = (newFilter: any) => {
+  console.log('updateModel', newFilter)
+  filterModel.value = {...newFilter}
+}
+watch(props.filter, updateModel)
+
+const setFilter = () => {
+  emit('filterChanged', filterModel.value)
+}
 
 </script>
 
-<style>
-</style>
+

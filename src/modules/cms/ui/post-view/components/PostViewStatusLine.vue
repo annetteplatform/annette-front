@@ -17,8 +17,7 @@
 
 <script lang="ts">
 import {computed, defineComponent, PropType, toRef} from 'vue';
-import {PostView} from 'src/modules/cms';
-import {useStore} from 'src/store';
+import {PostView, usePostViewStore} from 'src/modules/cms';
 import {date} from 'quasar';
 
 export default defineComponent({
@@ -31,7 +30,7 @@ export default defineComponent({
     }
   },
   setup(props) {
-    const store = useStore()
+    const store = usePostViewStore()
 
     const post = toRef(props, 'post')
 
@@ -44,7 +43,7 @@ export default defineComponent({
     })
 
     const changeLikeStatus = (postId: string) => {
-      void store.dispatch('cmsPostView/changeLikeStatus', postId)
+      void store.changeLikeStatus(postId)
     }
 
     return {

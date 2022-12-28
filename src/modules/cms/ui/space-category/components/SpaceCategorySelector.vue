@@ -1,6 +1,6 @@
 <template>
   <q-select
-    class="full-width"
+    class="full-width" stack-label dense
     :model-value="model"
     @update:model-value="select"
     use-input
@@ -8,20 +8,20 @@
     hide-selected
     input-debounce="500"
     :readonly="readonly"
-    :label="label"
+    :label="label || $t('annette.cms.spaceCategory.title')"
     :options="items"
     option-value="id"
     option-label="name"
     emit-value
     map-options
-    :clearable="clearable"
+    clearable
     :loading="instance.loading"
     @filter="setFilter"
   >
     <template v-slot:no-option>
       <q-item>
         <q-item-section class="text-grey">
-          No results
+          {{ $t('annette.shared.crud.noResults') }}
         </q-item-section>
       </q-item>
     </template>
@@ -30,7 +30,9 @@
 
 <script lang="ts">
 import {defineComponent, toRef} from 'vue';
-import {Category, CategoryFilter, useEntitySelector} from 'src/shared';
+import {useEntitySelector} from 'src/shared/composables';
+import {Category, CategoryFilter} from 'src/shared/model';
+import {useSpaceCategoryStore} from 'src/modules/cms';
 
 
 export default defineComponent({
@@ -40,7 +42,6 @@ export default defineComponent({
     label: {
       type: String,
       required: false,
-      default: 'Category'
     },
     modelValue: {
       type: String,
@@ -50,24 +51,21 @@ export default defineComponent({
       type: Boolean,
       default: false,
       required: false
-    },
-    clearable: {
-      type: Boolean,
-      default: false,
-      required: false
     }
   },
   emits: ['update:modelValue'],
   setup(props, {emit}) {
 
+    const store = useSpaceCategoryStore()
+
     const valueRef = toRef(props, 'modelValue')
 
     const entitySelector = useEntitySelector<Category, CategoryFilter>(
-      'cmsSpaceCategory',
+      store,
       'CategorySelector',
       valueRef,
-      emit)
-
+      emit
+    )
 
     return {
       ...entitySelector,

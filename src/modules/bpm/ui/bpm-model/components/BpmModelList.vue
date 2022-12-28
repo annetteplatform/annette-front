@@ -6,6 +6,9 @@
     :pagination="pagination"
     :loading="instance.loading"
     @request="onRequest">
+    <template v-slot:toolbar>
+      <slot name="toolbar"></slot>
+    </template>
     <template v-slot:row="props">
       <q-td>
         {{ props.row.id }}
@@ -20,11 +23,9 @@
         {{props.row.code }}
       </q-td>
       <q-td auto-width>
-        <q-btn flat round color="green" size="sm" icon="far fa-eye"
-               :to="{ name: 'bpm.bpmModel', params: { action: 'view', id: props.row.id } }"/>
-        <q-btn flat round color="blue" size="sm" icon="far fa-edit"
-               :to="{ name: 'bpm.bpmModel', params: { action: 'edit', id: props.row.id } }"/>
-        <q-btn flat round color="red" size="sm" icon="fas fa-trash" @click="deleteEntity(props.row.id)"/>
+        <default-row-toolbar :id="props.row.id"
+                             route-name="bpm.bpmModel"
+                             view copy edit del @delete="deleteEntity"/>
       </q-td>
     </template>
   </entity-list>
@@ -32,50 +33,17 @@
 
 <script lang="ts">
 import {defineComponent} from 'vue';
-import {useEntityList} from 'src/shared';
-import EntityList from 'src/shared/components/EntityList.vue';
-import {BpmModel, BpmModelFilter} from 'src/modules/bpm';
+import EntityList from 'src/shared/components/crud/EntityList.vue';
+import {useEntityList} from 'src/shared/composables';
+import {useI18n} from 'vue-i18n';
+import DefaultRowToolbar from 'src/shared/components/crud/DefaultRowToolbar.vue';
+import {useDeleteEntity} from 'src/shared/composables/delete-entity';
+import {BpmModel, BpmModelFilter, useBpmModelStore} from 'src/modules/bpm';
 
-const COLUMNS = [
-  {
-    name: 'id',
-    required: true,
-    label: 'Id',
-    align: 'left',
-    field: 'id',
-    sortable: true,
-  },
-  {
-    name: 'name',
-    align: 'left',
-    label: 'Name',
-    field: 'name',
-    sortable: true,
-    classes: 'text-truncate'
-  },
-  {
-    name: 'notation',
-    align: 'left',
-    label: 'Notation',
-    field: 'notation',
-    sortable: true,
-    classes: 'text-truncate'
-  },
-  {
-    name: 'code',
-    align: 'left',
-    label: 'Code',
-    field: 'code',
-    sortable: true,
-    classes: 'text-truncate'
-  }
-]
-
-const NAMESPACE = 'bpmBpmModel';
 
 export default defineComponent({
   name: 'BpmModelList',
-  components: {EntityList},
+  components: {DefaultRowToolbar, EntityList},
   props: {
     instanceKey: {
       type: String,
@@ -83,16 +51,62 @@ export default defineComponent({
     }
   },
   setup(props) {
+    const i18n = useI18n()
+
+    const columns = [
+      {
+        name: 'id',
+        required: true,
+        label: i18n.t('annette.bpm.bpmModel.field.id'),
+        align: 'left',
+        field: 'id',
+        sortable: true,
+      },
+      {
+        name: 'name',
+        required: true,
+        label: i18n.t('annette.bpm.bpmModel.field.name'),
+        align: 'left',
+        field: 'name',
+        sortable: true,
+        classes: 'text-truncate'
+      },
+      {
+        name: 'notation',
+        required: true,
+        label: i18n.t('annette.bpm.bpmModel.field.notation'),
+        align: 'left',
+        field: 'notation',
+        sortable: true,
+        classes: 'text-truncate'
+      },
+      {
+        name: 'code',
+        required: true,
+        label: i18n.t('annette.bpm.bpmModel.field.code'),
+        align: 'left',
+        field: 'code',
+        sortable: true,
+        classes: 'text-truncate'
+      },
+    ]
+
+    const store = useBpmModelStore()
 
     const entityList = useEntityList<BpmModel, BpmModelFilter>(
-      NAMESPACE,
+      store,
       props.instanceKey,
-      'Please confirm delete BPM Model.'
+    )
+
+    const deleteEntity = useDeleteEntity(
+      store,
+      i18n.t('annette.bpm.bpmModel.deleteQuestion'),
     )
 
     return {
-      columns: COLUMNS,
+      columns,
       ...entityList,
+      deleteEntity: deleteEntity.deleteEntity
     };
   }
 });

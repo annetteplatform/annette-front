@@ -1,46 +1,51 @@
 <template>
-  <entity-list-page narrow caption="Business processes" :namespace="namespace" :instance-key="instanceKey">
+  <entity-list-page narrow
+                    :caption="$t('annette.bpm.businessProcess.titlePl')"
+                    :message="instance.message"
+                    @closeMessage="closeMessage">
     <template v-slot:toolbar>
-      <q-btn class="q-mr-md" outline color="primary"
-             label="Refresh"
-             @click="refreshList"/>
-      <q-btn class="q-mr-md" outline color="primary"
-             label="Create"
-             :to="{name: 'bpm.businessProcess', params: {action: 'create', id: 'new'}}"/>
+      <default-list-page-toolbar @refresh="refreshList"/>
     </template>
     <template v-slot:filter>
-      <SimpleFilterForm class="q-mb-md"
-                        :filter="instance.filter"
-                        @filterChanged="onFilterChanged"/>
+      <simple-filter-form :filter="instance.filter"
+                          @filterChanged="onFilterChanged"/>
     </template>
     <template v-slot:default>
-      <BusinessProcessList class="q-mb-md"
-                      :instance-key="instanceKey"/>
+      <business-process-list
+        :instance-key="instanceKey">
+        <template v-slot:toolbar>
+          <default-list-toolbar create create-route-name="bpm.businessProcess"/>
+        </template>
+      </business-process-list>
     </template>
   </entity-list-page>
 </template>
 
-<script lang="ts">
-import {defineComponent} from 'vue';
-import {useEntityListPage} from 'src/shared';
-import BusinessProcessList from './components/BusinessProcessList.vue';
-import EntityListPage from 'src/shared/components/EntityListPage.vue';
-import {BusinessProcessFilter} from 'src/modules/bpm';
-import SimpleFilterForm from 'src/shared/components/SimpleFilterForm.vue';
 
-const NAMESPACE = 'bpmBusinessProcess';
-const INSTANCE_KEY = 'businessProcesses'
+<script lang="ts">
+import {useEntityListPage} from 'src/shared/composables/entity-list-page';
+import EntityListPage from 'src/shared/components/crud/EntityListPage.vue';
+import SimpleFilterForm from 'src/shared/components/crud/SimpleFilterForm.vue';
+import BusinessProcessList from './components/BusinessProcessList.vue';
+import {defineComponent} from 'vue';
+import DefaultListToolbar from 'src/shared/components/crud/DefaultListToolbar.vue';
+import DefaultListPageToolbar from 'src/shared/components/crud/DefaultListPageToolbar.vue';
+import {BusinessProcessFilter, useBusinessProcessStore} from 'src/modules/bpm';
 
 export default defineComponent({
   name: 'BusinessProcessListPage',
-  components: {SimpleFilterForm, EntityListPage, BusinessProcessList},
+  components: {
+    DefaultListPageToolbar,
+    DefaultListToolbar, BusinessProcessList, SimpleFilterForm, EntityListPage
+  },
   setup() {
 
+    const instanceKey = 'businessProcesses'
+    const store = useBusinessProcessStore()
     const entityListPage = useEntityListPage<BusinessProcessFilter>({
-      namespace: NAMESPACE,
-      instanceKey: INSTANCE_KEY,
+      store,
+      instanceKey
     })
-
     return {
       ...entityListPage
     };

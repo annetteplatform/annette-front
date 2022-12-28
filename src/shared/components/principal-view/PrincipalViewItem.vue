@@ -19,13 +19,13 @@
 
 <script lang="ts">
 import {computed, defineComponent, PropType, toRef} from 'vue';
-import {AnnettePrincipal} from 'src/shared';
 import {Ref} from '@vue/reactivity';
 import PersonPrincipalView from './PersonPrincipalView.vue';
 import OrgItemPrincipalView from './OrgItemPrincipalView.vue';
 import OrgRolePrincipalView from './OrgRolePrincipalView.vue';
 import AnonymousPrincipalView from './AnonymousPrincipalView.vue';
 import AuthenticatedPrincipalView from './AuthenticatedPrincipalView.vue';
+import {AnnettePrincipal} from 'src/shared/model';
 
 
 export default defineComponent({

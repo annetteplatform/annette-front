@@ -37,11 +37,10 @@
 
 <script lang="ts">
 import {computed, defineComponent, PropType, toRef, watch} from 'vue';
-import {PostView} from 'src/modules/cms';
-import {useStore} from 'src/store';
+import {PostView, useBlogViewStore} from 'src/modules/cms';
 import PrincipalViewItem from 'src/shared/components/principal-view/PrincipalViewItem.vue';
-import PostViewStatusLine from 'src/modules/cms/ui/post-view/components/PostViewStatusLine.vue';
-import WidgetView from 'src/shared/components/content/WidgetView.vue';
+import PostViewStatusLine from './PostViewStatusLine.vue';
+import WidgetView from 'src/modules/cms/ui/content/WidgetView.vue';
 
 export default defineComponent({
   name: 'PostViewCard',
@@ -57,17 +56,15 @@ export default defineComponent({
     }
   },
   setup(props) {
-    const store = useStore()
+    const blogViewStore = useBlogViewStore()
 
     const post = toRef(props, 'post')
 
     const introContentWidgets = computed(() => {
       if (post.value.introContent) {
         return post.value.introContent.widgetOrder
-          // @ts-ignore
           .map(id => post.value.introContent.widgets[id])
           .filter(c => c)
-
       } else {
         return []
       }
@@ -79,18 +76,17 @@ export default defineComponent({
           // @ts-ignore
           .map(id => post.value.content.widgets[id])
           .filter(c => c)
-
       } else {
         return []
       }
     })
 
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access,@typescript-eslint/no-unsafe-return
-    const blogs = computed(() => store.getters['cmsBlogView/entities'])
+    const blogs = computed(() => blogViewStore.entities)
     const postBlog = computed(() => post.value.blogId)
     watch(postBlog, (blogId: string) => {
-      void store.dispatch('cmsBlogView/loadBlogsIfNotExist', [blogId])
+      void blogViewStore.loadEntitiesIfNotExist([blogId])
     })
+    void blogViewStore.loadEntitiesIfNotExist([post.value.blogId])
 
     return {
       blogs,

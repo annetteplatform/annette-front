@@ -1,3 +1,4 @@
+import {BaseFilter} from 'src/shared/store';
 
 export interface FindResult {
   total: number
@@ -15,7 +16,7 @@ export interface SortBy {
   descending?: boolean
 }
 
-export interface SimpleFilter {
+export interface SimpleFilter extends BaseFilter {
   filter?: string
   sortBy?: SortBy[]
 }

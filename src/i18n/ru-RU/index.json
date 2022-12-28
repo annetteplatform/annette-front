@@ -1,0 +1,342 @@
+{
+	"annette": {
+		"application": {
+			"application": {
+				"deleteQuestion": "Пожалуйста, подтвердите удаление приложения.",
+				"field": {
+					"backendUrl": "Серверный URL",
+					"frontendUrl": "Клиентский URL",
+					"icon": "Иконка",
+					"id": "Идентификатор",
+					"label": "Метка",
+					"labelDescription": "Метка описание",
+					"name": "Наименование",
+					"translations": "Переводы"
+				},
+				"title": "Приложение",
+				"titlePl": "Приложения",
+				"translationNotAssigned": "Переводы не назначены"
+			},
+			"language": {
+				"deleteQuestion": "Пожалуйста, подтвердите удаление языка.",
+				"field": {
+					"id": "Идентификатор",
+					"name": "Наименование"
+				},
+				"title": "Язык",
+				"titlePl": "Языки"
+			},
+			"translation": {
+				"deleteQuestion": "Пожалуйста, подтвердите удаление перевода.",
+				"field": {
+					"id": "Идентификатор",
+					"name": "Наименование",
+					"translations": "Переводы"
+				},
+				"title": "Перевод",
+				"titlePl": "Переводы",
+				"translationLanguages": {
+					"deleteQuestion": "Пожалуйста, подтвердите удаление языка.",
+					"title": "Перевод JSON для {language}"
+				}
+			}
+		},
+		"authorization": {
+			"authRole": {
+				"addPermission": "Добавить разрешение",
+				"arg1": "Аргумент 1",
+				"arg2": "Аргумент 2",
+				"arg3": "Аргумент 3",
+				"deletePermissionQuestion": "Пожалуйста, подтвердите разрешение на удаление.",
+				"deleteQuestion": "Подтвердите удаление роли авторизации.",
+				"field": {
+					"description": "Описание",
+					"id": "Идентификатор",
+					"name": "Наименование"
+				},
+				"permission": "Разрешение",
+				"permissionId": "Идентификатор разрешения",
+				"permissions": "Разрешения",
+				"title": "Роль авторизации",
+				"titlePl": "Роли авторизации"
+			}
+		},
+		"bpm": {
+			"bpmModel": {
+				"deleteQuestion": "Подтвердите удаление модели BPM.",
+				"field": {
+					"code": "Код",
+					"description": "Описание",
+					"id": "Идентификатор",
+					"name": "Наименование",
+					"notation": "Нотация",
+					"xml": "Схема"
+				},
+				"page": {
+					"generalTab": "Общее",
+					"modelTab": "Модель",
+					"xmlTab": "XML"
+				},
+				"title": "Модель BPM",
+				"titlePl": "BPM-модели"
+			},
+			"businessProcess": {
+				"deleteQuestion": "",
+				"field": {
+					"bpmModelId": "",
+					"dataSchemaId": "",
+					"description": "",
+					"id": "",
+					"idType": "",
+					"keyType": "",
+					"name": "",
+					"processDefinition": "",
+					"processDefinitionType": "",
+					"var": {
+						"caption": "",
+						"datatype": "",
+						"default": "",
+						"name": "",
+						"variableName": ""
+					},
+					"variables": ""
+				},
+				"page": {
+					"generalTab": "",
+					"variablesTab": ""
+				},
+				"title": "",
+				"titlePl": ""
+			},
+			"dataSchema": {
+				"deleteQuestion": "",
+				"field": {
+					"description": "",
+					"id": "",
+					"name": "",
+					"var": {
+						"caption": "",
+						"datatype": "",
+						"default": "",
+						"name": "",
+						"variableName": ""
+					},
+					"variables": ""
+				},
+				"page": {
+					"generalTab": "",
+					"variablesTab": ""
+				},
+				"title": "",
+				"titlePl": ""
+			}
+		},
+		"orgStructure": {
+			"category": {
+				"allowedOrgItems": "Разрешенные организационные элементы",
+				"deleteQuestion": "Пожалуйста, подтвердите удаление категории.",
+				"field": {
+					"forOrganization": "Для организации",
+					"forPosition": "Для должности",
+					"forUnit": "Для подразделения",
+					"id": "Идентификатор",
+					"name": "Наименование"
+				},
+				"organization": "Организация",
+				"position": "Должность",
+				"title": "Категория",
+				"titlePl": "Категории",
+				"unit": "Подразделение"
+			},
+			"orgItem": {
+				"field": {
+					"categoryId": "Категория",
+					"externalId": "Внешний идентификатор",
+					"id": "Идентификатор",
+					"itemType": "Тип элемента",
+					"level": "Уровень",
+					"name": "Наименование",
+					"orgId": "Идентификатор организации",
+					"parentId": "Родительский идентификатор",
+					"rootPath": "Корневой путь",
+					"source": "Источник"
+				}
+			},
+			"orgRole": {
+				"deleteQuestion": "Подтвердите удаление организационной роли.",
+				"field": {
+					"description": "Описание",
+					"id": "Идентификатор",
+					"name": "Наименование"
+				},
+				"title": "Организационная роль ",
+				"titlePl": "Организационные роли "
+			},
+			"organization": {
+				"deleteOrgItemQuestion": "Пожалуйста, подтвердите удаление организационного элемента.",
+				"deleteQuestion": "Пожалуйста, подтвердите удаление организации.",
+				"editTitle": "Изменить организацию",
+				"title": "Организация",
+				"titlePl": "Организации",
+				"viewTitle": "Просмотр организации"
+			}
+		},
+		"person": {
+			"category": {
+				"deleteQuestion": "Пожалуйста, подтвердите удаление категории.",
+				"field": {
+					"id": "Идентификатор",
+					"name": "Наименование"
+				},
+				"title": "Категория",
+				"titlePl": "Категории"
+			},
+			"person": {
+				"deleteQuestion": "Пожалуйста, подтвердите удаление персоны.",
+				"field": {
+					"categoryId": "Категория",
+					"email": "Эл. адрес",
+					"externalId": "Внешний идентификатор",
+					"firstname": "Имя",
+					"id": "Идентификатор",
+					"lastname": "Фамилия",
+					"middlename": "Отчество",
+					"phone": "Телефон",
+					"source": "Источник"
+				},
+				"title": "Персона",
+				"titlePl": "Персоны"
+			}
+		},
+		"principalGroup": {
+			"category": {
+				"deleteQuestion": "Пожалуйста, подтвердите удаление категории.",
+				"field": {
+					"id": "Идентификатор",
+					"name": "Наименование"
+				},
+				"title": "Категория",
+				"titlePl": "Категории"
+			},
+			"group": {
+				"deleteQuestion": "Подтвердите удаление группы принципалов.",
+				"field": {
+					"categoryId": "Категория",
+					"description": "Описание",
+					"id": "Идентификатор",
+					"name": "Наименование"
+				},
+				"title": "Группа принципалов",
+				"titlePl": "Группы принципалов"
+			}
+		},
+		"serviceCatalog": {
+			"category": {
+				"deleteQuestion": "Пожалуйста, подтвердите удаление категории.",
+				"field": {
+					"id": "Идентификатор",
+					"name": "Наименование"
+				},
+				"title": "Категория",
+				"titlePl": "Категории"
+			},
+			"scope": {
+				"activateQuestion": "Пожалуйста, подтвердите активацию области сервисов",
+				"deactivateQuestion": "Пожалуйста, подтвердите деактивацию области сервисов.",
+				"deleteQuestion": "Подтвердите удаление области сервисов",
+				"field": {
+					"active": "Активный",
+					"categoryId": "Категория",
+					"children": "Сервисные элементы",
+					"description": "Описание",
+					"id": "Идентификатор",
+					"name": "Наименование"
+				},
+				"title": "Область сервисов",
+				"titlePl": "Области сервисов"
+			},
+			"serviceItem": {
+				"activateQuestion": "Пожалуйста, подтвердите активацию сервисного элемента.",
+				"createGroup": "Создать группу",
+				"createService": "Создать сервис",
+				"deactivateQuestion": "Пожалуйста, подтвердите деактивацию сервисного элемента.",
+				"deleteQuestion": "Пожалуйста, подтвердите удаление сервисного элемента.",
+				"field": {
+					"active": "Активно",
+					"children": "Сервисные элементы",
+					"description": "Описание",
+					"icon": "Значок",
+					"id": "Идентификатор",
+					"label": "Метка",
+					"labelDescription": "Метка описания",
+					"link": "Ссылка",
+					"name": "Наименование",
+					"type": "Тип"
+				},
+				"groupTitle": "Сервисная группа",
+				"groupTitlePl": "Сервисные группы",
+				"serviceTitle": "Сервис",
+				"serviceTitlePl": "Сервисы",
+				"title": "Сервисный элемент",
+				"titlePl": "Сервисные элементы"
+			}
+		},
+		"shared": {
+			"attribute": {
+				"titlePl": "Атрибуты"
+			},
+			"crud": {
+				"activate": "Активация",
+				"cancel": "Отмена",
+				"changed": "Изменено",
+				"copy": "Копировать",
+				"create": "Создать",
+				"deactivate": "Деактивировать",
+				"del": "Удалить",
+				"edit": "Изменить",
+				"fieldRequired": "Поле обязательно для заполнения",
+				"filter": "Фильтр",
+				"noResults": "Нет результатов",
+				"ok": "Ok",
+				"refresh": "Обновить",
+				"save": "Сохранить",
+				"saved": "Сохранено",
+				"updatedAt": "Обновлен в",
+				"updatedBy": "Обновлено",
+				"view": "Посмотреть"
+			},
+			"filter": {
+				"apply": "Применить",
+				"clear": "Очистить",
+				"filter": "Фильтр"
+			}
+		}
+	},
+	"annetteConsole": {
+		"mainMenu": {
+			"action": "Открыть"
+		},
+		"notAuthenticatedHome": {
+			"descriptionHtml": "В Консоли Annette вы можете управлять следующими объектами:<ul><li>Языки, переводы и приложения</li><li>Каталог пользователей</li><li>Организационные структуры и роли</li><li>Роли авторизации и назначать разрешения</li><li>Система управления контентом (CMS)</li><li>Система управления бизнес-процессами (BPMS)</li></ul>",
+			"signIn": "Войти",
+			"signInDescription": "Пожалуйста, войдите, чтобы получить доступ к Annette Console",
+			"title": "Консоль Annette"
+		},
+		"toolbar": {
+			"notificationsTooltip": "Уведомления",
+			"profileMenu": {
+				"language": "Язык",
+				"profile": "Профиль ",
+				"settings": "Настройки",
+				"signIn": "Войти",
+				"signOut": "Выход"
+			},
+			"searchTooltip": "Поиск",
+			"servicesTooltip": "Сервисы",
+			"title": "Консоль Annette"
+		}
+	},
+	"debug": {
+		"error": ""
+	}
+}

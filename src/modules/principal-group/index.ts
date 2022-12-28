@@ -1,4 +1,2 @@
-export * from './store'
-export * from './principal-group.service'
+export * from './data'
 export * from './routes'
-

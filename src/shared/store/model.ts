@@ -1,8 +1,15 @@
-import {Message} from 'src/shared';
+import {Message, SortBy} from '../model';
+
+export const UNCHANGED = 'unchanged'
+export const CHANGED = 'changed'
 
 export interface BaseEntity {
   id: string,
   updatedAt?: Date
+}
+
+export interface BaseFilter {
+  sortBy?: SortBy[]
 }
 
 export enum PagingMode {
@@ -87,9 +94,6 @@ export interface LoadFailurePayload {
   idInLoading: string[],
 }
 
-export interface ClearMessagePayload {
-  key: string,
-}
 
 
 

@@ -6,6 +6,9 @@
     :pagination="pagination"
     :loading="instance.loading"
     @request="onRequest">
+    <template v-slot:toolbar>
+      <slot name="toolbar"></slot>
+    </template>
     <template v-slot:row="props">
       <q-td>
         {{ props.row.id }}
@@ -16,55 +19,42 @@
       <q-td>
         <q-badge outline color="primary" :label="props.row.categoryId" />
       </q-td>
+      <q-td>
+        <q-btn v-if="props.row.active"
+               flat round color="green" size="sm" icon="fa-regular fa-circle-check" @click="deactivateEntity(props.row.id)">
+          <q-tooltip>
+            {{ $t('annette.shared.crud.deactivate') }}
+          </q-tooltip>
+        </q-btn>
+        <q-btn v-else
+               flat round color="grey" size="sm" icon="fa-regular fa-circle" @click="activateEntity(props.row.id)">
+          <q-tooltip>
+            {{ $t('annette.shared.crud.activate') }}
+          </q-tooltip>
+        </q-btn>
+      </q-td>
       <q-td auto-width>
-        <q-btn flat round color="green" size="sm" icon="far fa-eye"
-               :to="{ name: 'cms.space', params: { action: 'view', id: props.row.id } }"/>
-        <q-btn flat round color="blue" size="sm" icon="far fa-edit"
-               :to="{ name: 'cms.space', params: { action: 'edit', id: props.row.id } }"/>
-        <q-btn flat round color="red" size="sm" icon="fas fa-trash" @click="deleteEntity(props.row.id)"/>
+        <default-row-toolbar :id="props.row.id"
+                             route-name="cms.space"
+                             view copy edit del @delete="deleteEntity"/>
       </q-td>
     </template>
   </entity-list>
 </template>
 
 <script lang="ts">
-import {defineComponent} from 'vue';
-import {useEntityList} from 'src/shared';
-import EntityList from 'src/shared/components/EntityList.vue';
-import {Space, SpaceFilter} from 'src/modules/cms';
+import {defineComponent, ref, useSlots} from 'vue';
+import EntityList from 'src/shared/components/crud/EntityList.vue';
+import {useActivateEntity, useDeactivateEntity, useEntityList} from 'src/shared/composables';
+import {useI18n} from 'vue-i18n';
+import DefaultRowToolbar from 'src/shared/components/crud/DefaultRowToolbar.vue';
+import {useDeleteEntity} from 'src/shared/composables/delete-entity';
+import {Space, SpaceFilter, useSpaceStore} from 'src/modules/cms';
 
-const COLUMNS = [
-  {
-    name: 'id',
-    required: true,
-    label: 'Id',
-    align: 'left',
-    field: 'id',
-    sortable: true,
-  },
-  {
-    name: 'name',
-    align: 'left',
-    label: 'Name',
-    field: 'name',
-    sortable: true,
-    classes: 'text-truncate'
-  },
-  {
-    name: 'categoryId',
-    align: 'left',
-    label: 'Category Id',
-    field: 'categoryId',
-    sortable: true,
-    classes: 'text-truncate'
-  }
-]
-
-const NAMESPACE = 'cmsSpace';
 
 export default defineComponent({
   name: 'SpaceList',
-  components: {EntityList},
+  components: {DefaultRowToolbar, EntityList},
   props: {
     instanceKey: {
       type: String,
@@ -72,16 +62,69 @@ export default defineComponent({
     }
   },
   setup(props) {
+    const i18n = useI18n()
+
+    const columns = [
+      {
+        name: 'id',
+        required: true,
+        label: i18n.t('annette.cms.space.field.id'),
+        align: 'left',
+        field: 'id',
+        sortable: true,
+      },
+      {
+        name: 'name',
+        required: true,
+        label: i18n.t('annette.cms.space.field.name'),
+        align: 'left',
+        field: 'name',
+        sortable: true,
+      },
+      {
+        name: 'categoryId',
+        required: true,
+        label: i18n.t('annette.cms.space.field.categoryId'),
+        align: 'left',
+        field: 'categoryId',
+        sortable: true,
+      },
+      {
+        name: 'active',
+        required: true,
+        label: i18n.t('annette.cms.space.field.active'),
+        align: 'left',
+        field: 'active',
+        sortable: true,
+      }
+    ]
+
+    const store = useSpaceStore()
 
     const entityList = useEntityList<Space, SpaceFilter>(
-      NAMESPACE,
+      store,
       props.instanceKey,
-      'Please confirm delete space.'
+    )
+
+    const deleteEntity = useDeleteEntity(
+      store,
+      i18n.t('annette.cms.space.deleteQuestion'),
+    )
+    const activateEntity = useActivateEntity(
+      store,
+      i18n.t('annette.cms.space.activateQuestion'),
+    )
+    const deactivateEntity = useDeactivateEntity(
+      store,
+      i18n.t('annette.cms.space.deactivateQuestion'),
     )
 
     return {
-      columns: COLUMNS,
+      columns,
       ...entityList,
+      deleteEntity: deleteEntity.deleteEntity,
+      deactivateEntity: deactivateEntity.deactivateEntity,
+      activateEntity: activateEntity.activateEntity,
     };
   }
 });

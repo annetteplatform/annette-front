@@ -1,46 +1,51 @@
 <template>
-  <entity-list-page narrow caption="Data Schemas" :namespace="namespace" :instance-key="instanceKey">
+  <entity-list-page narrow
+                    :caption="$t('annette.bpm.dataSchema.titlePl')"
+                    :message="instance.message"
+                    @closeMessage="closeMessage">
     <template v-slot:toolbar>
-      <q-btn class="q-mr-md" outline color="primary"
-             label="Refresh"
-             @click="refreshList"/>
-      <q-btn class="q-mr-md" outline color="primary"
-             label="Create"
-             :to="{name: 'bpm.dataSchema', params: {action: 'create', id: 'new'}}"/>
+      <default-list-page-toolbar @refresh="refreshList"/>
     </template>
     <template v-slot:filter>
-      <SimpleFilterForm class="q-mb-md"
-                        :filter="instance.filter"
-                        @filterChanged="onFilterChanged"/>
+      <simple-filter-form :filter="instance.filter"
+                          @filterChanged="onFilterChanged"/>
     </template>
     <template v-slot:default>
-      <DataSchemaList class="q-mb-md"
-                      :instance-key="instanceKey"/>
+      <data-schema-list
+        :instance-key="instanceKey">
+        <template v-slot:toolbar>
+          <default-list-toolbar create create-route-name="bpm.dataSchema"/>
+        </template>
+      </data-schema-list>
     </template>
   </entity-list-page>
 </template>
 
-<script lang="ts">
-import {defineComponent} from 'vue';
-import {useEntityListPage} from 'src/shared';
-import DataSchemaList from './components/DataSchemaList.vue';
-import EntityListPage from 'src/shared/components/EntityListPage.vue';
-import {DataSchemaFilter} from 'src/modules/bpm';
-import SimpleFilterForm from 'src/shared/components/SimpleFilterForm.vue';
 
-const NAMESPACE = 'bpmDataSchema';
-const INSTANCE_KEY = 'dataSchemas'
+<script lang="ts">
+import {useEntityListPage} from 'src/shared/composables/entity-list-page';
+import EntityListPage from 'src/shared/components/crud/EntityListPage.vue';
+import SimpleFilterForm from 'src/shared/components/crud/SimpleFilterForm.vue';
+import DataSchemaList from './components/DataSchemaList.vue';
+import {defineComponent} from 'vue';
+import DefaultListToolbar from 'src/shared/components/crud/DefaultListToolbar.vue';
+import DefaultListPageToolbar from 'src/shared/components/crud/DefaultListPageToolbar.vue';
+import {DataSchemaFilter, useDataSchemaStore} from 'src/modules/bpm';
 
 export default defineComponent({
   name: 'DataSchemaListPage',
-  components: {SimpleFilterForm, EntityListPage, DataSchemaList},
+  components: {
+    DefaultListPageToolbar,
+    DefaultListToolbar, DataSchemaList, SimpleFilterForm, EntityListPage
+  },
   setup() {
 
+    const instanceKey = 'dataSchemas'
+    const store = useDataSchemaStore()
     const entityListPage = useEntityListPage<DataSchemaFilter>({
-      namespace: NAMESPACE,
-      instanceKey: INSTANCE_KEY,
+      store,
+      instanceKey
     })
-
     return {
       ...entityListPage
     };

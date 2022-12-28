@@ -6,8 +6,7 @@
 <script lang="ts">
 import {computed, defineComponent, toRef, watch} from 'vue';
 import {useRouter} from 'vue-router';
-import {useStore} from 'src/store';
-
+import {usePageViewStore} from 'src/modules/cms';
 
 export default defineComponent({
   name: 'PageTitleView',
@@ -20,12 +19,11 @@ export default defineComponent({
   },
   setup(props) {
     const router = useRouter()
-    const store = useStore()
+    const store = usePageViewStore()
 
     const pageId = toRef(props, 'pageId')
     const pageName = computed(() => {
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access,@typescript-eslint/no-unsafe-return
-      return store.getters['cmsPageView/entities'][pageId.value] ? store.getters['cmsPageView/entities'][pageId.value].title : pageId.value
+      return store.entities[pageId.value] ? store.entities[pageId.value].title : pageId.value
     })
 
     const openPage = () => {
@@ -33,7 +31,7 @@ export default defineComponent({
     }
 
     const load = () => {
-      void store.dispatch('cmsPageView/loadEntitiesIfNotExist', [pageId.value])
+      void store.loadEntitiesIfNotExist([pageId.value])
     }
 
     load()

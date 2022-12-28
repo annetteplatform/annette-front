@@ -4,9 +4,8 @@
 
 <script lang="ts">
 import {computed, defineComponent, PropType, toRef, watch} from 'vue';
-import {PageView} from 'src/modules/cms';
-import {useStore} from 'src/store';
-import WidgetView from 'src/shared/components/content/WidgetView.vue';
+import {PageView, useSpaceViewStore} from 'src/modules/cms';
+import WidgetView from 'src/modules/cms/ui/content/WidgetView.vue';
 
 export default defineComponent({
   name: 'PageViewCard',
@@ -18,7 +17,7 @@ export default defineComponent({
     }
   },
   setup(props) {
-    const store = useStore()
+    const spaceViewStore = useSpaceViewStore()
 
     const page = toRef(props, 'page')
 
@@ -34,15 +33,13 @@ export default defineComponent({
       }
     })
 
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access,@typescript-eslint/no-unsafe-return
-    const spaces = computed(() => store.getters['cmsSpaceView/entities'])
     const pageSpace = computed(() => page.value.spaceId)
     watch(pageSpace, (spaceId: string) => {
-      void store.dispatch('cmsSpaceView/loadSpacesIfNotExist', [spaceId])
+      void spaceViewStore.loadEntitiesIfNotExist([spaceId])
     })
 
     return {
-      spaces,
+      spaces: spaceViewStore.entities,
       contentWidgets
     };
   }

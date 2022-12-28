@@ -6,6 +6,9 @@
     :pagination="pagination"
     :loading="instance.loading"
     @request="onRequest">
+    <template v-slot:toolbar>
+      <slot name="toolbar"></slot>
+    </template>
     <template v-slot:row="props">
       <q-td>
         {{ props.row.id }}
@@ -14,45 +17,28 @@
         {{ props.row.name }}
       </q-td>
       <q-td auto-width>
-        <q-btn flat round color="green" size="sm" icon="far fa-eye"
-               :to="{ name: 'cms.spaceCategory', params: { action: 'view', id: props.row.id } }"/>
-        <q-btn flat round color="blue" size="sm" icon="far fa-edit"
-               :to="{ name: 'cms.spaceCategory', params: { action: 'edit', id: props.row.id } }"/>
-        <q-btn flat round color="red" size="sm" icon="fas fa-trash" @click="deleteEntity(props.row.id)"/>
+        <default-row-toolbar :id="props.row.id"
+                             route-name="cms.spaceCategory"
+                             view copy edit del @delete="deleteEntity"/>
       </q-td>
     </template>
   </entity-list>
 </template>
 
 <script lang="ts">
-import {defineComponent} from 'vue';
-import {Category, CategoryFilter, useEntityList} from 'src/shared';
-import EntityList from 'src/shared/components/EntityList.vue';
+import {defineComponent, ref, useSlots} from 'vue';
+import EntityList from 'src/shared/components/crud/EntityList.vue';
+import {useEntityList} from 'src/shared/composables';
+import {useI18n} from 'vue-i18n';
+import DefaultRowToolbar from 'src/shared/components/crud/DefaultRowToolbar.vue';
+import {useDeleteEntity} from 'src/shared/composables/delete-entity';
+import {Category, CategoryFilter} from 'src/shared/model';
+import {useSpaceCategoryStore} from 'src/modules/cms';
 
-const COLUMNS = [
-  {
-    name: 'id',
-    required: true,
-    label: 'Id',
-    align: 'left',
-    field: 'id',
-    sortable: true,
-  },
-  {
-    name: 'name',
-    required: true,
-    label: 'Name',
-    align: 'left',
-    field: 'name',
-    sortable: true,
-  }
-]
-
-const NAMESPACE = 'cmsSpaceCategory'
 
 export default defineComponent({
   name: 'SpaceCategoryList',
-  components: {EntityList},
+  components: {DefaultRowToolbar, EntityList},
   props: {
     instanceKey: {
       type: String,
@@ -60,16 +46,43 @@ export default defineComponent({
     }
   },
   setup(props) {
+    const i18n = useI18n()
+
+    const columns = [
+      {
+        name: 'id',
+        required: true,
+        label: i18n.t('annette.cms.spaceCategory.field.id'),
+        align: 'left',
+        field: 'id',
+        sortable: true,
+      },
+      {
+        name: 'name',
+        required: true,
+        label: i18n.t('annette.cms.spaceCategory.field.name'),
+        align: 'left',
+        field: 'name',
+        sortable: true,
+      }
+    ]
+
+    const store = useSpaceCategoryStore()
 
     const entityList = useEntityList<Category, CategoryFilter>(
-      NAMESPACE,
+      store,
       props.instanceKey,
-      'Please confirm delete category.'
+    )
+
+    const deleteEntity = useDeleteEntity(
+      store,
+      i18n.t('annette.cms.spaceCategory.deleteQuestion'),
     )
 
     return {
-      columns: COLUMNS,
+      columns,
       ...entityList,
+      deleteEntity: deleteEntity.deleteEntity
     };
   }
 });

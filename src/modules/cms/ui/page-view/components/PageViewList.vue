@@ -6,6 +6,9 @@
     :pagination="pagination"
     :loading="instance.loading"
     @request="onRequest">
+    <template v-slot:toolbar>
+      <slot name="toolbar"></slot>
+    </template>
     <template v-slot:row="props">
       <q-td>
         {{ props.row.title }}
@@ -27,45 +30,19 @@
 </template>
 
 <script lang="ts">
-import {defineComponent} from 'vue';
-import {useEntityList} from 'src/shared';
-import EntityList from 'src/shared/components/EntityList.vue';
-import {Page, PageFilter} from 'src/modules/cms';
-import {date} from 'quasar';
+import {defineComponent, ref, useSlots} from 'vue';
+import EntityList from 'src/shared/components/crud/EntityList.vue';
+import {useActivateEntity, useDeactivateEntity, useEntityList} from 'src/shared/composables';
+import {useI18n} from 'vue-i18n';
+import DefaultRowToolbar from 'src/shared/components/crud/DefaultRowToolbar.vue';
+import {useDeleteEntity} from 'src/shared/composables/delete-entity';
+import {PageView, PageViewFilter, usePageViewStore} from 'src/modules/cms';
+import {date, useQuasar} from 'quasar';
 
-const COLUMNS = [
-
-  {
-    name: 'title',
-    align: 'left',
-    label: 'Title',
-    field: 'title',
-    sortable: true,
-    classes: 'text-truncate'
-  },
-  {
-    name: 'spaceId',
-    align: 'left',
-    label: 'Space Id',
-    field: 'spaceId',
-    sortable: true,
-    classes: 'text-truncate'
-  },
-  {
-    name: 'publicationTimestamp',
-    align: 'left',
-    label: 'Date',
-    field: 'publicationTimestamp',
-    sortable: true,
-    classes: 'text-truncate'
-  }
-]
-
-const NAMESPACE = 'cmsPageView';
 
 export default defineComponent({
   name: 'PageViewList',
-  components: { EntityList},
+  components: {DefaultRowToolbar, EntityList},
   props: {
     instanceKey: {
       type: String,
@@ -73,11 +50,40 @@ export default defineComponent({
     }
   },
   setup(props) {
+    const i18n = useI18n()
 
-    const entityList = useEntityList<Page, PageFilter>(
-      NAMESPACE,
+    const columns = [
+      {
+        name: 'title',
+        align: 'left',
+        label: i18n.t('annette.cms.pageView.field.title'),
+        field: 'title',
+        sortable: true,
+        classes: 'text-truncate'
+      },
+      {
+        name: 'spaceId',
+        align: 'left',
+        label: i18n.t('annette.cms.pageView.field.spaceId'),
+        field: 'spaceId',
+        sortable: true,
+        classes: 'text-truncate'
+      },
+      {
+        name: 'publicationTimestamp',
+        align: 'left',
+        label: i18n.t('annette.cms.pageView.field.publicationTimestamp'),
+        field: 'publicationTimestamp',
+        sortable: true,
+        classes: 'text-truncate'
+      }
+    ]
+
+    const store = usePageViewStore()
+
+    const entityList = useEntityList<PageView, PageViewFilter>(
+      store,
       props.instanceKey,
-      'Please confirm delete page.'
     )
 
     const formatDate = (timestamp: Date) => {
@@ -85,7 +91,7 @@ export default defineComponent({
     }
 
     return {
-      columns: COLUMNS,
+      columns,
       ...entityList,
       formatDate,
     };

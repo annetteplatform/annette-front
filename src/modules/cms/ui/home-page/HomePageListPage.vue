@@ -1,48 +1,50 @@
 <template>
-  <EntityListPage narrow caption="Home Pages" :namespace="namespace" :instance-key="instanceKey" >
+  <entity-list-page narrow
+                    caption="Home Pages"
+                    :instance-key="instanceKey" >
     <template v-slot:toolbar>
-      <q-btn class="q-mr-md" outline color="primary"
-             label="Refresh"
-             @click="refreshList"/>
-      <q-btn color="primary"
-             label="Create"
-             @click="createEntity"
-             />
+      <default-list-page-toolbar @refresh="refreshList"/>
     </template>
     <template v-slot:filter>
-      <SimpleFilterForm class="q-mb-md"
+      <simple-filter-form class="q-mb-md"
                           :filter="instance.filter"
                           @filterChanged="onFilterChanged"/>
     </template>
     <template v-slot:default>
 
-      <HomePageList
-                   :instance-key="instanceKey"/>
+      <home-page-list :instance-key="instanceKey">
+        <template v-slot:toolbar>
+          <q-space/>
+          <q-btn color="primary"
+                 label="Create"
+                 @click="createEntity"/>
+        </template>
+      </home-page-list>
     </template>
-  </EntityListPage>
-  <HomePageFormDialog :show="showDialog" action="create" @close="close"/>
+  </entity-list-page>
+  <home-page-form-dialog :show="showDialog" action="create" @close="close"/>
 </template>
 
 <script lang="ts">
 import {defineComponent, ref} from 'vue';
-import {useEntityListPage} from 'src/shared';
 import HomePageList from './components/HomePageList.vue';
-import SimpleFilterForm from 'src/shared/components/SimpleFilterForm.vue';
-import EntityListPage from 'src/shared/components/EntityListPage.vue';
-import {HomePageFilter} from 'src/modules/cms';
-import HomePageFormDialog from 'src/modules/cms/ui/home-page/components/HomePageFormDialog.vue';
-
-const NAMESPACE = 'cmsHomePage';
-const INSTANCE_KEY = 'homePages'
+import SimpleFilterForm from 'src/shared/components/crud/SimpleFilterForm.vue';
+import EntityListPage from 'src/shared/components/crud/EntityListPage.vue';
+import {HomePageFilter, useHomePageStore} from 'src/modules/cms';
+import HomePageFormDialog from './components/HomePageFormDialog.vue';
+import {useEntityListPage} from 'src/shared/composables';
+import DefaultListPageToolbar from 'src/shared/components/crud/DefaultListPageToolbar.vue';
 
 export default defineComponent({
   name: 'HomePageListPage',
-  components: {HomePageFormDialog, EntityListPage, HomePageList, SimpleFilterForm},
+  components: {DefaultListPageToolbar, HomePageFormDialog, EntityListPage, HomePageList, SimpleFilterForm},
   setup() {
 
+    const store = useHomePageStore()
+    const instanceKey = 'homePages'
     const entityListPage = useEntityListPage<HomePageFilter>({
-      namespace: NAMESPACE,
-      instanceKey: INSTANCE_KEY,
+      store,
+      instanceKey,
     })
 
     const showDialog = ref(false)

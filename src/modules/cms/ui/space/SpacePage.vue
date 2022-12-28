@@ -1,183 +1,143 @@
 <template>
   <entity-page narrow
-               caption="Space"
+               :caption="$t('annette.cms.space.title')"
                :show-form="!!entityModel"
                :error="error"
+               :action="action"
+               :hide-status-bar="action != 'create' "
                @clearError="clearError">
     <template v-slot:toolbar>
-      <q-btn class="q-mr-md" outline color="primary"
-             label="Spaces"
-             :to="{name: 'cms.spaces'}"/>
-      <q-btn class="q-mr-md" outline color="primary"
-             v-if="action === 'edit'"
-             label="View"
-             :to="{name: 'cms.space', params: { action: 'view', id}}"/>
-      <q-btn class="q-mr-md" outline color="primary"
-             v-if="action === 'view'"
-             label="Edit"
-             :to="{name: 'cms.space', params: { action: 'edit', id}}"/>
-      <q-btn color="primary"
-             v-if="entityModel && action === 'create'"
-             label="Save"
-             @click="save"/>
+      <default-entity-page-toolbar :action="action" :id="id"
+                                   route-name="cms.space"
+                                   :back-label="$t('annette.cms.space.titlePl')"
+                                   back-route-name="cms.spaces"/>
     </template>
-    <template v-slot:status>
-    </template>
-    <template v-slot:default>
+    <template v-slot:save-toolbar>
       <div class="row">
-        <q-input class="col-md-4 col-sm-12 col-xs-12 "
+        <q-btn v-if="action == 'edit'" outline dense
+               class="q-mr-md"
+               color="primary"
+               :label="$t('annette.shared.crud.cancel')"
+               :to="{ name: 'cms.space', params: { action: 'view', id } }"/>
+        <q-btn dense
+               color="primary"
+               :label="$t('annette.shared.crud.save')"
+               @click="save"/>
+      </div>
+    </template>
+
+    <template v-slot:default>
+      <div class="row q-pb-md ">
+        <q-input class="col-md-4 col-sm-12 col-xs-12 " stack-label dense
                  v-model="entityModel.id"
-                 :rules="[val => !!val || 'Field is required']"
+                 :rules="[val => !!val || $t('annette.shared.crud.fieldRequired')]"
                  :readonly="action!=='create'"
                  ref="idRef"
-                 label="Id"/>
+                 :label="$t('annette.cms.space.field.id')"/>
       </div>
-      <div class="row">
-        <q-input class="col-md-12 col-sm-12 col-xs-12 "
+      <div class="row q-pb-sm ">
+        <q-input class="col-md-12 col-sm-12 col-xs-12 q-pr-md" stack-label dense
                  v-model="entityModel.name"
                  @update:model-value="updateName"
                  debounce="700"
-                 :rules="[val => !!val || 'Field is required']"
+                 :rules="[val => !!val || $t('annette.shared.crud.fieldRequired')]"
                  :readonly="action ==='view'"
                  ref="nameRef"
-                 label="Name"/>
+                 :label="$t('annette.cms.space.field.name')"/>
       </div>
-
-      <div class="row">
-        <space-category-selector v-model="entityModel.categoryId"
-                                @update:model-value="updateCategoryId"
-                                :readonly="action ==='view'"/>
-      </div>
-      <div class="row">
-        <q-input
-          class="col-md-12 col-sm-12 col-xs-12"
-          v-model="entityModel.description"
-          @update:model-value="updateDescription"
-          debounce="700"
-          label="Description"
-          type="textarea"
-          :readonly="action === 'view'"
+      <div class="row q-pb-sm">
+        <q-input autogrow
+                 class="col-md-12 col-sm-12 col-xs-12"
+                 v-model="entityModel.description"
+                 @update:model-value="updateDescription"
+                 debounce="700"
+                 :label="$t('annette.cms.space.field.description')"
+                 type="textarea"
+                 :readonly="action === 'view'"
         />
       </div>
 
-      <div class="row q-mt-md">
-        <q-list bordered class="full-width" separator>
-          <q-item>
-            <q-item-section>
-              Authors
-            </q-item-section>
-            <q-item-section avatar>
-              <q-btn class="float-left" round dense flat color="primary"
-                     icon="add"
-                     v-if="action !=='view'"
-                     @click="addAuthorPrincipal"
-              />
-            </q-item-section>
-          </q-item>
-          <q-item v-if="entityModel.authors.length === 0">
-            <q-item-section>
-              <q-item-label caption>
-                Principals not assigned
-              </q-item-label>
-            </q-item-section>
-          </q-item>
-          <q-item
-            v-for="principal in entityModel.authors"
-            :key="principal">
-            <principal-view-item :principal="principal"/>
-            <q-item-section side v-if="action !=='view'">
-              <q-btn flat round color="red" size="sm" icon="fas fa-trash"
-                     @click="deleteAuthorPrincipal(principal)"/>
-            </q-item-section>
-          </q-item>
-        </q-list>
+      <div class="row q-pb-sm">
+        <space-category-selector v-model="entityModel.categoryId"
+                                @update:model-value="updateCategory"
+                                :readonly="action ==='view'"
+                                :label="$t('annette.cms.space.field.categoryId')"/>
+      </div>
+      <div class="row q-pb-md">
+        <q-checkbox
+          class="col-md-12 col-sm-12 col-xs-12 q-pr-md"
+          v-model="entityModel.active"
+          disable
+          :label="$t('annette.serviceCatalog.scope.field.active')"/>
       </div>
 
-      <PrincipalSelectorDialog ref="principalSelectorDialog"/>
 
-      <div class="row q-mt-md">
-        <q-list bordered class="full-width" separator>
-          <q-item>
-            <q-item-section>
-              Target Principals
-            </q-item-section>
-            <q-item-section avatar>
-              <q-btn class="float-left" round dense flat color="primary"
-                     icon="add"
-                     v-if="action !=='view'"
-                     @click="addTargetPrincipal"
-              />
-            </q-item-section>
-          </q-item>
-          <q-item v-if="entityModel.targets.length === 0">
-            <q-item-section>
-              <q-item-label caption>
-                Principals not assigned
-              </q-item-label>
-            </q-item-section>
-          </q-item>
-          <q-item
-            v-for="principal in entityModel.targets"
-            :key="principal">
-            <principal-view-item :principal="principal"/>
-            <q-item-section side v-if="action !=='view'">
-              <q-btn flat round color="red" size="sm" icon="fas fa-trash"
-                     @click="deleteTargetPrincipal(principal)"/>
-            </q-item-section>
-          </q-item>
-        </q-list>
+
+      <div class="row q-mt-md" >
+        <principal-list-input :principals="entityModel.authors"
+                              @add-principal="addAuthor"
+                              @delete-principal="deleteAuthor"
+                              :readonly="action === 'view'"
+                              :label="$t('annette.cms.space.field.authors')"
+        />
       </div>
+
+      <div class="row q-mt-md" >
+        <principal-list-input :principals="entityModel.targets"
+                              @add-principal="addTarget"
+                              @delete-principal="deleteTarget"
+                              :readonly="action === 'view'"
+                              :label="$t('annette.cms.space.field.targets')"
+        />
+      </div>
+
     </template>
   </entity-page>
 </template>
 
 <script lang="ts">
-import {defineComponent, ref} from 'vue';
-import EntityPage from 'src/shared/components/EntityPage.vue';
-import SpaceCategorySelector from 'src/modules/cms/ui/space-category/components/SpaceCategorySelector.vue';
-import {useStore} from 'src/store';
-import {useQuasar} from 'quasar';
-import PrincipalViewItem from 'src/shared/components/principal-view/PrincipalViewItem.vue';
-import PrincipalSelectorDialog from 'src/shared/components/principal-selector/PrinciplaSelectorDialog.vue';
+/* eslint-disable @typescript-eslint/ban-ts-comment */
+import {defineComponent, Ref, ref} from 'vue';
+
+import EntityPage from 'src/shared/components/crud/EntityPage.vue';
+import DefaultEntityPageToolbar from 'src/shared/components/crud/DefaultEntityPageToolbar.vue';
+import {AnnettePrincipal} from 'src/shared/model';
+import {useSyncEntityPage} from 'src/shared/composables/sync-entity-page';
+import PrincipalListInput from 'src/shared/components/crud/PrincipalListInput.vue';
 import {
   Space,
   UpdateSpaceCategoryPayloadDto,
   UpdateSpaceDescriptionPayloadDto,
-  UpdateSpaceNamePayloadDto
+  UpdateSpaceNamePayloadDto,
+  useSpaceStore
 } from 'src/modules/cms';
-import {useSyncEntityPage} from 'src/shared/composables/sync-entity-page';
-import {AnnettePrincipal} from 'src/shared';
+import SpaceCategorySelector from 'src/modules/cms/ui/space-category/components/SpaceCategorySelector.vue';
 
 function emptyEntity(): Space {
   return {
     id: '',
     name: '',
     description: '',
-    active: true,
     categoryId: '',
+    active: true,
     authors: [],
     targets: [],
   }
 }
 
-const NAMESPACE = 'cmsSpace';
-
 export default defineComponent({
   name: 'SpacePage',
-  components: {PrincipalSelectorDialog, PrincipalViewItem, EntityPage, SpaceCategorySelector},
+  components: {
+    PrincipalListInput,
+    SpaceCategorySelector, DefaultEntityPageToolbar, EntityPage
+  },
   props: {
     id: String,
     action: String
   },
   setup(props) {
-
-    const store = useStore()
-    const quasar = useQuasar()
-
     const idRef = ref()
     const nameRef = ref()
-
-    const principalSelectorDialog = ref()
 
     const formHasError = (entity?: Space | null): boolean => {
       // eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-member-access
@@ -190,12 +150,17 @@ export default defineComponent({
         !!(entity && (entity.categoryId === '' || entity.categoryId === null || entity.categoryId === undefined))
     }
 
+    const store = useSpaceStore()
+
+    const principals: Ref<AnnettePrincipal[]> = ref([])
+
     const entityPage = useSyncEntityPage<Space>({
-      namespace: NAMESPACE,
+      store,
       emptyEntity,
       formHasError,
       props,
     })
+
 
     const updateName = (data: string) => {
       const payload: UpdateSpaceNamePayloadDto = {
@@ -204,7 +169,7 @@ export default defineComponent({
         name: data
       }
       void entityPage.update(() => {
-        return store.dispatch('cmsSpace/updateEntityName', payload) as Promise<Space>
+        return store.updateEntityName(payload)
       })
     }
 
@@ -215,29 +180,26 @@ export default defineComponent({
         description: data
       }
       void entityPage.update(() => {
-        return store.dispatch('cmsSpace/updateEntityDescription', payload) as Promise<Space>
+        return store.updateEntityDescription(payload)
       })
     }
 
-    const updateCategoryId = (data: string) => {
+    const updateCategory = (data: string) => {
       const payload: UpdateSpaceCategoryPayloadDto = {
         // @ts-ignore
         id: entityPage.entityModel.value.id,
         categoryId: data
       }
       void entityPage.update(() => {
-        return store.dispatch('cmsSpace/updateEntityCategoryId', payload) as Promise<Space>
+        return store.updateEntityCategoryId(payload)
       })
     }
 
 
-    const addAuthorPrincipal = async () => {
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-member-access
-      const principal = await principalSelectorDialog.value.showDialog()
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+    const addAuthor = async (principal: AnnettePrincipal) => {
       if (entityPage.action.value === 'edit') {
         void entityPage.update(() => {
-          return store.dispatch('cmsSpace/assignEntityAuthorPrincipal', {
+          return store.assignEntityAuthorPrincipal({
             id: entityPage.id.value,
             principal
           }) as Promise<Space>
@@ -248,40 +210,23 @@ export default defineComponent({
     }
 
 
-    const deleteAuthorPrincipal = (principal: AnnettePrincipal) => {
-      quasar.notify({
-        type: 'negative',
-        message: 'Please confirm delete principal',
-        actions: [
-          {label: 'Cancel', color: 'white'},
-          {
-            label: 'Delete',
-            color: 'white',
-            handler: async () => {
-              if (entityPage.action.value === 'edit') {
-                await entityPage.update(() => {
-                  // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-                  return store.dispatch('cmsSpace/unassignEntityAuthorPrincipal', {
-                    id: entityPage.id.value,
-                    principal
-                  }) as Promise<Space>
-                })
-              } else if (entityPage.action.value === 'create' && entityPage.entityModel.value) {
-                entityPage.entityModel.value.authors = entityPage.entityModel.value.authors.filter(p => p !== principal)
-              }
-            }
-          }
-        ]
-      })
-    }
-
-        const addTargetPrincipal = async () => {
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-member-access
-      const principal = await principalSelectorDialog.value.showDialog()
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+    const deleteAuthor = async (principal: AnnettePrincipal) => {
       if (entityPage.action.value === 'edit') {
         void entityPage.update(() => {
-          return store.dispatch('cmsSpace/assignEntityTargetPrincipal', {
+          return store.unassignEntityAuthorPrincipal({
+            id: entityPage.id.value,
+            principal
+          }) as Promise<Space>
+        })
+      } else if (entityPage.action.value === 'create' && entityPage.entityModel.value) {
+        entityPage.entityModel.value.authors = entityPage.entityModel.value.authors.filter(p => p !== principal)
+      }
+    }
+
+    const addTarget = async (principal: AnnettePrincipal) => {
+      if (entityPage.action.value === 'edit') {
+        void entityPage.update(() => {
+          return store.assignEntityTargetPrincipal({
             id: entityPage.id.value,
             principal
           }) as Promise<Space>
@@ -292,31 +237,17 @@ export default defineComponent({
     }
 
 
-    const deleteTargetPrincipal = (principal: AnnettePrincipal) => {
-      quasar.notify({
-        type: 'negative',
-        message: 'Please confirm delete principal',
-        actions: [
-          {label: 'Cancel', color: 'white'},
-          {
-            label: 'Delete',
-            color: 'white',
-            handler: async () => {
-              if (entityPage.action.value === 'edit') {
-                await entityPage.update(() => {
-                  // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-                  return store.dispatch('cmsSpace/unassignEntityTargetPrincipal', {
-                    id: entityPage.id.value,
-                    principal
-                  }) as Promise<Space>
-                })
-              } else if (entityPage.action.value === 'create' && entityPage.entityModel.value) {
-                entityPage.entityModel.value.targets = entityPage.entityModel.value.targets.filter(p => p !== principal)
-              }
-            }
-          }
-        ]
-      })
+    const deleteTarget = async (principal: AnnettePrincipal) => {
+      if (entityPage.action.value === 'edit') {
+        void entityPage.update(() => {
+          return store.unassignEntityTargetPrincipal({
+            id: entityPage.id.value,
+            principal
+          }) as Promise<Space>
+        })
+      } else if (entityPage.action.value === 'create' && entityPage.entityModel.value) {
+        entityPage.entityModel.value.targets = entityPage.entityModel.value.targets.filter(p => p !== principal)
+      }
     }
 
     return {
@@ -325,14 +256,13 @@ export default defineComponent({
       ...entityPage,
       updateName,
       updateDescription,
-      updateCategoryId,
-      principalSelectorDialog,
-      addAuthorPrincipal,
-      deleteAuthorPrincipal,
-      addTargetPrincipal,
-      deleteTargetPrincipal
-
-    };
+      updateCategory,
+      principals,
+      addAuthor,
+      deleteAuthor,
+      addTarget,
+      deleteTarget,
+    }
   }
-});
+})
 </script>

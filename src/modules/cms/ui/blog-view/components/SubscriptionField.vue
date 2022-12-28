@@ -5,7 +5,7 @@
 
 <script lang="ts">
 import {computed, defineComponent, toRef} from 'vue';
-import {useStore} from 'src/store';
+import {useBlogViewStore} from 'src/modules/cms';
 
 export default defineComponent({
   name: 'SubscriptionField',
@@ -22,7 +22,7 @@ export default defineComponent({
   },
   setup(props) {
 
-    const store = useStore()
+    const store = useBlogViewStore()
 
     const blogId = toRef(props, 'blogId')
     const subscriptions = toRef(props, 'subscriptions')
@@ -31,15 +31,15 @@ export default defineComponent({
     const subscribed = computed ( () => subscriptions.value.length > 0 )
     // @ts-ignore
     const hasPersonPrincipal = computed( () => !!subscriptions.value.find(p => p.principalType === 'person') )
-    const color = computed( () => hasPersonPrincipal.value ? 'primary' : 'grey' )
+    const color = computed( () => hasPersonPrincipal.value ? 'green' : 'grey' )
 
     const subscribe = () => {
-      void store.dispatch('cmsBlogView/subscribeToBlog', blogId.value)
+      void store.subscribeToBlog(blogId.value)
     }
 
     const unsubscribe = () => {
       if (hasPersonPrincipal.value) {
-        void store.dispatch('cmsBlogView/unsubscribeFromBlog', blogId.value)
+        void store.unsubscribeFromBlog(blogId.value)
       }
     }
 

@@ -52,7 +52,7 @@ import {
   AttributeMetadata,
   TextCaption,
   TranslationCaption
-} from 'src/shared'
+} from 'src/shared/model'
 import {Ref} from '@vue/reactivity';
 
 export default defineComponent({
@@ -61,7 +61,6 @@ export default defineComponent({
   props: {
     modelValue: {
       type: String,
-      required: true
     },
     meta: {
       type:Object as PropType<AttributeMetadata>,

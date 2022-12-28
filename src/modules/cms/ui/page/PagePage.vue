@@ -1,28 +1,31 @@
 <template>
   <entity-page narrow
-               caption="Page"
+               :caption="$t('annette.cms.page.title')"
                :show-form="!!page"
                :error="error"
+               :action="action"
+               :hide-status-bar="action != 'create' "
                @clearError="clearError">
     <template v-slot:toolbar>
-      <q-btn class="q-mr-md" outline color="primary"
-             label="Pages"
-             :to="{name: 'cms.pages'}"/>
-      <q-btn class="q-mr-md" outline color="primary"
-             v-if="action === 'edit'"
-             label="View"
-             :to="{name: 'cms.page', params: { action: 'view', id}}"/>
-      <q-btn class="q-mr-md" outline color="primary"
-             v-if="action === 'view'"
-             label="Edit"
-             :to="{name: 'cms.page', params: { action: 'edit', id}}"/>
-      <q-btn color="primary"
-             v-if="page && action === 'create'"
-             label="Save"
-             @click="save"/>
+      <default-entity-page-toolbar :action="action" :id="id"
+                                   route-name="cms.page"
+                                   :back-label="$t('annette.cms.page.titlePl')"
+                                   back-route-name="cms.pages"/>
     </template>
-    <template v-slot:status>
+    <template v-slot:save-toolbar>
+      <div class="row">
+        <q-btn v-if="action == 'edit'" outline dense
+               class="q-mr-md"
+               color="primary"
+               :label="$t('annette.shared.crud.cancel')"
+               :to="{ name: 'cms.page', params: { action: 'view', id } }"/>
+        <q-btn dense
+               color="primary"
+               :label="$t('annette.shared.crud.save')"
+               @click="save"/>
+      </div>
     </template>
+
     <template v-slot:default>
       <div class="row">
         <q-input class="col-md-4 col-sm-12 col-xs-12 q-pr-md"
@@ -32,8 +35,7 @@
                  :readonly="action!=='create'"
                  ref="idRef"
                  label="Id"/>
-        <q-input class="col-md-8 col-sm-12 col-xs-12 "
-                 v-if="state.spaceName"
+        <q-input class="col-md-4 col-sm-12 col-xs-12"
                  :model-value="state.spaceName"
                  readonly
                  label="Space"/>
@@ -139,10 +141,10 @@
                   <q-item-section>
                     Author
                   </q-item-section>
-
                 </q-item>
                 <q-item>
                   <principal-view-item :principal="page.authorId"/>
+                  <principal-selector-dialog ref="principalSelectorDialog"/>
                   <q-item-section side v-if="action !=='view'">
                     <q-btn flat round color="primary" size="sm" icon="edit"
                            @click="updateAuthor"/>
@@ -236,68 +238,60 @@
 
           <q-tab-panel name="targets" v-if="action !== 'create'">
             <div class="row q-mt-md">
-              <q-list bordered class="full-width" separator>
-                <q-item>
-                  <q-item-section>
-                    Principals
-                  </q-item-section>
-                  <q-item-section avatar>
-                    <q-btn class="float-left" round dense flat color="primary"
-                           icon="add"
-                           v-if="action !=='view'"
-                           @click="addPrincipal"
-                    />
-                  </q-item-section>
-                </q-item>
-                <q-item v-if="page.targets.length === 0">
-                  <q-item-section>
-                    <q-item-label caption>
-                      Principals not assigned
-                    </q-item-label>
-                  </q-item-section>
-                </q-item>
-                <q-item
-                  v-for="principal in page.targets"
-                  :key="principal">
-                  <principal-view-item :principal="principal"/>
-                  <q-item-section side v-if="action !=='view'">
-                    <q-btn flat round color="negative" size="sm" icon="fas fa-trash"
-                           @click="deletePrincipal(principal)"/>
-                  </q-item-section>
-                </q-item>
-              </q-list>
+              <principal-list-input :principals="page.targets"
+                                    @add-principal="addTarget"
+                                    @delete-principal="deleteTarget"
+                                    :readonly="action === 'view'"
+                                    :label="$t('annette.cms.page.field.targets')"
+              />
             </div>
-
           </q-tab-panel>
         </q-tab-panels>
       </q-card>
-      <principal-selector-dialog ref="principalSelectorDialog"/>
+
+
     </template>
   </entity-page>
 </template>
 
 <script lang="ts">
-import {computed, defineComponent, ref, toRef, watch} from 'vue';
-import EntityPage from 'src/shared/components/EntityPage.vue';
-import {useStore} from 'src/store';
+/* eslint-disable @typescript-eslint/ban-ts-comment */
+import {computed, defineComponent, Ref, ref, toRef, watch} from 'vue';
+
+import EntityPage from 'src/shared/components/crud/EntityPage.vue';
+import DefaultEntityPageToolbar from 'src/shared/components/crud/DefaultEntityPageToolbar.vue';
+import {AnnetteError, AnnettePrincipal} from 'src/shared/model';
+import PrincipalListInput from 'src/shared/components/crud/PrincipalListInput.vue';
+import {
+  FileDescriptor,
+  InitPageEditorPayload,
+  Page, PageEditor, RemoveFilePayload, toAction,
+  usePageStore
+} from 'src/modules/cms';
 import {date, openURL, useQuasar} from 'quasar';
-import PrincipalViewItem from 'src/shared/components/principal-view/PrincipalViewItem.vue';
-import PrincipalSelectorDialog from 'src/shared/components/principal-selector/PrinciplaSelectorDialog.vue';
-import {FileDescriptor, InitPageEditorPayload, Page, PageEditor, RemoveFilePayload, toAction,} from 'src/modules/cms';
-import {AnnetteError, AnnettePrincipal} from 'src/shared';
-import {Ref} from '@vue/reactivity';
 import {useRoute, useRouter} from 'vue-router';
+import {useAuthStore} from 'src/main';
+import PrincipalSelectorDialog from 'src/shared/components/principal-selector/PrinciplaSelectorDialog.vue';
+import PrincipalViewItem from 'src/shared/components/principal-view/PrincipalViewItem.vue';
+import SpaceSelector from 'src/modules/cms/ui/space/components/SpaceSelector.vue';
+
 
 export default defineComponent({
   name: 'PagePage',
-  components: {PrincipalSelectorDialog, PrincipalViewItem, EntityPage},
+  components: {
+    SpaceSelector,
+    PrincipalViewItem,
+    PrincipalSelectorDialog,
+    PrincipalListInput,
+    DefaultEntityPageToolbar, EntityPage
+  },
   props: {
     id: String,
     action: String
   },
   setup(props) {
-
-    const store = useStore()
+    const store = usePageStore()
+    const authStore = useAuthStore()
     const quasar = useQuasar()
     const route = useRoute()
     const router = useRouter()
@@ -306,28 +300,20 @@ export default defineComponent({
     const titleRef = ref()
 
     const tab = ref('general')
-
     const principalSelectorDialog = ref()
 
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const formHasError = (): boolean => {
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-member-access
       idRef.value.validate()
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-member-access
       titleRef.value.validate()
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
       return !!titleRef.value.hasError || !!idRef.value.hasError
     }
 
     const id = toRef(props, 'id')
     const action = toRef(props, 'action')
     const prevProps = ref('')
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access,@typescript-eslint/no-unsafe-return
-    const personId: Ref<string> = computed(() => store.getters['main/personId'])
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access,@typescript-eslint/no-unsafe-return
-    const state: Ref<PageEditor> = computed(() => store.getters['cmsPage/editor'])
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access,@typescript-eslint/no-unsafe-return
-    const page: Ref<Page> = computed(() => store.getters['cmsPage/page'])
+
+    const state: Ref<PageEditor> = computed(() => store.editor)
+    const page: Ref<Page> = computed(() => store.editor.page)
     const error: Ref<AnnetteError | null> = ref(null)
 
     // *********************************************
@@ -337,11 +323,11 @@ export default defineComponent({
         action: toAction(action.value as string),
         id: id.value as string,
         spaceId: action.value === 'create' ? id.value : undefined,
-        personId: action.value === 'create' ? personId.value : undefined,
+        personId: action.value === 'create' ? authStore.profile.id : undefined,
       }
       console.log('loadEntity')
       console.log(payload)
-      void store.dispatch('cmsPage/initPageEditor', payload)
+      void store.initPageEditor(payload)
     }
 
     const save = async () => {
@@ -353,15 +339,14 @@ export default defineComponent({
         // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
       } else if (action.value === 'create') {
         try {
-          const entity = await store.dispatch('cmsPage/createEditorPage')
+          const entity = await store.createEditorPage()
           void router.push({
             // @ts-ignore
             name: route.name,
-            // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
             params: {...route.params, action: 'edit', id: entity.id},
             query: route.query
           })
-          void store.dispatch('cmsPage/refreshAll')
+          void store.refreshAll()
         } catch (ex) {
           // @ts-ignore
           error.value = ex
@@ -394,13 +379,13 @@ export default defineComponent({
         id: id.value as string,
         file,
       }
-      await store.dispatch('cmsPage/removePageFile', payload)
+      await store.removePageFile(payload)
     }
 
     const fileUploaded = (info: any) => {
       // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
       const file = JSON.parse(info.xhr.response) as FileDescriptor
-      store.commit('cmsPage/editorFileUploaded', file)
+      store.editorFileUploaded(file)
       if (file.fileType === 'doc') {
         // eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-member-access
         docUploaderRef.value.removeUploadedFiles()
@@ -415,21 +400,21 @@ export default defineComponent({
     }
 
     const updateId = (data: string) => {
-      void store.commit('cmsPage/updateEditorId', data)
+      void store.updateEditorId(data)
     }
 
     const updateTitle = async (data: string) => {
-      void await store.dispatch('cmsPage/updateEditorTitle', data)
+      void await store.updateEditorTitle(data)
     }
 
     const updateAuthor = async () => {
       // eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-member-access
       const author = await principalSelectorDialog.value.showDialog()
-      void await store.dispatch('cmsPage/updateEditorAuthor', author)
+      void await store.updateEditorAuthor(author)
     }
 
     const updatePublicationStatus = async (data: boolean) => {
-      void await store.dispatch('cmsPage/updateEditorPublicationStatus', data)
+      void await store.updateEditorPublicationStatus(data)
     }
 
     const formatDate = (timestamp: Date) => {
@@ -439,38 +424,23 @@ export default defineComponent({
     const updatePublicationTimestamp = async (newTimestamp: string) => {
       const publicationTimestamp = date.extractDate(newTimestamp, 'YYYY-MM-DD HH:mm')
       if (publicationTimestamp.getFullYear() !== 1899) {
-        void await store.dispatch('cmsPage/updateEditorPublicationTimestamp', publicationTimestamp)
+        void await store.updateEditorPublicationTimestamp(publicationTimestamp)
       } else {
         console.log('error')
       }
     }
 
     const clearPublicationTimestamp = async () => {
-      void await store.dispatch('cmsPage/updateEditorPublicationTimestamp', undefined)
+      void await store.updateEditorPublicationTimestamp(undefined)
     }
 
-    const addPrincipal = async () => {
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-member-access
-      const principal = await principalSelectorDialog.value.showDialog()
-      await store.dispatch('cmsPage/assignEditorTargetPrincipal', principal)
+    const addTarget = async (principal: AnnettePrincipal) => {
+      await store.assignEditorTargetPrincipal(principal)
     }
 
 
-    const deletePrincipal = (principal: AnnettePrincipal) => {
-      quasar.notify({
-        type: 'negative',
-        message: 'Please confirm delete principal',
-        actions: [
-          {label: 'Cancel', color: 'white'},
-          {
-            label: 'Delete',
-            color: 'white',
-            handler: async () => {
-              await store.dispatch('cmsPage/unassignEditorTargetPrincipal', principal)
-            }
-          }
-        ]
-      })
+    const deleteTarget = async (principal: AnnettePrincipal) => {
+      await store.unassignEditorTargetPrincipal(principal)
     }
 
     return {
@@ -493,8 +463,8 @@ export default defineComponent({
       updatePublicationTimestamp,
       clearPublicationTimestamp,
       formatDate,
-      addPrincipal,
-      deletePrincipal,
+      addTarget,
+      deleteTarget,
 
       mediaUploaderRef,
       docUploaderRef,
@@ -502,19 +472,13 @@ export default defineComponent({
       deleteFile,
       downloadFile,
 
-
-    };
+    }
   }
-});
+})
 </script>
 
+
 <style>
-.markdown textarea {
-  font-family: Fira code, Fira Mono, Consolas, Menlo, Courier, monospace;
-  font-size: 14px;
-  line-height: 1.5;
-  padding: 5px;
-}
 
 .image-card {
   width: 100%;

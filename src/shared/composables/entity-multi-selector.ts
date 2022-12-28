@@ -1,21 +1,20 @@
-import {computed, ComputedRef, ref, watch} from 'vue';
-import {useStore} from 'src/store';
-import {InitInstancePayload, InstanceState, PagingMode, SetFilterPayload} from 'src/shared';
-import {Ref} from '@vue/reactivity';
+/* eslint-disable  @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/ban-ts-comment */
+
+import {computed, ComputedRef, Ref, ref, watch} from 'vue';
+import {InitInstancePayload, InstanceState, PagingMode, SetFilterPayload} from 'src/shared/store';
 
 
 export function useEntityMultiSelector<E, F>(
-  namespace: string,
+  store: any,
   instanceKey: string,
-  // @ts-ignore
   value: Ref<string[]>,
   emit: (event: 'update:modelValue', ids: string[]) => void,
   fixedFilterFn?: () => F
 ) {
-  const store = useStore()
 
   // eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-member-access
-  if (!store.getters[`${namespace}/instance`](instanceKey)) {
+  if (!store.instance(instanceKey)) {
     const initInstancePayload: InitInstancePayload<F> = {
       key: instanceKey,
       mode: PagingMode.Range,
@@ -24,24 +23,21 @@ export function useEntityMultiSelector<E, F>(
     if (fixedFilterFn) {
       initInstancePayload.filter = fixedFilterFn()
     }
-    void store.dispatch(`${namespace}/initInstance`, initInstancePayload)
+    void store.initInstance(initInstancePayload)
   } else if (fixedFilterFn) {
     const setFilterPayload: SetFilterPayload<F> = {
       key: instanceKey,
       filter: fixedFilterFn()
     }
-    void store.dispatch(`${namespace}/setFilter`, setFilterPayload)
-
+    void store.setFilter(setFilterPayload)
   }
 
-
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
   const model = ref(value.value)
 
   // eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-return,@typescript-eslint/no-unsafe-member-access
-  const instance: ComputedRef<InstanceState<F>> = computed(() => store.getters[`${namespace}/instance`](instanceKey))
+  const instance: ComputedRef<InstanceState<F>> = computed(() => store.instance(instanceKey))
   // eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-return,@typescript-eslint/no-unsafe-member-access
-  const items: ComputedRef<E[]> = computed(() => store.getters[`${namespace}/items`](instanceKey))
+  const items: ComputedRef<E[]> = computed(() => store.items(instanceKey))
 
   watch(value, (newValue) => {
       console.log('watch', newValue)
@@ -53,15 +49,13 @@ export function useEntityMultiSelector<E, F>(
   const select = (ids: string[]) => {
     // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
     model.value = ids
-    // @ts-ignore
     emit('update:modelValue', ids)
   }
 
   const setFilter = async (newFilter: string, update?: () => void) => {
     let fixedFilter = {}
     if (fixedFilterFn) fixedFilter = fixedFilterFn()
-    await store.dispatch(
-      `${namespace}/setFilter`,
+    await store.setFilter(
       {
         key: instanceKey,
         filter: {

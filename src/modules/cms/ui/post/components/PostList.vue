@@ -6,6 +6,9 @@
     :pagination="pagination"
     :loading="instance.loading"
     @request="onRequest">
+    <template v-slot:toolbar>
+      <slot name="toolbar"></slot>
+    </template>
     <template v-slot:row="props">
       <q-td>
         {{ props.row.title }}
@@ -34,74 +37,29 @@
         </span>
       </q-td>
       <q-td auto-width>
-        <q-btn flat round color="green" size="sm" icon="far fa-eye"
-               :to="{ name: 'cms.post', params: { action: 'view', id: props.row.id } }"/>
-        <q-btn flat round color="blue" size="sm" icon="far fa-edit"
-               :to="{ name: 'cms.post', params: { action: 'edit', id: props.row.id } }"/>
-        <q-btn flat round color="red" size="sm" icon="fas fa-trash" @click="deleteEntity(props.row.id)"/>
+        <default-row-toolbar :id="props.row.id"
+                             route-name="cms.post"
+                             view edit del @delete="deleteEntity"/>
       </q-td>
     </template>
   </entity-list>
 </template>
 
 <script lang="ts">
-import {defineComponent} from 'vue';
-import {useEntityList} from 'src/shared';
-import EntityList from 'src/shared/components/EntityList.vue';
-import {Post, PostFilter} from 'src/modules/cms';
-import {useStore} from 'src/store';
+import {defineComponent, ref, useSlots} from 'vue';
+import EntityList from 'src/shared/components/crud/EntityList.vue';
+import {useEntityList} from 'src/shared/composables';
+import {useI18n} from 'vue-i18n';
+import DefaultRowToolbar from 'src/shared/components/crud/DefaultRowToolbar.vue';
+import {useDeleteEntity} from 'src/shared/composables/delete-entity';
+import {Post, PostFilter, usePostStore} from 'src/modules/cms';
 import {date, useQuasar} from 'quasar';
 import FeaturedField from 'src/modules/cms/ui/post/components/FeaturedField.vue';
 
-const COLUMNS = [
-
-  {
-    name: 'title',
-    align: 'left',
-    label: 'Title',
-    field: 'title',
-    sortable: true,
-    classes: 'text-truncate'
-  },
-  {
-    name: 'blogId',
-    align: 'left',
-    label: 'Blog Id',
-    field: 'blogId',
-    sortable: true,
-    classes: 'text-truncate'
-  },
-  {
-    name: 'featured',
-    align: 'left',
-    label: 'Featured',
-    field: 'featured',
-    sortable: true,
-    classes: 'text-truncate'
-  },
-  {
-    name: 'publicationStatus',
-    align: 'left',
-    label: 'Status',
-    field: 'publicationStatus',
-    sortable: true,
-    classes: 'text-truncate'
-  },
-  {
-    name: 'publicationTimestamp',
-    align: 'left',
-    label: 'Date',
-    field: 'publicationTimestamp',
-    sortable: true,
-    classes: 'text-truncate'
-  }
-]
-
-const NAMESPACE = 'cmsPost';
 
 export default defineComponent({
   name: 'PostList',
-  components: {FeaturedField, EntityList},
+  components: {FeaturedField, DefaultRowToolbar, EntityList},
   props: {
     instanceKey: {
       type: String,
@@ -109,14 +67,62 @@ export default defineComponent({
     }
   },
   setup(props) {
-    const store = useStore()
+    const i18n = useI18n()
+
+    const columns = [
+      {
+        name: 'title',
+        align: 'left',
+        label: i18n.t('annette.cms.post.field.title'),
+        field: 'title',
+        sortable: true,
+        classes: 'text-truncate'
+      },
+      {
+        name: 'blogId',
+        align: 'left',
+        label: i18n.t('annette.cms.post.field.blogId'),
+        field: 'blogId',
+        sortable: true,
+        classes: 'text-truncate'
+      },
+      {
+        name: 'featured',
+        align: 'left',
+        label: i18n.t('annette.cms.post.field.featured'),
+        field: 'featured',
+        sortable: true,
+      },
+      {
+        name: 'publicationStatus',
+        align: 'left',
+        label: i18n.t('annette.cms.post.field.publicationStatus'),
+        field: 'publicationStatus',
+        sortable: true,
+      },
+      {
+        name: 'publicationTimestamp',
+        align: 'left',
+        label: i18n.t('annette.cms.post.field.publicationTimestamp'),
+        field: 'publicationTimestamp',
+        sortable: true,
+        classes: 'text-truncate'
+      }
+    ]
+
+    const store = usePostStore()
     const quasar = useQuasar()
 
     const entityList = useEntityList<Post, PostFilter>(
-      NAMESPACE,
+      store,
       props.instanceKey,
-      'Please confirm delete post.'
     )
+
+    const deleteEntity = useDeleteEntity(
+      store,
+      i18n.t('annette.cms.post.deleteQuestion'),
+    )
+
 
     const publish = (id: string) => {
       quasar.notify({
@@ -128,7 +134,7 @@ export default defineComponent({
             label: 'Publish',
             color: 'white',
             handler: () => {
-              store.dispatch('cmsPost/publishPost', id)
+              store.publishPost(id)
                 // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
                 .catch(ex => entityList.showErrorNotification(ex.code))
             }
@@ -151,7 +157,7 @@ export default defineComponent({
             label: 'Unpublish',
             color: 'white',
             handler: () => {
-              store.dispatch('cmsPost/unpublishPost', id)
+              store.unpublishPost(id)
                 // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
                 .catch(ex => entityList.showErrorNotification(ex.code))
             }
@@ -161,8 +167,9 @@ export default defineComponent({
     }
 
     return {
-      columns: COLUMNS,
+      columns,
       ...entityList,
+      deleteEntity: deleteEntity.deleteEntity,
       formatDate,
       publish,
       unpublish

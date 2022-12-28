@@ -1,0 +1,466 @@
+{
+  "annette": {
+    "application": {
+      "application": {
+        "deleteQuestion": "Please confirm delete application.",
+        "field": {
+          "backendUrl": "Backend URL",
+          "frontendUrl": "Frontend URL",
+          "icon": "Icon",
+          "id": "Id",
+          "label": "Label",
+          "labelDescription": "Label Description",
+          "name": "Name",
+          "translations": "Translations"
+        },
+        "title": "Application",
+        "titlePl": "Applications",
+        "translationNotAssigned": "Translations not assigned"
+      },
+      "language": {
+        "deleteQuestion": "Please confirm delete language.",
+        "field": {
+          "id": "Id",
+          "name": "Name"
+        },
+        "title": "Language",
+        "titlePl": "Languages"
+      },
+      "translation": {
+        "deleteQuestion": "Please confirm delete translation.",
+        "field": {
+          "id": "Id",
+          "name": "Name",
+          "translations": "Translations"
+        },
+        "title": "Translation",
+        "titlePl": "Translations",
+        "translationLanguages": {
+          "deleteQuestion": "Please confirm delete language.",
+          "title": "Translation JSON for {language}"
+        }
+      }
+    },
+    "authorization": {
+      "authRole": {
+        "addPermission": "Add Permission",
+        "arg1": "Arg 1",
+        "arg2": "Arg 2",
+        "arg3": "Arg 3",
+        "deletePermissionQuestion": "Please confirm delete permission.",
+        "deleteQuestion": "Please confirm delete authorization role.",
+        "field": {
+          "description": "Description",
+          "id": "Id",
+          "name": "Name"
+        },
+        "permission": "Permission",
+        "permissionId": "Permission Id",
+        "permissions": "Permissions",
+        "title": "Authorization Role",
+        "titlePl": "Authorization Roles"
+      }
+    },
+    "bpm": {
+      "bpmModel": {
+        "deleteQuestion": "Please confirm delete BPM model.",
+        "field": {
+          "code": "Code",
+          "description": "Description",
+          "id": "Id",
+          "name": "Name",
+          "notation": "Notation",
+          "xml": "Schema"
+        },
+        "page": {
+          "generalTab": "General",
+          "modelTab": "Model",
+          "xmlTab": "XML"
+        },
+        "title": "BPM Model",
+        "titlePl": "BPM Models"
+      },
+      "businessProcess": {
+        "deleteQuestion": "Please confirm delete data schema.",
+        "field": {
+          "bpmModelId": "BPM Model",
+          "dataSchemaId": "Data Schema",
+          "description": "Description",
+          "id": "Id",
+          "idType": "Id",
+          "keyType": "Key",
+          "name": "Name",
+          "processDefinition": "Process Definition",
+          "processDefinitionType": "Process Definition Type",
+          "var": {
+            "caption": "Caption",
+            "datatype": "Data Type",
+            "default": "Default Value",
+            "name": "Name",
+            "variableName": "Variable Name"
+          },
+          "variables": "Variables"
+        },
+        "page": {
+          "generalTab": "General",
+          "variablesTab": "Variables"
+        },
+        "title": "Business Process",
+        "titlePl": "Business Processes"
+      },
+      "dataSchema": {
+        "deleteQuestion": "Please confirm delete data schema.",
+        "field": {
+          "description": "Description",
+          "id": "Id",
+          "name": "Name",
+          "var": {
+            "caption": "Caption",
+            "datatype": "Data Type",
+            "default": "Default Value",
+            "name": "Name",
+            "variableName": "Variable Name"
+          },
+          "variables": "Variables"
+        },
+        "page": {
+          "generalTab": "General",
+          "variablesTab": "Variables"
+        },
+        "title": "Data Schema",
+        "titlePl": "Data Schemas"
+      }
+    },
+    "orgStructure": {
+      "category": {
+        "allowedOrgItems": "Allowed organizational items",
+        "deleteQuestion": "Please confirm delete category.",
+        "field": {
+          "forOrganization": "For organization",
+          "forPosition": "For position",
+          "forUnit": "For unit",
+          "id": "Id",
+          "name": "Name"
+        },
+        "organization": "Organization",
+        "position": "Position",
+        "title": "Category",
+        "titlePl": "Categories",
+        "unit": "Unit"
+      },
+      "orgItem": {
+        "field": {
+          "categoryId": "Category",
+          "externalId": "External Id",
+          "id": "Id",
+          "itemType": "Item type",
+          "level": "Level",
+          "name": "Name",
+          "orgId": "Organization Id",
+          "parentId": "Parent Id",
+          "rootPath": "Root path",
+          "source": "Source"
+        }
+      },
+      "orgRole": {
+        "deleteQuestion": "Please confirm delete organization role.",
+        "field": {
+          "description": "Description",
+          "id": "Id",
+          "name": "Name"
+        },
+        "title": "Organization Role",
+        "titlePl": "Organization Roles"
+      },
+      "organization": {
+        "deleteOrgItemQuestion": "Please confirm delete organization item.",
+        "deleteQuestion": "Please confirm delete organization.",
+        "editTitle": "Edit organization",
+        "title": "Organization",
+        "titlePl": "Organizations",
+        "viewTitle": "View organization"
+      }
+    },
+    "person": {
+      "category": {
+        "deleteQuestion": "Please confirm delete category.",
+        "field": {
+          "id": "Id",
+          "name": "Name"
+        },
+        "title": "Category",
+        "titlePl": "Categories"
+      },
+      "person": {
+        "deleteQuestion": "Please confirm delete person.",
+        "field": {
+          "categoryId": "Category",
+          "email": "Email",
+          "externalId": "External Id",
+          "firstname": "First name",
+          "id": "Id",
+          "lastname": "Last name",
+          "middlename": "Middle name",
+          "phone": "Phone",
+          "source": "Source"
+        },
+        "title": "Person",
+        "titlePl": "Persons"
+      }
+    },
+    "principalGroup": {
+      "category": {
+        "deleteQuestion": "Please confirm delete category.",
+        "field": {
+          "id": "Id",
+          "name": "Name"
+        },
+        "title": "Category",
+        "titlePl": "Categories"
+      },
+      "group": {
+        "deleteQuestion": "Please confirm delete principal group.",
+        "field": {
+          "categoryId": "Category",
+          "description": "Description",
+          "id": "Id",
+          "name": "Name",
+          "principals": "Principals"
+        },
+        "title": "Principal group",
+        "titlePl": "Principal groups"
+      }
+    },
+    "serviceCatalog": {
+      "category": {
+        "deleteQuestion": "Please confirm delete category.",
+        "field": {
+          "id": "Id",
+          "name": "Name"
+        },
+        "title": "Category",
+        "titlePl": "Categories"
+      },
+      "scope": {
+        "activateQuestion": "Please confirm activate scope.",
+        "deactivateQuestion": "Please confirm deactivate scope.",
+        "deleteQuestion": "Please confirm delete scope.",
+        "field": {
+          "active": "Active",
+          "categoryId": "Category",
+          "children": "Service Items",
+          "description": "Description",
+          "id": "Id",
+          "name": "Name"
+        },
+        "title": "Scope",
+        "titlePl": "Scopes"
+      },
+      "serviceItem": {
+        "activateQuestion": "Please confirm activate service item.",
+        "createGroup": "Create Group",
+        "createService": "Create Service",
+        "deactivateQuestion": "Please confirm deactivate service item.",
+        "deleteQuestion": "Please confirm delete service item.",
+        "field": {
+          "active": "Active",
+          "children": "Service Items",
+          "description": "Description",
+          "icon": "Icon",
+          "id": "Id",
+          "label": "Label",
+          "labelDescription": "Label description",
+          "link": "Link",
+          "name": "Name",
+          "type": "Type"
+        },
+        "groupTitle": "Service Group",
+        "groupTitlePl": "Service Groups",
+        "serviceTitle": "Service",
+        "serviceTitlePl": "Services",
+        "title": "Service Item",
+        "titlePl": "Service Items"
+      }
+    },
+    "cms": {
+      "blogCategory": {
+        "deleteQuestion": "Please confirm delete blog category.",
+        "field": {
+          "id": "Id",
+          "name": "Name"
+        },
+        "title": "Blog category",
+        "titlePl": "Blog categories"
+      },
+      "blog": {
+        "deleteQuestion": "Please confirm delete blog.",
+        "activateQuestion": "Please confirm activate blog.",
+        "deactivateQuestion": "Please confirm deactivate blog.",
+        "field": {
+          "categoryId": "Category",
+          "description": "Description",
+          "id": "Id",
+          "name": "Name",
+          "active": "Active",
+          "authors": "Authors",
+          "targets": "Target principals"
+        },
+        "title": "Blog",
+        "titlePl": "Blogs"
+      },
+      "blogView": {
+        "field": {
+          "subscribed": "Subscribed"
+        }
+      },
+      "post": {
+        "deleteQuestion": "Please confirm delete post.",
+        "publishQuestion": "Are you sure to publish post?",
+        "unpublishQuestion": "Are you sure to unpublish post?",
+        "field": {
+          "id": "Id",
+          "blogId": "Blog",
+          "featured": "Featured",
+          "title": "Title",
+          "authorId": "Author",
+          "introContent": "Intro Content",
+          "content": "Content",
+          "publicationStatus": "Status",
+          "publicationTimestamp": "Date",
+          "targets": "Target Principals"
+        },
+        "title": "Post",
+        "titlePl": "Posts"
+      },
+      "postView": {
+        "field": {
+          "id": "Id",
+          "blogId": "Blog",
+          "featured": "Featured",
+          "title": "Title",
+          "authorId": "Author",
+          "introContent": "Intro Content",
+          "content": "Content",
+          "publicationTimestamp": "Date"
+        },
+        "title": "Post",
+        "titlePl": "Posts"
+      },
+      "spaceCategory": {
+        "deleteQuestion": "Please confirm delete space category.",
+        "field": {
+          "id": "Id",
+          "name": "Name"
+        },
+        "title": "Space category",
+        "titlePl": "Space categories"
+      },
+      "space": {
+        "deleteQuestion": "Please confirm delete space.",
+        "activateQuestion": "Please confirm activate space.",
+        "deactivateQuestion": "Please confirm deactivate space.",
+        "field": {
+          "categoryId": "Category",
+          "description": "Description",
+          "id": "Id",
+          "name": "Name",
+          "active": "Active",
+          "authors": "Authors",
+          "targets": "Target principals"
+        },
+        "title": "Space",
+        "titlePl": "Spaces"
+      },
+      "page": {
+        "deleteQuestion": "Please confirm delete page.",
+        "publishQuestion": "Are you sure to publish page?",
+        "unpublishQuestion": "Are you sure to unpublish page?",
+        "field": {
+          "id": "Id",
+          "spaceId": "Space",
+          "title": "Title",
+          "authorId": "Author",
+          "content": "Content",
+          "publicationStatus": "Status",
+          "publicationTimestamp": "Date",
+          "targets": "Target Principals"
+        },
+        "title": "Page",
+        "titlePl": "Pages"
+      },
+      "pageView": {
+        "field": {
+          "id": "Id",
+          "spaceId": "Space",
+          "title": "Title",
+          "authorId": "Author",
+          "content": "Content",
+          "publicationTimestamp": "Date"
+        },
+        "title": "Page",
+        "titlePl": "Pages"
+      }
+    },
+    "shared": {
+      "attribute": {
+        "titlePl": "Attributes"
+      },
+      "crud": {
+        "activate": "Activate",
+        "cancel": "Cancel",
+        "changed": "Changed",
+        "copy": "Copy",
+        "create": "Create",
+        "deactivate": "Deactivate",
+        "del": "Delete",
+        "edit": "Edit",
+        "fieldRequired": "Field is required",
+        "filter": "Filter",
+        "noResults": "No results",
+        "ok": "Ok",
+        "refresh": "Refresh",
+        "save": "Save",
+        "saved": "Saved",
+        "updatedAt": "Updated At",
+        "updatedBy": "Updated By",
+        "view": "View"
+      },
+      "filter": {
+        "apply": "Apply",
+        "clear": "Clear",
+        "filter": "Filter"
+      },
+      "principalListInput": {
+        "notAssigned": "Principals not assigned",
+        "deleteQuestion": "Please confirm delete principal"
+      }
+    }
+  },
+  "annetteConsole": {
+    "mainMenu": {
+      "action": "Open"
+    },
+    "notAuthenticatedHome": {
+      "descriptionHtml": "In Annette Console you can manage the following entities:\n<ul>\n<li>Languages, translations and applications</li>\n<li>Person catalog</li>\n<li>Organizational structures and roles</li>\n<li>Authorization roles and assign permissions</li>\n<li>Content management system (CMS)</li>\n<li>Business process management system (BPMS)</li>\n</ul>",
+      "signIn": "Sign In",
+      "signInDescription": "Please sign in to get access to Annette Console",
+      "title": "Annette Console"
+    },
+    "toolbar": {
+      "notificationsTooltip": "Notifications",
+      "profileMenu": {
+        "language": "Language",
+        "profile": "Profile",
+        "settings": "Settings",
+        "signIn": "Sign In",
+        "signOut": "Sign Out"
+      },
+      "searchTooltip": "Search",
+      "servicesTooltip": "Services",
+      "title": "Annette Console"
+    }
+  },
+  "debug": {
+    "error": "Error with param1 = {param1}"
+  }
+}

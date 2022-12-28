@@ -1,24 +1,27 @@
 <template>
   <div>
-    <EntityList
+    <entity-list
       v-if="instance && items"
       :items="items"
       :columns="columns"
       :pagination="pagination"
       :loading="instance.loading"
       @request="onRequest">
+      <template v-slot:toolbar>
+        <slot name="toolbar"></slot>
+      </template>
       <template v-slot:row="props">
         <q-td>
-          <ApplicationNameView :application-id="props.row.applicationId" />
+          <application-name-view :application-id="props.row.applicationId" />
         </q-td>
         <q-td>
-          <PrincipalViewItem :principal="props.row.principal"/>
+          <principal-view-item :principal="props.row.principal"/>
         </q-td>
         <q-td>
           {{ props.row.priority }}
         </q-td>
         <q-td>
-          <PageTitleView :page-id="props.row.pageId" />
+          <page-title-view :page-id="props.row.pageId" />
         </q-td>
         <q-td auto-width>
           <q-btn flat round color="blue" size="sm" icon="far fa-edit"
@@ -26,61 +29,25 @@
           <q-btn flat round color="red" size="sm" icon="fas fa-trash" @click="deleteEntity(props.row.id)"/>
         </q-td>
       </template>
-    </EntityList>
-    <HomePageFormDialog :show="showDialog" :id="id" :action="action" @close="close"/>
+    </entity-list>
+    <home-page-form-dialog :show="showDialog" :id="id" :action="action" @close="close"/>
   </div>
 </template>
 
 <script lang="ts">
 import {defineComponent, ref} from 'vue';
-import {useEntityList} from 'src/shared';
-import EntityList from 'src/shared/components/EntityList.vue';
-import {HomePage, HomePageFilter} from 'src/modules/cms';
+import {HomePage, HomePageFilter, useHomePageStore} from 'src/modules/cms';
+import {useDeleteEntity, useEntityList} from 'src/shared/composables';
+import {useI18n} from 'vue-i18n';
+import EntityList from 'src/shared/components/crud/EntityList.vue';
+import ApplicationNameView from 'src/modules/application/ui/application/components/ApplicationNameView.vue';
 import PrincipalViewItem from 'src/shared/components/principal-view/PrincipalViewItem.vue';
-import HomePageFormDialog from 'src/modules/cms/ui/home-page/components/HomePageFormDialog.vue';
-import ApplicationNameView from 'src/modules/application/application/components/ApplicationNameView.vue';
 import PageTitleView from 'src/modules/cms/ui/page-view/components/PageTitleView.vue';
-
-const COLUMNS = [
-  {
-    name: 'applicationId',
-    required: true,
-    label: 'Application Id',
-    align: 'left',
-    field: 'applicationId',
-    sortable: true,
-  },
-  {
-    name: 'principal',
-    align: 'left',
-    label: 'Principal',
-    field: 'principal',
-    sortable: false,
-    classes: 'text-truncate'
-  },
-  {
-    name: 'priority',
-    align: 'left',
-    label: 'Priority',
-    field: 'priority',
-    sortable: true,
-    classes: 'text-truncate'
-  },
-  {
-    name: 'pageId',
-    align: 'left',
-    label: 'Page Id',
-    field: 'pageId',
-    sortable: false,
-    classes: 'text-truncate',
-  }
-]
-
-const NAMESPACE = 'cmsHomePage';
+import HomePageFormDialog from './HomePageFormDialog.vue';
 
 export default defineComponent({
   name: 'HomePageList',
-  components: {PageTitleView, ApplicationNameView, HomePageFormDialog, PrincipalViewItem, EntityList},
+  components: {HomePageFormDialog, PageTitleView, PrincipalViewItem, ApplicationNameView, EntityList},
   props: {
     instanceKey: {
       type: String,
@@ -89,11 +56,54 @@ export default defineComponent({
   },
   setup(props) {
 
+    const columns = [
+      {
+        name: 'applicationId',
+        required: true,
+        label: 'Application Id',
+        align: 'left',
+        field: 'applicationId',
+        sortable: true,
+      },
+      {
+        name: 'principal',
+        align: 'left',
+        label: 'Principal',
+        field: 'principal',
+        sortable: false,
+        classes: 'text-truncate'
+      },
+      {
+        name: 'priority',
+        align: 'left',
+        label: 'Priority',
+        field: 'priority',
+        sortable: true,
+        classes: 'text-truncate'
+      },
+      {
+        name: 'pageId',
+        align: 'left',
+        label: 'Page Id',
+        field: 'pageId',
+        sortable: false,
+        classes: 'text-truncate',
+      }
+    ]
+
+    const store = useHomePageStore()
+    const i18n = useI18n()
+
     const entityList = useEntityList<HomePage, HomePageFilter>(
-      NAMESPACE,
+      store,
       props.instanceKey,
-      'Please confirm unassign home page.'
     )
+
+    const deleteEntity = useDeleteEntity(
+      store,
+      i18n.t('annette.cms.homePage.deleteQuestion'),
+    )
+
 
     const showDialog = ref(false)
     const action = ref('edit')
@@ -111,11 +121,12 @@ export default defineComponent({
 
 
     return {
-      columns: COLUMNS,
+      columns,
       ...entityList,
       showDialog,
       action,
       id,
+      deleteEntity: deleteEntity.deleteEntity,
       editEntity,
       close
     };

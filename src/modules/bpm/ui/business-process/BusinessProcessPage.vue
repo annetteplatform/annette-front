@@ -1,28 +1,31 @@
 <template>
   <entity-page narrow
-               caption="Business process"
+               :caption="$t('annette.bpm.businessProcess.title')"
                :show-form="!!entityModel"
                :error="error"
+               :action="action"
+               :hide-status-bar="action != 'create' "
                @clearError="clearError">
     <template v-slot:toolbar>
-      <q-btn class="q-mr-md" outline color="primary"
-             label="Data Schemas"
-             :to="{name: 'bpm.businessProcesses'}"/>
-      <q-btn class="q-mr-md" outline color="primary"
-             v-if="action === 'edit'"
-             label="View"
-             :to="{name: 'bpm.businessProcess', params: { action: 'view', id}}"/>
-      <q-btn class="q-mr-md" outline color="primary"
-             v-if="action === 'view'"
-             label="Edit"
-             :to="{name: 'bpm.businessProcess', params: { action: 'edit', id}}"/>
-      <q-btn color="primary"
-             v-if="entityModel && action === 'create'"
-             label="Save"
-             @click="save"/>
+      <default-entity-page-toolbar :action="action" :id="id"
+                                   route-name="bpm.businessProcess"
+                                   :back-label="$t('annette.bpm.businessProcess.titlePl')"
+                                   back-route-name="bpm.businessProcesses"/>
     </template>
-    <template v-slot:status>
+    <template v-slot:save-toolbar>
+      <div class="row">
+        <q-btn v-if="action == 'edit'" outline dense
+               class="q-mr-md"
+               color="primary"
+               :label="$t('annette.shared.crud.cancel')"
+               :to="{ name: 'bpm.businessProcess', params: { action: 'view', id } }"/>
+        <q-btn dense
+               color="primary"
+               :label="$t('annette.shared.crud.save')"
+               @click="save"/>
+      </div>
     </template>
+
     <template v-slot:default>
       <q-tabs
         v-model="tab"
@@ -33,97 +36,109 @@
         align="justify"
         narrow-indicator
       >
-        <q-tab name="general" label="General"/>
-        <q-tab :disable="action ==='create'" name="vars" label="Variables"/>
+        <q-tab name="general"
+               :label="$t('annette.bpm.businessProcess.page.generalTab')"/>
+        <q-tab :disable="action ==='create'" name="vars"
+               :label="$t('annette.bpm.businessProcess.page.variablesTab')"/>
       </q-tabs>
 
       <q-separator/>
 
       <q-tab-panels v-model="tab" animated>
         <q-tab-panel name="general">
-
-          <div class="row">
-            <q-input class="col-md-4 col-sm-12 col-xs-12 "
+          <div class="row q-pb-sm">
+            <q-input class="col-md-4 col-sm-12 col-xs-12 " stack-label dense
                      v-model="entityModel.id"
-                     :rules="[val => !!val || 'Field is required']"
+                     :rules="[val => !!val || $t('annette.shared.crud.fieldRequired')]"
                      :readonly="action!=='create'"
                      ref="idRef"
-                     label="Id"/>
+                     :label="$t('annette.bpm.businessProcess.field.id')"/>
           </div>
-          <div class="row">
-            <q-input class="col-md-12 col-sm-12 col-xs-12 "
+
+          <div class="row q-pb-sm ">
+            <q-input class="col-md-12 col-sm-12 col-xs-12 q-pr-md" stack-label dense
                      v-model="entityModel.name"
                      @update:model-value="updateName"
                      debounce="700"
-                     :rules="[val => !!val || 'Field is required']"
+                     :rules="[val => !!val || $t('annette.shared.crud.fieldRequired')]"
                      :readonly="action ==='view'"
                      ref="nameRef"
-                     label="Name"/>
+                     :label="$t('annette.bpm.businessProcess.field.name')"/>
           </div>
-          <div class="row">
+
+          <div class="row q-pb-sm">
             <q-field class="col-md-3 col-sm-12 col-xs-12" borderless
-                     label="Process Definition Type" stack-label
+                     :label="$t('annette.bpm.businessProcess.field.processDefinitionType')"
+                     stack-label
                      :readonly="action ==='view'">
               <template v-slot:control>
                 <q-radio v-model="entityModel.processDefinitionType"
                          @update:model-value="updateProcessDefinitionType"
                          :disable="action ==='view'"
-                         val="key" label="Key"/>
+                         val="key"
+                         :label="$t('annette.bpm.businessProcess.field.keyType')"/>
                 <q-radio v-model="entityModel.processDefinitionType"
                          @update:model-value="updateProcessDefinitionType"
                          :disable="action ==='view'"
-                         val="id" label="Id"/>
+                         val="id"
+                         :label="$t('annette.bpm.businessProcess.field.idType')"/>
               </template>
             </q-field>
             <q-input class="col-md-9 col-sm-12 col-xs-12 "
                      v-model="entityModel.processDefinition"
                      @update:model-value="updateProcessDefinition"
                      debounce="700"
-                     :rules="[val => !!val || 'Field is required']"
+                     :rules="[val => !!val || $t('annette.shared.crud.fieldRequired')]"
                      :readonly="action ==='view'"
                      ref="processDefinitionIdRef"
-                     label="Process Definition Id"/>
+                     :label="$t('annette.bpm.businessProcess.field.processDefinition')"/>
           </div>
-          <div class="row">
+          <div class="row q-pb-sm">
             <bpm-model-selector v-model="entityModel.bpmModelId"
                                 @update:model-value="updateBpmModelId"
                                 :readonly="action ==='view'"/>
           </div>
-          <div class="row">
+          <div class="row q-pb-sm">
             <data-schema-selector v-model="entityModel.dataSchemaId"
                                   @update:model-value="updateDataSchemaId"
                                   :readonly="action ==='view'"/>
           </div>
 
-          <div class="row">
-            <q-input
-              class="col-md-12 col-sm-12 col-xs-12"
-              v-model="entityModel.description"
-              @update:model-value="updateDescription"
-              debounce="700"
-              label="Description"
-              type="textarea"
-              :readonly="action === 'view'"
-            />
+          <div class="row q-pb-sm ">
+            <q-input class="col-md-12 col-sm-12 col-xs-12" stack-label dense
+                     type="textarea"
+                     autogrow
+                     v-model="entityModel.description"
+                     @update:model-value="updateDescription"
+                     debounce="700"
+                     :readonly="action ==='view'"
+                     :label="$t('annette.bpm.businessProcess.field.description')"/>
           </div>
         </q-tab-panel>
+
         <q-tab-panel name="vars">
           <div class="row q-mt-md" v-if="action !== 'create'">
-            <BusinessProcessVariableList :variables="entityModel.variables"
-                                         :readonly="action === 'view'"
-                                         @store="storeVariable"
-                                         @delete="deleteVariable"/>
+            <business-process-variable-list :variables="entityModel.variables"
+                                       :readonly="action === 'view'"
+                                       @store="storeVariable"
+                                       @delete="deleteVariable"/>
           </div>
         </q-tab-panel>
+
+
       </q-tab-panels>
     </template>
   </entity-page>
 </template>
 
 <script lang="ts">
+/* eslint-disable @typescript-eslint/ban-ts-comment */
 import {defineComponent, ref} from 'vue';
-import EntityPage from 'src/shared/components/EntityPage.vue';
-import {useStore} from 'src/store';
+
+import {useQuasar} from 'quasar';
+import EntityPage from 'src/shared/components/crud/EntityPage.vue';
+import DefaultEntityPageToolbar from 'src/shared/components/crud/DefaultEntityPageToolbar.vue';
+import {useI18n} from 'vue-i18n';
 import {useSyncEntityPage} from 'src/shared/composables/sync-entity-page';
 import {
   BusinessProcess,
@@ -134,14 +149,13 @@ import {
   UpdateBusinessProcessDescriptionPayloadDto,
   UpdateBusinessProcessNamePayloadDto,
   UpdateBusinessProcessProcessDefinitionPayloadDto,
+  useBusinessProcessStore
 } from 'src/modules/bpm';
-import BusinessProcessVariableList
-  from 'src/modules/bpm/ui/business-process/components/BusinessProcessVariableList.vue';
+import BusinessProcessVariableList from './components/BusinessProcessVariableList.vue';
 import BpmModelSelector from 'src/modules/bpm/ui/bpm-model/components/BpmModelSelector.vue';
 import DataSchemaSelector from 'src/modules/bpm/ui/data-schema/components/DataSchemaSelector.vue';
 
-
-function emptyEntity(): BusinessProcess {
+function emptyEntity(id?: string, type?: string): BusinessProcess {
   return {
     id: '',
     name: '',
@@ -152,27 +166,20 @@ function emptyEntity(): BusinessProcess {
   }
 }
 
-const NAMESPACE = 'bpmBusinessProcess';
-
 export default defineComponent({
   name: 'BusinessProcessPage',
-  components: {DataSchemaSelector, BpmModelSelector, BusinessProcessVariableList, EntityPage},
+  components: {DataSchemaSelector, BpmModelSelector, BusinessProcessVariableList, DefaultEntityPageToolbar, EntityPage},
   props: {
     id: String,
-    action: String
+    action: String,
+    options: String
   },
   setup(props) {
-    const store = useStore()
     const tab = ref('general')
-    const editor = ref()
-    const options = {
-      wrap: 140
-    }
 
     const idRef = ref()
     const nameRef = ref()
 
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const formHasError = (entity?: BusinessProcess | null): boolean => {
       // eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-member-access
       idRef.value.validate()
@@ -183,12 +190,17 @@ export default defineComponent({
       return !!nameRef.value.hasError || !!idRef.value.hasError
     }
 
+    const store = useBusinessProcessStore()
+    const quasar = useQuasar()
+    const i18n = useI18n()
+
     const entityPage = useSyncEntityPage<BusinessProcess>({
-      namespace: NAMESPACE,
+      store,
       emptyEntity,
       formHasError,
       props,
     })
+
 
     const updateName = (data: string) => {
       const payload: UpdateBusinessProcessNamePayloadDto = {
@@ -197,7 +209,7 @@ export default defineComponent({
         name: data
       }
       void entityPage.update(() => {
-        return store.dispatch('bpmBusinessProcess/updateEntityName', payload) as Promise<BusinessProcess>
+        return store.updateEntityName(payload)
       })
     }
 
@@ -210,9 +222,10 @@ export default defineComponent({
         processDefinition: entityPage.entityModel.value?.processDefinition
       }
       void entityPage.update(() => {
-        return store.dispatch('bpmBusinessProcess/updateEntityProcessDefinition', payload) as Promise<BusinessProcess>
+        return store.updateEntityProcessDefinition(payload)
       })
     }
+
 
     const updateProcessDefinition = (data: string) => {
       const payload: UpdateBusinessProcessProcessDefinitionPayloadDto = {
@@ -223,7 +236,7 @@ export default defineComponent({
         processDefinition: data
       }
       void entityPage.update(() => {
-        return store.dispatch('bpmBusinessProcess/updateEntityProcessDefinition', payload) as Promise<BusinessProcess>
+        return store.updateEntityProcessDefinition(payload)
       })
     }
 
@@ -234,7 +247,7 @@ export default defineComponent({
         bpmModelId: data
       }
       void entityPage.update(() => {
-        return store.dispatch('bpmBusinessProcess/updateEntityBpmModel', payload) as Promise<BusinessProcess>
+        return store.updateEntityBpmModel(payload)
       })
     }
 
@@ -245,7 +258,7 @@ export default defineComponent({
         dataSchemaId: data
       }
       void entityPage.update(() => {
-        return store.dispatch('bpmBusinessProcess/updateEntityDataSchema', payload) as Promise<BusinessProcess>
+        return store.updateEntityDataSchema(payload)
       })
     }
 
@@ -256,30 +269,28 @@ export default defineComponent({
         description: data
       }
       void entityPage.update(() => {
-        return store.dispatch('bpmBusinessProcess/updateEntityDescription', payload) as Promise<BusinessProcess>
+        return store.updateEntityDescription(payload)
       })
     }
 
     const storeVariable = (payload: StoreBusinessProcessVariablePayloadDto) => {
       payload.businessProcessId = entityPage.entityModel.value?.id as string,
-        void entityPage.update(() => {
-          return store.dispatch('bpmBusinessProcess/storeBusinessProcessVariable', payload) as Promise<BusinessProcess>
-        })
+      void entityPage.update(() => {
+        return store.storeBusinessProcessVariable(payload)
+      })
     }
 
     const deleteVariable = (payload: DeleteBusinessProcessVariablePayloadDto) => {
       payload.businessProcessId = entityPage.entityModel.value?.id as string,
-        void entityPage.update(() => {
-          return store.dispatch('bpmBusinessProcess/deleteBusinessProcessVariable', payload) as Promise<BusinessProcess>
-        })
+      void entityPage.update(() => {
+        return store.deleteBusinessProcessVariable(payload)
+      })
     }
 
     return {
       idRef,
       nameRef,
       tab,
-      editor,
-      options,
       ...entityPage,
       updateName,
       updateProcessDefinitionType,
@@ -289,7 +300,7 @@ export default defineComponent({
       updateDescription,
       storeVariable,
       deleteVariable
-    };
+    }
   }
-});
+})
 </script>

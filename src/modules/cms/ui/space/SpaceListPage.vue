@@ -1,46 +1,51 @@
 <template>
-  <entity-list-page narrow caption="Spaces" :namespace="namespace" :instance-key="instanceKey" >
+  <entity-list-page narrow
+                    :caption="$t('annette.cms.space.titlePl')"
+                    :message="instance.message"
+                    @closeMessage="closeMessage">
     <template v-slot:toolbar>
-      <q-btn class="q-mr-md" outline color="primary"
-             label="Refresh"
-             @click="refreshList"/>
-      <q-btn color="primary"
-             label="Create"
-             :to="{name: 'cms.space', params: {action: 'create', id: 'new'}}"/>
+      <default-list-page-toolbar @refresh="refreshList"/>
     </template>
     <template v-slot:filter>
-      <simple-filter-form class="q-mb-md"
-                          :filter="instance.filter"
-                          @filterChanged="onFilterChanged"/>
+      <simple-filter-form
+        :filter="instance.filter"
+        @filterChanged="onFilterChanged"/>
     </template>
     <template v-slot:default>
-      <space-list class="q-mb-md"
-                   :instance-key="instanceKey"/>
+      <space-list
+        :instance-key="instanceKey">
+        <template v-slot:toolbar>
+         <default-list-toolbar create create-route-name="cms.space"/>
+        </template>
+      </space-list>
     </template>
   </entity-list-page>
 </template>
 
-<script lang="ts">
-import {defineComponent} from 'vue';
-import {useEntityListPage} from 'src/shared';
-import SpaceList from './components/SpaceList.vue';
-import SimpleFilterForm from 'src/shared/components/SimpleFilterForm.vue';
-import EntityListPage from 'src/shared/components/EntityListPage.vue';
-import {SpaceFilter} from 'src/modules/cms';
 
-const NAMESPACE = 'cmsSpace';
-const INSTANCE_KEY = 'spaces'
+<script lang="ts">
+import {useEntityListPage} from 'src/shared/composables/entity-list-page';
+import EntityListPage from 'src/shared/components/crud/EntityListPage.vue';
+import SimpleFilterForm from 'src/shared/components/crud/SimpleFilterForm.vue';
+import SpaceList from './components/SpaceList.vue';
+import {defineComponent} from 'vue';
+import DefaultListToolbar from 'src/shared/components/crud/DefaultListToolbar.vue';
+import DefaultListPageToolbar from 'src/shared/components/crud/DefaultListPageToolbar.vue';
+import {SpaceFilter, useSpaceStore} from 'src/modules/cms';
 
 export default defineComponent({
   name: 'SpaceListPage',
-  components: {EntityListPage, SpaceList, SimpleFilterForm},
+  components: {
+    DefaultListPageToolbar,
+    DefaultListToolbar, SpaceList, SimpleFilterForm, EntityListPage},
   setup() {
 
+    const instanceKey = 'spaces'
+    const store = useSpaceStore()
     const entityListPage = useEntityListPage<SpaceFilter>({
-      namespace: NAMESPACE,
-      instanceKey: INSTANCE_KEY,
+      store,
+      instanceKey
     })
-
     return {
       ...entityListPage
     };

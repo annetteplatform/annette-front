@@ -26,7 +26,7 @@
 
 
           <q-tab-panel name="person">
-            <PersonSelector label="Person"
+            <person-selector label="Person"
                             v-model="personId"/>
             <q-card-actions align="right">
               <q-btn flat label="Cancel" color="primary" @click="cancel"/>
@@ -87,10 +87,10 @@
 <script lang="ts">
 import {defineComponent, ref} from 'vue';
 import {Ref} from '@vue/reactivity';
-import {AnnettePrincipal} from 'src/shared';
 import CustomPrincipalSelector from './CustomPrincipalSelector.vue';
 import PrincipalViewItem from '../principal-view/PrincipalViewItem.vue';
-import PersonSelector from 'src/modules/person/person/components/PersonSelector.vue';
+import {AnnettePrincipal} from 'src/shared/model';
+import PersonSelector from 'src/modules/person/ui/person/components/PersonSelector.vue';
 
 function emptyPrincipal(): AnnettePrincipal {
   return {

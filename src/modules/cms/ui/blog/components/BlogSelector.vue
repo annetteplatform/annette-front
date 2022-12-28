@@ -1,6 +1,6 @@
 <template>
   <q-select
-    class="full-width"
+    class="full-width" stack-label dense
     :model-value="model"
     @update:model-value="select"
     use-input
@@ -30,8 +30,8 @@
 
 <script lang="ts">
 import {defineComponent, toRef} from 'vue';
-import {useEntitySelector} from 'src/shared';
-import {Blog, BlogFilter} from 'src/modules/cms';
+import {useEntitySelector} from 'src/shared/composables';
+import {Blog, BlogFilter, useBlogStore} from 'src/modules/cms';
 
 
 export default defineComponent({
@@ -40,8 +40,7 @@ export default defineComponent({
   props: {
     label: {
       type: String,
-      required: false,
-      default: 'Blog'
+      required: true,
     },
     modelValue: {
       type: String,
@@ -58,11 +57,13 @@ export default defineComponent({
 
     const valueRef = toRef(props, 'modelValue')
 
+    const store = useBlogStore()
     const entitySelector = useEntitySelector<Blog, BlogFilter>(
-      'cmsBlog',
+      store,
       'BlogSelector',
       valueRef,
       emit)
+
 
     return {
       ...entitySelector,

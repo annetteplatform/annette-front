@@ -1,43 +1,42 @@
 <template>
-  <entity-list-page narrow caption="Spaces" :namespace="namespace" :instance-key="instanceKey">
-    <template v-slot:toolbar>
-      <q-btn class="q-mr-md" outline color="primary"
-             label="Refresh"
-             @click="refreshList"/>
-    </template>
+  <entity-list-page narrow
+                    :caption="$t('annette.cms.space.titlePl')"
+                    :message="instance.message"
+                    @closeMessage="closeMessage">
     <template v-slot:filter>
-      <simple-filter-form class="q-mb-md"
-                          :filter="instance.filter"
-                          @filterChanged="onFilterChanged"/>
+      <simple-filter-form
+        :filter="instance.filter"
+        @filterChanged="onFilterChanged"/>
     </template>
     <template v-slot:default>
-      <space-view-list class="q-mb-md"
-                       :instance-key="instanceKey"/>
+      <space-view-list
+        :instance-key="instanceKey">
+      </space-view-list>
     </template>
   </entity-list-page>
 </template>
 
-<script lang="ts">
-import {defineComponent} from 'vue';
-import {useEntityListPage} from 'src/shared';
-import SpaceViewList from './components/SpaceViewList.vue';
-import SimpleFilterForm from 'src/shared/components/SimpleFilterForm.vue';
-import EntityListPage from 'src/shared/components/EntityListPage.vue';
-import {SpaceViewFilter} from 'src/modules/cms';
 
-const NAMESPACE = 'cmsSpaceView';
-const INSTANCE_KEY = 'spaceViews'
+<script lang="ts">
+import {useEntityListPage} from 'src/shared/composables/entity-list-page';
+import EntityListPage from 'src/shared/components/crud/EntityListPage.vue';
+import SimpleFilterForm from 'src/shared/components/crud/SimpleFilterForm.vue';
+import SpaceViewList from './components/SpaceViewList.vue';
+import {defineComponent} from 'vue';
+import {SpaceViewFilter, useSpaceViewStore} from 'src/modules/cms';
 
 export default defineComponent({
   name: 'SpaceViewListPage',
-  components: {EntityListPage, SpaceViewList, SimpleFilterForm},
+  components: {
+   SpaceViewList, SimpleFilterForm, EntityListPage},
   setup() {
 
+    const instanceKey = 'spaceViews'
+    const store = useSpaceViewStore()
     const entityListPage = useEntityListPage<SpaceViewFilter>({
-      namespace: NAMESPACE,
-      instanceKey: INSTANCE_KEY,
+      store,
+      instanceKey
     })
-
     return {
       ...entityListPage
     };

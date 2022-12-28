@@ -1,4 +1,6 @@
-import {AnnettePrincipal, BaseEntity, SortBy} from 'src/shared';
+import { BaseEntity} from '../store';
+import {AnnettePrincipal} from './principal';
+import {SortBy} from './filter';
 
 export interface Category extends BaseEntity{
   id: string,
@@ -11,5 +13,9 @@ export interface CategoryFilter {
   filter?: string
   name?: string
   sortBy?: SortBy[]
+}
+
+export function emptyCategoryFilter() {
+  return { filter: ''}
 }
 

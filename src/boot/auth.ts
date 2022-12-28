@@ -1,37 +1,16 @@
-import {boot} from 'quasar/wrappers';
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore
-import Keycloak, {KeycloakConfig} from 'keycloak-js'
+import { boot } from 'quasar/wrappers'
 import axios, {AxiosRequestConfig} from 'axios'
+
+import {useAuthStore} from 'src/main';
 import {NavigationGuardNext, RouteLocationNormalized} from 'vue-router'
+import {keycloak} from 'boot/keycloak';
 
+const authStore = useAuthStore();
 
-// eslint-disable-next-line @typescript-eslint/ban-types
-function keycloakConfig(): KeycloakConfig | string {
-  const DEFAULT_URI = '/api/annette/v1/auth/keycloak/annette'
-  try {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-    const config: KeycloakConfig = JSON.parse(process.env.KEYCLOAK_CONFIG as string)
-    if (config) {
-      return config
-    } else {
-      return DEFAULT_URI
-    }
-  } catch (ex) {
-    console.warn(ex)
-    return DEFAULT_URI
-  }
-}
+// "async" is optional;
+// more info on params: https://v2.quasar.dev/quasar-cli/boot-files
+export default boot(async ( { app, router } ) => {
 
-console.log('Keycloak creating...')
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore
-// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-export const keycloak: Keycloak.KeycloakInstance = new Keycloak(keycloakConfig())
-console.log('Keycloak created')
-
-
-export default boot(async ({app, router, store}) => {
 
   function tokenInterceptor() {
     axios.interceptors.request.use(
@@ -42,15 +21,12 @@ export default boot(async ({app, router, store}) => {
               .updateToken(30)
               .then(
                 () => {
-                  // eslint-disable-next-line @typescript-eslint/restrict-template-expressions,@typescript-eslint/no-unsafe-member-access
                   config.headers.Authorization = `Bearer ${keycloak.token}`
                   resolve(config)
                 },
-                // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                (failure: any) => {
-                  // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
+                (failure) => {
                   console.error(`Failed to refresh the token, or the session has expired: ${failure}`)
-                  void store.dispatch('main/Login')
+                  void authStore.login()
                   reject(failure)
                 })
           })
@@ -63,25 +39,18 @@ export default boot(async ({app, router, store}) => {
       })
   }
 
-  function authGuard(to: RouteLocationNormalized, from: RouteLocationNormalized, next: NavigationGuardNext) {
 
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+  function authGuard(to: RouteLocationNormalized, from: RouteLocationNormalized, next: NavigationGuardNext) {
     if (to.matched.some(record => record.meta.requiresAuth)) {
       if (keycloak.authenticated) {
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-call
         next()
       } else {
-        void store.dispatch('main/Login')
+        void authStore.login()
       }
     } else {
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-return
       if (keycloak.authenticated && to.matched.some(record => record.meta.unauthenticatedOnly)) {
-        // console.log('unauthenticatedOnly')
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-call
         next('/')
       } else {
-        // console.log('unautenticated')
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-call
         next()
       }
     }
@@ -91,6 +60,7 @@ export default boot(async ({app, router, store}) => {
   router.beforeEach(authGuard)
   tokenInterceptor()
 
+
   await new Promise((resolve) => {
     console.log('Keycloak initializing...')
     void keycloak
@@ -99,34 +69,29 @@ export default boot(async ({app, router, store}) => {
           checkLoginIframe: true,
           // enableLogging: true,
           silentCheckSsoRedirectUri: window.location.origin + '/silent-check-sso.html',
-        pkceMethod: 'S256',
+          pkceMethod: 'S256',
         }
       )
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      .then((success: any) => {
+      .then(success => {
         console.log('Keycloak initialized...')
         console.log('success', success)
         if (success) {
           // loggedIn();
-          void store.dispatch('main/LoggedIn')
+          void authStore.loggedIn()
         } else {
           // loggedOut();
-          void store.dispatch('main/LoggedOut')
+          void authStore.loggedOut()
         }
         resolve(success)
       })
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      .catch((failure: any) => {
-          console.log('Keycloak initialization failure...')
-          console.log('failure', failure)
-          // console.log('browser', navigator.userAgent.toLowerCase())
+      .catch(failure => {
+        console.log('Keycloak initialization failure...')
+        console.log('failure', failure)
 
-          void store.dispatch('main/LoggedOut')
-            .then(() => {
-              void store.dispatch('main/Login')
-            })
-          resolve(failure)
-          // reject(failure)
-        })
+        void authStore.loggedOut()
+        void authStore.login()
+        resolve(failure)
+      })
   })
+
 })

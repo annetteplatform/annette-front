@@ -1,6 +1,6 @@
 <template>
   <q-select
-    class="full-width"
+    class="full-width" stack-label dense
     :model-value="model"
     @update:model-value="select"
     multiple
@@ -29,10 +29,9 @@
 </template>
 
 <script lang="ts">
-import {defineComponent, toRef} from 'vue';
-import {BusinessProcess, BusinessProcessFilter} from 'src/modules/bpm';
-import {useEntityMultiSelector} from 'src/shared';
-import {Ref} from '@vue/reactivity';
+import {defineComponent, Ref, toRef} from 'vue';
+import {useEntityMultiSelector} from 'src/shared/composables';
+import {BusinessProcess, BusinessProcessFilter, useBusinessProcessStore} from 'src/modules/bpm';
 
 
 export default defineComponent({
@@ -42,7 +41,7 @@ export default defineComponent({
     label: {
       type: String,
       required: false,
-      default: 'Business Processes'
+      default: 'BusinessProcess'
     },
     modelValue: {
       type: Array,
@@ -59,11 +58,13 @@ export default defineComponent({
 
     const valueRef = toRef(props, 'modelValue') as Ref<string[]>
 
+    const store = useBusinessProcessStore()
     const entitySelector = useEntityMultiSelector<BusinessProcess, BusinessProcessFilter>(
-      'bpmBusinessProcess',
+      store,
       'BusinessProcessMultiSelector',
       valueRef,
       emit)
+
 
     return {
       ...entitySelector,

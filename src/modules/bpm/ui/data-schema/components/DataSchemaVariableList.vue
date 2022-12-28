@@ -46,8 +46,10 @@
         </q-tr>
       </template>
     </q-table>
-    <DataSchemaVariableEditDialog :show="showVariableDialog" :variable="dialogVariable"
-                                  @update="storeVariable" @cancel="cancel"/>
+    <data-schema-variable-edit-dialog :show="showVariableDialog"
+                                      :variable="dialogVariable"
+                                      @update="storeVariable"
+                                      @cancel="cancel"/>
   </div>
 </template>
 
@@ -61,55 +63,9 @@ import {
   StoreDataSchemaVariablePayloadDto
 } from 'src/modules/bpm';
 import {Ref} from '@vue/reactivity';
-import DataSchemaVariableEditDialog from 'src/modules/bpm/ui/data-schema/components/DataSchemaVariableEditDialog.vue';
+import DataSchemaVariableEditDialog from './DataSchemaVariableEditDialog.vue';
 import {useQuasar} from 'quasar';
-
-const COLUMNS = [
-  {
-    name: 'variableName',
-    required: true,
-    label: 'Id',
-    align: 'left',
-    field: 'Variable Name',
-    sortable: true,
-  },
-  {
-    name: 'name',
-    align: 'left',
-    label: 'Name',
-    field: 'name',
-    sortable: true,
-    classes: 'text-truncate'
-  },
-  {
-    name: 'caption',
-    align: 'left',
-    label: 'Caption',
-    field: 'caption',
-    sortable: true,
-    classes: 'text-truncate'
-  },
-
-  {
-    name: 'datatype',
-    align: 'left',
-    label: 'Datatype',
-    field: 'datatype',
-    sortable: true,
-    classes: 'text-truncate'
-  },
-
-  {
-    name: 'default',
-    align: 'left',
-    label: 'Default',
-    field: 'default',
-    sortable: true,
-    classes: 'text-truncate'
-  },
-
-]
-
+import {useI18n} from 'vue-i18n';
 
 export default defineComponent({
   name: 'DataSchemaVariableList',
@@ -127,8 +83,55 @@ export default defineComponent({
   emits: ['store', 'delete'],
   setup(props, {emit}) {
     const quasar = useQuasar()
+    const i18n = useI18n()
+
+    const columns = [
+      {
+        name: 'variableName',
+        required: true,
+        label: i18n.t('annette.bpm.dataSchema.field.var.variableName'),
+        align: 'left',
+        field: 'variableName',
+        sortable: true,
+      },
+      {
+        name: 'name',
+        align: 'left',
+        label: i18n.t('annette.bpm.dataSchema.field.var.name'),
+        field: 'name',
+        sortable: true,
+        classes: 'text-truncate'
+      },
+      {
+        name: 'caption',
+        align: 'left',
+        label: i18n.t('annette.bpm.dataSchema.field.var.caption'),
+        field: 'caption',
+        sortable: true,
+        classes: 'text-truncate'
+      },
+
+      {
+        name: 'datatype',
+        align: 'left',
+        label: i18n.t('annette.bpm.dataSchema.field.var.datatype'),
+        field: 'datatype',
+        sortable: true,
+        classes: 'text-truncate'
+      },
+
+      {
+        name: 'default',
+        align: 'left',
+        label: i18n.t('annette.bpm.dataSchema.field.var.default'),
+        field: 'default',
+        sortable: true,
+        classes: 'text-truncate'
+      },
+    ]
 
     const variables = toRef(props, 'variables')
+
 
     const dialogVariable: Ref<FullDataSchemaVariable | null> = ref(null)
     const showVariableDialog = ref(false)
@@ -190,7 +193,7 @@ export default defineComponent({
     }
 
     return {
-      columns: COLUMNS,
+      columns,
       items,
       createVariable,
       editVariable,

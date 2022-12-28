@@ -1,5 +1,6 @@
 import {RouteRecordRaw} from 'vue-router';
 
+
 export const cmsRoutes: RouteRecordRaw[] = [
   {
     path: 'cms/blog-categories',
@@ -154,5 +155,4 @@ export const cmsExtRoutes: RouteRecordRaw[] = [
     meta: {requiresAuth: true}
   },
 ]
-
 

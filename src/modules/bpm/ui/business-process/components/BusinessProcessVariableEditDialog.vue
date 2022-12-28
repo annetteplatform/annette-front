@@ -10,14 +10,14 @@
           <div class="row">
             <q-input class="col-md-12 col-sm-12 col-xs-12 "
                      v-model="variableModel.variableName"
-                     :rules="[val => !!val || 'Field is required']"
+                     :rules="[val => !!val || $t('annette.shared.crud.fieldRequired')]"
                      label="Variable Name"
             />
           </div>
           <div class="row ">
             <q-input class="col-md-12 col-sm-12 col-xs-12 "
                      v-model="variableModel.name"
-                     :rules="[val => !!val || 'Field is required']"
+                     :rules="[val => !!val || $t('annette.shared.crud.fieldRequired')]"
                      label="Name"
             />
           </div>
@@ -65,7 +65,7 @@ export default defineComponent({
       required: true
     },
     variable: {
-      type: Object as PropType<FullBusinessProcessVariable>,
+      type: Object as PropType<FullBusinessProcessVariable | null>,
       required: true
     }
   },
@@ -87,7 +87,7 @@ export default defineComponent({
         businessProcessId: '',
         ...variableModel.value,
         oldVariableName
-      }
+      } as StoreBusinessProcessVariablePayloadDto
       emit('update', payload)
     }
 
@@ -96,12 +96,14 @@ export default defineComponent({
     }
 
     watch(show, (newShow) => {
-      if (newShow) originalVariableName.value = variable.value.variableName
+      if (newShow && variable.value) originalVariableName.value = variable.value.variableName
       else originalVariableName.value = ''
     })
 
     watch(variable, () => {
-      variableModel.value = variable.value
+      if (variable.value) {
+        variableModel.value = variable.value
+      }
     })
 
     return {

@@ -1,7 +1,8 @@
-import {Ref} from '@vue/reactivity';
-import {ref, toRef, watch} from 'vue';
-import {AnnetteError} from 'src/shared';
-import {useStore} from 'src/store';
+/* eslint-disable  @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/ban-ts-comment */
+
+import {Ref, ref, toRef, watch} from 'vue';
+import {AnnetteError} from 'src/shared/model';
 import {useQuasar} from 'quasar';
 import {useRoute, useRouter} from 'vue-router';
 
@@ -11,8 +12,8 @@ function deepCopy<T>(object: T): T {
 }
 
 export interface UseSyncEntityPageOpt<T> {
-  namespace: string,
-  emptyEntity?: (id?: string) => T,
+  store: any,
+  emptyEntity?: (id?: string, options?: string) => T,
   formHasError?: (entity?: T | null) => boolean,
   props: any,
   onBeforeLoad?: (action: string, id: string) => void
@@ -23,13 +24,14 @@ export function useSyncEntityPage<T>(
   opt: UseSyncEntityPageOpt<T>
 ) {
 
-  const store = useStore()
+  const store = opt.store
   const quasar = useQuasar()
   const route = useRoute()
   const router = useRouter()
 
   const id: Ref<string> = toRef(opt.props, 'id')
   const action: Ref<string> = toRef(opt.props, 'action')
+  const options: Ref<string> = toRef(opt.props, 'options')
   const prevProps = ref('')
 
   const entityModel: Ref<T | null> = ref(null)
@@ -46,34 +48,33 @@ export function useSyncEntityPage<T>(
 
   const loadEntity = async () => {
     if (opt.onBeforeLoad) {
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
       opt.onBeforeLoad(action.value, id.value)
     }
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-    if (action.value === 'create' && opt.emptyEntity) {
-      const entity = opt.emptyEntity(id.value)
+    if (action.value === 'create' && id.value == 'new' && opt.emptyEntity) {
+      const entity = opt.emptyEntity(id.value, options.value)
       updateEntity(entity)
     } else {
       try {
         let entity: T
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
         if (action.value === 'view') {
-          // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-          const entities: T[] = await store.dispatch(`${opt.namespace}/loadEntitiesIfNotExist`, [id.value])
+          const entities: T[] = await store.loadEntitiesIfNotExist([id.value])
           entity = entities[0]
         } else {
           // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-          entity = await store.dispatch(`${opt.namespace}/getEntityForEdit`, id.value)
+          entity = await store.getEntityForEdit(id.value)
+          if (action.value == 'create') {
+            entity = {
+              ...entity,
+              id: ''
+            }
+          }
         }
         updateEntity(entity)
       } catch (ex) {
-        // @ts-ignore
-        error.value = ex
+        error.value = ex as AnnetteError
       }
     }
-    if (opt.onAfterLoad) {
-      // @ts-ignore
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+    if (opt.onAfterLoad && entityModel.value) {
       opt.onAfterLoad(action.value, entityModel.value)
     }
   }
@@ -88,19 +89,19 @@ export function useSyncEntityPage<T>(
       // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
     } else if (action.value === 'create') {
       try {
-        const entity = await store.dispatch(`${opt.namespace}/createEntity`, entityModel.value)
+        const entity = await store.createEntity(entityModel.value)
         updateEntity(entity)
         void router.push({
+          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
           // @ts-ignore
           name: route.name,
           // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
           params: {...route.params, action: 'edit', id: entity.id},
           query: route.query
         })
-        void store.dispatch(`${opt.namespace}/refreshAll`)
+        void store.refreshAll()
       } catch (ex) {
-        // @ts-ignore
-        error.value = ex
+        error.value = ex as AnnetteError
       }
     }
   }
@@ -112,8 +113,7 @@ export function useSyncEntityPage<T>(
         const entity = await updateFn()
         updateEntity(entity)
       } catch (ex) {
-        // @ts-ignore
-        error.value = ex
+        error.value = ex as AnnetteError
       }
     }
   }

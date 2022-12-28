@@ -22,11 +22,10 @@
 <script lang="ts">
 import {computed, defineComponent, PropType, ref, toRef, watch} from 'vue';
 import {useRouter} from 'vue-router'
-import {OrgItem, OrgPosition} from 'src/modules/org-structure';
+import {OrgItem, OrgPosition, useOrgItemStore} from 'src/modules/org-structure';
 import {Ref} from '@vue/reactivity';
-import {Person} from 'src/modules/person';
-import {useStore} from 'src/store';
-import {AnnettePrincipal} from 'src/shared';
+import {Person, usePersonStore} from 'src/modules/person';
+import {AnnettePrincipal} from 'src/shared/model';
 
 
 export default defineComponent({
@@ -39,7 +38,8 @@ export default defineComponent({
     }
   },
   setup(props) {
-    const store = useStore()
+    const orgItemStore = useOrgItemStore()
+    const personStore = usePersonStore()
     const router = useRouter()
 
     const principal: Ref<AnnettePrincipal> = toRef(props, 'principal')
@@ -70,17 +70,17 @@ export default defineComponent({
     })
 
     const loadPrincipal = async () => {
-      const loadedItems: OrgItem[] = await store.dispatch('orgItem/loadEntitiesIfNotExist', [principal.value.principalId])
+      const loadedItems: OrgItem[] = await orgItemStore.loadEntitiesIfNotExist([principal.value.principalId])
       if (loadedItems && loadedItems[0]) {
         orgItem.value = loadedItems[0]
         // @ts-ignore
         const len = orgItem.value.rootPath.length
         // @ts-ignore
         const hierarchyIds: string[] = orgItem.value.rootPath.slice(0, len - 1)
-        const items: OrgItem[] = await store.dispatch('orgItem/loadEntitiesIfNotExist', hierarchyIds)
+        const items: OrgItem[] = await orgItemStore.loadEntitiesIfNotExist( hierarchyIds)
         hierarchy.value = items.map((item: OrgItem) => item.name).join(' / ')
         if (orgItem.value && orgItem.value?.itemType === 'position' && (orgItem.value as OrgPosition).persons.length === 1) {
-          const persons: Person[] = await store.dispatch('personPerson/loadEntitiesIfNotExist', [(orgItem.value as OrgPosition).persons[0]])
+          const persons: Person[] = await personStore.loadEntitiesIfNotExist([(orgItem.value as OrgPosition).persons[0]])
           if (persons && persons[0]) {
             person.value = persons[0]
           } else {

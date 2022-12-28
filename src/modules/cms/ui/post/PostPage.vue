@@ -1,28 +1,31 @@
 <template>
   <entity-page narrow
-               caption="Post"
+               :caption="$t('annette.cms.post.title')"
                :show-form="!!post"
                :error="error"
+               :action="action"
+               :hide-status-bar="action != 'create' "
                @clearError="clearError">
     <template v-slot:toolbar>
-      <q-btn class="q-mr-md" outline color="primary"
-             label="Posts"
-             :to="{name: 'cms.posts'}"/>
-      <q-btn class="q-mr-md" outline color="primary"
-             v-if="action === 'edit'"
-             label="View"
-             :to="{name: 'cms.post', params: { action: 'view', id}}"/>
-      <q-btn class="q-mr-md" outline color="primary"
-             v-if="action === 'view'"
-             label="Edit"
-             :to="{name: 'cms.post', params: { action: 'edit', id}}"/>
-      <q-btn color="primary"
-             v-if="post && action === 'create'"
-             label="Save"
-             @click="save"/>
+      <default-entity-page-toolbar :action="action" :id="id"
+                                   route-name="cms.post"
+                                   :back-label="$t('annette.cms.post.titlePl')"
+                                   back-route-name="cms.posts"/>
     </template>
-    <template v-slot:status>
+    <template v-slot:save-toolbar>
+      <div class="row">
+        <q-btn v-if="action == 'edit'" outline dense
+               class="q-mr-md"
+               color="primary"
+               :label="$t('annette.shared.crud.cancel')"
+               :to="{ name: 'cms.post', params: { action: 'view', id } }"/>
+        <q-btn dense
+               color="primary"
+               :label="$t('annette.shared.crud.save')"
+               @click="save"/>
+      </div>
     </template>
+
     <template v-slot:default>
       <div class="row">
         <q-input class="col-md-4 col-sm-12 col-xs-12 q-pr-md"
@@ -70,50 +73,44 @@
         <q-tab-panels v-model="tab" animated>
           <q-tab-panel name="general">
 
-
             <div class="row q-mt-md">
-              <q-checkbox
-                class="col-md-12 col-sm-12 col-xs-12 q-pr-md"
-                v-if="action !== 'create'"
-                :model-value="post.featured"
-                @update:model-value="updateFeatured"
-                :disable="action === 'view'"
-                label="Featured"/>
+              <q-checkbox class="col-md-12 col-sm-12 col-xs-12 q-pr-md"
+                          v-if="action !== 'create'"
+                          :model-value="post.featured"
+                          @update:model-value="updateFeatured"
+                          :disable="action === 'view'"
+                          label="Featured"/>
             </div>
 
             <div class="row q-mt-md" v-if="action !== 'create'">
-              <q-field
-                class="col-md-6 col-sm-6 col-xs-12 q-pr-md"
-                label="Publication Status"
-                stack-label
-                borderless>
+              <q-field class="col-md-6 col-sm-6 col-xs-12 q-pr-md"
+                       label="Publication Status"
+                       stack-label
+                       borderless>
 
-                <q-checkbox
-                  :model-value="post.publicationStatus === 'published'"
-                  @update:model-value="updatePublicationStatus"
-                  :disable="action === 'view'"
-                  label="Published"/>
+                <q-checkbox :model-value="post.publicationStatus === 'published'"
+                            @update:model-value="updatePublicationStatus"
+                            :disable="action === 'view'"
+                            label="Published"/>
               </q-field>
 
               <div class="col-md-6 col-sm-6 col-xs-12 q-pr-md"
                    style="max-width: 300px">
-                <q-input
-                  :model-value="formatDate(post.publicationTimestamp)"
-                  @update:model-value="updatePublicationTimestamp"
-                  :readonly="action === 'view'"
-                  debounce="1000"
-                  label="Publication date"
-                  stack-label
+                <q-input :model-value="formatDate(post.publicationTimestamp)"
+                         @update:model-value="updatePublicationTimestamp"
+                         :readonly="action === 'view'"
+                         debounce="1000"
+                         label="Publication date"
+                         stack-label
                 >
                   <template v-slot:prepend
                             v-if="action !== 'view'">
                     <q-icon name="event" class="cursor-pointer">
                       <q-popup-proxy transition-show="scale" transition-hide="scale">
-                        <q-date
-                          :model-value="formatDate(post.publicationTimestamp)"
-                          @update:model-value="updatePublicationTimestamp"
-                          debounce="1000"
-                          mask="YYYY-MM-DD HH:mm">
+                        <q-date :model-value="formatDate(post.publicationTimestamp)"
+                                @update:model-value="updatePublicationTimestamp"
+                                debounce="1000"
+                                mask="YYYY-MM-DD HH:mm">
                           <div class="row items-center justify-end">
                             <q-btn v-close-popup label="Close" color="primary" flat/>
                           </div>
@@ -126,11 +123,10 @@
                             v-if="action !== 'view'">
                     <q-icon name="access_time" class="cursor-pointer">
                       <q-popup-proxy transition-show="scale" transition-hide="scale">
-                        <q-time
-                          :model-value="formatDate(post.publicationTimestamp)"
-                          @update:model-value="updatePublicationTimestamp"
-                          debounce="1000"
-                          mask="YYYY-MM-DD HH:mm" format24h>
+                        <q-time :model-value="formatDate(post.publicationTimestamp)"
+                                @update:model-value="updatePublicationTimestamp"
+                                debounce="1000"
+                                mask="YYYY-MM-DD HH:mm" format24h>
                           <div class="row items-center justify-end">
                             <q-btn v-close-popup label="Close" color="primary" flat/>
                           </div>
@@ -150,10 +146,10 @@
                   <q-item-section>
                     Author
                   </q-item-section>
-
                 </q-item>
                 <q-item>
                   <principal-view-item :principal="post.authorId"/>
+                  <principal-selector-dialog ref="principalSelectorDialog"/>
                   <q-item-section side v-if="action !=='view'">
                     <q-btn flat round color="primary" size="sm" icon="edit"
                            @click="updateAuthor"/>
@@ -251,68 +247,58 @@
 
           <q-tab-panel name="targets" v-if="action !== 'create'">
             <div class="row q-mt-md">
-              <q-list bordered class="full-width" separator>
-                <q-item>
-                  <q-item-section>
-                    Principals
-                  </q-item-section>
-                  <q-item-section avatar>
-                    <q-btn class="float-left" round dense flat color="primary"
-                           icon="add"
-                           v-if="action !=='view'"
-                           @click="addPrincipal"
-                    />
-                  </q-item-section>
-                </q-item>
-                <q-item v-if="post.targets.length === 0">
-                  <q-item-section>
-                    <q-item-label caption>
-                      Principals not assigned
-                    </q-item-label>
-                  </q-item-section>
-                </q-item>
-                <q-item
-                  v-for="principal in post.targets"
-                  :key="principal">
-                  <principal-view-item :principal="principal"/>
-                  <q-item-section side v-if="action !=='view'">
-                    <q-btn flat round color="negative" size="sm" icon="fas fa-trash"
-                           @click="deletePrincipal(principal)"/>
-                  </q-item-section>
-                </q-item>
-              </q-list>
+              <principal-list-input :principals="post.targets"
+                                    @add-principal="addTarget"
+                                    @delete-principal="deleteTarget"
+                                    :readonly="action === 'view'"
+                                    :label="$t('annette.cms.post.field.targets')"
+              />
             </div>
-
           </q-tab-panel>
         </q-tab-panels>
       </q-card>
-      <principal-selector-dialog ref="principalSelectorDialog"/>
+
+
     </template>
   </entity-page>
 </template>
 
 <script lang="ts">
-import {computed, defineComponent, ref, toRef, watch} from 'vue';
-import EntityPage from 'src/shared/components/EntityPage.vue';
-import {useStore} from 'src/store';
+/* eslint-disable @typescript-eslint/ban-ts-comment */
+import {computed, defineComponent, Ref, ref, toRef, watch} from 'vue';
+
+import EntityPage from 'src/shared/components/crud/EntityPage.vue';
+import {AnnetteError, AnnettePrincipal} from 'src/shared/model';
+import PrincipalListInput from 'src/shared/components/crud/PrincipalListInput.vue';
+import {
+  FileDescriptor,
+  InitPostEditorPayload,
+  Post, PostEditor, RemoveFilePayload, toAction,
+  usePostStore
+} from 'src/modules/cms';
 import {date, openURL, useQuasar} from 'quasar';
-import PrincipalViewItem from 'src/shared/components/principal-view/PrincipalViewItem.vue';
-import PrincipalSelectorDialog from 'src/shared/components/principal-selector/PrinciplaSelectorDialog.vue';
-import {FileDescriptor, InitPostEditorPayload, Post, PostEditor, RemoveFilePayload, toAction,} from 'src/modules/cms';
-import {AnnetteError, AnnettePrincipal} from 'src/shared';
-import {Ref} from '@vue/reactivity';
 import {useRoute, useRouter} from 'vue-router';
+import {useAuthStore} from 'src/main';
+import PrincipalSelectorDialog from 'src/shared/components/principal-selector/PrinciplaSelectorDialog.vue';
+import PrincipalViewItem from 'src/shared/components/principal-view/PrincipalViewItem.vue';
+import DefaultEntityPageToolbar from 'src/shared/components/crud/DefaultEntityPageToolbar.vue';
+
 
 export default defineComponent({
   name: 'PostPage',
-  components: {PrincipalSelectorDialog, PrincipalViewItem, EntityPage},
+  components: {
+    PrincipalViewItem,
+    PrincipalSelectorDialog,
+    PrincipalListInput,
+    DefaultEntityPageToolbar, EntityPage
+  },
   props: {
     id: String,
     action: String
   },
   setup(props) {
-
-    const store = useStore()
+    const store = usePostStore()
+    const authStore = useAuthStore()
     const quasar = useQuasar()
     const route = useRoute()
     const router = useRouter()
@@ -321,28 +307,20 @@ export default defineComponent({
     const titleRef = ref()
 
     const tab = ref('general')
-
     const principalSelectorDialog = ref()
 
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const formHasError = (): boolean => {
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-member-access
       idRef.value.validate()
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-member-access
       titleRef.value.validate()
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
       return !!titleRef.value.hasError || !!idRef.value.hasError
     }
 
     const id = toRef(props, 'id')
     const action = toRef(props, 'action')
     const prevProps = ref('')
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access,@typescript-eslint/no-unsafe-return
-    const personId: Ref<string> = computed(() => store.getters['main/personId'])
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access,@typescript-eslint/no-unsafe-return
-    const state: Ref<PostEditor> = computed(() => store.getters['cmsPost/editor'])
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access,@typescript-eslint/no-unsafe-return
-    const post: Ref<Post> = computed(() => store.getters['cmsPost/post'])
+
+    const state = computed(() => store.editor)
+    const post = computed(() => store.editor.post)
     const error: Ref<AnnetteError | null> = ref(null)
 
     // *********************************************
@@ -352,11 +330,11 @@ export default defineComponent({
         action: toAction(action.value as string),
         id: id.value as string,
         blogId: action.value === 'create' ? id.value : undefined,
-        personId: action.value === 'create' ? personId.value : undefined,
+        personId: action.value === 'create' ? authStore.profile?.id || '' : undefined,
       }
       console.log('loadEntity')
       console.log(payload)
-      void store.dispatch('cmsPost/initPostEditor', payload)
+      void store.initPostEditor(payload)
     }
 
     const save = async () => {
@@ -368,15 +346,14 @@ export default defineComponent({
         // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
       } else if (action.value === 'create') {
         try {
-          const entity = await store.dispatch('cmsPost/createEditorPost')
+          const entity = await store.createEditorPost()
           void router.push({
             // @ts-ignore
             name: route.name,
-            // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-            params: {...route.params, action: 'edit', id: entity.id},
+            params: {...route.params, action: 'edit', id: entity?.id},
             query: route.query
           })
-          void store.dispatch('cmsPost/refreshAll')
+          void store.refreshAll()
         } catch (ex) {
           // @ts-ignore
           error.value = ex
@@ -409,13 +386,13 @@ export default defineComponent({
         id: id.value as string,
         file,
       }
-      await store.dispatch('cmsPost/removePostFile', payload)
+      await store.removePostFile(payload)
     }
 
     const fileUploaded = (info: any) => {
       // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
       const file = JSON.parse(info.xhr.response) as FileDescriptor
-      store.commit('cmsPost/editorFileUploaded', file)
+      store.editorFileUploaded(file)
       if (file.fileType === 'doc') {
         // eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-member-access
         docUploaderRef.value.removeUploadedFiles()
@@ -430,68 +407,50 @@ export default defineComponent({
     }
 
     const updateId = (data: string) => {
-      void store.commit('cmsPost/updateEditorId', data)
+      void store.updateEditorId(data)
     }
 
     const updateTitle = async (data: string) => {
-      void await store.dispatch('cmsPost/updateEditorTitle', data)
+      void await store.updateEditorTitle(data)
     }
 
     const updateAuthor = async () => {
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-member-access
       const author = await principalSelectorDialog.value.showDialog()
-      void await store.dispatch('cmsPost/updateEditorAuthor', author)
+      void await store.updateEditorAuthor(author)
     }
 
     const updateFeatured = async (data: boolean) => {
-      void await store.dispatch('cmsPost/updateEditorFeatured', data)
+      void await store.updateEditorFeatured(data)
     }
 
     const updatePublicationStatus = async (data: boolean) => {
-      void await store.dispatch('cmsPost/updateEditorPublicationStatus', data)
+      void await store.updateEditorPublicationStatus(data)
     }
-
 
     const formatDate = (timestamp: Date) => {
       return date.formatDate(timestamp, 'YYYY-MM-DD HH:mm')
     }
 
-
     const updatePublicationTimestamp = async (newTimestamp: string) => {
       const publicationTimestamp = date.extractDate(newTimestamp, 'YYYY-MM-DD HH:mm')
       if (publicationTimestamp.getFullYear() !== 1899) {
-        void await store.dispatch('cmsPost/updateEditorPublicationTimestamp', publicationTimestamp)
+        void await store.updateEditorPublicationTimestamp(publicationTimestamp)
       } else {
         console.log('error')
       }
     }
 
     const clearPublicationTimestamp = async () => {
-      void await store.dispatch('cmsPost/updateEditorPublicationTimestamp', undefined)
+      void await store.updateEditorPublicationTimestamp(undefined)
     }
 
-    const addPrincipal = async () => {
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-member-access
-      const principal = await principalSelectorDialog.value.showDialog()
-      await store.dispatch('cmsPost/assignEditorTargetPrincipal', principal)
+    const addTarget = async (principal: AnnettePrincipal) => {
+      await store.assignEditorTargetPrincipal(principal)
     }
 
 
-    const deletePrincipal = (principal: AnnettePrincipal) => {
-      quasar.notify({
-        type: 'negative',
-        message: 'Please confirm delete principal',
-        actions: [
-          {label: 'Cancel', color: 'white'},
-          {
-            label: 'Delete',
-            color: 'white',
-            handler: async () => {
-              await store.dispatch('cmsPost/unassignEditorTargetPrincipal', principal)
-            }
-          }
-        ]
-      })
+    const deleteTarget = async (principal: AnnettePrincipal) => {
+      await store.unassignEditorTargetPrincipal(principal)
     }
 
     return {
@@ -515,8 +474,8 @@ export default defineComponent({
       updatePublicationTimestamp,
       clearPublicationTimestamp,
       formatDate,
-      addPrincipal,
-      deletePrincipal,
+      addTarget,
+      deleteTarget,
 
       mediaUploaderRef,
       docUploaderRef,
@@ -524,19 +483,13 @@ export default defineComponent({
       deleteFile,
       downloadFile,
 
-
-    };
+    }
   }
-});
+})
 </script>
 
+
 <style>
-.markdown textarea {
-  font-family: Fira code, Fira Mono, Consolas, Menlo, Courier, monospace;
-  font-size: 14px;
-  line-height: 1.5;
-  padding: 5px;
-}
 
 .image-card {
   width: 100%;

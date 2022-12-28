@@ -6,6 +6,9 @@
     :pagination="pagination"
     :loading="instance.loading"
     @request="onRequest">
+    <template v-slot:toolbar>
+      <slot name="toolbar"></slot>
+    </template>
     <template v-slot:row="props">
       <q-td>
         {{ props.row.id }}
@@ -14,11 +17,9 @@
         {{ props.row.name }}
       </q-td>
       <q-td auto-width>
-        <q-btn flat round color="green" size="sm" icon="far fa-eye"
-               :to="{ name: 'bpm.dataSchema', params: { action: 'view', id: props.row.id } }"/>
-        <q-btn flat round color="blue" size="sm" icon="far fa-edit"
-               :to="{ name: 'bpm.dataSchema', params: { action: 'edit', id: props.row.id } }"/>
-        <q-btn flat round color="red" size="sm" icon="fas fa-trash" @click="deleteEntity(props.row.id)"/>
+        <default-row-toolbar :id="props.row.id"
+                             route-name="bpm.dataSchema"
+                             view copy edit del @delete="deleteEntity"/>
       </q-td>
     </template>
   </entity-list>
@@ -26,35 +27,17 @@
 
 <script lang="ts">
 import {defineComponent} from 'vue';
-import {useEntityList} from 'src/shared';
-import EntityList from 'src/shared/components/EntityList.vue';
-import {DataSchema, DataSchemaFilter} from 'src/modules/bpm';
+import EntityList from 'src/shared/components/crud/EntityList.vue';
+import {useEntityList} from 'src/shared/composables';
+import {useI18n} from 'vue-i18n';
+import DefaultRowToolbar from 'src/shared/components/crud/DefaultRowToolbar.vue';
+import {useDeleteEntity} from 'src/shared/composables/delete-entity';
+import {DataSchema, DataSchemaFilter, useDataSchemaStore} from 'src/modules/bpm';
 
-const COLUMNS = [
-  {
-    name: 'id',
-    required: true,
-    label: 'Id',
-    align: 'left',
-    field: 'id',
-    sortable: true,
-  },
-  {
-    name: 'name',
-    align: 'left',
-    label: 'Name',
-    field: 'name',
-    sortable: true,
-    classes: 'text-truncate'
-  },
-
-]
-
-const NAMESPACE = 'bpmDataSchema';
 
 export default defineComponent({
   name: 'DataSchemaList',
-  components: {EntityList},
+  components: {DefaultRowToolbar, EntityList},
   props: {
     instanceKey: {
       type: String,
@@ -62,16 +45,44 @@ export default defineComponent({
     }
   },
   setup(props) {
+    const i18n = useI18n()
+
+    const columns = [
+      {
+        name: 'id',
+        required: true,
+        label: i18n.t('annette.bpm.dataSchema.field.id'),
+        align: 'left',
+        field: 'id',
+        sortable: true,
+      },
+      {
+        name: 'name',
+        required: true,
+        label: i18n.t('annette.bpm.dataSchema.field.name'),
+        align: 'left',
+        field: 'name',
+        sortable: true,
+        classes: 'text-truncate'
+      },
+    ]
+
+    const store = useDataSchemaStore()
 
     const entityList = useEntityList<DataSchema, DataSchemaFilter>(
-      NAMESPACE,
+      store,
       props.instanceKey,
-      'Please confirm delete BPM Model.'
+    )
+
+    const deleteEntity = useDeleteEntity(
+      store,
+      i18n.t('annette.bpm.dataSchema.deleteQuestion'),
     )
 
     return {
-      columns: COLUMNS,
+      columns,
       ...entityList,
+      deleteEntity: deleteEntity.deleteEntity
     };
   }
 });

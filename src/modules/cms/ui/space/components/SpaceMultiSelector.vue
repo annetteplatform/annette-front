@@ -1,6 +1,6 @@
 <template>
   <q-select
-    class="full-width"
+    class="full-width" stack-label dense
     :model-value="model"
     @update:model-value="select"
     multiple
@@ -29,10 +29,9 @@
 </template>
 
 <script lang="ts">
-import {defineComponent, toRef} from 'vue';
-import {Space, SpaceFilter} from 'src/modules/cms';
-import {useEntityMultiSelector} from 'src/shared';
-import {Ref} from '@vue/reactivity';
+import {defineComponent, Ref, toRef} from 'vue';
+import {useEntityMultiSelector} from 'src/shared/composables';
+import {Space, SpaceFilter, useSpaceStore} from 'src/modules/cms';
 
 
 export default defineComponent({
@@ -42,7 +41,7 @@ export default defineComponent({
     label: {
       type: String,
       required: false,
-      default: 'Spaces'
+      default: 'Space'
     },
     modelValue: {
       type: Array,
@@ -59,11 +58,13 @@ export default defineComponent({
 
     const valueRef = toRef(props, 'modelValue') as Ref<string[]>
 
+    const store = useSpaceStore()
     const entitySelector = useEntityMultiSelector<Space, SpaceFilter>(
-      'cmsSpace',
+      store,
       'SpaceMultiSelector',
       valueRef,
       emit)
+
 
     return {
       ...entitySelector,

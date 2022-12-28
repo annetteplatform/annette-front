@@ -6,6 +6,9 @@
     :pagination="pagination"
     :loading="instance.loading"
     @request="onRequest">
+    <template v-slot:toolbar>
+      <slot name="toolbar"></slot>
+    </template>
     <template v-slot:row="props">
       <q-td>
         {{ props.row.title }}
@@ -31,65 +34,28 @@
         </span>
       </q-td>
       <q-td auto-width>
-        <q-btn flat round color="green" size="sm" icon="far fa-eye"
-               :to="{ name: 'cms.page', params: { action: 'view', id: props.row.id } }"/>
-        <q-btn flat round color="blue" size="sm" icon="far fa-edit"
-               :to="{ name: 'cms.page', params: { action: 'edit', id: props.row.id } }"/>
-        <q-btn flat round color="red" size="sm" icon="fas fa-trash" @click="deleteEntity(props.row.id)"/>
+        <default-row-toolbar :id="props.row.id"
+                             route-name="cms.page"
+                             view edit del @delete="deleteEntity"/>
       </q-td>
     </template>
   </entity-list>
 </template>
 
 <script lang="ts">
-import {defineComponent} from 'vue';
-import {useEntityList} from 'src/shared';
-import EntityList from 'src/shared/components/EntityList.vue';
-import {Page, PageFilter} from 'src/modules/cms';
-import {useStore} from 'src/store';
+import {defineComponent, ref, useSlots} from 'vue';
+import EntityList from 'src/shared/components/crud/EntityList.vue';
+import {useActivateEntity, useDeactivateEntity, useEntityList} from 'src/shared/composables';
+import {useI18n} from 'vue-i18n';
+import DefaultRowToolbar from 'src/shared/components/crud/DefaultRowToolbar.vue';
+import {useDeleteEntity} from 'src/shared/composables/delete-entity';
+import {Page, PageFilter, usePageStore} from 'src/modules/cms';
 import {date, useQuasar} from 'quasar';
 
-const COLUMNS = [
-
-  {
-    name: 'title',
-    align: 'left',
-    label: 'Title',
-    field: 'title',
-    sortable: true,
-    classes: 'text-truncate'
-  },
-  {
-    name: 'spaceId',
-    align: 'left',
-    label: 'Space Id',
-    field: 'spaceId',
-    sortable: true,
-    classes: 'text-truncate'
-  },
-  {
-    name: 'publicationStatus',
-    align: 'left',
-    label: 'Status',
-    field: 'publicationStatus',
-    sortable: true,
-    classes: 'text-truncate'
-  },
-  {
-    name: 'publicationTimestamp',
-    align: 'left',
-    label: 'Date',
-    field: 'publicationTimestamp',
-    sortable: true,
-    classes: 'text-truncate'
-  }
-]
-
-const NAMESPACE = 'cmsPage';
 
 export default defineComponent({
   name: 'PageList',
-  components: { EntityList},
+  components: {DefaultRowToolbar, EntityList},
   props: {
     instanceKey: {
       type: String,
@@ -97,14 +63,56 @@ export default defineComponent({
     }
   },
   setup(props) {
-    const store = useStore()
+    const i18n = useI18n()
+
+    const columns = [
+      {
+        name: 'title',
+        align: 'left',
+        label: i18n.t('annette.cms.page.field.title'),
+        field: 'title',
+        sortable: true,
+        classes: 'text-truncate'
+      },
+      {
+        name: 'spaceId',
+        align: 'left',
+        label: i18n.t('annette.cms.page.field.spaceId'),
+        field: 'spaceId',
+        sortable: true,
+        classes: 'text-truncate'
+      },
+      {
+        name: 'publicationStatus',
+        align: 'left',
+        label: i18n.t('annette.cms.page.field.publicationStatus'),
+        field: 'publicationStatus',
+        sortable: true,
+        classes: 'text-truncate'
+      },
+      {
+        name: 'publicationTimestamp',
+        align: 'left',
+        label: i18n.t('annette.cms.page.field.publicationTimestamp'),
+        field: 'publicationTimestamp',
+        sortable: true,
+        classes: 'text-truncate'
+      }
+    ]
+
+    const store = usePageStore()
     const quasar = useQuasar()
 
     const entityList = useEntityList<Page, PageFilter>(
-      NAMESPACE,
+      store,
       props.instanceKey,
-      'Please confirm delete page.'
     )
+
+    const deleteEntity = useDeleteEntity(
+      store,
+      i18n.t('annette.cms.page.deleteQuestion'),
+    )
+
 
     const publish = (id: string) => {
       quasar.notify({
@@ -116,7 +124,7 @@ export default defineComponent({
             label: 'Publish',
             color: 'white',
             handler: () => {
-              store.dispatch('cmsPage/publishPage', id)
+              store.publishPage(id)
                 // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
                 .catch(ex => entityList.showErrorNotification(ex.code))
             }
@@ -139,7 +147,7 @@ export default defineComponent({
             label: 'Unpublish',
             color: 'white',
             handler: () => {
-              store.dispatch('cmsPage/unpublishPage', id)
+              store.unpublishPage(id)
                 // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
                 .catch(ex => entityList.showErrorNotification(ex.code))
             }
@@ -149,8 +157,9 @@ export default defineComponent({
     }
 
     return {
-      columns: COLUMNS,
+      columns,
       ...entityList,
+      deleteEntity: deleteEntity.deleteEntity,
       formatDate,
       publish,
       unpublish

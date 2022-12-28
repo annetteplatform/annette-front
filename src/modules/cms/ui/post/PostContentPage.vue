@@ -1,34 +1,32 @@
 <template>
-      <ContentEditor v-if="content"
-                     :content="content"
-                     :readonly="action ==='view'"
-                     @changeOrder="changeWidgetOrder"
-                     @update="updateWidget"
-                     @delete="deleteWidget"
-                     :media="state.files.media"
-                     :docs="state.files.docs"
-                     :narrow="true"
-      />
+  <content-editor v-if="content"
+                  :content="content"
+                  :readonly="action ==='view'"
+                  @changeOrder="changeWidgetOrder"
+                  @update="updateWidget"
+                  @delete="deleteWidget"
+                  :media="state.files.media"
+                  :docs="state.files.docs"
+                  :narrow="true"
+  />
 </template>
 
 <script lang="ts">
-import {computed, defineComponent, ref, toRef, watch} from 'vue';
+import {computed, ComputedRef, defineComponent, ref, toRef, watch} from 'vue';
 import {
-  ChangeWidgetOrderPayloadDto,
-  Content,
+  ChangeWidgetOrderPayloadDto, Content,
   DeleteWidgetPayloadDto,
   InitPostContentEditorPayload,
   PostEditor,
   toAction,
-  UpdateWidgetPayloadDto
+  UpdateWidgetPayloadDto, usePostStore,
 } from 'src/modules/cms';
-import {AnnetteError} from 'src/shared';
+import {AnnetteError} from 'src/shared/model';
 import {Ref} from '@vue/reactivity';
-import ContentEditor from 'src/shared/components/content/editor/ContentEditor.vue';
-import {useStore} from 'src/store';
+import ContentEditor from 'src/modules/cms/ui/content/editor/ContentEditor.vue';
 
 export default defineComponent({
-  name: 'PostIntroContentPage',
+  name: 'PostContentPage',
   components: {ContentEditor},
   props: {
     id: String,
@@ -37,21 +35,17 @@ export default defineComponent({
   },
   setup(props) {
 
-    const store = useStore()
+    const store = usePostStore()
 
     const id = toRef(props, 'id')
     const action = toRef(props, 'action')
     const contentType = toRef(props, 'contentType')
     const prevProps = ref('')
 
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access,@typescript-eslint/no-unsafe-return
-    const state: Ref<PostEditor> = computed(() => store.getters['cmsPost/editor'])
-
-    const content: Ref<Content> = computed(() => {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access,@typescript-eslint/no-unsafe-return
-      if (contentType.value === 'intro') { return store.getters['cmsPost/introContent'] }
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access,@typescript-eslint/no-unsafe-return
-      else { return store.getters['cmsPost/content'] }
+    const state: Ref<PostEditor> = computed(() => store.editor)
+    const content: ComputedRef<Content | undefined> = computed(() => {
+      if (contentType.value === 'intro') return store.editor.post?.introContent
+      else return store.editor.post?.content
     })
 
     const error: Ref<AnnetteError | null> = ref(null)
@@ -64,7 +58,7 @@ export default defineComponent({
         id: id.value as string,
         contentType: contentType.value as string
       }
-      void store.dispatch('cmsPost/initPostContentEditor', payload)
+      void store.initPostContentEditor(payload)
     }
 
     const clearError = () => {
@@ -72,7 +66,6 @@ export default defineComponent({
     }
 
     const watcher = () => {
-      // eslint-disable-next-line @typescript-eslint/restrict-template-expressions,@typescript-eslint/no-unsafe-member-access
       const newProps = `${action.value}/${id.value}/${contentType.value}`
       if (prevProps.value !== newProps) {
         loadEntity()
@@ -85,30 +78,28 @@ export default defineComponent({
     watch(action, watcher)
     watch(contentType, watcher)
 
+
     // @ts-ignore
     const changeWidgetOrder = async (data) => {
       const payload: ChangeWidgetOrderPayloadDto = {
         id: id.value as string,
         contentType: contentType.value as string,
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
         widgetId: data.widgetId,
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
         order: data.order
       }
-      await store.dispatch('cmsPost/changeEditorWidgetOrder', payload)
+      await store.changeEditorWidgetOrder(payload)
     }
 
     // @ts-ignore
     const updateWidget = async (data) => {
       const payload: UpdateWidgetPayloadDto = {
-        id: id.value as string,
         contentType: contentType.value as string,
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+        id: id.value as string,
         widget: data.widget,
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
         order: data.order
       }
-      await store.dispatch('cmsPost/updateEditorWidget', payload)
+      console.log(payload)
+      await store.updateEditorWidget(payload)
     }
 
     const deleteWidget = async (widgetId: string) => {
@@ -117,7 +108,7 @@ export default defineComponent({
         contentType: contentType.value as string,
         widgetId: widgetId,
       }
-      await store.dispatch('cmsPost/deleteEditorWidget', payload)
+      await store.deleteEditorWidget(payload)
     }
 
     return {

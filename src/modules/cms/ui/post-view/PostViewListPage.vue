@@ -1,40 +1,43 @@
 <template>
-  <entity-list-page narrow caption="Posts" :namespace="namespace" :instance-key="instanceKey">
+  <entity-list-page narrow
+                    :caption="$t('annette.cms.postView.titlePl')"
+                    :message="instance.message"
+                    @closeMessage="closeMessage">
     <template v-slot:toolbar>
-      <q-btn class="q-mr-md" outline color="primary"
-             label="Refresh"
-             @click="refreshList"/>
+     <default-list-page-toolbar @refresh="refreshList"/>
     </template>
     <template v-slot:filter>
-      <post-view-filter-form class="q-mb-md"
-                             :filter="instance.filter"
+      <post-view-filter-form :filter="instance.filter"
                              @filterChanged="onFilterChanged"
                              :empty-filter="emptyFilter"/>
     </template>
     <template v-slot:default>
-      <postView-list class="q-mb-md"
-                     :instance-key="instanceKey"/>
+      <post-view-list :instance-key="instanceKey"/>
     </template>
   </entity-list-page>
 </template>
 
+
 <script lang="ts">
-import {defineComponent, toRef, watch} from 'vue';
-import {InstanceState, PagingMode, useEntityListPage} from 'src/shared';
+import {useEntityListPage} from 'src/shared/composables/entity-list-page';
+import EntityListPage from 'src/shared/components/crud/EntityListPage.vue';
 import PostViewList from './components/PostViewList.vue';
-import EntityListPage from 'src/shared/components/EntityListPage.vue';
+import {defineComponent, Ref, toRef, watch} from 'vue';
+import {PostViewFilter, usePostViewStore} from 'src/modules/cms';
 import PostViewFilterForm from './components/PostViewFilterForm.vue';
-import {PostViewFilter} from 'src/modules/cms';
-import {Ref} from '@vue/reactivity';
-import {useStore} from 'src/store';
-
-const NAMESPACE = 'cmsPostView';
-const INSTANCE_KEY = 'postViews'
-
+import DefaultListPageToolbar from 'src/shared/components/crud/DefaultListPageToolbar.vue';
+import {PagingMode} from 'src/shared/store';
 
 export default defineComponent({
-  name: 'PostViewListPage',
-  components: {PostViewFilterForm, EntityListPage, PostViewList},
+  name: 'PostViewListPostView',
+  components: {
+    DefaultListPageToolbar,
+    PostViewFilterForm, PostViewList, EntityListPage
+  },
+  blogs: {
+    type: String,
+    required: false
+  },
   props: {
     blogs: {
       type: String,
@@ -43,8 +46,9 @@ export default defineComponent({
   },
   setup(props) {
 
-    const store = useStore()
-
+    const instanceKey = 'postViews'
+    const store = usePostViewStore()
+    // @ts-ignore
     const blogs = toRef(props, 'blogs') as Ref<string>
 
     function emptyFilter(): PostViewFilter {
@@ -59,7 +63,7 @@ export default defineComponent({
       }
     }
 
-    const updateBlogFilter = (instance: InstanceState<PostViewFilter>) => {
+    const updateBlogFilter = (instance: any) => {
       console.log('updateBlogFilter', blogs.value)
       const newFilter = {
         ...instance.filter,
@@ -67,13 +71,12 @@ export default defineComponent({
       if (blogs.value && blogs.value !== 'undefined') {
         newFilter.blogs = blogs.value.split(',')
       }
-      void store.dispatch(`${NAMESPACE}/setFilter`, {key: INSTANCE_KEY, filter: newFilter})
+      void store.setFilter({key: instanceKey, filter: newFilter})
     }
 
-
     const entityListPage = useEntityListPage<PostViewFilter>({
-      namespace: NAMESPACE,
-      instanceKey: INSTANCE_KEY,
+      store,
+      instanceKey,
       filter: emptyFilter(),
       pagingMode: PagingMode.Range,
       onInstanceUpdate: updateBlogFilter
@@ -84,7 +87,6 @@ export default defineComponent({
     return {
       ...entityListPage,
       emptyFilter,
-      sp: blogs
     };
   }
 });

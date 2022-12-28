@@ -1,5 +1,5 @@
 export * from './attributes'
-export * from './caption'
+export * from './multi-language'
 export * from './category'
 export * from './filter'
 export * from './message'

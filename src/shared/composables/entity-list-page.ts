@@ -1,10 +1,11 @@
-import {useStore} from 'src/store';
-import {InitInstancePayload, InstanceState, PagingMode} from 'src/shared';
+/* eslint-disable  @typescript-eslint/no-explicit-any */
+
 import {computed} from 'vue';
-import {Ref} from '@vue/reactivity';
+import {Ref} from 'vue';
+import { InitInstancePayload, InstanceState, PagingMode} from '../store';
 
 export interface UseEntityListPageOpt<F> {
-  namespace: string,
+  store: any
   instanceKey: string,
   filter?: F,
   pagingMode?: PagingMode
@@ -13,13 +14,8 @@ export interface UseEntityListPageOpt<F> {
 }
 
 export function useEntityListPage<F>(opt: UseEntityListPageOpt<F>) {
-// (namespace: string, opt.instanceKey: string, filter?: F) {
 
-  const store = useStore()
-
-
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-member-access
-  if (!store.getters[`${opt.namespace}/instance`](opt.instanceKey)) {
+  if (!opt.store.instances[opt.instanceKey]) {
     const initInstancePayload: InitInstancePayload<F> = {
       key: opt.instanceKey,
       mode: opt.pagingMode || PagingMode.Standard,
@@ -29,30 +25,31 @@ export function useEntityListPage<F>(opt: UseEntityListPageOpt<F>) {
       initInstancePayload.filter = opt.filter
     }
 
-    void store.dispatch(`${opt.namespace}/initInstance`, initInstancePayload)
+    void opt.store.initInstance(initInstancePayload)
   } else if (opt.onInstanceUpdate) {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-return,@typescript-eslint/no-unsafe-member-access
-    opt.onInstanceUpdate(store.getters[`${opt.namespace}/instance`](opt.instanceKey))
+    opt.onInstanceUpdate(opt.store.instances[opt.instanceKey])
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-return,@typescript-eslint/no-unsafe-member-access
-  const instance: Ref<InstanceState<F>> = computed(() => store.getters[`${opt.namespace}/instance`](opt.instanceKey))
+  const instance: Ref<InstanceState<F>> = computed(() => opt.store.instances[opt.instanceKey])
 
   const refreshList = () => {
-    void store.dispatch(`${opt.namespace}/refresh`, {key: opt.instanceKey})
+    void opt.store.refresh({key: opt.instanceKey})
   }
 
-  const onFilterChanged = (filter: any) => {
+  const onFilterChanged = (filter: F) => {
     console.log('onFilterChanged', filter)
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-    void store.dispatch(`${opt.namespace}/setFilter`, {key: opt.instanceKey, filter: filter})
+    void opt.store.setFilter({key: opt.instanceKey, filter: filter})
+  }
+
+  const closeMessage = () => {
+    void opt.store.clearMessage(opt.instanceKey)
   }
 
   return {
-    namespace: opt.namespace,
     instanceKey: opt.instanceKey,
     instance,
     refreshList,
     onFilterChanged,
+    closeMessage
   };
 }

@@ -20,8 +20,8 @@
 <script lang="ts">
 import {defineComponent, PropType, ref, toRef, watch} from 'vue';
 import {Ref} from '@vue/reactivity';
-import {AnnettePrincipal} from 'src/shared';
-import PrincipalTypeSelector from 'src/modules/authorization/assignment/components/PrincipalTypeSelector.vue';
+import {AnnettePrincipal} from 'src/shared/model';
+import PrincipalTypeSelector from './PrincipalTypeSelector.vue';
 
 
 export default defineComponent({

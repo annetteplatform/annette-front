@@ -1,45 +1,52 @@
 <template>
-  <entity-list-page narrow caption="Space Categories" :namespace="namespace" :instance-key="instanceKey" >
+  <entity-list-page narrow
+                    :caption="$t('annette.cms.spaceCategory.titlePl')"
+                    :message="instance.message"
+                    @closeMessage="closeMessage">
     <template v-slot:toolbar>
-      <q-btn class="q-mr-md" outline color="primary"
-             label="Refresh"
-             @click="refreshList"/>
-      <q-btn color="primary"
-             label="Create"
-             :to="{name: 'cms.spaceCategory', params: {action: 'create', id: 'new'}}"/>
+      <default-list-page-toolbar @refresh="refreshList"/>
     </template>
     <template v-slot:filter>
-      <simple-filter-form class="q-mb-md"
-                          :filter="instance.filter"
-                          @filterChanged="onFilterChanged"/>
+      <simple-filter-form
+        :filter="instance.filter"
+        @filterChanged="onFilterChanged"/>
     </template>
     <template v-slot:default>
-      <space-category-list class="q-mb-md"
-                            :instance-key="instanceKey"/>
+      <space-category-list
+        :instance-key="instanceKey">
+        <template v-slot:toolbar>
+         <default-list-toolbar create create-route-name="cms.spaceCategory"/>
+        </template>
+      </space-category-list>
     </template>
   </entity-list-page>
 </template>
 
-<script lang="ts">
-import {defineComponent} from 'vue';
-import {CategoryFilter, useEntityListPage} from 'src/shared';
-import SpaceCategoryList from './components/SpaceCategoryList.vue';
-import EntityListPage from 'src/shared/components/EntityListPage.vue';
-import SimpleFilterForm from 'src/shared/components/SimpleFilterForm.vue';
 
-const NAMESPACE = 'cmsSpaceCategory'
-const INSTANCE_KEY = 'categories'
+<script lang="ts">
+import {useEntityListPage} from 'src/shared/composables/entity-list-page';
+import EntityListPage from 'src/shared/components/crud/EntityListPage.vue';
+import SimpleFilterForm from 'src/shared/components/crud/SimpleFilterForm.vue';
+import SpaceCategoryList from './components/SpaceCategoryList.vue';
+import {defineComponent} from 'vue';
+import DefaultListToolbar from 'src/shared/components/crud/DefaultListToolbar.vue';
+import DefaultListPageToolbar from 'src/shared/components/crud/DefaultListPageToolbar.vue';
+import {CategoryFilter} from 'src/shared/model';
+import {useSpaceCategoryStore} from 'src/modules/cms';
 
 export default defineComponent({
   name: 'SpaceCategoryListPage',
-  components: {EntityListPage, SpaceCategoryList, SimpleFilterForm},
+  components: {
+    DefaultListPageToolbar,
+    DefaultListToolbar, SpaceCategoryList, SimpleFilterForm, EntityListPage},
   setup() {
 
+    const instanceKey = 'categories'
+    const store = useSpaceCategoryStore()
     const entityListPage = useEntityListPage<CategoryFilter>({
-      namespace: NAMESPACE,
-      instanceKey: INSTANCE_KEY
+      store,
+      instanceKey
     })
-
     return {
       ...entityListPage
     };
