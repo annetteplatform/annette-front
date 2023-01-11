@@ -56,8 +56,8 @@ export const usePageStore = defineStore('cmsPage', () => {
     defaultPageSize: DEFAULT_PAGE_SIZE,
     defaultFilter: emptyPageFilter,
     find: cmsPageService.findPages,
-    getEntityById: cmsPageService.getPageAnnotationById,
-    getEntitiesById: cmsPageService.getPagesAnnotationById,
+    getEntity: cmsPageService.getPageAnnotationById,
+    getEntities: cmsPageService.getPagesAnnotationById,
   })
 
   const editor: Ref<PageEditor> = ref({

@@ -26,15 +26,15 @@ export const personService = {
       .then(result => result.data)
   },
 
-  async getPersonById(id: string, readSide = true) {
+  async getPerson(id: string, readSide = true) {
     // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-    return await axios.get<Person>(`/api/annette/v1/person/getPersonById/${id}/${readSide}`)
+    return await axios.get<Person>(`/api/annette/v1/person/getPerson/${id}/${readSide}`)
       .then(result => convertPerson(result.data))
   },
 
-  async getPersonsById(ids: string[], readSide = true) {
+  async getPersons(ids: string[], readSide = true) {
     // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-    return await axios.post<Person[]>(`/api/annette/v1/person/getPersonsById/${readSide}`, ids)
+    return await axios.post<Person[]>(`/api/annette/v1/person/getPersons/${readSide}`, ids)
       .then(result => result.data.map(convertPerson))
   },
 
@@ -90,15 +90,15 @@ export const personService = {
       .then(result => result.data)
   },
 
-  async getCategoryById(id: string, readSide = true) {
+  async getCategory(id: string, readSide = true) {
     // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-    return await axios.get<Category>(`/api/annette/v1/person/getCategoryById/${id}/${readSide}`)
+    return await axios.get<Category>(`/api/annette/v1/person/getCategory/${id}/${readSide}`)
       .then(result => convertCategory(result.data))
   },
 
-  async getCategoriesById(ids: string[], readSide = true) {
+  async getCategories(ids: string[], readSide = true) {
     // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-    return await axios.post<Category[]>(`/api/annette/v1/person/getCategoriesById/${readSide}`, ids)
+    return await axios.post<Category[]>(`/api/annette/v1/person/getCategories/${readSide}`, ids)
       .then(result => result.data.map(convertCategory))
   },
 

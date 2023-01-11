@@ -11,8 +11,8 @@ export const useCategoryStore = defineStore('serviceCatalogCategory', () => {
     defaultPageSize: DEFAULT_PAGE_SIZE,
     defaultFilter: emptyCategoryFilter,
     find: serviceCatalogService.findCategories,
-    getEntityById: serviceCatalogService.getCategoryById,
-    getEntitiesById: serviceCatalogService.getCategoriesById,
+    getEntity: serviceCatalogService.getCategoryById,
+    getEntities: serviceCatalogService.getCategoriesById,
   })
 
   const createEntity = async (entity: Category) => {

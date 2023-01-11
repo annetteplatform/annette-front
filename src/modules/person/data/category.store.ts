@@ -11,8 +11,8 @@ export const useCategoryStore = defineStore('personCategory', () => {
     defaultPageSize: DEFAULT_PAGE_SIZE,
     defaultFilter: emptyCategoryFilter,
     find: personService.findCategories,
-    getEntityById: personService.getCategoryById,
-    getEntitiesById: personService.getCategoriesById,
+    getEntity: personService.getCategory,
+    getEntities: personService.getCategories,
   })
 
   const createEntity = async (entity: Category) => {

@@ -11,8 +11,8 @@ export const useServiceItemStore = defineStore('service-item', () => {
     defaultPageSize: DEFAULT_PAGE_SIZE,
     defaultFilter: emptyServiceItemFilter,
     find: serviceCatalogService.findServiceItems,
-    getEntityById: serviceCatalogService.getServiceItemById,
-    getEntitiesById: serviceCatalogService.getServiceItemsById,
+    getEntity: serviceCatalogService.getServiceItemById,
+    getEntities: serviceCatalogService.getServiceItemsById,
   })
 
   const createEntity = async (entity: ServiceItem) => {

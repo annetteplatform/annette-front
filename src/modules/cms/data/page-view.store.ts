@@ -14,8 +14,8 @@ export const usePageViewStore = defineStore('cmsPageView', () => {
     defaultPageSize: DEFAULT_PAGE_SIZE,
     defaultFilter: emptyPageViewFilter,
     find: cmsPageViewService.findPageViews,
-    getEntityById: cmsPageViewService.getPageViewById,
-    getEntitiesById: cmsPageViewService.getPageViewsById,
+    getEntity: cmsPageViewService.getPageViewById,
+    getEntities: cmsPageViewService.getPageViewsById,
   })
 
   const getPageView = async (id: string) => {

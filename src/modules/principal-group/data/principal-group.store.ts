@@ -17,8 +17,8 @@ export const usePrincipalGroupStore = defineStore('principalGroup', () => {
     defaultPageSize: DEFAULT_PAGE_SIZE,
     defaultFilter: emptyPrincipalGroupFilter,
     find: principalGroupService.findPrincipalGroups,
-    getEntityById: principalGroupService.getPrincipalGroupById,
-    getEntitiesById: principalGroupService.getPrincipalGroupsById,
+    getEntity: principalGroupService.getPrincipalGroupById,
+    getEntities: principalGroupService.getPrincipalGroupsById,
   })
 
   const createEntity = async (entity: PrincipalGroup) => {

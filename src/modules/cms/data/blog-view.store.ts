@@ -14,8 +14,8 @@ export const useBlogViewStore = defineStore('cmsBlogView', () => {
     defaultPageSize: DEFAULT_PAGE_SIZE,
     defaultFilter: emptyBlogViewFilter,
     find: cmsBlogViewService.findBlogViews,
-    getEntityById: cmsBlogViewService.getBlogViewById,
-    getEntitiesById: cmsBlogViewService.getBlogViewsById,
+    getEntity: cmsBlogViewService.getBlogViewById,
+    getEntities: cmsBlogViewService.getBlogViewsById,
   })
 
   const subscribeToBlog = async (id: string) => {

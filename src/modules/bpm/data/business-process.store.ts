@@ -20,8 +20,8 @@ export const useBusinessProcessStore = defineStore('businessProcess', () => {
     defaultPageSize: DEFAULT_PAGE_SIZE,
     defaultFilter: emptyBusinessProcessFilter,
     find: bpmBusinessProcessService.findBusinessProcesses,
-    getEntityById: bpmBusinessProcessService.getBusinessProcessById,
-    getEntitiesById: bpmBusinessProcessService.getBusinessProcessesById,
+    getEntity: bpmBusinessProcessService.getBusinessProcessById,
+    getEntities: bpmBusinessProcessService.getBusinessProcessesById,
   })
 
   const createEntity = async (entity: CreateBusinessProcessPayloadDto) => {

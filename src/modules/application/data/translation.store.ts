@@ -11,8 +11,8 @@ export const useTranslationStore = defineStore('translation', () => {
     defaultPageSize: DEFAULT_PAGE_SIZE,
     defaultFilter: emptyTranslationFilter,
     find: applicationService.findTranslations,
-    getEntityById: applicationService.getTranslationById,
-    getEntitiesById: applicationService.getTranslationsById,
+    getEntity: applicationService.getTranslationById,
+    getEntities: applicationService.getTranslationsById,
   })
 
   const createEntity = async (entity: Translation) => {
