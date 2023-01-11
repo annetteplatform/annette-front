@@ -27,14 +27,16 @@ export const personService = {
   },
 
   async getPerson(id: string, readSide = true) {
+    let source = readSide ? '' : '?source=origin'
     // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-    return await axios.get<Person>(`/api/annette/v1/person/getPerson/${id}/${readSide}`)
+    return await axios.get<Person>(`/api/annette/v1/person/getPerson/${id}${source}`)
       .then(result => convertPerson(result.data))
   },
 
   async getPersons(ids: string[], readSide = true) {
+    let source = readSide ? '' : '?source=origin'
     // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-    return await axios.post<Person[]>(`/api/annette/v1/person/getPersons/${readSide}`, ids)
+    return await axios.post<Person[]>(`/api/annette/v1/person/getPersons${source}`, ids)
       .then(result => result.data.map(convertPerson))
   },
 
@@ -62,14 +64,16 @@ export const personService = {
   },
 
   async getPersonAttributes(id: string, readSide = true, attributes: string) {
+    let source = readSide ? '' : '&source=origin'
     // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-    return await axios.get<AttributeValues>(`/api/annette/v1/person/getPersonAttributes/${id}/${readSide}?attributes=${attributes}`)
+    return await axios.get<AttributeValues>(`/api/annette/v1/person/getPersonAttributes/${id}?attributes=${attributes}${source}`)
       .then(result => result.data)
   },
 
   async getPersonsAttributes(ids: string[], readSide = true, attributes: string) {
+    let source = readSide ? '' : '&source=origin'
     // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-    return await axios.post<EntitiesAttributeValues>(`/api/annette/v1/person/getPersonsAttributes/${readSide}?attributes=${attributes}`, ids)
+    return await axios.post<EntitiesAttributeValues>(`/api/annette/v1/person/getPersonsAttributes?attributes=${attributes}${source}`, ids)
       .then(result => result.data)
   },
 
@@ -91,14 +95,16 @@ export const personService = {
   },
 
   async getCategory(id: string, readSide = true) {
+    let source = readSide ? '' : '?source=origin'
     // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-    return await axios.get<Category>(`/api/annette/v1/person/getCategory/${id}/${readSide}`)
+    return await axios.get<Category>(`/api/annette/v1/person/getCategory/${id}${source}`)
       .then(result => convertCategory(result.data))
   },
 
   async getCategories(ids: string[], readSide = true) {
+    let source = readSide ? '' : '?source=origin'
     // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-    return await axios.post<Category[]>(`/api/annette/v1/person/getCategories/${readSide}`, ids)
+    return await axios.post<Category[]>(`/api/annette/v1/person/getCategories${source}`, ids)
       .then(result => result.data.map(convertCategory))
   },
 
