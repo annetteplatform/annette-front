@@ -11,8 +11,8 @@ export const useOrgCategoryStore = defineStore('orgCategory', () => {
     defaultPageSize: DEFAULT_PAGE_SIZE,
     defaultFilter: emptyOrgCategoryFilter,
     find: orgStructureService.findCategories,
-    getEntityById: orgStructureService.getCategoryById,
-    getEntitiesById: orgStructureService.getCategoriesById,
+    getEntity: orgStructureService.getCategoryById,
+    getEntities: orgStructureService.getCategoriesById,
   })
 
   const createEntity = async (entity: OrgCategory) => {

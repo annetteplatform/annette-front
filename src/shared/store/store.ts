@@ -29,8 +29,8 @@ export interface EntityStoreOptions<E extends BaseEntity, F> {
   defaultPageSize: number,
   defaultFilter: () => F,
   find: (query: F, offset: number, size: number) => Promise<FindResult>,
-  getEntityById: (id: string, readSide: boolean) => Promise<E>,
-  getEntitiesById: (ids: string[], readSide: boolean) => Promise<E[]>
+  getEntity: (id: string, readSide: boolean) => Promise<E>,
+  getEntities: (ids: string[], readSide: boolean) => Promise<E[]>
 }
 
 export function useEntityStore<E extends BaseEntity, F>(
@@ -175,7 +175,7 @@ export function useEntityStore<E extends BaseEntity, F>(
       const addIdInLoading = idsToLoad.filter(id => !idInLoading.value.includes(id))
       idInLoading.value = [...idInLoading.value, ...addIdInLoading]
       try {
-        const newEntities: E[] = await options.getEntitiesById(idsToLoad, true)
+        const newEntities: E[] = await options.getEntities(idsToLoad, true)
         const loadSuccessPayload: LoadSuccessPayload<E, F> = {
           ...payload,
           idInLoading: idsToLoad,
@@ -373,13 +373,13 @@ export function useEntityStore<E extends BaseEntity, F>(
   }
 
   const getEntityForEdit = async (id: string) => {
-    const entity = await options.getEntityById(id, false)
+    const entity = await options.getEntity(id, false)
     entities.value[entity.id] = entity
     return entity
   }
 
   const getEntitiesForEdit = async (ids: string[]) => {
-    const newEntities = await options.getEntitiesById(ids, false)
+    const newEntities = await options.getEntities(ids, false)
     storeEntities(newEntities)
     return newEntities
   }
@@ -387,7 +387,7 @@ export function useEntityStore<E extends BaseEntity, F>(
   const loadEntitiesIfNotExist = async (ids: string[]) => {
     const entitiesToLoad: string[] = ids.filter(id => !entities.value[id])
     if (entitiesToLoad.length > 0) {
-      const newEntities = await options.getEntitiesById(entitiesToLoad, true)
+      const newEntities = await options.getEntities(entitiesToLoad, true)
       storeEntities(newEntities)
     }
     return ids.filter(id => entities.value[id]).map(id => entities.value[id])

@@ -11,8 +11,8 @@ export const usePersonStore = defineStore('person', () => {
     defaultPageSize: DEFAULT_PAGE_SIZE,
     defaultFilter: emptyPersonFilter,
     find: personService.findPersons,
-    getEntityById: personService.getPersonById,
-    getEntitiesById: personService.getPersonsById,
+    getEntity: personService.getPerson,
+    getEntities: personService.getPersons,
   })
 
   const createEntity = async (entity: Person) => {

@@ -61,8 +61,8 @@ export const usePostStore = defineStore('cmsPost', () => {
     defaultPageSize: DEFAULT_PAGE_SIZE,
     defaultFilter: emptyPostFilter,
     find: cmsPostService.findPosts,
-    getEntityById: cmsPostService.getPostAnnotationById,
-    getEntitiesById: cmsPostService.getPostsAnnotationById,
+    getEntity: cmsPostService.getPostAnnotationById,
+    getEntities: cmsPostService.getPostsAnnotationById,
   })
 
   const editor: Ref<PostEditor> = ref({

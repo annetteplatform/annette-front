@@ -14,8 +14,8 @@ export const usePostViewStore = defineStore('cmsPostView', () => {
     defaultPageSize: DEFAULT_PAGE_SIZE,
     defaultFilter: emptyPostViewFilter,
     find: cmsPostViewService.findPostViews,
-    getEntityById: cmsPostViewService.getPostViewById,
-    getEntitiesById: cmsPostViewService.getPostViewAnnotationsById,
+    getEntity: cmsPostViewService.getPostViewById,
+    getEntities: cmsPostViewService.getPostViewAnnotationsById,
   })
 
   const getPostView = async (id: string) => {

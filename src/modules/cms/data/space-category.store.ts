@@ -11,8 +11,8 @@ export const useSpaceCategoryStore = defineStore('cmsSpaceCategory', () => {
     defaultPageSize: DEFAULT_PAGE_SIZE,
     defaultFilter: emptyCategoryFilter,
     find: cmsSpaceCategoryService.findCategories,
-    getEntityById: cmsSpaceCategoryService.getCategoryById,
-    getEntitiesById: cmsSpaceCategoryService.getCategoriesById,
+    getEntity: cmsSpaceCategoryService.getCategoryById,
+    getEntities: cmsSpaceCategoryService.getCategoriesById,
   })
 
   const createEntity = async (entity: Category) => {

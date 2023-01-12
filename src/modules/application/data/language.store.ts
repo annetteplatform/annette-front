@@ -11,8 +11,8 @@ export const useLanguageStore = defineStore('language', () => {
     defaultPageSize: DEFAULT_PAGE_SIZE,
     defaultFilter: emptyLanguageFilter,
     find: applicationService.findLanguages,
-    getEntityById: applicationService.getLanguageById,
-    getEntitiesById: applicationService.getLanguagesById,
+    getEntity: applicationService.getLanguageById,
+    getEntities: applicationService.getLanguagesById,
   })
 
   const createEntity = async (entity: Language) => {

@@ -11,8 +11,8 @@ export const useScopeStore = defineStore('scope', () => {
     defaultPageSize: DEFAULT_PAGE_SIZE,
     defaultFilter: emptyScopeFilter,
     find: serviceCatalogService.findScopes,
-    getEntityById: serviceCatalogService.getScopeById,
-    getEntitiesById: serviceCatalogService.getScopesById,
+    getEntity: serviceCatalogService.getScopeById,
+    getEntities: serviceCatalogService.getScopesById,
   })
 
   const createEntity = async (entity: Scope) => {

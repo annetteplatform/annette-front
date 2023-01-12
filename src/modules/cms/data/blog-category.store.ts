@@ -11,8 +11,8 @@ export const useBlogCategoryStore = defineStore('cmsBlogCategory', () => {
     defaultPageSize: DEFAULT_PAGE_SIZE,
     defaultFilter: emptyCategoryFilter,
     find: cmsBlogCategoryService.findCategories,
-    getEntityById: cmsBlogCategoryService.getCategoryById,
-    getEntitiesById: cmsBlogCategoryService.getCategoriesById,
+    getEntity: cmsBlogCategoryService.getCategoryById,
+    getEntities: cmsBlogCategoryService.getCategoriesById,
   })
 
   const createEntity = async (entity: Category) => {

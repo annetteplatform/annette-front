@@ -41,8 +41,8 @@ export interface CustomEntityStoreOptions<E extends BaseEntity, F> {
   defaultPageSize: number,
   defaultFilter: () => F,
   load: (state: EntityState<E, F>, payload: LoadPayload<F>) => Promise<string>
-  getEntityById?: (id: string, readSide: boolean) => Promise<E>,
-  getEntitiesById?: (ids: string[], readSide: boolean) => Promise<E[]>
+  getEntity?: (id: string, readSide: boolean) => Promise<E>,
+  getEntities?: (ids: string[], readSide: boolean) => Promise<E[]>
 }
 
 export function useCustomEntityStore<E extends BaseEntity, F>(
@@ -330,8 +330,8 @@ export function useCustomEntityStore<E extends BaseEntity, F>(
   }
 
   const getEntityForEdit = async (id: string) => {
-    if (options.getEntityById) {
-      const entity = await options.getEntityById(id, false)
+    if (options.getEntity) {
+      const entity = await options.getEntity(id, false)
       entities.value[entity.id] = entity
       return entity
     }
@@ -339,8 +339,8 @@ export function useCustomEntityStore<E extends BaseEntity, F>(
   }
 
   const getEntitiesForEdit = async (ids: string[]) => {
-    if (options.getEntitiesById) {
-      const newEntities = await options.getEntitiesById(ids, false)
+    if (options.getEntities) {
+      const newEntities = await options.getEntities(ids, false)
       storeEntities(newEntities)
       return newEntities
     }
@@ -348,10 +348,10 @@ export function useCustomEntityStore<E extends BaseEntity, F>(
   }
 
   const loadEntitiesIfNotExist = async (ids: string[]) => {
-    if (options.getEntitiesById) {
+    if (options.getEntities) {
       const entitiesToLoad: string[] = ids.filter(id => !entities.value[id])
       if (entitiesToLoad.length > 0) {
-        const newEntities = await options.getEntitiesById(entitiesToLoad, true)
+        const newEntities = await options.getEntities(entitiesToLoad, true)
         storeEntities(newEntities)
       }
       return ids.filter(id => entities.value[id]).map(id => entities.value[id])
