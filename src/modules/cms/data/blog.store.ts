@@ -19,8 +19,8 @@ export const useBlogStore = defineStore('cmsBlog', () => {
     defaultPageSize: DEFAULT_PAGE_SIZE,
     defaultFilter: emptyBlogFilter,
     find: cmsBlogService.findBlogs,
-    getEntity: cmsBlogService.getBlogById,
-    getEntities: cmsBlogService.getBlogsById,
+    getEntity: cmsBlogService.getBlog,
+    getEntities: cmsBlogService.getBlogs,
   })
 
   const createEntity = async (entity: CreateBlogPayloadDto) => {

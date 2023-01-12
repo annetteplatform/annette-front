@@ -26,7 +26,7 @@
       </q-td>
       <q-td auto-width>
         <default-row-toolbar :id="props.row.id"
-                             route-name="org-structure.category"
+                             route-name="orgStructure.category"
                              view copy edit del @delete="deleteEntity"/>
       </q-td>
     </template>

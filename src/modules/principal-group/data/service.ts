@@ -46,15 +46,15 @@ export const principalGroupService = {
       .then(result => result.data)
   },
 
-  async getPrincipalGroupById(id: string, readSide = true) {
+  async getPrincipalGroup(id: string, readSide = true) {
     // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-    return await axios.get<PrincipalGroup>(`/api/annette/v1/principalGroup/getPrincipalGroupById/${id}/${readSide}`)
+    return await axios.get<PrincipalGroup>(`/api/annette/v1/principalGroup/getPrincipalGroup/${id}/${readSide}`)
       .then(result => convertPrincipalGroup(result.data))
   },
 
-  async getPrincipalGroupsById(ids: string[], readSide = true) {
+  async getPrincipalGroups(ids: string[], readSide = true) {
     // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-    return await axios.post<PrincipalGroup[]>(`/api/annette/v1/principalGroup/getPrincipalGroupsById/${readSide}`, ids)
+    return await axios.post<PrincipalGroup[]>(`/api/annette/v1/principalGroup/getPrincipalGroups/${readSide}`, ids)
       .then(result => result.data.map(convertPrincipalGroup))
   },
 
@@ -91,15 +91,15 @@ export const principalGroupService = {
       .then(result => result.data)
   },
 
-  async getCategoryById(id: string, readSide = true) {
+  async getCategory(id: string, readSide = true) {
     // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-    return await axios.get<Category>(`/api/annette/v1/principalGroup/getCategoryById/${id}/${readSide}`)
+    return await axios.get<Category>(`/api/annette/v1/principalGroup/getCategory/${id}/${readSide}`)
       .then(result => convertCategory(result.data))
   },
 
-  async getCategoriesById(ids: string[], readSide = true) {
+  async getCategories(ids: string[], readSide = true) {
     // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-    return await axios.post<Category[]>(`/api/annette/v1/principalGroup/getCategoriesById/${readSide}`, ids)
+    return await axios.post<Category[]>(`/api/annette/v1/principalGroup/getCategories/${readSide}`, ids)
       .then(result => result.data.map(convertCategory))
   },
 

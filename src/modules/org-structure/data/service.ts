@@ -54,15 +54,15 @@ export const orgStructureService = {
       .then(result => result.data)
   },
 
-  async getCategoryById(id: string, readSide = true) {
+  async getCategory(id: string, readSide = true) {
     // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-    return await axios.get<OrgCategory>(`/api/annette/v1/orgStructure/getCategoryById/${id}/${readSide}`)
+    return await axios.get<OrgCategory>(`/api/annette/v1/orgStructure/getCategory/${id}/${readSide}`)
       .then(result => convertOrgCategory(result.data))
   },
 
-  async getCategoriesById(ids: string[], readSide = true) {
+  async getCategories(ids: string[], readSide = true) {
     // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-    return await axios.post<OrgCategory[]>(`/api/annette/v1/orgStructure/getCategoriesById/${readSide}`, ids)
+    return await axios.post<OrgCategory[]>(`/api/annette/v1/orgStructure/getCategories/${readSide}`, ids)
       .then(result => result.data.map(convertOrgCategory))
   },
 
@@ -93,15 +93,15 @@ export const orgStructureService = {
       .then(result => result.data)
   },
 
-  async getOrgRoleById(id: string, readSide = true) {
+  async getOrgRole(id: string, readSide = true) {
     // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-    return await axios.get<OrgRole>(`/api/annette/v1/orgStructure/getOrgRoleById/${id}/${readSide}`)
+    return await axios.get<OrgRole>(`/api/annette/v1/orgStructure/getOrgRole/${id}/${readSide}`)
       .then(result => convertOrgRole(result.data))
   },
 
-  async getOrgRolesById(ids: string[], readSide = true) {
+  async getOrgRoles(ids: string[], readSide = true) {
     // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-    return await axios.post<OrgRole[]>(`/api/annette/v1/orgStructure/getOrgRolesById/${readSide}`, ids)
+    return await axios.post<OrgRole[]>(`/api/annette/v1/orgStructure/getOrgRoles/${readSide}`, ids)
       .then(result => result.data.map(convertOrgRole))
   },
 
@@ -191,14 +191,14 @@ export const orgStructureService = {
       .then(() => true)
   },
 
-  async getOrgItemById(id: string, fromReadSide: boolean) {
+  async getOrgItem(id: string, fromReadSide: boolean) {
     // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-    return await axios.get<OrgItem>(`/api/annette/v1/orgStructure/getOrgItemById/${id}/${fromReadSide}`)
+    return await axios.get<OrgItem>(`/api/annette/v1/orgStructure/getOrgItem/${id}/${fromReadSide}`)
       .then(result => convertOrgItem(result.data))
   },
-  async getOrgItemsById(ids: string[], fromReadSide: boolean) {
+  async getOrgItems(ids: string[], fromReadSide: boolean) {
     // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-    return await axios.post<OrgItem[]>(`/api/annette/v1/orgStructure/getOrgItemsById/${fromReadSide}`, ids)
+    return await axios.post<OrgItem[]>(`/api/annette/v1/orgStructure/getOrgItems/${fromReadSide}`, ids)
       .then(result => result.data.map(convertOrgItem))
   },
 

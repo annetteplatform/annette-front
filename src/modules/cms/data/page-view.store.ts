@@ -14,12 +14,12 @@ export const usePageViewStore = defineStore('cmsPageView', () => {
     defaultPageSize: DEFAULT_PAGE_SIZE,
     defaultFilter: emptyPageViewFilter,
     find: cmsPageViewService.findPageViews,
-    getEntity: cmsPageViewService.getPageViewById,
-    getEntities: cmsPageViewService.getPageViewsById,
+    getEntity: cmsPageViewService.getPageView,
+    getEntities: cmsPageViewService.getPageViews,
   })
 
   const getPageView = async (id: string) => {
-    const entity = await cmsPageViewService.getPageViewById(id)
+    const entity = await cmsPageViewService.getPageView(id)
     entityStore.storeEntity(entity)
     return entity
 
@@ -28,7 +28,7 @@ export const usePageViewStore = defineStore('cmsPageView', () => {
   const changeLikeStatus = async (id: string) => {
     let metric: PageMetric
     // @ts-ignore
-    if (state.entities[id] && state.entities[id].metric && state.entities[id].metric.likedByMe) {
+    if (entityStore.entities.value[id] && entityStore.entities.value[id].metric && entityStore.entities.value[id].metric.likedByMe) {
       metric = await cmsPageViewService.unlikePage(id)
     } else {
       metric = await cmsPageViewService.likePage(id)

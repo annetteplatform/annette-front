@@ -56,8 +56,8 @@ export const usePageStore = defineStore('cmsPage', () => {
     defaultPageSize: DEFAULT_PAGE_SIZE,
     defaultFilter: emptyPageFilter,
     find: cmsPageService.findPages,
-    getEntity: cmsPageService.getPageAnnotationById,
-    getEntities: cmsPageService.getPagesAnnotationById,
+    getEntity: cmsPageService.getPageAnnotation,
+    getEntities: cmsPageService.getPagesAnnotation,
   })
 
   const editor: Ref<PageEditor> = ref({
@@ -84,7 +84,7 @@ export const usePageStore = defineStore('cmsPage', () => {
     withContent: boolean,
     withTargets: boolean) => {
     void cmsPageService.getPageFiles(payload.id).then(files => editor.value.files = files)
-    const page = await cmsPageService.getPageById(
+    const page = await cmsPageService.getPage(
       payload.id,
       fromReadSide,
       withContent,

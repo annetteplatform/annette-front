@@ -153,7 +153,7 @@ export default defineComponent({
     const languageDialog = async (lang: string) => {
       language.value = lang
       try {
-        translationJson.value = await store.getTranslationJsonById(
+        translationJson.value = await store.getTranslationJson(
           {
             translationId: translationId.value,
             languageId: lang

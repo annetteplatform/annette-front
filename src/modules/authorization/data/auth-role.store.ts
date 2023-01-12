@@ -11,8 +11,8 @@ export const useAuthRoleStore = defineStore('authRole', () => {
     defaultPageSize: DEFAULT_PAGE_SIZE,
     defaultFilter: emptyAuthRoleFilter,
     find: authorizationService.findRoles,
-    getEntity: authorizationService.getRoleById,
-    getEntities: authorizationService.getRolesById,
+    getEntity: authorizationService.getRole,
+    getEntities: authorizationService.getRoles,
   })
 
   const createEntity = async (entity: AuthRole) => {

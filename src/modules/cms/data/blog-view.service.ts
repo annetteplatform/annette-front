@@ -14,15 +14,15 @@ export const cmsBlogViewService = {
       .then(result => result.data)
   },
 
-  async getBlogViewById(id: string, readSide = true) {
+  async getBlogView(id: string, readSide = true) {
     // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-    return await axios.get<BlogView>(`/api/annette/v1/cms/getBlogViewById/${id}/${readSide}`)
+    return await axios.get<BlogView>(`/api/annette/v1/cms/getBlogView/${id}/${readSide}`)
       .then(result => convertBlogView(result.data))
   },
 
-  async getBlogViewsById(ids: string[]) {
+  async getBlogViews(ids: string[]) {
     // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-    return await axios.post<BlogView[]>('/api/annette/v1/cms/getBlogViewsById', ids)
+    return await axios.post<BlogView[]>('/api/annette/v1/cms/getBlogViews', ids)
       .then(result => result.data.map(convertBlogView))
   },
 

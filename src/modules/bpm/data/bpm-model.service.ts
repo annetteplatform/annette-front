@@ -40,15 +40,15 @@ export const bpmBpmModelService = {
       .then(result => result.data)
   },
 
-  async getBpmModelById(id: string) {
+  async getBpmModel(id: string) {
     // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-    return await axios.get<BpmModel>(`/api/annette/v1/bpm/getBpmModelById/${id}`)
+    return await axios.get<BpmModel>(`/api/annette/v1/bpm/getBpmModel/${id}`)
       .then(result => convertBpmModel(result.data))
   },
 
-  async getBpmModelsById(ids: string[]) {
+  async getBpmModels(ids: string[]) {
     // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-    return await axios.post<BpmModel[]>('/api/annette/v1/bpm/getBpmModelsById', ids)
+    return await axios.post<BpmModel[]>('/api/annette/v1/bpm/getBpmModels', ids)
       .then(result => result.data.map(convertBpmModel))
   },
 

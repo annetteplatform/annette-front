@@ -61,8 +61,8 @@ export const usePostStore = defineStore('cmsPost', () => {
     defaultPageSize: DEFAULT_PAGE_SIZE,
     defaultFilter: emptyPostFilter,
     find: cmsPostService.findPosts,
-    getEntity: cmsPostService.getPostAnnotationById,
-    getEntities: cmsPostService.getPostsAnnotationById,
+    getEntity: cmsPostService.getPostAnnotation,
+    getEntities: cmsPostService.getPostsAnnotation,
   })
 
   const editor: Ref<PostEditor> = ref({
@@ -90,7 +90,7 @@ export const usePostStore = defineStore('cmsPost', () => {
     withContent: boolean,
     withTargets: boolean) => {
     void cmsPostService.getPostFiles(payload.id).then(files => editor.value.files = files)
-    const post = await cmsPostService.getPostById(
+    const post = await cmsPostService.getPost(
       payload.id,
       fromReadSide,
       withIntro,

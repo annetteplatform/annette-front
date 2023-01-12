@@ -17,21 +17,21 @@ export const cmsPageViewService = {
       .then(result => result.data)
   },
 
-  async getPageViewAnnotationsById(ids: string[]) {
+  async getPageViewAnnotations(ids: string[]) {
     // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-    return await axios.post<PageView[]>('/api/annette/v1/cms/getPageViewAnnotationsById', ids)
+    return await axios.post<PageView[]>('/api/annette/v1/cms/getPageViewAnnotations', ids)
       .then(result => result.data.map(convertPageView))
   },
 
-  async getPageViewsById(ids: string[]) {
+  async getPageViews(ids: string[]) {
     // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-    return await axios.post<PageView[]>('/api/annette/v1/cms/getPageViewsById', ids)
+    return await axios.post<PageView[]>('/api/annette/v1/cms/getPageViews', ids)
       .then(result => result.data.map(convertPageView))
   },
 
-  async getPageViewById(id: string) {
+  async getPageView(id: string) {
     // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-    return await axios.get<PageView>(`/api/annette/v1/cms/getPageViewById/${id}`)
+    return await axios.get<PageView>(`/api/annette/v1/cms/getPageView/${id}`)
       .then(result => result.data)
   },
 

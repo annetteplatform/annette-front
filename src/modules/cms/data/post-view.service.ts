@@ -17,21 +17,21 @@ export const cmsPostViewService = {
       .then(result => result.data)
   },
 
-  async getPostViewAnnotationsById(ids: string[]) {
+  async getPostViewAnnotations(ids: string[]) {
     // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-    return await axios.post<PostView[]>('/api/annette/v1/cms/getPostViewAnnotationsById', ids)
+    return await axios.post<PostView[]>('/api/annette/v1/cms/getPostViewAnnotations', ids)
       .then(result => result.data.map(convertPostView))
   },
 
-  async getPostViewsById(ids: string[]) {
+  async getPostViews(ids: string[]) {
     // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-    return await axios.post<PostView[]>('/api/annette/v1/cms/getPostViewsById', ids)
+    return await axios.post<PostView[]>('/api/annette/v1/cms/getPostViews', ids)
       .then(result => result.data.map(convertPostView))
   },
 
-  async getPostViewById(id: string) {
+  async getPostView(id: string) {
     // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-    return await axios.get<PostView>(`/api/annette/v1/cms/getPostViewById/${id}`)
+    return await axios.get<PostView>(`/api/annette/v1/cms/getPostView/${id}`)
       .then(result => result.data)
   },
 

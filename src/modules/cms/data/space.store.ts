@@ -19,8 +19,8 @@ export const useSpaceStore = defineStore('cmsSpace', () => {
     defaultPageSize: DEFAULT_PAGE_SIZE,
     defaultFilter: emptySpaceFilter,
     find: cmsSpaceService.findSpaces,
-    getEntity: cmsSpaceService.getSpaceById,
-    getEntities: cmsSpaceService.getSpacesById,
+    getEntity: cmsSpaceService.getSpace,
+    getEntities: cmsSpaceService.getSpaces,
   })
 
   const createEntity = async (entity: CreateSpacePayloadDto) => {

@@ -17,8 +17,8 @@ export const useBpmModelStore = defineStore('bpmModel', () => {
     defaultPageSize: DEFAULT_PAGE_SIZE,
     defaultFilter: emptyBpmModelFilter,
     find: bpmBpmModelService.findBpmModels,
-    getEntity: bpmBpmModelService.getBpmModelById,
-    getEntities: bpmBpmModelService.getBpmModelsById,
+    getEntity: bpmBpmModelService.getBpmModel,
+    getEntities: bpmBpmModelService.getBpmModels,
   })
 
   const createEntity = async (entity: CreateBpmModelPayloadDto) => {
