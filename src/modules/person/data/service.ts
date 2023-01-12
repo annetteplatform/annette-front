@@ -26,17 +26,23 @@ export const personService = {
       .then(result => result.data)
   },
 
-  async getPerson(id: string, readSide = true) {
-    let source = readSide ? '' : '?source=origin'
+  async getPerson(id: string, readSide = true, attributes: string) {
+    const params = {
+      source: readSide ? undefined : 'origin',
+      attributes: attributes
+    }
     // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-    return await axios.get<Person>(`/api/annette/v1/person/getPerson/${id}${source}`)
+    return await axios.get<Person>(`/api/annette/v1/person/getPerson/${id}`, {params})
       .then(result => convertPerson(result.data))
   },
 
-  async getPersons(ids: string[], readSide = true) {
-    let source = readSide ? '' : '?source=origin'
+  async getPersons(ids: string[], readSide = true, attributes: string) {
+    const params = {
+      source: readSide ? undefined : 'origin',
+      attributes: attributes
+    }
     // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-    return await axios.post<Person[]>(`/api/annette/v1/person/getPersons${source}`, ids)
+    return await axios.post<Person[]>(`/api/annette/v1/person/getPersons`, ids, {params})
       .then(result => result.data.map(convertPerson))
   },
 
@@ -64,16 +70,25 @@ export const personService = {
   },
 
   async getPersonAttributes(id: string, readSide = true, attributes: string) {
-    let source = readSide ? '' : '&source=origin'
+    const params = {
+      source: readSide ? undefined : 'origin',
+      attributes: attributes
+    }
     // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-    return await axios.get<AttributeValues>(`/api/annette/v1/person/getPersonAttributes/${id}?attributes=${attributes}${source}`)
+    return await axios.get<AttributeValues>(`/api/annette/v1/person/getPersonAttributes/${id}`, {params})
       .then(result => result.data)
   },
 
   async getPersonsAttributes(ids: string[], readSide = true, attributes: string) {
-    let source = readSide ? '' : '&source=origin'
-    // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-    return await axios.post<EntitiesAttributeValues>(`/api/annette/v1/person/getPersonsAttributes?attributes=${attributes}${source}`, ids)
+    const params = {
+      source: readSide ? undefined : 'origin',
+      attributes: attributes
+    }
+    return await axios.post<EntitiesAttributeValues>(
+      `/api/annette/v1/person/getPersonsAttributes?attributes=${attributes}`,
+      ids,
+      {params}
+    )
       .then(result => result.data)
   },
 
@@ -95,16 +110,20 @@ export const personService = {
   },
 
   async getCategory(id: string, readSide = true) {
-    let source = readSide ? '' : '?source=origin'
+    const params = {
+      source: readSide ? undefined : 'origin'
+    }
     // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-    return await axios.get<Category>(`/api/annette/v1/person/getCategory/${id}${source}`)
+    return await axios.get<Category>(`/api/annette/v1/person/getCategory/${id}`, {params})
       .then(result => convertCategory(result.data))
   },
 
   async getCategories(ids: string[], readSide = true) {
-    let source = readSide ? '' : '?source=origin'
+    const params = {
+      source: readSide ? undefined : 'origin',
+    }
     // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-    return await axios.post<Category[]>(`/api/annette/v1/person/getCategories${source}`, ids)
+    return await axios.post<Category[]>(`/api/annette/v1/person/getCategories`, ids, {params})
       .then(result => result.data.map(convertCategory))
   },
 
