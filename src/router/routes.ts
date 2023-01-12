@@ -31,8 +31,9 @@ const routes: RouteRecordRaw[] = [
   ...cmsExtRoutes,
   {
     path: '/navigate',
-    redirect: '',
+    component: () => import('src/main/ui/MainLayout.vue'),
     beforeEnter(to) {
+      console.log('beforeEnter')
       const url = to.query['url'] as string
       const openInNew = to.query['openInNew'] === 'true'
       if (openInNew) {
