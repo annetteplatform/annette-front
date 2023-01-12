@@ -152,7 +152,8 @@ export function useEntityStore<E extends BaseEntity, F>(
     // search by filter and pages specified
     let findResults: FindResult
     const offset = payload.fromPage * payload.pageSize
-    const size = (payload.toPage + 1) * payload.pageSize
+    // const size = (payload.toPage + 1) * payload.pageSize
+    const size = payload.pageSize
     try {
       findResults = await options.find(payload.filter, offset, size)
     } catch (ex) {

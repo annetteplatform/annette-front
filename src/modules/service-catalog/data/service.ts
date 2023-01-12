@@ -28,14 +28,18 @@ export const serviceCatalogService = {
   },
 
   async getCategory(id: string, readSide = true) {
-    // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-    return await axios.get<Category>(`/api/annette/v1/serviceCatalog/getCategory/${id}/${readSide}`)
+    const params = {
+      source: readSide ? undefined : 'origin',
+    }
+    return await axios.get<Category>(`/api/annette/v1/serviceCatalog/getCategory/${id}`, {params})
       .then(result => convertCategory(result.data))
   },
 
   async getCategories(ids: string[], readSide = true) {
-    // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-    return await axios.post<Category[]>(`/api/annette/v1/serviceCatalog/getCategories/${readSide}`, ids)
+    const params = {
+      source: readSide ? undefined : 'origin',
+    }
+    return await axios.post<Category[]>(`/api/annette/v1/serviceCatalog/getCategories`, ids, {params})
       .then(result => result.data.map(convertCategory))
   },
 
@@ -78,14 +82,18 @@ export const serviceCatalogService = {
   },
 
   async getScope(id: string, readSide = true) {
-    // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-    return await axios.get<Scope>(`/api/annette/v1/serviceCatalog/getScope/${id}/${readSide}`)
+    const params = {
+      source: readSide ? undefined : 'origin',
+    }
+    return await axios.get<Scope>(`/api/annette/v1/serviceCatalog/getScope/${id}`, {params})
       .then(result => convertScope(result.data))
   },
 
   async getScopes(ids: string[], readSide = true) {
-    // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-    return await axios.post<Scope[]>(`/api/annette/v1/serviceCatalog/getScopes/${readSide}`, ids)
+    const params = {
+      source: readSide ? undefined : 'origin',
+    }
+    return await axios.post<Scope[]>(`/api/annette/v1/serviceCatalog/getScopes`, ids, {params})
       .then(result => result.data.map(convertScope))
   },
 
@@ -122,12 +130,12 @@ export const serviceCatalogService = {
   },
 
   async assignScopePrincipal(scopeId: string, principal: AnnettePrincipal) {
-    return await axios.post('/api/annette/v1/serviceCatalog/assignScopePrincipal', { scopeId, principal })
+    return await axios.post('/api/annette/v1/serviceCatalog/assignScopePrincipal', {scopeId, principal})
       .then(() => true)
   },
 
   async unassignScopePrincipal(scopeId: string, principal: AnnettePrincipal) {
-    return await axios.post('/api/annette/v1/serviceCatalog/unassignScopePrincipal', { scopeId, principal })
+    return await axios.post('/api/annette/v1/serviceCatalog/unassignScopePrincipal', {scopeId, principal})
       .then(() => true)
   },
 
@@ -170,14 +178,18 @@ export const serviceCatalogService = {
   },
 
   async getServiceItem(id: string, readSide = true) {
-    // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-    return await axios.get<ServiceItem>(`/api/annette/v1/serviceCatalog/getServiceItem/${id}/${readSide}`)
+    const params = {
+      source: readSide ? undefined : 'origin',
+    }
+    return await axios.get<ServiceItem>(`/api/annette/v1/serviceCatalog/getServiceItem/${id}`, {params})
       .then(result => convertServiceItem(result.data))
   },
 
   async getServiceItems(ids: string[], readSide = true) {
-    // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-    return await axios.post<ServiceItem[]>(`/api/annette/v1/serviceCatalog/getServiceItems/${readSide}`, ids)
+    const params = {
+      source: readSide ? undefined : 'origin',
+    }
+    return await axios.post<ServiceItem[]>(`/api/annette/v1/serviceCatalog/getServiceItems`, ids, {params})
       .then(result => result.data.map(convertServiceItem))
   },
 
@@ -214,12 +226,12 @@ export const serviceCatalogService = {
   },
 
   async assignServicePrincipal(serviceId: string, principal: AnnettePrincipal) {
-    return await axios.post('/api/annette/v1/serviceCatalog/assignServicePrincipal', { serviceId, principal })
+    return await axios.post('/api/annette/v1/serviceCatalog/assignServicePrincipal', {serviceId, principal})
       .then(() => true)
   },
 
   async unassignServicePrincipal(serviceId: string, principal: AnnettePrincipal) {
-    return await axios.post('/api/annette/v1/serviceCatalog/unassignServicePrincipal', { serviceId, principal })
+    return await axios.post('/api/annette/v1/serviceCatalog/unassignServicePrincipal', {serviceId, principal})
       .then(() => true)
   },
 
