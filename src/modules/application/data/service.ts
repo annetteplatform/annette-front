@@ -26,15 +26,15 @@ export const applicationService = {
       .then(result => result.data, processError)
   },
 
-  async getApplicationById(id: string, readSide = true) {
+  async getApplication(id: string, readSide = true) {
     // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-    return await axios.get<Application>(`/api/annette/v1/application/getApplicationById/${id}/${readSide}`)
+    return await axios.get<Application>(`/api/annette/v1/application/getApplication/${id}/${readSide}`)
       .then(result => convertApplication(result.data), processError)
   },
 
-  async getApplicationsById(ids: string[], readSide = true) {
+  async getApplications(ids: string[], readSide = true) {
     // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-    return await axios.post<Application[]>(`/api/annette/v1/application/getApplicationsById/${readSide}`, ids)
+    return await axios.post<Application[]>(`/api/annette/v1/application/getApplications/${readSide}`, ids)
       .then(result => result.data.map(convertApplication), processError)
   },
 
@@ -72,15 +72,15 @@ export const applicationService = {
       .then(result => result.data, processError)
   },
 
-  async getLanguageById(id: string, readSide = true) {
+  async getLanguage(id: string, readSide = true) {
     // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-    return await axios.get<Language>(`/api/annette/v1/application/getLanguageById/${id}/${readSide}`)
+    return await axios.get<Language>(`/api/annette/v1/application/getLanguage/${id}/${readSide}`)
       .then(result => convertLanguage(result.data), processError)
   },
 
-  async getLanguagesById(ids: string[], readSide = true) {
+  async getLanguages(ids: string[], readSide = true) {
     // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-    return await axios.post<Language[]>(`/api/annette/v1/application/getLanguagesById/${readSide}`, ids)
+    return await axios.post<Language[]>(`/api/annette/v1/application/getLanguages/${readSide}`, ids)
       .then(result => result.data.map(convertLanguage), processError)
   },
 
@@ -111,15 +111,15 @@ export const applicationService = {
       .then(result => result.data, processError)
   },
 
-  async getTranslationById(id: string, readSide = true) {
+  async getTranslation(id: string, readSide = true) {
     // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-    return await axios.get<Translation>(`/api/annette/v1/application/getTranslationById/${id}/${readSide}`)
+    return await axios.get<Translation>(`/api/annette/v1/application/getTranslation/${id}/${readSide}`)
       .then(result => convertTranslation(result.data), processError)
   },
 
-  async getTranslationsById(ids: string[], readSide = true) {
+  async getTranslations(ids: string[], readSide = true) {
     // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-    return await axios.post<Translation[]>(`/api/annette/v1/application/getTranslationsById/${readSide}`, ids)
+    return await axios.post<Translation[]>(`/api/annette/v1/application/getTranslations/${readSide}`, ids)
       .then(result => result.data.map(convertTranslation), processError)
   },
 
@@ -156,7 +156,7 @@ export const applicationService = {
       .then(result => result.data, processError)
   },
 
-  async getTranslationJsonById(translationId: string, languageId: string) {
+  async getTranslationJson(translationId: string, languageId: string) {
     return await axios.get<TranslationJson>(
       `/api/annette/v1/application/getTranslationJson/${translationId}/${languageId}`)
       .then(result => convertTranslationJson(result.data), processError)

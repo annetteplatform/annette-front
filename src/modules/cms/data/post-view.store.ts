@@ -14,12 +14,12 @@ export const usePostViewStore = defineStore('cmsPostView', () => {
     defaultPageSize: DEFAULT_PAGE_SIZE,
     defaultFilter: emptyPostViewFilter,
     find: cmsPostViewService.findPostViews,
-    getEntity: cmsPostViewService.getPostViewById,
-    getEntities: cmsPostViewService.getPostViewAnnotationsById,
+    getEntity: cmsPostViewService.getPostView,
+    getEntities: cmsPostViewService.getPostViewAnnotations,
   })
 
   const getPostView = async (id: string) => {
-    const entity = await cmsPostViewService.getPostViewById(id)
+    const entity = await cmsPostViewService.getPostView(id)
     entityStore.storeEntity(entity)
     return entity
 
@@ -28,7 +28,7 @@ export const usePostViewStore = defineStore('cmsPostView', () => {
   const changeLikeStatus = async (id: string) => {
     let metric: PostMetric
     // @ts-ignore
-    if (state.entities[id] && state.entities[id].metric && state.entities[id].metric.likedByMe) {
+    if (entityStore.entities.value[id] && entityStore.entities.value[id].metric && entityStore.entities.value[id].metric.likedByMe) {
       metric = await cmsPostViewService.unlikePost(id)
     } else {
       metric = await cmsPostViewService.likePost(id)

@@ -14,8 +14,8 @@ export const useSpaceViewStore = defineStore('cmsSpaceView', () => {
     defaultPageSize: DEFAULT_PAGE_SIZE,
     defaultFilter: emptySpaceViewFilter,
     find: cmsSpaceViewService.findSpaceViews,
-    getEntity: cmsSpaceViewService.getSpaceViewById,
-    getEntities: cmsSpaceViewService.getSpaceViewsById,
+    getEntity: cmsSpaceViewService.getSpaceView,
+    getEntities: cmsSpaceViewService.getSpaceViews,
   })
 
   const subscribeToSpace = async (id: string) => {

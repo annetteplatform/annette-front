@@ -65,15 +65,15 @@ export const bpmBusinessProcessService = {
       .then(result => result.data)
   },
 
-  async getBusinessProcessById(id: string) {
+  async getBusinessProcess(id: string) {
     // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-    return await axios.get<BusinessProcess>(`/api/annette/v1/bpm/getBusinessProcessById/${id}`)
+    return await axios.get<BusinessProcess>(`/api/annette/v1/bpm/getBusinessProcess/${id}`)
       .then(result => convertBusinessProcess(result.data))
   },
 
-  async getBusinessProcessesById(ids: string[]) {
+  async getBusinessProcesses(ids: string[]) {
     // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-    return await axios.post<BusinessProcess[]>('/api/annette/v1/bpm/getBusinessProcessesById', ids)
+    return await axios.post<BusinessProcess[]>('/api/annette/v1/bpm/getBusinessProcesses', ids)
       .then(result => result.data.map(convertBusinessProcess))
   },
 

@@ -14,15 +14,15 @@ export const cmsSpaceViewService = {
       .then(result => result.data)
   },
 
-  async getSpaceViewById(id: string, readSide = true) {
+  async getSpaceView(id: string, readSide = true) {
     // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-    return await axios.get<SpaceView>(`/api/annette/v1/cms/getSpaceViewById/${id}/${readSide}`)
+    return await axios.get<SpaceView>(`/api/annette/v1/cms/getSpaceView/${id}/${readSide}`)
       .then(result => convertSpaceView(result.data))
   },
 
-  async getSpaceViewsById(ids: string[]) {
+  async getSpaceViews(ids: string[]) {
     // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-    return await axios.post<SpaceView[]>('/api/annette/v1/cms/getSpaceViewsById', ids)
+    return await axios.post<SpaceView[]>('/api/annette/v1/cms/getSpaceViews', ids)
       .then(result => result.data.map(convertSpaceView))
   },
 

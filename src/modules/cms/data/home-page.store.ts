@@ -15,8 +15,8 @@ export const useHomePageStore = defineStore('cmsHomePage', () => {
     defaultPageSize: DEFAULT_PAGE_SIZE,
     defaultFilter: emptyHomePageFilter,
     find: cmsHomePageService.findHomePages,
-    getEntity: cmsHomePageService.getHomePageById,
-    getEntities: cmsHomePageService.getHomePagesById,
+    getEntity: cmsHomePageService.getHomePage,
+    getEntities: cmsHomePageService.getHomePages,
   })
 
   const assignHomePage = async (payload: AssignHomePagePayloadDto) => {

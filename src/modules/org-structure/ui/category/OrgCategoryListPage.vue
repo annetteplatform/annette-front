@@ -15,7 +15,7 @@
       <org-category-list
         :instance-key="instanceKey">
         <template v-slot:toolbar>
-         <default-list-toolbar create create-route-name="org-structure.category"/>
+         <default-list-toolbar create create-route-name="orgStructure.category"/>
         </template>
       </org-category-list>
     </template>

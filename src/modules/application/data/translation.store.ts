@@ -11,8 +11,8 @@ export const useTranslationStore = defineStore('translation', () => {
     defaultPageSize: DEFAULT_PAGE_SIZE,
     defaultFilter: emptyTranslationFilter,
     find: applicationService.findTranslations,
-    getEntity: applicationService.getTranslationById,
-    getEntities: applicationService.getTranslationsById,
+    getEntity: applicationService.getTranslation,
+    getEntities: applicationService.getTranslations,
   })
 
   const createEntity = async (entity: Translation) => {
@@ -36,8 +36,8 @@ export const useTranslationStore = defineStore('translation', () => {
     return await applicationService.getTranslationLanguages(id)
   }
 
-  const  getTranslationJsonById = async ( payload: GetTranslationJsonPayload) =>  {
-    return await applicationService.getTranslationJsonById(payload.translationId, payload.languageId)
+  const  getTranslationJson = async ( payload: GetTranslationJsonPayload) =>  {
+    return await applicationService.getTranslationJson(payload.translationId, payload.languageId)
   }
 
 
@@ -47,7 +47,7 @@ export const useTranslationStore = defineStore('translation', () => {
     updateEntity,
     deleteEntity,
     getTranslationLanguages,
-    getTranslationJsonById
+    getTranslationJson
   }
 
 

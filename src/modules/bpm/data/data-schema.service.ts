@@ -48,15 +48,15 @@ export const bpmDataSchemaService = {
       .then(result => result.data)
   },
 
-  async getDataSchemaById(id: string) {
+  async getDataSchema(id: string) {
     // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-    return await axios.get<DataSchema>(`/api/annette/v1/bpm/getDataSchemaById/${id}`)
+    return await axios.get<DataSchema>(`/api/annette/v1/bpm/getDataSchema/${id}`)
       .then(result => convertDataSchema(result.data))
   },
 
-  async getDataSchemasById(ids: string[]) {
+  async getDataSchemas(ids: string[]) {
     // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-    return await axios.post<DataSchema[]>('/api/annette/v1/bpm/getDataSchemasById', ids)
+    return await axios.post<DataSchema[]>('/api/annette/v1/bpm/getDataSchemas', ids)
       .then(result => result.data.map(convertDataSchema))
   },
 

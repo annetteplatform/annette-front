@@ -19,8 +19,8 @@ export const useDataSchemaStore = defineStore('dataSchema', () => {
     defaultPageSize: DEFAULT_PAGE_SIZE,
     defaultFilter: emptyDataSchemaFilter,
     find: bpmDataSchemaService.findDataSchemas,
-    getEntity: bpmDataSchemaService.getDataSchemaById,
-    getEntities: bpmDataSchemaService.getDataSchemasById,
+    getEntity: bpmDataSchemaService.getDataSchema,
+    getEntities: bpmDataSchemaService.getDataSchemas,
   })
 
   const createEntity = async (entity: CreateDataSchemaPayloadDto) => {

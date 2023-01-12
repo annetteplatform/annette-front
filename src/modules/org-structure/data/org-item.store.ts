@@ -28,8 +28,8 @@ export const useOrgItemStore = defineStore('orgItem', () => {
     defaultPageSize: DEFAULT_PAGE_SIZE,
     defaultFilter: emptyOrgItemFilter,
     find: orgStructureService.findOrgItems,
-    getEntity: orgStructureService.getOrgItemById,
-    getEntities: orgStructureService.getOrgItemsById,
+    getEntity: orgStructureService.getOrgItem,
+    getEntities: orgStructureService.getOrgItems,
   })
 
   const createOrganization = async (entity: CreateOrganizationPayloadDto) => {

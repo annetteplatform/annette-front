@@ -19,15 +19,15 @@ export const cmsHomePageService = {
       .then(result => result.data)
   },
 
-  async getHomePageById(id: string, readSide = true,) {
+  async getHomePage(id: string, readSide = true,) {
     // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-    return await axios.get<HomePage>(`/api/annette/v1/cms/getHomePageById/${id}/${readSide}`)
+    return await axios.get<HomePage>(`/api/annette/v1/cms/getHomePage/${id}/${readSide}`)
       .then(result => convertHomePage(result.data))
   },
 
-  async getHomePagesById(ids: string[], readSide = true) {
+  async getHomePages(ids: string[], readSide = true) {
     // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-    return await axios.post<HomePage[]>(`/api/annette/v1/cms/getHomePagesById/${readSide}`, ids)
+    return await axios.post<HomePage[]>(`/api/annette/v1/cms/getHomePages/${readSide}`, ids)
       .then(result => result.data.map(convertHomePage))
   },
 

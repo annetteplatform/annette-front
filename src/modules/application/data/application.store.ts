@@ -11,8 +11,8 @@ export const useApplicationStore = defineStore('application', () => {
     defaultPageSize: DEFAULT_PAGE_SIZE,
     defaultFilter: emptyApplicationFilter,
     find: applicationService.findApplications,
-    getEntity: applicationService.getApplicationById,
-    getEntities: applicationService.getApplicationsById,
+    getEntity: applicationService.getApplication,
+    getEntities: applicationService.getApplications,
   })
 
   const createEntity = async (entity: Application) => {

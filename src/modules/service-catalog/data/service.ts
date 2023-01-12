@@ -27,15 +27,15 @@ export const serviceCatalogService = {
       .then(result => result.data)
   },
 
-  async getCategoryById(id: string, readSide = true) {
+  async getCategory(id: string, readSide = true) {
     // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-    return await axios.get<Category>(`/api/annette/v1/serviceCatalog/getCategoryById/${id}/${readSide}`)
+    return await axios.get<Category>(`/api/annette/v1/serviceCatalog/getCategory/${id}/${readSide}`)
       .then(result => convertCategory(result.data))
   },
 
-  async getCategoriesById(ids: string[], readSide = true) {
+  async getCategories(ids: string[], readSide = true) {
     // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-    return await axios.post<Category[]>(`/api/annette/v1/serviceCatalog/getCategoriesById/${readSide}`, ids)
+    return await axios.post<Category[]>(`/api/annette/v1/serviceCatalog/getCategories/${readSide}`, ids)
       .then(result => result.data.map(convertCategory))
   },
 
@@ -77,15 +77,15 @@ export const serviceCatalogService = {
       .then(result => '')
   },
 
-  async getScopeById(id: string, readSide = true) {
+  async getScope(id: string, readSide = true) {
     // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-    return await axios.get<Scope>(`/api/annette/v1/serviceCatalog/getScopeById/${id}/${readSide}`)
+    return await axios.get<Scope>(`/api/annette/v1/serviceCatalog/getScope/${id}/${readSide}`)
       .then(result => convertScope(result.data))
   },
 
-  async getScopesById(ids: string[], readSide = true) {
+  async getScopes(ids: string[], readSide = true) {
     // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-    return await axios.post<Scope[]>(`/api/annette/v1/serviceCatalog/getScopesById/${readSide}`, ids)
+    return await axios.post<Scope[]>(`/api/annette/v1/serviceCatalog/getScopes/${readSide}`, ids)
       .then(result => result.data.map(convertScope))
   },
 
@@ -169,15 +169,15 @@ export const serviceCatalogService = {
       .then(result => '')
   },
 
-  async getServiceItemById(id: string, readSide = true) {
+  async getServiceItem(id: string, readSide = true) {
     // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-    return await axios.get<ServiceItem>(`/api/annette/v1/serviceCatalog/getServiceItemById/${id}/${readSide}`)
+    return await axios.get<ServiceItem>(`/api/annette/v1/serviceCatalog/getServiceItem/${id}/${readSide}`)
       .then(result => convertServiceItem(result.data))
   },
 
-  async getServiceItemsById(ids: string[], readSide = true) {
+  async getServiceItems(ids: string[], readSide = true) {
     // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-    return await axios.post<ServiceItem[]>(`/api/annette/v1/serviceCatalog/getServiceItemsById/${readSide}`, ids)
+    return await axios.post<ServiceItem[]>(`/api/annette/v1/serviceCatalog/getServiceItems/${readSide}`, ids)
       .then(result => result.data.map(convertServiceItem))
   },
 

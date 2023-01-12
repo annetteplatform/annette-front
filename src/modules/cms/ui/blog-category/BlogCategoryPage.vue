@@ -9,7 +9,7 @@
       <default-entity-page-toolbar :action="action" :id="id"
                                    route-name="cms.blogCategory"
                                    :back-label="$t('annette.cms.blogCategory.titlePl')"
-                                   back-route-name="cms.categories"/>
+                                   back-route-name="cms.blogCategories"/>
     </template>
     <template v-slot:status>
       <q-chip outline square color="red" text-color="white"

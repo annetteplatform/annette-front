@@ -11,8 +11,8 @@ export const useOrgRoleStore = defineStore('orgRole', () => {
     defaultPageSize: DEFAULT_PAGE_SIZE,
     defaultFilter: emptyOrgRoleFilter,
     find: orgStructureService.findOrgRoles,
-    getEntity: orgStructureService.getOrgRoleById,
-    getEntities: orgStructureService.getOrgRolesById,
+    getEntity: orgStructureService.getOrgRole,
+    getEntities: orgStructureService.getOrgRoles,
   })
 
   const createEntity = async (entity: OrgRole) => {

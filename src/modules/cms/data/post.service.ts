@@ -94,32 +94,32 @@ export const cmsPostService = {
       .then(result => convertUpdated(result.data))
   },
 
-  async getPostAnnotationById(id: string, readSide = true) {
+  async getPostAnnotation(id: string, readSide = true) {
     // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-    return await axios.get<Post>(`/api/annette/v1/cms/getPostById/${id}/${readSide}`)
+    return await axios.get<Post>(`/api/annette/v1/cms/getPost/${id}/${readSide}`)
       .then(result => convertPost(result.data))
   },
 
-  async getPostById(id: string,
+  async getPost(id: string,
                     readSide = true,
                     withIntro: boolean,
                     withContent: boolean,
                     withTargets: boolean,
   ) {
     // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-    return await axios.get<Post>(`/api/annette/v1/cms/getPostById/${id}/${readSide}?withIntro=${withIntro}&withContent=${withContent}&withTargets=${withTargets}`)
+    return await axios.get<Post>(`/api/annette/v1/cms/getPost/${id}/${readSide}?withIntro=${withIntro}&withContent=${withContent}&withTargets=${withTargets}`)
       .then(result => convertPost(result.data))
   },
 
-  async getPostsAnnotationById(ids: string[], readSide = true) {
+  async getPostsAnnotation(ids: string[], readSide = true) {
     // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-    return await axios.post<Post[]>(`/api/annette/v1/cms/getPostsById/${readSide}`, ids)
+    return await axios.post<Post[]>(`/api/annette/v1/cms/getPosts/${readSide}`, ids)
       .then(result => result.data.map(convertPost))
   },
 
-  async getPostsById(ids: string[], readSide = true) {
+  async getPosts(ids: string[], readSide = true) {
     // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-    return await axios.post<Post[]>(`/api/annette/v1/cms/getPostsById/${readSide}?withIntro=true&withContent=true&withTargets=true`, ids)
+    return await axios.post<Post[]>(`/api/annette/v1/cms/getPosts/${readSide}?withIntro=true&withContent=true&withTargets=true`, ids)
       .then(result => result.data.map(convertPost))
   },
 

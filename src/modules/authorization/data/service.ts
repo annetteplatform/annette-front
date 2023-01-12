@@ -22,15 +22,15 @@ export const authorizationService = {
       .then(result => result.data)
   },
 
-  async getRoleById(id: string, readSide = true) {
+  async getRole(id: string, readSide = true) {
     // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-    return await axios.get<AuthRole>(`/api/annette/v1/authorization/getRoleById/${id}/${readSide}`)
+    return await axios.get<AuthRole>(`/api/annette/v1/authorization/getRole/${id}/${readSide}`)
       .then(result => convertRole(result.data))
   },
 
-  async getRolesById(ids: string[], readSide = true) {
+  async getRoles(ids: string[], readSide = true) {
     // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-    return await axios.post<AuthRole[]>(`/api/annette/v1/authorization/getRolesById/${readSide}`, ids)
+    return await axios.post<AuthRole[]>(`/api/annette/v1/authorization/getRoles/${readSide}`, ids)
       .then(result => result.data.map(convertRole))
   },
 

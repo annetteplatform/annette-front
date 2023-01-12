@@ -66,15 +66,15 @@ export const cmsBlogService = {
       .then(result => result.data)
   },
 
-  async getBlogById(id: string, readSide = true) {
+  async getBlog(id: string, readSide = true) {
     // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-    return await axios.get<Blog>(`/api/annette/v1/cms/getBlogById/${id}/${readSide}`)
+    return await axios.get<Blog>(`/api/annette/v1/cms/getBlog/${id}/${readSide}`)
       .then(result => convertBlog(result.data))
   },
 
-  async getBlogsById(ids: string[], readSide = true) {
+  async getBlogs(ids: string[], readSide = true) {
     // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-    return await axios.post<Blog[]>(`/api/annette/v1/cms/getBlogsById/${readSide}`, ids)
+    return await axios.post<Blog[]>(`/api/annette/v1/cms/getBlogs/${readSide}`, ids)
       .then(result => result.data.map(convertBlog))
   },
 
