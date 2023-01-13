@@ -5,6 +5,7 @@
         v-if="item.type == 'group'"
         :header-inset-level="level * 0.2"
         expand-separator
+        dense
         :icon="item.icon.icon"
         :label="item.label"
         :model-value="!!mainStore.sidebarOpenGroups[item.id]"
@@ -14,13 +15,14 @@
       </q-expansion-item>
       <q-item
         v-else
+        dense
         :inset-level="level * 0.2" :to="menuList.getRoute(item)">
         <q-item-section avatar>
           <q-icon color="primary" :name="item.icon.icon"/>
         </q-item-section>
         <q-item-section>
           <q-item-label>{{ item.label }}</q-item-label>
-          <q-item-label caption lines="2">{{ item.labelDescription || ' ' }}</q-item-label>
+<!--          <q-item-label caption lines="2">{{ item.labelDescription || ' ' }}</q-item-label>-->
         </q-item-section>
       </q-item>
     </template>
