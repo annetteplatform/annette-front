@@ -69,14 +69,18 @@ export const cmsSpaceService = {
   },
 
   async getSpace(id: string, readSide = true) {
-    // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-    return await axios.get<Space>(`/api/annette/v1/cms/getSpace/${id}/${readSide}`)
+    const params = {
+      source: readSide ? undefined : 'origin',
+    }
+    return await axios.get<Space>(`/api/annette/v1/cms/getSpace/${id}`, {params})
       .then(result => convertSpace(result.data))
   },
 
   async getSpaces(ids: string[], readSide = true) {
-    // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-    return await axios.post<Space[]>(`/api/annette/v1/cms/getSpaces/${readSide}`, ids)
+    const params = {
+      source: readSide ? undefined : 'origin',
+    }
+    return await axios.post<Space[]>(`/api/annette/v1/cms/getSpaces`, ids, {params})
       .then(result => result.data.map(convertSpace))
   },
 

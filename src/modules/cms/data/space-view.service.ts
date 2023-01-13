@@ -15,8 +15,10 @@ export const cmsSpaceViewService = {
   },
 
   async getSpaceView(id: string, readSide = true) {
-    // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-    return await axios.get<SpaceView>(`/api/annette/v1/cms/getSpaceView/${id}/${readSide}`)
+    const params = {
+      source: readSide ? undefined : 'origin',
+    }
+    return await axios.get<SpaceView>(`/api/annette/v1/cms/getSpaceView/${id}`, {params})
       .then(result => convertSpaceView(result.data))
   },
 

@@ -13,12 +13,12 @@ export const applicationService = {
 
   async createApplication(entity: Application) {
     return await axios.post<Application>('/api/annette/v1/application/createApplication', entity)
-      .then(result => convertApplication(result.data), processError)
+      .then(result => convertApplication(result.data), processError<Application>)
   },
 
   async updateApplication(entity: Application) {
     return await axios.post<Application>('/api/annette/v1/application/updateApplication', entity)
-      .then(result => convertApplication(result.data), processError)
+      .then(result => convertApplication(result.data), processError<Application>)
   },
 
   async deleteApplication(id: string) {
@@ -27,15 +27,19 @@ export const applicationService = {
   },
 
   async getApplication(id: string, readSide = true) {
-    // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-    return await axios.get<Application>(`/api/annette/v1/application/getApplication/${id}/${readSide}`)
-      .then(result => convertApplication(result.data), processError)
+    const params = {
+      source: readSide ? undefined : 'origin',
+    }
+    return await axios.get<Application>(`/api/annette/v1/application/getApplication/${id}`, {params})
+      .then(result => convertApplication(result.data), processError<Application>)
   },
 
   async getApplications(ids: string[], readSide = true) {
-    // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-    return await axios.post<Application[]>(`/api/annette/v1/application/getApplications/${readSide}`, ids)
-      .then(result => result.data.map(convertApplication), processError)
+    const params = {
+      source: readSide ? undefined : 'origin',
+    }
+    return await axios.post<Application[]>(`/api/annette/v1/application/getApplications`, ids, {params})
+      .then(result => result.data.map(convertApplication), processError<Application[]>)
   },
 
   async findApplications(filter: ApplicationFilter, offset: number, size: number) {
@@ -73,14 +77,18 @@ export const applicationService = {
   },
 
   async getLanguage(id: string, readSide = true) {
-    // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-    return await axios.get<Language>(`/api/annette/v1/application/getLanguage/${id}/${readSide}`)
+    const params = {
+      source: readSide ? undefined : 'origin',
+    }
+    return await axios.get<Language>(`/api/annette/v1/application/getLanguage/${id}`,{params})
       .then(result => convertLanguage(result.data), processError)
   },
 
   async getLanguages(ids: string[], readSide = true) {
-    // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-    return await axios.post<Language[]>(`/api/annette/v1/application/getLanguages/${readSide}`, ids)
+    const params = {
+      source: readSide ? undefined : 'origin',
+    }
+    return await axios.post<Language[]>(`/api/annette/v1/application/getLanguages`, ids, {params})
       .then(result => result.data.map(convertLanguage), processError)
   },
 
@@ -112,14 +120,18 @@ export const applicationService = {
   },
 
   async getTranslation(id: string, readSide = true) {
-    // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-    return await axios.get<Translation>(`/api/annette/v1/application/getTranslation/${id}/${readSide}`)
+    const params = {
+      source: readSide ? undefined : 'origin',
+    }
+    return await axios.get<Translation>(`/api/annette/v1/application/getTranslation/${id}`, {params})
       .then(result => convertTranslation(result.data), processError)
   },
 
   async getTranslations(ids: string[], readSide = true) {
-    // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-    return await axios.post<Translation[]>(`/api/annette/v1/application/getTranslations/${readSide}`, ids)
+    const params = {
+      source: readSide ? undefined : 'origin',
+    }
+    return await axios.post<Translation[]>(`/api/annette/v1/application/getTranslations`, ids, {params})
       .then(result => result.data.map(convertTranslation), processError)
   },
 

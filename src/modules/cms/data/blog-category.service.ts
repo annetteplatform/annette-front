@@ -20,14 +20,18 @@ export const cmsBlogCategoryService = {
   },
 
   async getCategory(id: string, readSide = true) {
-    // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-    return await axios.get<Category>(`/api/annette/v1/cms/getBlogCategory/${id}/${readSide}`)
+    const params = {
+      source: readSide ? undefined : 'origin',
+    }
+    return await axios.get<Category>(`/api/annette/v1/cms/getBlogCategory/${id}`, {params})
       .then(result => convertCategory(result.data))
   },
 
   async getCategories(ids: string[], readSide = true) {
-    // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-    return await axios.post<Category[]>(`/api/annette/v1/cms/getBlogCategories/${readSide}`, ids)
+    const params = {
+      source: readSide ? undefined : 'origin',
+    }
+    return await axios.post<Category[]>(`/api/annette/v1/cms/getBlogCategories`, ids, {params})
       .then(result => result.data.map(convertCategory))
   },
 

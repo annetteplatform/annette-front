@@ -95,8 +95,10 @@ export const cmsPostService = {
   },
 
   async getPostAnnotation(id: string, readSide = true) {
-    // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-    return await axios.get<Post>(`/api/annette/v1/cms/getPost/${id}/${readSide}`)
+    const params = {
+      source: readSide ? undefined : 'origin',
+    }
+    return await axios.get<Post>(`/api/annette/v1/cms/getPost/${id}`,{params})
       .then(result => convertPost(result.data))
   },
 
@@ -106,20 +108,34 @@ export const cmsPostService = {
                     withContent: boolean,
                     withTargets: boolean,
   ) {
+    const params = {
+      source: readSide ? undefined : 'origin',
+      withIntro,
+      withContent,
+      withTargets,
+    }
     // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-    return await axios.get<Post>(`/api/annette/v1/cms/getPost/${id}/${readSide}?withIntro=${withIntro}&withContent=${withContent}&withTargets=${withTargets}`)
+    return await axios.get<Post>(`/api/annette/v1/cms/getPost/${id}`, {params})
       .then(result => convertPost(result.data))
   },
 
   async getPostsAnnotation(ids: string[], readSide = true) {
-    // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-    return await axios.post<Post[]>(`/api/annette/v1/cms/getPosts/${readSide}`, ids)
+    const params = {
+      source: readSide ? undefined : 'origin'
+    }
+    return await axios.post<Post[]>(`/api/annette/v1/cms/getPosts`, ids, {params})
       .then(result => result.data.map(convertPost))
   },
 
   async getPosts(ids: string[], readSide = true) {
+    const params = {
+      source: readSide ? undefined : 'origin',
+      withIntro: true,
+      withContent: true,
+      withTargets: true,
+    }
     // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-    return await axios.post<Post[]>(`/api/annette/v1/cms/getPosts/${readSide}?withIntro=true&withContent=true&withTargets=true`, ids)
+    return await axios.post<Post[]>(`/api/annette/v1/cms/getPosts`, ids, {params})
       .then(result => result.data.map(convertPost))
   },
 

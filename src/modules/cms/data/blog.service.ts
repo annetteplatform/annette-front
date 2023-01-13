@@ -67,14 +67,19 @@ export const cmsBlogService = {
   },
 
   async getBlog(id: string, readSide = true) {
-    // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-    return await axios.get<Blog>(`/api/annette/v1/cms/getBlog/${id}/${readSide}`)
+    const params = {
+      source: readSide ? undefined : 'origin',
+    }
+    return await axios.get<Blog>(`/api/annette/v1/cms/getBlog/${id}`, {params})
       .then(result => convertBlog(result.data))
   },
 
   async getBlogs(ids: string[], readSide = true) {
+    const params = {
+      source: readSide ? undefined : 'origin',
+    }
     // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-    return await axios.post<Blog[]>(`/api/annette/v1/cms/getBlogs/${readSide}`, ids)
+    return await axios.post<Blog[]>(`/api/annette/v1/cms/getBlogs`, ids, {params})
       .then(result => result.data.map(convertBlog))
   },
 

@@ -87,8 +87,10 @@ export const cmsPageService = {
   },
 
   async getPageAnnotation(id: string, readSide = true) {
-    // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-    return await axios.get<Page>(`/api/annette/v1/cms/getPage/${id}/${readSide}`)
+    const params = {
+      source: readSide ? undefined : 'origin',
+    }
+    return await axios.get<Page>(`/api/annette/v1/cms/getPage/${id}`, {params})
       .then(result => convertPage(result.data))
   },
 
@@ -97,20 +99,32 @@ export const cmsPageService = {
                     withContent: boolean,
                     withTargets: boolean,
   ) {
+    const params = {
+      source: readSide ? undefined : 'origin',
+      withContent,
+      withTargets
+    }
     // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-    return await axios.get<Page>(`/api/annette/v1/cms/getPage/${id}/${readSide}?withContent=${withContent}&withTargets=${withTargets}`)
+    return await axios.get<Page>(`/api/annette/v1/cms/getPage/${id}`, {params})
       .then(result => convertPage(result.data))
   },
 
   async getPagesAnnotation(ids: string[], readSide = true) {
-    // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-    return await axios.post<Page[]>(`/api/annette/v1/cms/getPages/${readSide}`, ids)
+    const params = {
+      source: readSide ? undefined : 'origin',
+    }
+    return await axios.post<Page[]>(`/api/annette/v1/cms/getPages`, ids, {params})
       .then(result => result.data.map(convertPage))
   },
 
   async getPages(ids: string[], readSide = true) {
+    const params = {
+      source: readSide ? undefined : 'origin',
+      withContent:true,
+      withTargets:true
+    }
     // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-    return await axios.post<Page[]>(`/api/annette/v1/cms/getPages/${readSide}?withIntro=true&withContent=true&withTargets=true`, ids)
+    return await axios.post<Page[]>(`/api/annette/v1/cms/getPages`, ids, {params})
       .then(result => result.data.map(convertPage))
   },
 
