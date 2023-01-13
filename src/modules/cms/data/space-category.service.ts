@@ -20,14 +20,18 @@ export const cmsSpaceCategoryService = {
   },
 
   async getCategory(id: string, readSide = true) {
-    // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-    return await axios.get<Category>(`/api/annette/v1/cms/getSpaceCategory/${id}/${readSide}`)
+    const params = {
+      source: readSide ? undefined : 'origin',
+    }
+    return await axios.get<Category>(`/api/annette/v1/cms/getSpaceCategory/${id}`, {params})
       .then(result => convertCategory(result.data))
   },
 
   async getCategories(ids: string[], readSide = true) {
-    // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-    return await axios.post<Category[]>(`/api/annette/v1/cms/getSpaceCategories/${readSide}`, ids)
+    const params = {
+      source: readSide ? undefined : 'origin',
+    }
+    return await axios.post<Category[]>(`/api/annette/v1/cms/getSpaceCategories`, ids, {params})
       .then(result => result.data.map(convertCategory))
   },
 

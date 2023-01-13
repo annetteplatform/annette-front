@@ -15,8 +15,10 @@ export const cmsBlogViewService = {
   },
 
   async getBlogView(id: string, readSide = true) {
-    // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-    return await axios.get<BlogView>(`/api/annette/v1/cms/getBlogView/${id}/${readSide}`)
+    const params = {
+      source: readSide ? undefined : 'origin',
+    }
+    return await axios.get<BlogView>(`/api/annette/v1/cms/getBlogView/${id}`, {params})
       .then(result => convertBlogView(result.data))
   },
 
