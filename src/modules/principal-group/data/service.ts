@@ -47,14 +47,18 @@ export const principalGroupService = {
   },
 
   async getPrincipalGroup(id: string, readSide = true) {
-    // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-    return await axios.get<PrincipalGroup>(`/api/annette/v1/principalGroup/getPrincipalGroup/${id}/${readSide}`)
+    const params = {
+      source: readSide ? undefined : 'origin',
+    }
+    return await axios.get<PrincipalGroup>(`/api/annette/v1/principalGroup/getPrincipalGroup/${id}`, {params})
       .then(result => convertPrincipalGroup(result.data))
   },
 
   async getPrincipalGroups(ids: string[], readSide = true) {
-    // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-    return await axios.post<PrincipalGroup[]>(`/api/annette/v1/principalGroup/getPrincipalGroups/${readSide}`, ids)
+    const params = {
+      source: readSide ? undefined : 'origin',
+    }
+    return await axios.post<PrincipalGroup[]>(`/api/annette/v1/principalGroup/getPrincipalGroups`, ids, {params})
       .then(result => result.data.map(convertPrincipalGroup))
   },
 
@@ -92,14 +96,18 @@ export const principalGroupService = {
   },
 
   async getCategory(id: string, readSide = true) {
-    // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-    return await axios.get<Category>(`/api/annette/v1/principalGroup/getCategory/${id}/${readSide}`)
+    const params = {
+      source: readSide ? undefined : 'origin',
+    }
+    return await axios.get<Category>(`/api/annette/v1/principalGroup/getCategory/${id}`, {params})
       .then(result => convertCategory(result.data))
   },
 
   async getCategories(ids: string[], readSide = true) {
-    // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-    return await axios.post<Category[]>(`/api/annette/v1/principalGroup/getCategories/${readSide}`, ids)
+    const params = {
+      source: readSide ? undefined : 'origin',
+    }
+    return await axios.post<Category[]>(`/api/annette/v1/principalGroup/getCategories`, ids, {params})
       .then(result => result.data.map(convertCategory))
   },
 

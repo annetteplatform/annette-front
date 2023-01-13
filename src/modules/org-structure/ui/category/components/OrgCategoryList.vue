@@ -17,11 +17,11 @@
         {{ props.row.name }}
       </q-td>
       <q-td key="orgItem">
-        <q-badge v-if="props.row.forOrganization" outline color="primary"
+        <q-badge class="q-mr-sm" v-if="props.row.forOrganization" outline color="primary"
                  :label="$t('annette.orgStructure.category.organization')" />
-        <q-badge class="q-ml-sm" v-if="props.row.forUnit" outline color="secondary"
+        <q-badge class="q-mr-sm" v-if="props.row.forUnit" outline color="secondary"
                  :label="$t('annette.orgStructure.category.unit')" />
-        <q-badge class="q-ml-sm" v-if="props.row.forPosition" outline color="accent"
+        <q-badge v-if="props.row.forPosition" outline color="accent"
                  :label="$t('annette.orgStructure.category.position')" />
       </q-td>
       <q-td auto-width>

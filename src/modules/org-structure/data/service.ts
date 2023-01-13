@@ -55,14 +55,18 @@ export const orgStructureService = {
   },
 
   async getCategory(id: string, readSide = true) {
-    // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-    return await axios.get<OrgCategory>(`/api/annette/v1/orgStructure/getCategory/${id}/${readSide}`)
+    const params = {
+      source: readSide ? undefined : 'origin',
+    }
+    return await axios.get<OrgCategory>(`/api/annette/v1/orgStructure/getCategory/${id}`, {params})
       .then(result => convertOrgCategory(result.data))
   },
 
   async getCategories(ids: string[], readSide = true) {
-    // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-    return await axios.post<OrgCategory[]>(`/api/annette/v1/orgStructure/getCategories/${readSide}`, ids)
+    const params = {
+      source: readSide ? undefined : 'origin',
+    }
+    return await axios.post<OrgCategory[]>(`/api/annette/v1/orgStructure/getCategories`, ids, {params})
       .then(result => result.data.map(convertOrgCategory))
   },
 
@@ -94,14 +98,18 @@ export const orgStructureService = {
   },
 
   async getOrgRole(id: string, readSide = true) {
-    // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-    return await axios.get<OrgRole>(`/api/annette/v1/orgStructure/getOrgRole/${id}/${readSide}`)
+    const params = {
+      source: readSide ? undefined : 'origin',
+    }
+    return await axios.get<OrgRole>(`/api/annette/v1/orgStructure/getOrgRole/${id}`, {params})
       .then(result => convertOrgRole(result.data))
   },
 
   async getOrgRoles(ids: string[], readSide = true) {
-    // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-    return await axios.post<OrgRole[]>(`/api/annette/v1/orgStructure/getOrgRoles/${readSide}`, ids)
+    const params = {
+      source: readSide ? undefined : 'origin',
+    }
+    return await axios.post<OrgRole[]>(`/api/annette/v1/orgStructure/getOrgRoles`, ids, {params})
       .then(result => result.data.map(convertOrgRole))
   },
 
@@ -192,13 +200,17 @@ export const orgStructureService = {
   },
 
   async getOrgItem(id: string, fromReadSide: boolean) {
-    // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-    return await axios.get<OrgItem>(`/api/annette/v1/orgStructure/getOrgItem/${id}/${fromReadSide}`)
+    const params = {
+      source: fromReadSide ? undefined : 'origin',
+    }
+    return await axios.get<OrgItem>(`/api/annette/v1/orgStructure/getOrgItem/${id}`, {params})
       .then(result => convertOrgItem(result.data))
   },
   async getOrgItems(ids: string[], fromReadSide: boolean) {
-    // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-    return await axios.post<OrgItem[]>(`/api/annette/v1/orgStructure/getOrgItems/${fromReadSide}`, ids)
+    const params = {
+      source: fromReadSide ? undefined : 'origin',
+    }
+    return await axios.post<OrgItem[]>(`/api/annette/v1/orgStructure/getOrgItems`, ids, {params})
       .then(result => result.data.map(convertOrgItem))
   },
 
@@ -229,14 +241,20 @@ export const orgStructureService = {
   },
 
   async getOrgItemAttributes(id: string, readSide = true, attributes: string) {
-    // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-    return await axios.get<AttributeValues>(`/api/annette/v1/orgStructure/getOrgItemAttributes/${id}/${readSide}?attributes=${attributes}`)
+    const params = {
+      source: readSide ? undefined : 'origin',
+      attributes
+    }
+    return await axios.get<AttributeValues>(`/api/annette/v1/orgStructure/getOrgItemAttributes/${id}`, {params})
       .then(result => result.data)
   },
 
   async getOrgItemsAttributes(ids: string[], readSide = true, attributes: string) {
-    // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-    return await axios.post<EntitiesAttributeValues>(`/api/annette/v1/orgStructure/getOrgItemsAttributes/${readSide}?attributes=${attributes}`, ids)
+    const params = {
+      source: readSide ? undefined : 'origin',
+      attributes
+    }
+    return await axios.post<EntitiesAttributeValues>(`/api/annette/v1/orgStructure/getOrgItemsAttributes`, ids, {params})
       .then(result => result.data)
   },
 

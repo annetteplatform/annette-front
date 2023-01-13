@@ -25,7 +25,7 @@
                class="q-mr-md"
                color="primary"
                :label="$t('annette.shared.crud.cancel')"
-               :to="{ name: 'org-structure.category', params: { action: 'view', id } }"/>
+               :to="{ name: 'orgStructure.category', params: { action: 'view', id } }"/>
         <q-btn dense
                color="primary"
                :label="$t('annette.shared.crud.save')"
