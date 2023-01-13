@@ -23,14 +23,19 @@ export const authorizationService = {
   },
 
   async getRole(id: string, readSide = true) {
-    // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-    return await axios.get<AuthRole>(`/api/annette/v1/authorization/getRole/${id}/${readSide}`)
+    const params = {
+      source: readSide ? undefined : 'origin',
+    }
+    return await axios.get<AuthRole>(`/api/annette/v1/authorization/getRole/${id}`, {params})
       .then(result => convertRole(result.data))
   },
 
   async getRoles(ids: string[], readSide = true) {
+    const params = {
+      source: readSide ? undefined : 'origin',
+    }
     // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-    return await axios.post<AuthRole[]>(`/api/annette/v1/authorization/getRoles/${readSide}`, ids)
+    return await axios.post<AuthRole[]>(`/api/annette/v1/authorization/getRoles`, ids, {params})
       .then(result => result.data.map(convertRole))
   },
 
@@ -45,18 +50,20 @@ export const authorizationService = {
   },
 
   async getRolePrincipals(id: string, readSide = true) {
-    // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-    return await axios.get<AnnettePrincipal[]>(`/api/annette/v1/authorization/getRolePrincipals/${id}/${readSide}`)
+    const params = {
+      source: readSide ? undefined : 'origin',
+    }
+    return await axios.get<AnnettePrincipal[]>(`/api/annette/v1/authorization/getRolePrincipals/${id}`, {params})
       .then(result => result.data)
   },
 
   async assignPrincipal(roleId: string, principal: AnnettePrincipal) {
-    return await axios.post('/api/annette/v1/authorization/assignPrincipal', { roleId, principal })
+    return await axios.post('/api/annette/v1/authorization/assignPrincipal', {roleId, principal})
       .then(() => true)
   },
 
   async unassignPrincipal(roleId: string, principal: AnnettePrincipal) {
-    return await axios.post('/api/annette/v1/authorization/unassignPrincipal', { roleId, principal })
+    return await axios.post('/api/annette/v1/authorization/unassignPrincipal', {roleId, principal})
       .then(() => true)
   },
 
