@@ -15,6 +15,7 @@
       </q-expansion-item>
       <q-item
         v-else
+        dense
         :inset-level="level * 0.2" :to="menuList.getRoute(item)">
         <q-item-section avatar>
           <q-icon color="primary" :name="item.icon.icon"/>
@@ -25,7 +26,6 @@
                      :delay="1000">
             {{ item.labelDescription }}
           </q-tooltip>
-<!--          <q-item-label v-if="item.labelDescription && item.labelDescription != ''" caption lines="2">{{ item.labelDescription }}</q-item-label>-->
         </q-item-section>
       </q-item>
     </template>
