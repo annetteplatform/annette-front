@@ -3,9 +3,9 @@
     <template v-for="item in items" :key="item.id">
       <q-expansion-item
         v-if="item.type == 'group'"
+        dense
         :header-inset-level="level * 0.2"
         expand-separator
-        dense
         :icon="item.icon.icon"
         :label="item.label"
         :model-value="!!mainStore.sidebarOpenGroups[item.id]"
@@ -22,7 +22,10 @@
         </q-item-section>
         <q-item-section>
           <q-item-label>{{ item.label }}</q-item-label>
-<!--          <q-item-label caption lines="2">{{ item.labelDescription || ' ' }}</q-item-label>-->
+          <q-tooltip v-if="item.labelDescription && item.labelDescription != ''"
+                     :delay="1000">
+            {{ item.labelDescription }}
+          </q-tooltip>
         </q-item-section>
       </q-item>
     </template>
