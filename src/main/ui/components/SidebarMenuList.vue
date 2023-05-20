@@ -3,6 +3,7 @@
     <template v-for="item in items" :key="item.id">
       <q-expansion-item
         v-if="item.type == 'group'"
+        dense
         :header-inset-level="level * 0.2"
         expand-separator
         :icon="item.icon.icon"
@@ -20,7 +21,11 @@
         </q-item-section>
         <q-item-section>
           <q-item-label>{{ item.label }}</q-item-label>
-          <q-item-label caption lines="2">{{ item.labelDescription || ' ' }}</q-item-label>
+          <q-tooltip v-if="item.labelDescription && item.labelDescription != ''"
+                     :delay="1000">
+            {{ item.labelDescription }}
+          </q-tooltip>
+<!--          <q-item-label v-if="item.labelDescription && item.labelDescription != ''" caption lines="2">{{ item.labelDescription }}</q-item-label>-->
         </q-item-section>
       </q-item>
     </template>
