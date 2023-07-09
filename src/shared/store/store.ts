@@ -1,6 +1,6 @@
-import {computed, ComputedRef, Ref, ref,} from 'vue';
+import {computed, Ref, ref,} from 'vue';
 import {
-  BaseEntity, BaseFilter, CHANGED,
+  BaseEntity, CHANGED,
   InitInstancePayload,
   LoadPayload,
   LoadSuccessPayload,

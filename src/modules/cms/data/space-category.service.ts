@@ -31,7 +31,7 @@ export const cmsSpaceCategoryService = {
     const params = {
       source: readSide ? undefined : 'origin',
     }
-    return await axios.post<Category[]>(`/api/annette/v1/cms/getSpaceCategories`, ids, {params})
+    return await axios.post<Category[]>('/api/annette/v1/cms/getSpaceCategories', ids, {params})
       .then(result => result.data.map(convertCategory))
   },
 

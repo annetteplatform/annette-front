@@ -1,5 +1,3 @@
-import {AnnettePrincipal} from 'src/shared/model';
-
 export * from './action.model'
 export * from './blog.model'
 export * from './blog.service'

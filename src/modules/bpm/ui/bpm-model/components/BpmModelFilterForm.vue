@@ -24,11 +24,10 @@
 </template>
 
 <script setup lang="ts">
-/* eslint-disable  @typescript-eslint/no-explicit-any */
-/* eslint-disable @typescript-eslint/ban-ts-comment */
+
+
 
 import {PropType, ref, watch} from 'vue'
-import {SimpleFilter} from 'src/shared/model';
 import {BpmModelFilter} from 'src/modules/bpm';
 
 const props = defineProps({

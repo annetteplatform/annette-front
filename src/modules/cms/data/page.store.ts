@@ -25,7 +25,7 @@ import {Space} from './space.model';
 import {Updated} from './update.model';
 import {FileDescriptor, Files, RemoveFilePayload,} from './file.model';
 import {uid} from 'quasar';
-import {AnnettePrincipal} from 'src/shared/model';
+import {AnnettePrincipal, newPrincipal} from 'src/shared/model';
 import {useSpaceStore} from 'src/modules/cms/data/space.store';
 
 const DEFAULT_PAGE_SIZE = 10
@@ -35,10 +35,7 @@ function emptyEntity(id: string, spaceId: string, personId: string) {
     id: id,
     spaceId: spaceId,
     featured: false,
-    authorId: {
-      principalType: 'person',
-      principalId: personId
-    },
+    authorId: newPrincipal('person', personId),
     title: '',
     content: {
       settings: {},
@@ -350,8 +347,7 @@ export const usePageStore = defineStore('cmsPage', () => {
       if (editor.value.id === payload.id && editor.value.page) {
         if (editor.value.page.targets) {
           editor.value.page.targets = editor.value.page.targets.filter(p =>
-            p.principalType !== payload.principal.principalType &&
-            p.principalId !== payload.principal.principalId
+            p !== payload.principal
           )
         }
         editor.value.page.updatedAt = updated.updatedAt

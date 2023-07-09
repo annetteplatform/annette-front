@@ -48,10 +48,8 @@
 <script lang="ts">
 import {useEntityListPage} from 'src/shared/composables/entity-list-page';
 import EntityListPage from 'src/shared/components/crud/EntityListPage.vue';
-import SimpleFilterForm from 'src/shared/components/crud/SimpleFilterForm.vue';
 import BpmModelList from './components/BpmModelList.vue';
 import {defineComponent} from 'vue';
-import DefaultListToolbar from 'src/shared/components/crud/DefaultListToolbar.vue';
 import DefaultListPageToolbar from 'src/shared/components/crud/DefaultListPageToolbar.vue';
 import {BpmModelFilter, useBpmModelStore} from 'src/modules/bpm';
 import BpmModelFilterForm from 'src/modules/bpm/ui/bpm-model/components/BpmModelFilterForm.vue';
@@ -61,7 +59,7 @@ export default defineComponent({
   components: {
     BpmModelFilterForm,
     DefaultListPageToolbar,
-    DefaultListToolbar, BpmModelList, SimpleFilterForm, EntityListPage
+    BpmModelList, EntityListPage
   },
   setup() {
 

@@ -12,11 +12,11 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType, ref, toRef, watch} from 'vue';
+import {computed, defineComponent, ref, toRef, watch} from 'vue';
 import {useRouter} from 'vue-router'
 import {Ref} from '@vue/reactivity';
 import {Person, usePersonStore} from 'src/modules/person';
-import {AnnettePrincipal} from 'src/shared/model';
+import {AnnettePrincipal, extractPrincipalId} from 'src/shared/model';
 
 
 export default defineComponent({
@@ -24,7 +24,7 @@ export default defineComponent({
   components: {},
   props: {
     principal: {
-      type: Object as PropType<AnnettePrincipal>,
+      type: String,
       required: true,
     }
   },
@@ -32,29 +32,31 @@ export default defineComponent({
     const store = usePersonStore()
     const router = useRouter()
 
-    const principal = toRef(props, 'principal')
+    const principal: Ref<AnnettePrincipal> = toRef(props, 'principal')
+    const principalId = computed( () => extractPrincipalId(principal.value))
 
     const person: Ref<Person | null> = ref(null)
 
     const loadPrincipal = async () => {
-      if (principal.value.principalId !== 'ANONYMOUS') {
-        const persons: Person[] = await store.loadEntitiesIfNotExist( [principal.value.principalId])
-        if (persons && persons[0]) {
-          person.value = persons[0]
-        } else {
-          person.value = {
-            id: principal.value.principalId,
-            lastname: 'Unknown person',
-            firstname: `[${principal.value.principalId}]`,
-            categoryId:''
-          }
-        }
-      } else {
+      if (principalId.value === 'ANONYMOUS') {
         person.value = {
-          id: principal.value.principalId,
+          id: principalId.value,
           lastname: 'ANONYMOUS',
           firstname: '',
           categoryId:''
+        }
+      } else {
+        person.value = {
+          id: principalId.value,
+          lastname: principalId.value,
+          firstname: '',
+          categoryId:''
+        }
+        if (principalId.value !== '') {
+          const persons: Person[] = await store.loadEntitiesIfNotExist([principalId.value])
+          if (persons && persons[0]) {
+            person.value = persons[0]
+          }
         }
       }
 

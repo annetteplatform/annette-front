@@ -102,15 +102,12 @@
 </template>
 
 <script lang="ts">
-/* eslint-disable @typescript-eslint/ban-ts-comment */
-import {computed, defineComponent, ref} from 'vue';
+import { defineComponent, ref} from 'vue';
 
 import {Person, personService, usePersonStore} from 'src/modules/person';
-import {useQuasar} from 'quasar';
 import {useEntityPage} from 'src/shared/composables';
 import EntityPage from 'src/shared/components/crud/EntityPage.vue';
 import DefaultEntityPageToolbar from 'src/shared/components/crud/DefaultEntityPageToolbar.vue';
-import {useI18n} from 'vue-i18n';
 import AttributesForm from 'src/shared/components/attributes/AttributesForm.vue';
 import PersonCategorySelector from 'src/modules/person/ui/category/components/PersonCategorySelector.vue';
 
@@ -155,8 +152,8 @@ export default defineComponent({
     }
 
     const store = usePersonStore()
-    const quasar = useQuasar()
-    const i18n = useI18n()
+    // const quasar = useQuasar()
+    // const i18n = useI18n()
 
     const entityPage = useEntityPage<Person>({
         store,

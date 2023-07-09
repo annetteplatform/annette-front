@@ -1,5 +1,5 @@
-/* eslint-disable  @typescript-eslint/no-explicit-any */
-/* eslint-disable @typescript-eslint/ban-ts-comment */
+
+
 
 import {Ref, ref, toRef, watch} from 'vue';
 import {AnnetteError} from 'src/shared/model';

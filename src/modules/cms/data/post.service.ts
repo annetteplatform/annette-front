@@ -123,7 +123,7 @@ export const cmsPostService = {
     const params = {
       source: readSide ? undefined : 'origin'
     }
-    return await axios.post<Post[]>(`/api/annette/v1/cms/getPosts`, ids, {params})
+    return await axios.post<Post[]>('/api/annette/v1/cms/getPosts', ids, {params})
       .then(result => result.data.map(convertPost))
   },
 
@@ -135,7 +135,7 @@ export const cmsPostService = {
       withTargets: true,
     }
     // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-    return await axios.post<Post[]>(`/api/annette/v1/cms/getPosts`, ids, {params})
+    return await axios.post<Post[]>('/api/annette/v1/cms/getPosts', ids, {params})
       .then(result => result.data.map(convertPost))
   },
 

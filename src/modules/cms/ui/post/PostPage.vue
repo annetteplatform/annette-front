@@ -264,7 +264,6 @@
 </template>
 
 <script lang="ts">
-/* eslint-disable @typescript-eslint/ban-ts-comment */
 import {computed, defineComponent, Ref, ref, toRef, watch} from 'vue';
 
 import EntityPage from 'src/shared/components/crud/EntityPage.vue';
@@ -273,13 +272,13 @@ import PrincipalListInput from 'src/shared/components/crud/PrincipalListInput.vu
 import {
   FileDescriptor,
   InitPostEditorPayload,
-  Post, PostEditor, RemoveFilePayload, toAction,
+  RemoveFilePayload, toAction,
   usePostStore
 } from 'src/modules/cms';
 import {date, openURL, useQuasar} from 'quasar';
 import {useRoute, useRouter} from 'vue-router';
 import {useAuthStore} from 'src/main';
-import PrincipalSelectorDialog from 'src/shared/components/principal-selector/PrinciplaSelectorDialog.vue';
+import PrincipalSelectorDialog from 'src/shared/components/principal-selector/PrincipalSelectorDialog.vue';
 import PrincipalViewItem from 'src/shared/components/principal-view/PrincipalViewItem.vue';
 import DefaultEntityPageToolbar from 'src/shared/components/crud/DefaultEntityPageToolbar.vue';
 

@@ -51,7 +51,7 @@ import {Ref} from '@vue/reactivity';
 import ApplicationSelector from 'src/modules/application/ui/application/components/ApplicationSelector.vue';
 import PageSelector from 'src/modules/cms/ui/page/components/PageSelector.vue';
 import PrincipalViewItem from 'src/shared/components/principal-view/PrincipalViewItem.vue';
-import PrincipalSelectorDialog from 'src/shared/components/principal-selector/PrinciplaSelectorDialog.vue';
+import PrincipalSelectorDialog from 'src/shared/components/principal-selector/PrincipalSelectorDialog.vue';
 
 export default defineComponent({
   name: 'HomePageFormDialog',
@@ -85,20 +85,14 @@ export default defineComponent({
           applicationId: '',
           priority: 0,
           pageId: '',
-          principal: {
-            principalType: '',
-            principalId: ''
-          },
+          principal: '~',
         }
       } else if (show.value && action.value === 'edit') {
         homePage.value = {
           applicationId: '',
           priority: 0,
           pageId: '',
-          principal: {
-            principalType: '',
-            principalId: ''
-          },
+          principal: '~',
         }
         const page = await store.getEntityForEdit(id.value as string)
         homePage.value = extend(true, {}, page)
@@ -119,8 +113,7 @@ export default defineComponent({
     const canSave = computed(() => {
       return homePage.value &&
         homePage.value.applicationId.trim() !== '' &&
-        homePage.value.principal.principalType.trim() !== '' &&
-        homePage.value.principal.principalId.trim() !== '' &&
+        homePage.value.principal !== '' &&
         homePage.value.pageId.trim() !== ''
     })
 

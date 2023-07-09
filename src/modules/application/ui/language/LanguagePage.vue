@@ -55,7 +55,6 @@
 </template>
 
 <script lang="ts">
-/* eslint-disable @typescript-eslint/ban-ts-comment */
 import { defineComponent, ref} from 'vue';
 
 import {Language, useLanguageStore} from 'src/modules/application';

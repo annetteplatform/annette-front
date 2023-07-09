@@ -36,8 +36,7 @@
 </template>
 
 <script lang="ts">
-/* eslint-disable  @typescript-eslint/no-explicit-any */
-/* eslint-disable @typescript-eslint/ban-ts-comment */
+
 import {defineComponent} from 'vue';
 
 export default defineComponent({

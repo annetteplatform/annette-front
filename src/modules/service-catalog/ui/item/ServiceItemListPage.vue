@@ -35,7 +35,6 @@ import EntityListPage from 'src/shared/components/crud/EntityListPage.vue';
 import SimpleFilterForm from 'src/shared/components/crud/SimpleFilterForm.vue';
 import ServiceItemList from './components/ServiceItemList.vue';
 import {defineComponent} from 'vue';
-import DefaultListToolbar from 'src/shared/components/crud/DefaultListToolbar.vue';
 import DefaultListPageToolbar from 'src/shared/components/crud/DefaultListPageToolbar.vue';
 import { ServiceItemFilter, useServiceItemStore} from 'src/modules/service-catalog';
 
@@ -43,7 +42,7 @@ export default defineComponent({
   name: 'ServiceItemListPage',
   components: {
     DefaultListPageToolbar,
-    DefaultListToolbar, ServiceItemList, SimpleFilterForm, EntityListPage},
+     ServiceItemList, SimpleFilterForm, EntityListPage},
   setup() {
 
     const instanceKey = 'serviceItems'

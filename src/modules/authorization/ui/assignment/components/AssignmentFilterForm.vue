@@ -5,13 +5,13 @@
         <div class="row">
           <div class="col-md-4 col-sm-12 col-xs-12 q-pr-md">
             <principal-type-selector
-              v-model="filterModel.principal.principalType"
+              v-model="filterModel.principalType"
               clearable
               label="Principal Type"/>
           </div>
           <q-input
             class="col-md-8 col-sm-12 col-xs-12 q-pr-md"
-            v-model="filterModel.principal.principalId"
+            v-model="filterModel.principalId"
             stack-label
             label="Principal Id"
           />
@@ -99,10 +99,8 @@ export default defineComponent({
           arg2: '',
           arg3: '',
         },
-        principal: {
-          principalType: '',
-          principalId: ''
-        },
+        principalType: '',
+        principalId: '',
         source: {
           sourceType: '',
           sourceId: ''
@@ -119,8 +117,8 @@ export default defineComponent({
 
     const setFilter = () => {
       let newFilter = deepCopy<AuthAssignmentFilter>(filterModel.value)
-      if (newFilter.principal.principalType === null) {
-        newFilter.principal.principalType = ''
+      if (newFilter.principalType === null) {
+        newFilter.principalType = ''
       }
       if (newFilter.permission.id === null) {
         newFilter.permission.id = ''

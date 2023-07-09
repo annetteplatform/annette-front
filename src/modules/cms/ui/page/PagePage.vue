@@ -255,7 +255,6 @@
 </template>
 
 <script lang="ts">
-/* eslint-disable @typescript-eslint/ban-ts-comment */
 import {computed, defineComponent, Ref, ref, toRef, watch} from 'vue';
 
 import EntityPage from 'src/shared/components/crud/EntityPage.vue';
@@ -271,15 +270,13 @@ import {
 import {date, openURL, useQuasar} from 'quasar';
 import {useRoute, useRouter} from 'vue-router';
 import {useAuthStore} from 'src/main';
-import PrincipalSelectorDialog from 'src/shared/components/principal-selector/PrinciplaSelectorDialog.vue';
+import PrincipalSelectorDialog from 'src/shared/components/principal-selector/PrincipalSelectorDialog.vue';
 import PrincipalViewItem from 'src/shared/components/principal-view/PrincipalViewItem.vue';
-import SpaceSelector from 'src/modules/cms/ui/space/components/SpaceSelector.vue';
 
 
 export default defineComponent({
   name: 'PagePage',
   components: {
-    SpaceSelector,
     PrincipalViewItem,
     PrincipalSelectorDialog,
     PrincipalListInput,

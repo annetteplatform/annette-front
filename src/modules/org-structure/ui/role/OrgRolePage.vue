@@ -62,7 +62,6 @@
 </template>
 
 <script lang="ts">
-/* eslint-disable @typescript-eslint/ban-ts-comment */
 import { defineComponent, ref} from 'vue';
 
 import {OrgRole, useOrgRoleStore} from 'src/modules/org-structure';

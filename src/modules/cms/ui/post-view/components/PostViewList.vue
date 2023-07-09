@@ -16,7 +16,7 @@
 
 <script lang="ts">
 import {computed, ComputedRef, defineComponent, toRef} from 'vue';
-import {PostView, useBlogViewStore, usePostViewStore} from 'src/modules/cms';
+import {PostView, usePostViewStore} from 'src/modules/cms';
 import PostViewCard from 'src/modules/cms/ui/post-view/components/PostViewCard.vue';
 import {SetPagePayload} from 'src/shared/store';
 
@@ -31,7 +31,6 @@ export default defineComponent({
   },
   setup(props) {
     const store = usePostViewStore()
-    const blogViewStore = useBlogViewStore()
 
     // eslint-disable-next-line @typescript-eslint/no-unsafe-call
     const instanceKey = toRef(props, 'instanceKey')

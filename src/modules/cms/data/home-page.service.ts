@@ -31,7 +31,7 @@ export const cmsHomePageService = {
     const params = {
       source: readSide ? undefined : 'origin',
     }
-    return await axios.post<HomePage[]>(`/api/annette/v1/cms/getHomePages`, ids, {params})
+    return await axios.post<HomePage[]>('/api/annette/v1/cms/getHomePages', ids, {params})
       .then(result => result.data.map(convertHomePage))
   },
 

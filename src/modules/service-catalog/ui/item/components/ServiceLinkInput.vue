@@ -31,10 +31,8 @@
 </template>
 
 <script lang="ts" setup>
-/* eslint-disable  @typescript-eslint/no-explicit-any */
-import {computed, PropType, ref, toRef, watch} from 'vue';
-import {useQuasar} from 'quasar';
-import {useI18n} from 'vue-i18n';
+
+import {computed, PropType} from 'vue';
 import {ServiceLink} from 'src/main';
 import ApplicationSelector from 'src/modules/application/ui/application/components/ApplicationSelector.vue';
 
@@ -58,9 +56,6 @@ const props = defineProps({
 })
 
 const emit = defineEmits(['update:modelValue'])
-
-const quasar = useQuasar()
-const i18n = useI18n()
 
 const model = computed({
   get: () => props.modelValue,

@@ -1,13 +1,13 @@
 <template>
   <q-item-section >
     <q-item-label caption lines="1" >
-      {{ principalType }}
+      {{ principalTypeName }}
     </q-item-label>
     <q-item-label class="cursor-pointer" @click="openOrgItem" v-if="orgItem">
       <span class="person-navigate text-weight-bold"> {{ orgItem.name }} </span>
     </q-item-label>
     <q-item-label v-else>
-       {{ principal.principalId }}
+       {{ principalId }}
     </q-item-label>
     <q-item-label caption lines="2" v-if="hierarchy" >
       {{ hierarchy }}
@@ -20,12 +20,12 @@
 </template>
 
 <script lang="ts">
-import {computed, defineComponent, PropType, ref, toRef, watch} from 'vue';
+import {computed, defineComponent, ref, toRef, watch} from 'vue';
 import {useRouter} from 'vue-router'
 import {OrgItem, OrgPosition, useOrgItemStore} from 'src/modules/org-structure';
 import {Ref} from '@vue/reactivity';
 import {Person, usePersonStore} from 'src/modules/person';
-import {AnnettePrincipal} from 'src/shared/model';
+import {AnnettePrincipal, extractPrincipalId, extractPrincipalType, PrincipalTypeNames} from 'src/shared/model';
 
 
 export default defineComponent({
@@ -33,7 +33,7 @@ export default defineComponent({
   components: {},
   props: {
     principal: {
-      type: Object as PropType<AnnettePrincipal>,
+      type: String,
       required: true,
     }
   },
@@ -43,34 +43,31 @@ export default defineComponent({
     const router = useRouter()
 
     const principal: Ref<AnnettePrincipal> = toRef(props, 'principal')
+    const principalType = computed( () => extractPrincipalType(principal.value))
+    const principalId = computed( () => extractPrincipalId(principal.value))
 
     const orgItem: Ref<OrgItem | null> = ref(null)
     const hierarchy = ref('')
     const person: Ref<Person | null> = ref(null)
 
-    const principalTypes: {[id: string]: string} = {
-      'org-position': 'Position',
-      'unit-chief': 'Unit chief',
-      'direct-unit': 'Direct unit',
-      'descendant-unit': 'Descendant unit'
-    }
+    const principalTypes = PrincipalTypeNames
 
-    const principalType = computed(() => {
-      return principalTypes[principal.value.principalType] || principal.value.principalType
+    const principalTypeName = computed(() => {
+      return principalTypes[principalType.value] || principalType.value
     })
 
     const isUnitPrincipal = computed(() => {
       const orgItemPrincipals = ['unit-chief', 'direct-unit', 'descendant-unit']
-      return orgItemPrincipals.includes(principal.value.principalType)
+      return orgItemPrincipals.includes(principalType.value)
     })
 
     const isPositionPrincipal = computed(() => {
       const orgItemPrincipals = ['org-position']
-      return orgItemPrincipals.includes(principal.value.principalType)
+      return orgItemPrincipals.includes(principalType.value)
     })
 
     const loadPrincipal = async () => {
-      const loadedItems: OrgItem[] = await orgItemStore.loadEntitiesIfNotExist([principal.value.principalId])
+      const loadedItems: OrgItem[] = await orgItemStore.loadEntitiesIfNotExist([principalId.value])
       if (loadedItems && loadedItems[0]) {
         orgItem.value = loadedItems[0]
         // @ts-ignore
@@ -113,6 +110,8 @@ export default defineComponent({
     watch(principal, loadPrincipal)
 
     return {
+      principalTypeName,
+      principalId,
       orgItem,
       hierarchy,
       person,

@@ -1,4 +1,4 @@
-import {computed, ComputedRef, Ref, ref,} from 'vue';
+import {computed, Ref, ref,} from 'vue';
 import {
   BaseEntity, BaseFilter, CHANGED,
   InitInstancePayload,
@@ -6,9 +6,6 @@ import {
   LoadSuccessPayload,
   PagingMode, RefreshPayload, ResetInstancePayload, SetFilterPayload, SetPagePayload, SetPageSizePayload, UNCHANGED
 } from './model';
-import {FindResult, Message} from '../model';
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore
 import hash from 'object-hash'
 import {
   findFirstNonExistingPage,

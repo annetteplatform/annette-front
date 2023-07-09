@@ -23,9 +23,9 @@
 </template>
 
 <script lang="ts">
-import {computed, ComputedRef, defineComponent, ref, toRef, watch} from 'vue';
+import {defineComponent, ref, toRef, watch} from 'vue';
 import {Ref} from '@vue/reactivity';
-import {PERMISSION_IDS, useAuthRoleStore} from 'src/modules/authorization';
+import {PERMISSION_IDS} from 'src/modules/authorization';
 
 
 export default defineComponent({
@@ -54,7 +54,6 @@ export default defineComponent({
   },
   emits: ['update:modelValue'],
   setup(props, {emit}) {
-    const store = useAuthRoleStore()
 
     // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access,@typescript-eslint/no-unsafe-return
     const permissions: Ref<string[]> = ref(PERMISSION_IDS)

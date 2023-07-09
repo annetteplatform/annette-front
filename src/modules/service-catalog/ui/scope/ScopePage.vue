@@ -86,7 +86,6 @@
 </template>
 
 <script lang="ts">
-/* eslint-disable @typescript-eslint/ban-ts-comment */
 import { defineComponent, ref} from 'vue';
 
 import {Scope, useScopeStore} from 'src/modules/service-catalog';

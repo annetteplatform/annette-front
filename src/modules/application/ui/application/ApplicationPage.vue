@@ -131,13 +131,11 @@
 </template>
 
 <script lang="ts">
-/* eslint-disable @typescript-eslint/ban-ts-comment */
 import {computed, defineComponent, ref} from 'vue';
 
 import {Application, useApplicationStore, useTranslationStore} from 'src/modules/application';
 import {useQuasar} from 'quasar';
 import {useEntityPage} from 'src/shared/composables';
-import {TextCaption, TranslationCaption} from 'src/shared/model';
 import EntityPage from 'src/shared/components/crud/EntityPage.vue';
 import TranslationSelector from '../translation/components/TranslationSelector.vue';
 import DefaultEntityPageToolbar from 'src/shared/components/crud/DefaultEntityPageToolbar.vue';

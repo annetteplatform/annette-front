@@ -58,7 +58,7 @@ export const principalGroupService = {
     const params = {
       source: readSide ? undefined : 'origin',
     }
-    return await axios.post<PrincipalGroup[]>(`/api/annette/v1/principalGroup/getPrincipalGroups`, ids, {params})
+    return await axios.post<PrincipalGroup[]>('/api/annette/v1/principalGroup/getPrincipalGroups', ids, {params})
       .then(result => result.data.map(convertPrincipalGroup))
   },
 
@@ -107,7 +107,7 @@ export const principalGroupService = {
     const params = {
       source: readSide ? undefined : 'origin',
     }
-    return await axios.post<Category[]>(`/api/annette/v1/principalGroup/getCategories`, ids, {params})
+    return await axios.post<Category[]>('/api/annette/v1/principalGroup/getCategories', ids, {params})
       .then(result => result.data.map(convertCategory))
   },
 

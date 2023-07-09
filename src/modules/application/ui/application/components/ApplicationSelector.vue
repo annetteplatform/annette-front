@@ -32,7 +32,6 @@
 import {defineComponent, toRef} from 'vue';
 import {Application, ApplicationFilter, useApplicationStore} from 'src/modules/application';
 import {useEntitySelector} from 'src/shared/composables';
-import {useI18n} from 'vue-i18n';
 
 
 
@@ -58,7 +57,6 @@ export default defineComponent({
   setup(props, {emit}) {
 
     const store = useApplicationStore()
-    const i18n = useI18n()
 
     const valueRef = toRef(props, 'modelValue')
 

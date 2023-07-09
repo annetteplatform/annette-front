@@ -89,14 +89,11 @@ import {defineComponent, ref} from 'vue';
 import {Ref} from '@vue/reactivity';
 import CustomPrincipalSelector from './CustomPrincipalSelector.vue';
 import PrincipalViewItem from '../principal-view/PrincipalViewItem.vue';
-import {AnnettePrincipal} from 'src/shared/model';
+import {AnnettePrincipal, ANONYMOUS_PRINCIPAL, AUTHENTICATED_PRINCIPAL, newPrincipal} from 'src/shared/model';
 import PersonSelector from 'src/modules/person/ui/person/components/PersonSelector.vue';
 
 function emptyPrincipal(): AnnettePrincipal {
-  return {
-    principalType: 'person',
-    principalId: ''
-  }
+  return 'person~'
 }
 
 export default defineComponent({
@@ -126,7 +123,7 @@ export default defineComponent({
     const selectCustom = () => {
       if (tab.value === 'custom' && resolve.value) {
         show.value = false
-        resolve.value({...customPrincipal.value})
+        resolve.value(customPrincipal.value)
         customPrincipal.value = emptyPrincipal()
       }
     }
@@ -134,10 +131,7 @@ export default defineComponent({
     const selectPerson = () => {
       if (tab.value === 'person' && resolve.value) {
         show.value = false
-        const person = {
-          principalType: 'person',
-          principalId: personId.value
-        }
+        const person = newPrincipal('person', personId.value)
         resolve.value(person)
       }
     }
@@ -145,10 +139,7 @@ export default defineComponent({
     const selectAuthenticated = () => {
       if (tab.value === 'special' && resolve.value) {
         show.value = false
-        const person = {
-          principalType: 'authenticated',
-          principalId: 'user'
-        }
+        const person = AUTHENTICATED_PRINCIPAL
         resolve.value(person)
       }
     }
@@ -156,10 +147,7 @@ export default defineComponent({
     const selectAnonymous = () => {
       if (tab.value === 'special' && resolve.value) {
         show.value = false
-        const person = {
-          principalType: 'person',
-          principalId: 'ANONYMOUS'
-        }
+        const person = ANONYMOUS_PRINCIPAL
         resolve.value(person)
       }
     }

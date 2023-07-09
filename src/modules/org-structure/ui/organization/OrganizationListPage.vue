@@ -33,7 +33,6 @@ import EntityListPage from 'src/shared/components/crud/EntityListPage.vue';
 import SimpleFilterForm from 'src/shared/components/crud/SimpleFilterForm.vue';
 import OrganizationList from './components/OrganizationList.vue';
 import {defineComponent, ref} from 'vue';
-import DefaultListToolbar from 'src/shared/components/crud/DefaultListToolbar.vue';
 import DefaultListPageToolbar from 'src/shared/components/crud/DefaultListPageToolbar.vue';
 import {emptyOrganizationFilter, OrgItemFilter, useOrgItemStore} from 'src/modules/org-structure';
 import CreateOrgItemDialog from 'src/modules/org-structure/ui/organization/components/CreateOrgItemDialog.vue';
@@ -43,7 +42,7 @@ export default defineComponent({
   components: {
     CreateOrgItemDialog,
     DefaultListPageToolbar,
-    DefaultListToolbar, OrganizationList, SimpleFilterForm, EntityListPage},
+    OrganizationList, SimpleFilterForm, EntityListPage},
   setup() {
 
     const instanceKey = 'orgItems'

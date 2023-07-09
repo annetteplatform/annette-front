@@ -23,7 +23,7 @@
 </template>
 
 <script lang="ts">
-import {computed, ComputedRef, defineComponent, ref, toRef, watch} from 'vue';
+import {defineComponent, ref, toRef, watch} from 'vue';
 import {Ref} from '@vue/reactivity';
 import {PRINCIPAL_TYPES} from 'src/shared/model';
 

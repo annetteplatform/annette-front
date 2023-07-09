@@ -101,7 +101,7 @@
 
 <script setup lang="ts">
 
-import {mainService, useAuthStore, useMainStore} from 'src/main';
+import {useAuthStore, useMainStore} from 'src/main';
 import {useI18n} from 'vue-i18n';
 
 const authStore = useAuthStore()

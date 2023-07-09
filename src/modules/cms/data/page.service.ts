@@ -113,7 +113,7 @@ export const cmsPageService = {
     const params = {
       source: readSide ? undefined : 'origin',
     }
-    return await axios.post<Page[]>(`/api/annette/v1/cms/getPages`, ids, {params})
+    return await axios.post<Page[]>('/api/annette/v1/cms/getPages', ids, {params})
       .then(result => result.data.map(convertPage))
   },
 
@@ -124,7 +124,7 @@ export const cmsPageService = {
       withTargets:true
     }
     // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-    return await axios.post<Page[]>(`/api/annette/v1/cms/getPages`, ids, {params})
+    return await axios.post<Page[]>('/api/annette/v1/cms/getPages', ids, {params})
       .then(result => result.data.map(convertPage))
   },
 

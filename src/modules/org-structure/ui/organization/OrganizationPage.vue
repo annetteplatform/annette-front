@@ -93,7 +93,6 @@
 </template>
 
 <script lang="ts">
-/* eslint-disable @typescript-eslint/ban-ts-comment */
 import {computed, defineComponent, Ref, ref, toRefs, watch} from 'vue';
 
 import {OrgItem, orgStructureService, OrgUnit, useOrgItemStore} from 'src/modules/org-structure';

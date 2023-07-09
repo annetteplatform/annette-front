@@ -96,7 +96,6 @@
 </template>
 
 <script lang="ts">
-/* eslint-disable @typescript-eslint/ban-ts-comment */
 import {defineComponent, Ref, ref} from 'vue';
 
 import EntityPage from 'src/shared/components/crud/EntityPage.vue';

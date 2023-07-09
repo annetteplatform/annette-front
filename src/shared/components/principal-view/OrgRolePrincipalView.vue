@@ -7,15 +7,15 @@
           {{ role.name }}
     </q-item-label>
     <q-item-label v-else>
-      {{ principal.principalId }}
+      {{ principalId }}
     </q-item-label>
   </q-item-section>
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType, ref, toRef, watch} from 'vue';
+import {computed, defineComponent, ref, toRef, watch} from 'vue';
 import {Ref} from '@vue/reactivity';
-import {AnnettePrincipal} from 'src/shared/model';
+import {AnnettePrincipal, extractPrincipalId} from 'src/shared/model';
 import {OrgRole, useOrgRoleStore} from 'src/modules/org-structure';
 
 
@@ -24,20 +24,21 @@ export default defineComponent({
   components: {},
   props: {
     principal: {
-      type: Object as PropType<AnnettePrincipal>,
+      type: String,
       required: true,
     }
   },
   setup(props) {
     const store = useOrgRoleStore()
 
-    const principal = toRef(props, 'principal')
+    const principal: Ref<AnnettePrincipal> = toRef(props, 'principal')
+    const principalId = computed( () => extractPrincipalId(principal.value))
 
     const role: Ref<OrgRole | null> = ref(null)
 
     const loadPrincipal = async () => {
       console.log('principal.value', principal.value)
-      const roles: OrgRole[] = await store.loadEntitiesIfNotExist([principal.value.principalId])
+      const roles: OrgRole[] = await store.loadEntitiesIfNotExist([principalId.value])
       if (roles && roles[0]) {
         role.value = roles[0]
       } else {
@@ -49,6 +50,7 @@ export default defineComponent({
     watch(principal, loadPrincipal)
 
     return {
+      principalId,
       role
     };
   }

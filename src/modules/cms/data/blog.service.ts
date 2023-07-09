@@ -79,7 +79,7 @@ export const cmsBlogService = {
       source: readSide ? undefined : 'origin',
     }
     // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-    return await axios.post<Blog[]>(`/api/annette/v1/cms/getBlogs`, ids, {params})
+    return await axios.post<Blog[]>('/api/annette/v1/cms/getBlogs', ids, {params})
       .then(result => result.data.map(convertBlog))
   },
 

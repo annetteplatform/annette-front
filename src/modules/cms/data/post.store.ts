@@ -25,7 +25,7 @@ import {Blog} from './blog.model';
 import {Updated} from './update.model';
 import {FileDescriptor, Files, RemoveFilePayload,} from './file.model';
 import {uid} from 'quasar';
-import {AnnettePrincipal} from 'src/shared/model';
+import {AnnettePrincipal, newPrincipal} from 'src/shared/model';
 import {useBlogStore} from 'src/modules/cms/data/blog.store';
 
 const DEFAULT_PAGE_SIZE = 10
@@ -35,10 +35,7 @@ function emptyEntity(id: string, blogId: string, personId: string) {
     id: id,
     blogId: blogId,
     featured: false,
-    authorId: {
-      principalType: 'person',
-      principalId: personId
-    },
+    authorId: newPrincipal('person', personId),
     title: '',
     introContent: {
       settings: {},
@@ -399,8 +396,7 @@ export const usePostStore = defineStore('cmsPost', () => {
       if (editor.value.id === payload.id && editor.value.post) {
         if (editor.value.post.targets) {
           editor.value.post.targets = editor.value.post.targets.filter(p =>
-            p.principalType !== payload.principal.principalType &&
-            p.principalId !== payload.principal.principalId
+            p !== payload.principal
           )
         }
         editor.value.post.updatedAt = updated.updatedAt

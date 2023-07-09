@@ -1,5 +1,5 @@
-/* eslint-disable  @typescript-eslint/no-explicit-any */
-/* eslint-disable @typescript-eslint/ban-ts-comment */
+
+
 
 import {Ref} from 'vue';
 import {ref, toRefs, watch} from 'vue';

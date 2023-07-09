@@ -1,5 +1,5 @@
-/* eslint-disable  @typescript-eslint/no-explicit-any */
-/* eslint-disable @typescript-eslint/ban-ts-comment */
+
+
 
 import {computed, ComputedRef, Ref, ref, watch} from 'vue';
 import {InitInstancePayload, InstanceState, PagingMode, SetFilterPayload} from 'src/shared/store';

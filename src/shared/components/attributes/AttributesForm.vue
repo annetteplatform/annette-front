@@ -81,7 +81,7 @@ export default defineComponent({
     const i18n = useI18n()
 
     const getCaption = (meta: AttributeMetadata) => {
-      let caption: string = ''
+      let caption = ''
       if (meta.caption.type == 'text') caption = (meta.caption as TextCaption).text
       else caption = i18n.t((meta.caption as TranslationCaption).translationId)
       if (meta.type === 'boolean' || meta.allowedValues) {

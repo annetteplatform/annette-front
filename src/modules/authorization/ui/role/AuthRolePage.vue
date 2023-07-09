@@ -122,7 +122,6 @@
 </template>
 
 <script lang="ts">
-/* eslint-disable @typescript-eslint/ban-ts-comment */
 import {defineComponent, ref} from 'vue';
 
 import {AuthRole, Permission, useAuthRoleStore} from 'src/modules/authorization';

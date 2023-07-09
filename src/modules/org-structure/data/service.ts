@@ -66,7 +66,7 @@ export const orgStructureService = {
     const params = {
       source: readSide ? undefined : 'origin',
     }
-    return await axios.post<OrgCategory[]>(`/api/annette/v1/orgStructure/getCategories`, ids, {params})
+    return await axios.post<OrgCategory[]>('/api/annette/v1/orgStructure/getCategories', ids, {params})
       .then(result => result.data.map(convertOrgCategory))
   },
 
@@ -109,7 +109,7 @@ export const orgStructureService = {
     const params = {
       source: readSide ? undefined : 'origin',
     }
-    return await axios.post<OrgRole[]>(`/api/annette/v1/orgStructure/getOrgRoles`, ids, {params})
+    return await axios.post<OrgRole[]>('/api/annette/v1/orgStructure/getOrgRoles', ids, {params})
       .then(result => result.data.map(convertOrgRole))
   },
 
@@ -210,7 +210,7 @@ export const orgStructureService = {
     const params = {
       source: fromReadSide ? undefined : 'origin',
     }
-    return await axios.post<OrgItem[]>(`/api/annette/v1/orgStructure/getOrgItems`, ids, {params})
+    return await axios.post<OrgItem[]>('/api/annette/v1/orgStructure/getOrgItems', ids, {params})
       .then(result => result.data.map(convertOrgItem))
   },
 
@@ -254,7 +254,7 @@ export const orgStructureService = {
       source: readSide ? undefined : 'origin',
       attributes
     }
-    return await axios.post<EntitiesAttributeValues>(`/api/annette/v1/orgStructure/getOrgItemsAttributes`, ids, {params})
+    return await axios.post<EntitiesAttributeValues>('/api/annette/v1/orgStructure/getOrgItemsAttributes', ids, {params})
       .then(result => result.data)
   },
 

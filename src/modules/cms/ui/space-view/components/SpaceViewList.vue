@@ -29,12 +29,11 @@ import {defineComponent} from 'vue';
 import EntityList from 'src/shared/components/crud/EntityList.vue';
 import {useEntityList} from 'src/shared/composables';
 import {useI18n} from 'vue-i18n';
-import DefaultRowToolbar from 'src/shared/components/crud/DefaultRowToolbar.vue';
 import {SpaceView, SpaceViewFilter, useSpaceViewStore} from 'src/modules/cms';
 
 export default defineComponent({
   name: 'SpaceViewList',
-  components: {DefaultRowToolbar, EntityList},
+  components: {EntityList},
   props: {
     instanceKey: {
       type: String,

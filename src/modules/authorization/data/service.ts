@@ -35,7 +35,7 @@ export const authorizationService = {
       source: readSide ? undefined : 'origin',
     }
     // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-    return await axios.post<AuthRole[]>(`/api/annette/v1/authorization/getRoles`, ids, {params})
+    return await axios.post<AuthRole[]>('/api/annette/v1/authorization/getRoles', ids, {params})
       .then(result => result.data.map(convertRole))
   },
 

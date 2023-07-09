@@ -43,7 +43,7 @@
 </template>
 
 <script lang="ts">
-import {defineComponent, ref, useSlots} from 'vue';
+import {defineComponent} from 'vue';
 import EntityList from 'src/shared/components/crud/EntityList.vue';
 import {useActivateEntity, useDeactivateEntity, useEntityList} from 'src/shared/composables';
 import {useI18n} from 'vue-i18n';

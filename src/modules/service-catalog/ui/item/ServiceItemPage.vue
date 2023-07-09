@@ -107,7 +107,6 @@
 </template>
 
 <script lang="ts">
-/* eslint-disable @typescript-eslint/ban-ts-comment */
 import {defineComponent, ref, toRef} from 'vue';
 
 import {Group,  Service, ServiceItem, useServiceItemStore} from 'src/modules/service-catalog';

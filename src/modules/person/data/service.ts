@@ -42,7 +42,7 @@ export const personService = {
       attributes: attributes
     }
     // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-    return await axios.post<Person[]>(`/api/annette/v1/person/getPersons`, ids, {params})
+    return await axios.post<Person[]>('/api/annette/v1/person/getPersons', ids, {params})
       .then(result => result.data.map(convertPerson))
   },
 
@@ -123,7 +123,7 @@ export const personService = {
       source: readSide ? undefined : 'origin',
     }
     // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-    return await axios.post<Category[]>(`/api/annette/v1/person/getCategories`, ids, {params})
+    return await axios.post<Category[]>('/api/annette/v1/person/getCategories', ids, {params})
       .then(result => result.data.map(convertCategory))
   },
 

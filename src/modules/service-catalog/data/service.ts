@@ -39,7 +39,7 @@ export const serviceCatalogService = {
     const params = {
       source: readSide ? undefined : 'origin',
     }
-    return await axios.post<Category[]>(`/api/annette/v1/serviceCatalog/getCategories`, ids, {params})
+    return await axios.post<Category[]>('/api/annette/v1/serviceCatalog/getCategories', ids, {params})
       .then(result => result.data.map(convertCategory))
   },
 
@@ -78,7 +78,7 @@ export const serviceCatalogService = {
 
   async deleteScope(id: string) {
     return await axios.post<string>('/api/annette/v1/serviceCatalog/deleteScope', {id})
-      .then(result => '')
+      .then(() => '')
   },
 
   async getScope(id: string, readSide = true) {
@@ -93,7 +93,7 @@ export const serviceCatalogService = {
     const params = {
       source: readSide ? undefined : 'origin',
     }
-    return await axios.post<Scope[]>(`/api/annette/v1/serviceCatalog/getScopes`, ids, {params})
+    return await axios.post<Scope[]>('/api/annette/v1/serviceCatalog/getScopes', ids, {params})
       .then(result => result.data.map(convertScope))
   },
 
@@ -118,12 +118,8 @@ export const serviceCatalogService = {
       .then(
         result => result.data.hits.map(
           hit => {
-            let principalCode = hit.id.split('/')[1]
-            let sp = principalCode.split('~')
-            return {
-              principalType: sp[0],
-              principalId: sp[1]
-            }
+            const principalCode = hit.id.split('/')[1]
+            return principalCode
           }
         )
       )
@@ -174,7 +170,7 @@ export const serviceCatalogService = {
 
   async deleteServiceItem(id: string) {
     return await axios.post<string>('/api/annette/v1/serviceCatalog/deleteServiceItem', {id})
-      .then(result => '')
+      .then(() => '')
   },
 
   async getServiceItem(id: string, readSide = true) {
@@ -189,7 +185,7 @@ export const serviceCatalogService = {
     const params = {
       source: readSide ? undefined : 'origin',
     }
-    return await axios.post<ServiceItem[]>(`/api/annette/v1/serviceCatalog/getServiceItems`, ids, {params})
+    return await axios.post<ServiceItem[]>('/api/annette/v1/serviceCatalog/getServiceItems', ids, {params})
       .then(result => result.data.map(convertServiceItem))
   },
 
@@ -214,12 +210,8 @@ export const serviceCatalogService = {
       .then(
         result => result.data.hits.map(
           hit => {
-            let principalCode = hit.id.split('/')[1]
-            let sp = principalCode.split('~')
-            return {
-              principalType: sp[0],
-              principalId: sp[1]
-            }
+            const principalCode = hit.id.split('/')[1]
+            return principalCode
           }
         )
       )

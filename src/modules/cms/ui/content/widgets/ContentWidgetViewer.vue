@@ -48,7 +48,6 @@ import {
   MediaData,
   mediaToSource
 } from 'src/modules/cms/ui/content';
-import {useStore} from 'src/store';
 import {useRouter} from 'vue-router';
 import {useAuthStore} from 'src/main';
 

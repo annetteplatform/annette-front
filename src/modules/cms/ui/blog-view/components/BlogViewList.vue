@@ -28,19 +28,17 @@
 </template>
 
 <script lang="ts">
-import {defineComponent, ref, useSlots} from 'vue';
+import {defineComponent} from 'vue';
 import EntityList from 'src/shared/components/crud/EntityList.vue';
-import {useActivateEntity, useDeactivateEntity, useEntityList} from 'src/shared/composables';
+import {useEntityList} from 'src/shared/composables';
 import {useI18n} from 'vue-i18n';
-import DefaultRowToolbar from 'src/shared/components/crud/DefaultRowToolbar.vue';
-import {useDeleteEntity} from 'src/shared/composables/delete-entity';
 import {BlogView, BlogViewFilter, useBlogViewStore} from 'src/modules/cms';
 import SubscriptionField from 'src/modules/cms/ui/blog-view/components/SubscriptionField.vue';
 
 
 export default defineComponent({
   name: 'BlogViewList',
-  components: {SubscriptionField, DefaultRowToolbar, EntityList},
+  components: {SubscriptionField, EntityList},
   props: {
     instanceKey: {
       type: String,

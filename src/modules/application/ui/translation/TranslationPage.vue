@@ -60,7 +60,6 @@
 </template>
 
 <script lang="ts">
-/* eslint-disable @typescript-eslint/ban-ts-comment */
 import { defineComponent, ref} from 'vue';
 
 import {Translation, useTranslationStore} from 'src/modules/application';

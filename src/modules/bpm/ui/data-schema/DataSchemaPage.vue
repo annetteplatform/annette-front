@@ -94,13 +94,10 @@
 </template>
 
 <script lang="ts">
-/* eslint-disable @typescript-eslint/ban-ts-comment */
 import {defineComponent, ref} from 'vue';
 
-import {useQuasar} from 'quasar';
 import EntityPage from 'src/shared/components/crud/EntityPage.vue';
 import DefaultEntityPageToolbar from 'src/shared/components/crud/DefaultEntityPageToolbar.vue';
-import {useI18n} from 'vue-i18n';
 import {useSyncEntityPage} from 'src/shared/composables/sync-entity-page';
 import {
   DataSchema,
@@ -112,7 +109,7 @@ import {
 } from 'src/modules/bpm';
 import DataSchemaVariableList from './components/DataSchemaVariableList.vue';
 
-function emptyEntity(id?: string, type?: string): DataSchema {
+function emptyEntity(): DataSchema {
   return {
     id: '',
     name: '',
@@ -125,8 +122,14 @@ export default defineComponent({
   name: 'DataSchemaPage',
   components: {DataSchemaVariableList, DefaultEntityPageToolbar, EntityPage},
   props: {
-    id: String,
-    action: String,
+    id: {
+      type: String,
+      required: true
+    },
+    action: {
+      type: String,
+      required: true
+    },
     options: String
   },
   setup(props) {
@@ -135,7 +138,7 @@ export default defineComponent({
     const idRef = ref()
     const nameRef = ref()
 
-    const formHasError = (entity?: DataSchema | null): boolean => {
+    const formHasError = (): boolean => {
       // eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-member-access
       idRef.value.validate()
       // eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-member-access
@@ -146,8 +149,6 @@ export default defineComponent({
     }
 
     const store = useDataSchemaStore()
-    const quasar = useQuasar()
-    const i18n = useI18n()
 
     const entityPage = useSyncEntityPage<DataSchema>({
       store,

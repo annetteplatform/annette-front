@@ -1,4 +1,4 @@
-/* eslint-disable  @typescript-eslint/no-explicit-any */
+
 
 import axios from 'axios'
 
@@ -38,7 +38,7 @@ export const applicationService = {
     const params = {
       source: readSide ? undefined : 'origin',
     }
-    return await axios.post<Application[]>(`/api/annette/v1/application/getApplications`, ids, {params})
+    return await axios.post<Application[]>('/api/annette/v1/application/getApplications', ids, {params})
       .then(result => result.data.map(convertApplication), processError<Application[]>)
   },
 
@@ -88,7 +88,7 @@ export const applicationService = {
     const params = {
       source: readSide ? undefined : 'origin',
     }
-    return await axios.post<Language[]>(`/api/annette/v1/application/getLanguages`, ids, {params})
+    return await axios.post<Language[]>('/api/annette/v1/application/getLanguages', ids, {params})
       .then(result => result.data.map(convertLanguage), processError)
   },
 
@@ -131,7 +131,7 @@ export const applicationService = {
     const params = {
       source: readSide ? undefined : 'origin',
     }
-    return await axios.post<Translation[]>(`/api/annette/v1/application/getTranslations`, ids, {params})
+    return await axios.post<Translation[]>('/api/annette/v1/application/getTranslations', ids, {params})
       .then(result => result.data.map(convertTranslation), processError)
   },
 

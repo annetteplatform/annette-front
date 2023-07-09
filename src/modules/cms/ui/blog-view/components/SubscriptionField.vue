@@ -6,6 +6,7 @@
 <script lang="ts">
 import {computed, defineComponent, toRef} from 'vue';
 import {useBlogViewStore} from 'src/modules/cms';
+import {extractPrincipalType} from 'src/shared/model';
 
 export default defineComponent({
   name: 'SubscriptionField',
@@ -30,7 +31,7 @@ export default defineComponent({
     // @ts-ignore
     const subscribed = computed ( () => subscriptions.value.length > 0 )
     // @ts-ignore
-    const hasPersonPrincipal = computed( () => !!subscriptions.value.find(p => p.principalType === 'person') )
+    const hasPersonPrincipal = computed( () => !!subscriptions.value.find(p => extractPrincipalType(p) === 'person') )
     const color = computed( () => hasPersonPrincipal.value ? 'green' : 'grey' )
 
     const subscribe = () => {

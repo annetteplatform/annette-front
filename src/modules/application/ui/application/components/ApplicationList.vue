@@ -26,7 +26,7 @@
 </template>
 
 <script lang="ts">
-import {defineComponent, ref, useSlots} from 'vue';
+import {defineComponent} from 'vue';
 import EntityList from 'src/shared/components/crud/EntityList.vue';
 import {useEntityList} from 'src/shared/composables';
 import {Application, ApplicationFilter} from 'src/modules/application/data/application.model';

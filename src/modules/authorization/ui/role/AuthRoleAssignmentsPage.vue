@@ -90,7 +90,7 @@ import {AnnettePrincipal} from 'src/shared/model';
 import {AuthRole, useAuthRoleStore} from 'src/modules/authorization';
 import {useQuasar} from 'quasar';
 import {Ref} from '@vue/reactivity';
-import PrincipalSelectorDialog from 'src/shared/components/principal-selector/PrinciplaSelectorDialog.vue';
+import PrincipalSelectorDialog from 'src/shared/components/principal-selector/PrincipalSelectorDialog.vue';
 import PrincipalViewItem from 'src/shared/components/principal-view/PrincipalViewItem.vue';
 import EntityPage from 'src/shared/components/crud/EntityPage.vue';
 import {useEntityPage} from 'src/shared/composables';

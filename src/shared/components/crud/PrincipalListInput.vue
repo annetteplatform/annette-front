@@ -1,4 +1,5 @@
 <template>
+  <principal-selector-dialog ref="principalSelectorDialog"/>
   <q-list bordered class="full-width" separator>
     <q-item>
       <q-item-section>
@@ -9,7 +10,6 @@
                icon="add"
                v-if="!readonly"
                @click="addPrincipal"/>
-        <principal-selector-dialog ref="principalSelectorDialog"/>
       </q-item-section>
     </q-item>
     <q-item v-if="principals.length === 0">
@@ -32,18 +32,19 @@
 </template>
 
 <script lang="ts" setup>
-/* eslint-disable  @typescript-eslint/no-explicit-any */
-import { PropType, ref} from 'vue';
+
+import {ref} from 'vue';
 import {useQuasar} from 'quasar';
 import {useI18n} from 'vue-i18n';
 import {AnnettePrincipal} from 'src/shared/model';
-import PrincipalSelectorDialog from 'src/shared/components/principal-selector/PrinciplaSelectorDialog.vue';
 import PrincipalViewItem from 'src/shared/components/principal-view/PrincipalViewItem.vue';
+import PrincipalSelectorDialog from 'src/shared/components/principal-selector/PrincipalSelectorDialog.vue';
 
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const props = defineProps({
   principals: {
-    type: Object as PropType<AnnettePrincipal[]>,
+    type: Array,
     required: true
   },
   readonly: {
@@ -86,6 +87,7 @@ const deletePrincipal = (principal: AnnettePrincipal) => {
 defineExpose({
   addPrincipal,
   deletePrincipal,
+  principalSelectorDialog
 })
 
 </script>

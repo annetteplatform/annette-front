@@ -1,14 +1,14 @@
 <template>
   <div class="row">
     <principal-type-selector
-      :model-value="principal.principalType"
+      :model-value="principalType"
       @update:model-value="setPrincipalType"
       label="Principal Type"/>
   </div>
   <div class="row">
     <q-input
       class="col-md-12 col-sm-12 col-xs-12 "
-      :model-value="principal.principalId"
+      :model-value="principalId"
       @update:model-value="setPrincipalId"
       label="Principal Id"
     />
@@ -18,9 +18,9 @@
 </template>
 
 <script lang="ts">
-import {defineComponent, PropType, ref, toRef, watch} from 'vue';
+import {computed, defineComponent, toRef} from 'vue';
 import {Ref} from '@vue/reactivity';
-import {AnnettePrincipal} from 'src/shared/model';
+import {AnnettePrincipal, extractPrincipalId, extractPrincipalType, newPrincipal} from 'src/shared/model';
 import PrincipalTypeSelector from './PrincipalTypeSelector.vue';
 
 
@@ -29,34 +29,26 @@ export default defineComponent({
   components: {PrincipalTypeSelector},
   props: {
     modelValue: {
-      type: Object as PropType<AnnettePrincipal>,
+      type: String,
       required: true
     }
   },
   emits: ['update:modelValue'],
   setup(props, {emit}) {
+    const principal: Ref<AnnettePrincipal> = toRef(props, 'modelValue')
+    const principalType = computed(() => extractPrincipalType(principal.value))
+    const principalId = computed(() => extractPrincipalId(principal.value))
 
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-call
-    const principalProp = toRef(props, 'modelValue')
-    const principal: Ref<AnnettePrincipal> = ref({...props.modelValue})
-
-    watch(principalProp, (newPrincipal: AnnettePrincipal) => principal.value = newPrincipal)
-
-    const setPrincipalId = (principalId: string) => {
-      if (principal.value) {
-        principal.value.principalId = principalId
-        emit('update:modelValue', {...principal.value})
-      }
+    const setPrincipalId = (pId: string) => {
+      emit('update:modelValue', newPrincipal(principalType.value, pId))
     }
-    const setPrincipalType = (principalType: string) => {
-      if (principal.value) {
-        principal.value.principalType = principalType
-        emit('update:modelValue', {...principal.value})
-      }
+    const setPrincipalType = (pType: string) => {
+      emit('update:modelValue', newPrincipal(pType, principalId.value))
     }
 
     return {
-      principal,
+      principalType,
+      principalId,
       setPrincipalType,
       setPrincipalId,
     }

@@ -1,15 +1,13 @@
 import axios from 'axios'
 import { FindResult} from 'src/shared/model'
 import {
-  ActivateSpacePayloadDto,
   AssignSpacePrincipalPayloadDto,
-  CreateSpacePayloadDto, DeactivateSpacePayloadDto,
+  CreateSpacePayloadDto,
   Space,
   SpaceFilter, UnassignSpacePrincipalPayloadDto, UpdateSpaceCategoryPayloadDto,
   UpdateSpaceDescriptionPayloadDto,
   UpdateSpaceNamePayloadDto
 } from './space.model';
-import {Blog} from 'src/modules/cms';
 
 export const cmsSpaceService = {
 
@@ -80,7 +78,7 @@ export const cmsSpaceService = {
     const params = {
       source: readSide ? undefined : 'origin',
     }
-    return await axios.post<Space[]>(`/api/annette/v1/cms/getSpaces`, ids, {params})
+    return await axios.post<Space[]>('/api/annette/v1/cms/getSpaces', ids, {params})
       .then(result => result.data.map(convertSpace))
   },
 

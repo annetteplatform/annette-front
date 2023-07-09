@@ -66,7 +66,7 @@
 </template>
 
 <script lang="ts">
-/* eslint-disable  @typescript-eslint/no-explicit-any */
+
 import {computed, defineComponent, PropType, ref} from 'vue';
 import {useServiceItemStore} from 'src/modules/service-catalog';
 import ServiceItemSelector from 'src/modules/service-catalog/ui/item/components/ServiceItemSelector.vue';

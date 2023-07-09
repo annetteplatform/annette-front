@@ -122,13 +122,10 @@
 </template>
 
 <script lang="ts">
-/* eslint-disable @typescript-eslint/ban-ts-comment */
 import {defineComponent, ref} from 'vue';
 
-import {useQuasar} from 'quasar';
 import EntityPage from 'src/shared/components/crud/EntityPage.vue';
 import DefaultEntityPageToolbar from 'src/shared/components/crud/DefaultEntityPageToolbar.vue';
-import {useI18n} from 'vue-i18n';
 import {useSyncEntityPage} from 'src/shared/composables/sync-entity-page';
 import {
   BpmModel,
@@ -172,14 +169,14 @@ export default defineComponent({
   setup(props) {
     const tab = ref('general')
     const editor = ref()
-    const options = {
-      wrap: 140
-    }
+    // const options = {
+    //   wrap: 140
+    // }
 
     const idRef = ref()
     const nameRef = ref()
 
-    const formHasError = (entity?: BpmModel | null): boolean => {
+    const formHasError = (/*entity?: BpmModel*/ ): boolean => {
       // eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-member-access
       idRef.value.validate()
       // eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-member-access
@@ -190,8 +187,6 @@ export default defineComponent({
     }
 
     const store = useBpmModelStore()
-    const quasar = useQuasar()
-    const i18n = useI18n()
 
     const entityPage = useSyncEntityPage<BpmModel>({
       store,
@@ -240,7 +235,6 @@ export default defineComponent({
       nameRef,
       tab,
       editor,
-      options,
       ...entityPage,
       updateName,
       updateDescription,

@@ -132,13 +132,10 @@
 </template>
 
 <script lang="ts">
-/* eslint-disable @typescript-eslint/ban-ts-comment */
 import {defineComponent, ref} from 'vue';
 
-import {useQuasar} from 'quasar';
 import EntityPage from 'src/shared/components/crud/EntityPage.vue';
 import DefaultEntityPageToolbar from 'src/shared/components/crud/DefaultEntityPageToolbar.vue';
-import {useI18n} from 'vue-i18n';
 import {useSyncEntityPage} from 'src/shared/composables/sync-entity-page';
 import {
   BusinessProcess,
@@ -155,7 +152,7 @@ import BusinessProcessVariableList from './components/BusinessProcessVariableLis
 import BpmModelSelector from 'src/modules/bpm/ui/bpm-model/components/BpmModelSelector.vue';
 import DataSchemaSelector from 'src/modules/bpm/ui/data-schema/components/DataSchemaSelector.vue';
 
-function emptyEntity(id?: string, type?: string): BusinessProcess {
+function emptyEntity(): BusinessProcess {
   return {
     id: '',
     name: '',
@@ -180,7 +177,7 @@ export default defineComponent({
     const idRef = ref()
     const nameRef = ref()
 
-    const formHasError = (entity?: BusinessProcess | null): boolean => {
+    const formHasError = (): boolean => {
       // eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-member-access
       idRef.value.validate()
       // eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-member-access
@@ -191,8 +188,6 @@ export default defineComponent({
     }
 
     const store = useBusinessProcessStore()
-    const quasar = useQuasar()
-    const i18n = useI18n()
 
     const entityPage = useSyncEntityPage<BusinessProcess>({
       store,

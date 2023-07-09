@@ -13,7 +13,8 @@ export interface PermissionAssignment extends BaseEntity {
 
 export interface AuthAssignmentFilter {
   permission: Permission,
-  principal: AnnettePrincipal,
+  principalType: string,
+  principalId: string,
   source: AuthSource,
   sortBy?: SortBy[]
 }
@@ -27,17 +28,14 @@ export function emptyAuthAssignmentFilter() {
       arg2: '',
       arg3: ''
     },
-    principal: {
-      principalType: '',
-      principalId: ''
-    },
+    principalType: '',
+    principalId: '',
     source: {
       sourceType: '',
       sourceId: ''
     }
   }
 }
-
 
 
 export interface AuthSource {

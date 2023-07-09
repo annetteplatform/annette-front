@@ -1,5 +1,5 @@
-/* eslint-disable  @typescript-eslint/no-explicit-any */
-/* eslint-disable @typescript-eslint/ban-ts-comment */
+
+
 
 import {useQuasar} from 'quasar';
 import {AnnetteError} from 'src/shared/model';

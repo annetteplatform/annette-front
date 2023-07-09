@@ -58,7 +58,7 @@
 </template>
 
 <script lang="ts" setup>
-/* eslint-disable  @typescript-eslint/no-explicit-any */
+
 import {computed, PropType, ref, toRef, watch} from 'vue';
 import {useLanguageStore} from 'src/modules/application';
 import {useQuasar} from 'quasar';

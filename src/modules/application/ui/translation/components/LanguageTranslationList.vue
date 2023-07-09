@@ -92,7 +92,7 @@
 </template>
 
 <script lang="ts">
-/* eslint-disable  @typescript-eslint/no-explicit-any */
+
 import {computed, defineComponent, ref, toRefs, watch} from 'vue';
 import {applicationService, TranslationJson, useLanguageStore, useTranslationStore} from 'src/modules/application';
 import {Ref} from 'vue';
